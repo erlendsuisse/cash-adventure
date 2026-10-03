@@ -48,9 +48,9 @@ const betrayal_aftermath: StoryCard = {
   choices: [
     {
       id: 'work_with_syndicate',
-      label: 'Partner with the Syndicate (+50g/mo, -50 charm)',
+      label: 'Partner with the Syndicate (+50g wages, -2 charm)',
       effects: [
-        { kind: 'expense', delta: -50 },
+        { kind: 'wages', delta: 50 },
         { kind: 'stat', stat: 'charm', delta: -2 },
         { kind: 'flag', id: 'syndicate_partner', set: 1 },
         { kind: 'narrate', text: 'You become a broker in the grey market. Profitable, but corrosive to your soul.' },

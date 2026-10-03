@@ -1,125 +1,83 @@
 import type { StoryCard } from '../../engine/types'
+import { heat, venture } from './factories'
 
 // CHAPTER 3 EXPANDED: Warfare & Conflict
 // War profiteering, military ventures, refugee economies, supply chains, military politics, escape routes
 
 export const chapter3MilitaryVentureCards: StoryCard[] = [
-  {
+  venture({
     id: 'ch3_weapons_smuggling',
-    chapter: 3,
     weight: 4,
-    storyPhase: 'reckoning',
     title: 'Weapons Smuggling Operation',
-    body: ['A black market weapons dealer needs distribution. "Both armies need supplies they can\'t get officially. We supply both sides. 350g investment."'],
-    choices: [
-      {
-        id: 'smuggle_weapons',
-        label: 'Start weapons smuggling (350g)',
-        requires: [{ kind: 'goldAtLeast', amount: 350 }],
-        effects: [
-          { kind: 'gold', delta: -350 },
-          { kind: 'acquireAsset', asset: { id: 'ch3_weapons_smuggle', label: 'Weapons Smuggling Network', cost: 350, monthlyCashflow: 120, sector: 'military' } },
-          { kind: 'flag', id: 'arms_dealer', set: 1 },
-          { kind: 'narrate', text: 'You smuggle weapons to both sides. Profit from bloodshed.' },
-        ],
-      },
-      { id: 'refuse_weapons', label: 'Decline', effects: [{ kind: 'narrate', text: 'The dealer finds another distributor.' }] },
+    body: [
+      'A black market weapons dealer needs distribution. "Both armies need supplies they can\'t get officially. We supply both sides. 350g investment."',
     ],
-  },
-  {
+    asset: { id: 'ch3_weapons_smuggle', label: 'Weapons Smuggling Network', cost: 350, monthlyCashflow: 120, sector: 'military' },
+    accept: {
+      id: 'smuggle_weapons',
+      label: 'Start weapons smuggling (350g)',
+      effects: [{ kind: 'flag', id: 'arms_dealer', set: 1 }, { kind: 'narrate', text: 'You smuggle weapons to both sides. Profit from bloodshed.' }, heat('war')],
+    },
+    decline: { id: 'refuse_weapons', label: 'Decline', text: 'The dealer finds another distributor.' },
+  }),
+  venture({
     id: 'ch3_medical_supplies_smuggle',
-    chapter: 3,
     weight: 3,
-    storyPhase: 'reckoning',
     title: 'Medical Supply Operation',
     body: ['A healer offers to sell medical supplies to both armies. "They pay premium prices. We profit from their desperation to save wounded soldiers."'],
-    choices: [
-      {
-        id: 'sell_medical',
-        label: 'Sell medical supplies (280g)',
-        requires: [{ kind: 'goldAtLeast', amount: 280 }],
-        effects: [
-          { kind: 'gold', delta: -280 },
-          { kind: 'acquireAsset', asset: { id: 'ch3_medical_supplies', label: 'Military Medical Supply Network', cost: 280, monthlyCashflow: 85, sector: 'military' } },
-          { kind: 'stat', stat: 'charm', delta: 1 },
-          { kind: 'narrate', text: 'You save lives for a profit. Money and morality intertwine.' },
-        ],
-      },
-      { id: 'refuse_medical', label: 'Decline', effects: [{ kind: 'narrate', text: 'Someone else will profit from necessity.' }] },
-    ],
-  },
-  {
+    asset: { id: 'ch3_medical_supplies', label: 'Military Medical Supply Network', cost: 280, monthlyCashflow: 85, sector: 'military' },
+    accept: {
+      id: 'sell_medical',
+      label: 'Sell medical supplies (280g)',
+      effects: [{ kind: 'stat', stat: 'charm', delta: 1 }, { kind: 'narrate', text: 'You save lives for a profit. Money and morality intertwine.' }],
+    },
+    decline: { id: 'refuse_medical', label: 'Decline', text: 'Someone else will profit from necessity.' },
+  }),
+  venture({
     id: 'ch3_military_food_contract',
-    chapter: 3,
     weight: 3,
-    storyPhase: 'reckoning',
     title: 'Military Food Supply Contract',
     body: ['The army quartermaster offers a standing contract. "Soldiers eat even during war. Consistent demand, consistent payment. 320g advance."'],
-    choices: [
-      {
-        id: 'food_contract',
-        label: 'Accept food contract (320g)',
-        requires: [{ kind: 'goldAtLeast', amount: 320 }],
-        effects: [
-          { kind: 'gold', delta: -320 },
-          { kind: 'acquireAsset', asset: { id: 'ch3_food_supplier', label: 'Military Food Supplier', cost: 320, monthlyCashflow: 95, sector: 'military' } },
-          { kind: 'narrate', text: 'You feed the army. Steady money from hunger.' },
-        ],
-      },
-      { id: 'refuse_food', label: 'Decline', effects: [{ kind: 'narrate', text: 'They find another supplier.' }] },
-    ],
-  },
-  {
+    asset: { id: 'ch3_food_supplier', label: 'Military Food Supplier', cost: 320, monthlyCashflow: 95, sector: 'military' },
+    accept: {
+      id: 'food_contract',
+      label: 'Accept food contract (320g)',
+      effects: [{ kind: 'narrate', text: 'You feed the army. Steady money from hunger.' }],
+    },
+    decline: { id: 'refuse_food', label: 'Decline', text: 'They find another supplier.' },
+  }),
+  venture({
     id: 'ch3_intelligence_selling',
-    chapter: 3,
     weight: 2,
-    storyPhase: 'reckoning',
     title: 'Sell Military Intelligence',
     body: ['Spies want to buy intelligence from you. "You move around. You hear things. We pay well for information."'],
-    choices: [
-      {
-        id: 'sell_intelligence',
-        label: 'Become an intelligence broker (290g setup)',
-        requires: [{ kind: 'goldAtLeast', amount: 290 }],
-        effects: [
-          { kind: 'gold', delta: -290 },
-          { kind: 'acquireAsset', asset: { id: 'ch3_intel_broker', label: 'Military Intelligence Broker', cost: 290, monthlyCashflow: 70, sector: 'military' } },
-          { kind: 'flag', id: 'spy_network', set: 1 },
-          { kind: 'narrate', text: 'Information is your new trade. Lives depend on your accuracy.' },
-        ],
-      },
-      { id: 'refuse_intel', label: 'Decline', effects: [{ kind: 'narrate', text: 'The spies move on.' }] },
-    ],
-  },
-  {
+    asset: { id: 'ch3_intel_broker', label: 'Military Intelligence Broker', cost: 290, monthlyCashflow: 70, sector: 'military' },
+    accept: {
+      id: 'sell_intelligence',
+      label: 'Become an intelligence broker (290g setup)',
+      effects: [{ kind: 'flag', id: 'spy_network', set: 1 }, { kind: 'narrate', text: 'Information is your new trade. Lives depend on your accuracy.' }, heat('war')],
+    },
+    decline: { id: 'refuse_intel', label: 'Decline', text: 'The spies move on.' },
+  }),
+  venture({
     id: 'ch3_transport_logistics',
-    chapter: 3,
     weight: 3,
-    storyPhase: 'reckoning',
     title: 'Military Transport Service',
     body: ['The army needs civilians to move supplies between bases. "Safe work. Good pay. 310g to get established."'],
-    choices: [
-      {
-        id: 'transport_service',
-        label: 'Start transport service (310g)',
-        requires: [{ kind: 'goldAtLeast', amount: 310 }],
-        effects: [
-          { kind: 'gold', delta: -310 },
-          { kind: 'acquireAsset', asset: { id: 'ch3_transport', label: 'Military Transport Service', cost: 310, monthlyCashflow: 80, sector: 'military' } },
-          { kind: 'narrate', text: 'You move the gears of war. Safe money from logistics.' },
-        ],
-      },
-      { id: 'refuse_transport', label: 'Decline', effects: [{ kind: 'narrate', text: 'They find another transporter.' }] },
-    ],
-  },
+    asset: { id: 'ch3_transport', label: 'Military Transport Service', cost: 310, monthlyCashflow: 80, sector: 'military' },
+    accept: {
+      id: 'transport_service',
+      label: 'Start transport service (310g)',
+      effects: [{ kind: 'narrate', text: 'You move the gears of war. Safe money from logistics.' }],
+    },
+    decline: { id: 'refuse_transport', label: 'Decline', text: 'They find another transporter.' },
+  }),
 ]
 
 export const chapter3WarScenarioCards: StoryCard[] = [
   {
     id: 'ch3_soldier_deserter',
-    chapter: 3,
     weight: 3,
-    storyPhase: 'reckoning',
     title: 'A Deserting Soldier Seeks Your Help',
     body: ['A young soldier, fleeing the war, finds you. "I can\'t kill anymore. Will you help me escape? I have 60g."'],
     choices: [
@@ -146,9 +104,7 @@ export const chapter3WarScenarioCards: StoryCard[] = [
   },
   {
     id: 'ch3_refugee_family_encounter',
-    chapter: 3,
     weight: 2,
-    storyPhase: 'reckoning',
     title: 'Refugee Family Needs Shelter',
     body: ['A family of refugees seeks shelter from the war. "We have 30g. Will that buy us safety?"'],
     choices: [
@@ -169,15 +125,14 @@ export const chapter3WarScenarioCards: StoryCard[] = [
           { kind: 'gold', delta: 80 },
           { kind: 'stat', stat: 'charm', delta: -1 },
           { kind: 'narrate', text: 'You profit from their desperation. They survive, but barely.' },
+          heat('war'),
         ],
       },
     ],
   },
   {
     id: 'ch3_officer_proposition',
-    chapter: 3,
     weight: 2,
-    storyPhase: 'reckoning',
     title: 'Military Officer Proposition',
     body: ['A high-ranking officer approaches. "I\'m planning to desert with my regiment\'s treasury. Need a trustworthy partner to hide the gold."'],
     choices: [
@@ -200,9 +155,7 @@ export const chapter3WarScenarioCards: StoryCard[] = [
   },
   {
     id: 'ch3_battle_witness',
-    chapter: 3,
     weight: 3,
-    storyPhase: 'reckoning',
     title: 'You Witness a Battle',
     body: ['You see a major battle play out—thousands dying. The winning general approaches. "You saw what happened here. What will you tell people?"'],
     choices: [
@@ -232,9 +185,7 @@ export const chapter3WarScenarioCards: StoryCard[] = [
 export const chapter3WarEconomyCards: StoryCard[] = [
   {
     id: 'ch3_armistice_threat',
-    chapter: 3,
     weight: 4,
-    storyPhase: 'reckoning',
     title: 'Peace Threatens Your Profits',
     body: ['Rumors of armistice talks spread. War profits will evaporate if peace comes. What do you do?'],
     choices: [
@@ -255,15 +206,14 @@ export const chapter3WarEconomyCards: StoryCard[] = [
           { kind: 'flag', id: 'war_profiteer', set: 1 },
           { kind: 'stat', stat: 'nerve', delta: 1 },
           { kind: 'narrate', text: 'You fund extremists to keep the war going. More deaths. More profit.' },
+          heat('war'),
         ],
       },
     ],
   },
   {
     id: 'ch3_enemy_territory_trade',
-    chapter: 3,
     weight: 3,
-    storyPhase: 'reckoning',
     title: 'Smuggle to Enemy Territory',
     body: ['Both sides need goods the other side has. You could smuggle contraband across enemy lines for huge profit. (+220g for one run)'],
     choices: [
@@ -275,6 +225,7 @@ export const chapter3WarEconomyCards: StoryCard[] = [
           { kind: 'stat', stat: 'nerve', delta: 1 },
           { kind: 'flag', id: 'enemy_smuggler', set: 1 },
           { kind: 'narrate', text: 'You cross battle lines for profit. A dangerous game.' },
+          heat('war'),
         ],
       },
       {
@@ -286,9 +237,7 @@ export const chapter3WarEconomyCards: StoryCard[] = [
   },
   {
     id: 'ch3_inflation_surge',
-    chapter: 3,
     weight: 3,
-    storyPhase: 'reckoning',
     title: 'War Inflation Surges',
     body: ['War spending creates massive inflation. Money in the bank becomes worthless. Goods appreciate. Time to invest in real assets.'],
     choices: [
@@ -317,9 +266,7 @@ export const chapter3WarEconomyCards: StoryCard[] = [
 export const chapter3WarDangerCards: StoryCard[] = [
   {
     id: 'ch3_army_requisition',
-    chapter: 3,
     weight: 4,
-    storyPhase: 'reckoning',
     title: 'Army Requisitions Your Goods',
     body: ['Soldiers arrive and seize your supplies for military use. "Wartime requisition. Your country needs this."'],
     choices: [
@@ -345,9 +292,7 @@ export const chapter3WarDangerCards: StoryCard[] = [
   },
   {
     id: 'ch3_caught_trading_enemies',
-    chapter: 3,
     weight: 3,
-    storyPhase: 'reckoning',
     title: 'Caught Trading with the Enemy',
     body: ['Your government discovers you\'ve been selling to the enemy side. Treason is a capital offense.'],
     choices: [
@@ -375,9 +320,7 @@ export const chapter3WarDangerCards: StoryCard[] = [
   },
   {
     id: 'ch3_ambush_on_supply_run',
-    chapter: 3,
     weight: 3,
-    storyPhase: 'reckoning',
     title: 'Ambushed During Supply Run',
     body: ['Bandits ambush your supply convoy. "Stand down or we kill everyone."'],
     choices: [
@@ -403,9 +346,7 @@ export const chapter3WarDangerCards: StoryCard[] = [
   },
   {
     id: 'ch3_informant_demands',
-    chapter: 3,
     weight: 2,
-    storyPhase: 'reckoning',
     title: 'Informant Threatens Exposure',
     body: ['An informant you paid demands more money or they expose your dealings to authorities. "Pay up or lose everything."'],
     choices: [
@@ -435,9 +376,7 @@ export const chapter3WarDangerCards: StoryCard[] = [
 export const chapter3RecoveryCards: StoryCard[] = [
   {
     id: 'ch3_neutral_city_escape',
-    chapter: 3,
     weight: 2,
-    storyPhase: 'reckoning',
     title: 'Escape to Neutral City',
     body: ['War-torn but still standing, a neutral city offers refuge. "Here, neither side has control. You can breathe."'],
     choices: [

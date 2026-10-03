@@ -36,6 +36,11 @@ describe('isMet', () => {
     expect(isMet({ kind: 'isFree' }, notFree)).toBe(false)
   })
 
+  it('isFree needs some passive income, even when expenses are zero', () => {
+    const broke = makeState({ finances: { gold: 0, wages: 50, monthlyExpenses: 0, debt: 0, assets: [], commodities: { spice: 0, salt: 0, iron: 0 } } })
+    expect(isMet({ kind: 'isFree' }, broke)).toBe(false)
+  })
+
   it('colossiAtLeast', () => {
     const state = makeState({ progress: { colossiDefeated: 2, boons: [], freedomDays: 0, tier: 1, storyPhase: 'early_game', currentPath: undefined } })
     expect(isMet({ kind: 'colossiAtLeast', count: 2 }, state)).toBe(true)

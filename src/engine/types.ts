@@ -6,6 +6,9 @@ export type FlagId = string
 export type SectorId = string
 export type BoonId = string
 
+/** Chapter N opens once N-1 Colossi are defeated. */
+export type ChapterNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7
+
 export type StoryPhase = 'early_game' | 'climbing' | 'entangled' | 'reckoning' | 'recovery'
 export type ConsequencePath = 'mafia' | 'police' | 'war' | 'banking'
 
@@ -33,6 +36,7 @@ export interface Finances {
   wages: number // active income - the thing you want to stop needing
   monthlyExpenses: number
   debt: number
+  loanPayments?: number // the share of monthlyExpenses that services debt; repaying debt only removes this share
   assets: OwnedAsset[]
   commodities: {
     spice: number
@@ -201,7 +205,7 @@ export interface StoryCard {
   requires?: Requirement[] // gates whether the card can be drawn
   minTier?: number
   storyPhase?: StoryPhase // optional phase gate: card only drawable in this phase
-  chapter?: number // optional chapter gate: 1-7, undefined = all chapters
+  chapter?: ChapterNumber // optional chapter gate, undefined = all chapters. Set via defineChapterDeck, not by hand
   visual?: VisualMetadata // optional visual metadata for UI rendering
 }
 
@@ -246,8 +250,7 @@ export interface Campaign {
   cards: Record<CardId, StoryCard>
   deckCardIds: CardId[] // drawable pool, subset of cards with `weight`
   sectors: SectorId[]
-  colossusCardIds: CardId[] // ordered trial-start cards, index = colossiDefeated (legacy support)
-  colossusPathCards?: Record<ConsequencePath, CardId> // path-based colossus start cards
+  colossusCardIds: CardId[] // ordered trial-start cards, index = colossiDefeated
   marketDayCardId: CardId
   tuning: Tuning
   consequenceTuning?: ConsequenceTuning // thresholds for consequence triggers

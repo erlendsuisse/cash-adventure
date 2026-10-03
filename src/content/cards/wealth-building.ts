@@ -252,7 +252,6 @@ export const wealthBuildingDeck: StoryCard[] = [
     id: 'expand_merchant_routes',
     title: 'Expand Your Routes',
     body: ['Your first merchant route is thriving. Your partners approach you. "We\'re opening a second route to the west. You in?"'],
-    storyPhase: 'entangled',
     weight: 13,
     requires: [
       { kind: 'flag', id: 'merchant_route_active', atLeast: 1 },
@@ -299,7 +298,6 @@ export const wealthBuildingDeck: StoryCard[] = [
     id: 'guild_partnership',
     title: 'Guild Partnership Proposal',
     body: ['As your wealth grows, the merchant guilds take notice. "We want successful independent traders like you. Join our guild. Full partnership with quarterly bonuses."'],
-    storyPhase: 'entangled',
     weight: 9,
     requires: [
       { kind: 'goldAtLeast', amount: 200 },

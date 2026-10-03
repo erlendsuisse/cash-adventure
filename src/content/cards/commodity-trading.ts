@@ -127,7 +127,6 @@ export const commodityTradingCards: StoryCard[] = [
     body: [
       'News spreads fast: a major shipbuilder is offering premium prices for iron and salt. Merchants rush to sell. This is your chance.',
     ],
-    storyPhase: 'entangled',
     weight: 13,
     requires: [
       {
@@ -190,7 +189,6 @@ export const commodityTradingCards: StoryCard[] = [
     body: [
       'A wealthy merchant from the capital is buying bulk quantities of commodities. "I\'ll pay fair prices for anything you have," he says.',
     ],
-    storyPhase: 'entangled',
     weight: 10,
     requires: [
       {

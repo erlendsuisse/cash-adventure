@@ -132,8 +132,8 @@ export const dangerCards: StoryCard[] = [
     id: 'betrayal_by_partner',
     title: 'Your Partner Betrays You',
     body: ['Your business partner has fled with half the inventory and vanished. You discover the betrayal too late. "He seemed so honest," says the guard.'],
-    storyPhase: 'entangled',
     weight: 9,
+    requires: [{ kind: 'colossiAtLeast', count: 1 }], // was gated on the never-entered 'entangled' phase: a mid-game danger
     choices: [
       {
         id: 'accept_betrayal',
@@ -147,7 +147,7 @@ export const dangerCards: StoryCard[] = [
   },
 
   {
-    id: 'market_crash',
+    id: 'market_crash_danger',
     title: 'The Market Crashes',
     body: ['Word from the capital: trade wars have begun. Prices plummet overnight. Your investments are worth a fraction of what they were.'],
     storyPhase: 'climbing',
@@ -179,7 +179,6 @@ export const dangerCards: StoryCard[] = [
     body: [
       'Dark figures visit your businesses. "We provide protection. The fee is 15% of monthly profits. Or bad things happen." You have to choose.',
     ],
-    storyPhase: 'entangled',
     weight: 10,
     requires: [{ kind: 'colossiAtLeast', count: 2 }],
     choices: [
@@ -208,7 +207,6 @@ export const dangerCards: StoryCard[] = [
     body: [
       'A powerful noble decides your warehouse is the perfect location for their new palace. They offer "compensation" far below its worth, and soldiers back the offer.',
     ],
-    storyPhase: 'entangled',
     weight: 8,
     requires: [{ kind: 'colossiAtLeast', count: 2 }],
     choices: [
@@ -237,7 +235,6 @@ export const dangerCards: StoryCard[] = [
     body: [
       'Competitors have poisoned wells, burned fields, and destroyed shipments. Your supply of goods vanishes overnight. Economic warfare.',
     ],
-    storyPhase: 'entangled',
     weight: 9,
     requires: [{ kind: 'colossiAtLeast', count: 3 }],
     choices: [
@@ -265,7 +262,6 @@ export const dangerCards: StoryCard[] = [
     id: 'economic_downturn',
     title: 'Economic Downturn Hits',
     body: ['The city\'s economy contracts. Trade dries up. Nobles stop spending. Merchants struggle to survive. Your income plummets.'],
-    storyPhase: 'entangled',
     weight: 10,
     requires: [{ kind: 'colossiAtLeast', count: 2 }],
     choices: [
@@ -294,7 +290,6 @@ export const dangerCards: StoryCard[] = [
     body: [
       'Your creditors have sent enforcers. They break your storefront and rough up your workers. "Pay up or this gets worse," they growl.',
     ],
-    storyPhase: 'reckoning',
     weight: 11,
     requires: [{ kind: 'colossiAtLeast', count: 4 }],
     choices: [
@@ -323,7 +318,6 @@ export const dangerCards: StoryCard[] = [
     body: [
       'Disease ravages the regions where your goods come from. Entire villages are quarantined. Your suppliers are dead or dying. Supply halts.',
     ],
-    storyPhase: 'reckoning',
     weight: 9,
     requires: [{ kind: 'colossiAtLeast', count: 5 }],
     choices: [
@@ -352,7 +346,6 @@ export const dangerCards: StoryCard[] = [
     body: [
       'A disgruntled customer sues for damages. The case is high-profile. Even if you win, the damage to your reputation is catastrophic.',
     ],
-    storyPhase: 'entangled',
     weight: 8,
     requires: [{ kind: 'colossiAtLeast', count: 3 }],
     choices: [
@@ -381,7 +374,6 @@ export const dangerCards: StoryCard[] = [
     body: [
       'Criminals seize your warehouse and demand ransom. "Pay 300 gold or we burn everything inside." They\'re serious. Your inventory could be destroyed.',
     ],
-    storyPhase: 'reckoning',
     weight: 10,
     requires: [{ kind: 'colossiAtLeast', count: 4 }],
     choices: [

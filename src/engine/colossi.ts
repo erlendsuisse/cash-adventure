@@ -1,4 +1,4 @@
-import type { Campaign, ConsequencePath, GameState } from './types'
+import type { Campaign, CardId, ConsequencePath, GameState } from './types'
 
 export const COLOSSI_TO_WIN = 7
 
@@ -8,7 +8,7 @@ export const COLOSSI_TO_WIN = 7
  *  summoned it, which is also what stops this from re-triggering every
  *  single day for the several turns the trial itself takes to resolve. */
 export function checkTrialTrigger(state: GameState, campaign: Campaign): GameState {
-  const nextColossus = campaign.colossusCardIds[state.progress.colossiDefeated]
+  const nextColossus = summonableColossus(state, campaign)
   if (!nextColossus) return state
   if (state.progress.freedomDays < campaign.tuning.freedomDaysToTrial) return state
 
@@ -19,11 +19,24 @@ export function checkTrialTrigger(state: GameState, campaign: Campaign): GameSta
   }
 }
 
-/** Checks if any consequence path has been triggered by accumulated flags.
- *  If triggered, queues the path's colossus card and sets currentPath.
- *  Resets the trigger flag to prevent re-triggering. */
+/** The next Colossus's trial-start card, unless every Colossus is beaten or
+ *  that trial is already queued or under way (its start card has been seen but
+ *  the reckoning that counts the defeat hasn't happened yet). */
+function summonableColossus(state: GameState, campaign: Campaign): CardId | undefined {
+  const next = campaign.colossusCardIds[state.progress.colossiDefeated]
+  if (!next) return undefined
+  if (state.pendingCards.includes(next) || state.seenCardIds.includes(next)) return undefined
+  return next
+}
+
+/** Heat on a consequence path (a trigger flag at its threshold) pulls the next
+ *  Colossus forward, freedom or not, and colours the run with that path.
+ *  Colossi always come in order - the path never picks which one. The trigger
+ *  flag resets either way: heat that builds while a trial is already coming
+ *  folds into that trial instead of summoning a second one straight after. */
 export function checkConsequenceTrigger(state: GameState, campaign: Campaign): GameState {
-  if (!campaign.consequenceTuning || !campaign.colossusPathCards) return state
+  if (!campaign.consequenceTuning) return state
+  if (!campaign.colossusCardIds[state.progress.colossiDefeated]) return state
 
   const paths: ConsequencePath[] = ['mafia', 'police', 'war', 'banking']
 
@@ -34,14 +47,12 @@ export function checkConsequenceTrigger(state: GameState, campaign: Campaign): G
     const flagValue = state.flags[tuning.flagId] ?? 0
 
     if (flagValue >= tuning.threshold) {
-      const colossusCardId = campaign.colossusPathCards[path]
-      if (!colossusCardId) continue
-
+      const nextColossus = summonableColossus(state, campaign)
       return {
         ...state,
         progress: { ...state.progress, currentPath: path },
         flags: { ...state.flags, [tuning.flagId]: 0 },
-        pendingCards: [colossusCardId, ...state.pendingCards],
+        pendingCards: nextColossus ? [nextColossus, ...state.pendingCards] : state.pendingCards,
       }
     }
   }

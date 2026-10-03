@@ -61,7 +61,7 @@ export function apply(effect: Effect, state: GameState): GameState {
     case 'expense':
       return {
         ...state,
-        finances: { ...state.finances, monthlyExpenses: state.finances.monthlyExpenses + effect.delta },
+        finances: { ...state.finances, monthlyExpenses: Math.max(0, state.finances.monthlyExpenses + effect.delta) },
       }
 
     case 'loan':
@@ -72,6 +72,7 @@ export function apply(effect: Effect, state: GameState): GameState {
           gold: state.finances.gold + effect.principal,
           debt: state.finances.debt + effect.principal,
           monthlyExpenses: state.finances.monthlyExpenses + effect.monthlyPayment,
+          loanPayments: (state.finances.loanPayments ?? 0) + effect.monthlyPayment,
         },
       }
 

@@ -1,168 +1,120 @@
 import type { StoryCard } from '../../engine/types'
+import { heat, venture } from './factories'
 
 // CHAPTER 2 EXPANDED: Underworld Rising
 // Organized ventures, street hustles, criminal networks, black market deals, gang politics, corruption
 
 export const chapter2VentureCards: StoryCard[] = [
-  {
+  venture({
     id: 'ch2_protection_racket_start',
-    chapter: 2,
     weight: 4,
-    storyPhase: 'entangled',
     title: 'Start a Protection Racket',
-    body: ['A local gang boss suggests you could make serious money protecting merchants from... accidents. "Most smart business owners pay for peace of mind."'],
-    choices: [
-      {
-        id: 'start_protection_racket',
-        label: 'Start protection racket (120g investment)',
-        requires: [{ kind: 'goldAtLeast', amount: 120 }],
-        effects: [
-          { kind: 'gold', delta: -120 },
-          { kind: 'acquireAsset', asset: { id: 'ch2_protection_racket', label: 'Protection Racket', cost: 120, monthlyCashflow: 45, sector: 'underworld' } },
-          { kind: 'narrate', text: 'You become a protection provider. Fear is a commodity.' },
-        ],
-      },
-      { id: 'refuse_racket', label: 'Too risky', effects: [{ kind: 'narrate', text: 'The boss shrugs. "Your loss."' }] },
+    body: [
+      'A local gang boss suggests you could make serious money protecting merchants from... accidents. "Most smart business owners pay for peace of mind."',
     ],
-  },
-  {
+    asset: { id: 'ch2_protection_racket', label: 'Protection Racket', cost: 120, monthlyCashflow: 45, sector: 'underworld' },
+    accept: {
+      id: 'start_protection_racket',
+      label: 'Start protection racket (120g investment)',
+      effects: [{ kind: 'narrate', text: 'You become a protection provider. Fear is a commodity.' }, heat('mafia')],
+    },
+    decline: { id: 'refuse_racket', label: 'Too risky', text: 'The boss shrugs. "Your loss."' },
+  }),
+  venture({
     id: 'ch2_gambling_house_invest',
-    chapter: 2,
     weight: 3,
-    storyPhase: 'entangled',
     title: 'Invest in an Underground Gambling Den',
     body: ['A casino operator wants capital to expand. "The house always wins. With your money behind me, we split the take."'],
-    choices: [
-      {
-        id: 'fund_gambling',
-        label: 'Fund the gambling den (160g)',
-        requires: [{ kind: 'goldAtLeast', amount: 160 }],
-        effects: [
-          { kind: 'gold', delta: -160 },
-          { kind: 'acquireAsset', asset: { id: 'ch2_gambling_den', label: 'Underground Casino', cost: 160, monthlyCashflow: 55, sector: 'underworld' } },
-          { kind: 'narrate', text: 'You own a piece of the house. Addiction is profitable.' },
-        ],
-      },
-      { id: 'refuse_gambling', label: 'Decline', effects: [{ kind: 'narrate', text: 'Another investor will take the deal.' }] },
-    ],
-  },
-  {
+    asset: { id: 'ch2_gambling_den', label: 'Underground Casino', cost: 160, monthlyCashflow: 55, sector: 'underworld' },
+    accept: {
+      id: 'fund_gambling',
+      label: 'Fund the gambling den (160g)',
+      effects: [{ kind: 'narrate', text: 'You own a piece of the house. Addiction is profitable.' }, heat('mafia')],
+    },
+    decline: { id: 'refuse_gambling', label: 'Decline', text: 'Another investor will take the deal.' },
+  }),
+  venture({
     id: 'ch2_counterfeiting_operation',
-    chapter: 2,
     weight: 3,
-    storyPhase: 'entangled',
     title: 'Counterfeit Coin Operation',
     body: ['A forger needs safe houses for their operation. "Fake coins flood the market, values crash, we buy cheap, real coin returns, we sell high."'],
-    choices: [
-      {
-        id: 'run_counterfeiting',
-        label: 'Provide safe houses (140g)',
-        requires: [{ kind: 'goldAtLeast', amount: 140 }],
-        effects: [
-          { kind: 'gold', delta: -140 },
-          { kind: 'acquireAsset', asset: { id: 'ch2_counterfeiting', label: 'Counterfeiting Operation', cost: 140, monthlyCashflow: 60, sector: 'underworld' } },
-          { kind: 'flag', id: 'counterfeiter', set: 1 },
-          { kind: 'narrate', text: 'You run a counterfeiting operation. Authorities will hunt you if they learn the truth.' },
-        ],
-      },
-      { id: 'skip_counterfeiting', label: 'Too dangerous', effects: [{ kind: 'narrate', text: 'The forger finds another partner.' }] },
-    ],
-  },
-  {
+    asset: { id: 'ch2_counterfeiting', label: 'Counterfeiting Operation', cost: 140, monthlyCashflow: 60, sector: 'underworld' },
+    accept: {
+      id: 'run_counterfeiting',
+      label: 'Provide safe houses (140g)',
+      effects: [
+        { kind: 'flag', id: 'counterfeiter', set: 1 },
+        { kind: 'narrate', text: 'You run a counterfeiting operation. Authorities will hunt you if they learn the truth.' },
+        heat('police'),
+      ],
+    },
+    decline: { id: 'skip_counterfeiting', label: 'Too dangerous', text: 'The forger finds another partner.' },
+  }),
+  venture({
     id: 'ch2_brothel_investment',
-    chapter: 2,
     weight: 2,
-    storyPhase: 'entangled',
     title: 'Sex Work Enterprise',
     body: ['An experienced madam seeks capital. "Sex never goes out of business. Invest with me, you\'ll never need to work again."'],
-    choices: [
-      {
-        id: 'fund_brothel',
-        label: 'Fund the enterprise (170g)',
-        requires: [{ kind: 'goldAtLeast', amount: 170 }],
-        effects: [
-          { kind: 'gold', delta: -170 },
-          { kind: 'acquireAsset', asset: { id: 'ch2_brothel', label: 'Sex Work Enterprise', cost: 170, monthlyCashflow: 50, sector: 'underworld' } },
-          { kind: 'stat', stat: 'charm', delta: -1 },
-          { kind: 'narrate', text: 'You profit from pleasure and desperation. The money is good. The mirror is hard to face.' },
-        ],
-      },
-      { id: 'refuse_brothel', label: 'Decline', effects: [{ kind: 'narrate', text: 'The madam nods understandingly and leaves.' }] },
-    ],
-  },
-  {
+    asset: { id: 'ch2_brothel', label: 'Sex Work Enterprise', cost: 170, monthlyCashflow: 50, sector: 'underworld' },
+    accept: {
+      id: 'fund_brothel',
+      label: 'Fund the enterprise (170g)',
+      effects: [
+        { kind: 'stat', stat: 'charm', delta: -1 },
+        { kind: 'narrate', text: 'You profit from pleasure and desperation. The money is good. The mirror is hard to face.' },
+      ],
+    },
+    decline: { id: 'refuse_brothel', label: 'Decline', text: 'The madam nods understandingly and leaves.' },
+  }),
+  venture({
     id: 'ch2_drug_house_landlord',
-    chapter: 2,
     weight: 3,
-    storyPhase: 'entangled',
     title: 'Rent to Drug Dealers',
     body: ['Drug dealers need safe houses to cook and distribute. You could rent them space. "The money is excellent and we handle all the risk."'],
-    choices: [
-      {
-        id: 'rent_to_dealers',
-        label: 'Rent them properties (110g)',
-        requires: [{ kind: 'goldAtLeast', amount: 110 }],
-        effects: [
-          { kind: 'gold', delta: -110 },
-          { kind: 'acquireAsset', asset: { id: 'ch2_drug_landlord', label: 'Drug House Landlord', cost: 110, monthlyCashflow: 42, sector: 'underworld' } },
-          { kind: 'flag', id: 'drug_landlord', set: 1 },
-          { kind: 'narrate', text: 'Your properties become drug manufacturing centers. You profit from addiction.' },
-        ],
-      },
-      { id: 'refuse_dealers', label: 'Decline', effects: [{ kind: 'narrate', text: 'They find other landlords.' }] },
-    ],
-  },
-  {
+    asset: { id: 'ch2_drug_landlord', label: 'Drug House Landlord', cost: 110, monthlyCashflow: 42, sector: 'underworld' },
+    accept: {
+      id: 'rent_to_dealers',
+      label: 'Rent them properties (110g)',
+      effects: [
+        { kind: 'flag', id: 'drug_landlord', set: 1 },
+        { kind: 'narrate', text: 'Your properties become drug manufacturing centers. You profit from addiction.' },
+        heat('mafia'),
+      ],
+    },
+    decline: { id: 'refuse_dealers', label: 'Decline', text: 'They find other landlords.' },
+  }),
+  venture({
     id: 'ch2_fence_stolen_goods',
-    chapter: 2,
     weight: 4,
-    storyPhase: 'entangled',
     title: 'Fence Stolen Goods',
     body: ['Professional thieves need someone to move their stolen goods. "We steal it, you sell it. Split the proceeds 60-40."'],
-    choices: [
-      {
-        id: 'become_fence',
-        label: 'Become their fence (95g startup)',
-        requires: [{ kind: 'goldAtLeast', amount: 95 }],
-        effects: [
-          { kind: 'gold', delta: -95 },
-          { kind: 'acquireAsset', asset: { id: 'ch2_fence', label: 'Stolen Goods Fence', cost: 95, monthlyCashflow: 38, sector: 'underworld' } },
-          { kind: 'narrate', text: 'You become a fence for stolen goods. Every item has a story of loss.' },
-        ],
-      },
-      { id: 'refuse_fence', label: 'Decline', effects: [{ kind: 'narrate', text: 'They find another fence.' }] },
-    ],
-  },
-  {
+    asset: { id: 'ch2_fence', label: 'Stolen Goods Fence', cost: 95, monthlyCashflow: 38, sector: 'underworld' },
+    accept: {
+      id: 'become_fence',
+      label: 'Become their fence (95g startup)',
+      effects: [{ kind: 'narrate', text: 'You become a fence for stolen goods. Every item has a story of loss.' }, heat('police')],
+    },
+    decline: { id: 'refuse_fence', label: 'Decline', text: 'They find another fence.' },
+  }),
+  venture({
     id: 'ch2_racket_extortion',
-    chapter: 2,
     weight: 3,
-    storyPhase: 'entangled',
     title: 'Extortion Scheme',
     body: ['A con artist offers partnership. "We get dirt on wealthy people, they pay to keep it quiet. Foolproof money."'],
-    choices: [
-      {
-        id: 'run_extortion',
-        label: 'Run extortion scheme (105g)',
-        requires: [{ kind: 'goldAtLeast', amount: 105 }],
-        effects: [
-          { kind: 'gold', delta: -105 },
-          { kind: 'acquireAsset', asset: { id: 'ch2_extortion', label: 'Extortion Scheme', cost: 105, monthlyCashflow: 48, sector: 'underworld' } },
-          { kind: 'flag', id: 'extortionist', set: 1 },
-          { kind: 'narrate', text: 'You profit from blackmail. One day, someone refuses to pay.' },
-        ],
-      },
-      { id: 'refuse_extortion', label: 'Decline', effects: [{ kind: 'narrate', text: 'The con artist disappears.' }] },
-    ],
-  },
+    asset: { id: 'ch2_extortion', label: 'Extortion Scheme', cost: 105, monthlyCashflow: 48, sector: 'underworld' },
+    accept: {
+      id: 'run_extortion',
+      label: 'Run extortion scheme (105g)',
+      effects: [{ kind: 'flag', id: 'extortionist', set: 1 }, { kind: 'narrate', text: 'You profit from blackmail. One day, someone refuses to pay.' }, heat('mafia')],
+    },
+    decline: { id: 'refuse_extortion', label: 'Decline', text: 'The con artist disappears.' },
+  }),
 ]
 
 export const chapter2StoryCards: StoryCard[] = [
   {
     id: 'ch2_street_hustler_friend',
-    chapter: 2,
     weight: 3,
-    storyPhase: 'entangled',
     title: 'An Old Friend from the Streets',
     body: ['Someone you used to know appears, street-worn and desperate. "I remember when you had nothing too. You\'ve made it big. Help me out?"'],
     choices: [
@@ -189,9 +141,7 @@ export const chapter2StoryCards: StoryCard[] = [
   },
   {
     id: 'ch2_gang_initiation_offer',
-    chapter: 2,
     weight: 3,
-    storyPhase: 'entangled',
     title: 'Gang Initiation Offer',
     body: ['A gang leader approaches. "You\'re making serious money. Join us officially. Get protection, influence, and a cut of everything."'],
     choices: [
@@ -202,6 +152,7 @@ export const chapter2StoryCards: StoryCard[] = [
           { kind: 'flag', id: 'gang_member', set: 1 },
           { kind: 'stat', stat: 'nerve', delta: 2 },
           { kind: 'narrate', text: 'You are now made. You belong to something bigger and darker than yourself.' },
+          heat('mafia'),
         ],
       },
       {
@@ -216,9 +167,7 @@ export const chapter2StoryCards: StoryCard[] = [
   },
   {
     id: 'ch2_informant_recruitment',
-    chapter: 2,
     weight: 2,
-    storyPhase: 'entangled',
     title: 'Recruit an Informant',
     body: ['A desperate guard offers to sell you information about shipments, schedules, and opportunities. "I need 50g just to stay alive."'],
     choices: [
@@ -237,9 +186,7 @@ export const chapter2StoryCards: StoryCard[] = [
   },
   {
     id: 'ch2_rival_merchant_cooperation',
-    chapter: 2,
     weight: 2,
-    storyPhase: 'entangled',
     title: 'Propose Cooperation to Rival',
     body: ['Your old rival merchant approaches with a proposition. "We\'re destroying each other. Partners instead of enemies?"'],
     choices: [
@@ -268,9 +215,7 @@ export const chapter2StoryCards: StoryCard[] = [
 export const chapter2MoreMarketCards: StoryCard[] = [
   {
     id: 'ch2_police_crackdown',
-    chapter: 2,
     weight: 4,
-    storyPhase: 'entangled',
     title: 'Police Crackdown on Crime',
     body: ['New police commissioner cracks down hard on the underworld. Street-level operations collapse. Prices spike from scarcity.'],
     choices: [
@@ -291,15 +236,14 @@ export const chapter2MoreMarketCards: StoryCard[] = [
           { kind: 'gold', delta: -250 },
           { kind: 'flag', id: 'police_corrupt', set: 1 },
           { kind: 'narrate', text: 'The police look the other way. Corruption is your security.' },
+          heat('police'),
         ],
       },
     ],
   },
   {
     id: 'ch2_supply_drought',
-    chapter: 2,
     weight: 3,
-    storyPhase: 'entangled',
     title: 'Supply Route Drought',
     body: ['Border patrol tightens. Smugglers can\'t get goods through. Prices spike for smuggled items, crash for legitimate goods.'],
     choices: [
@@ -321,9 +265,7 @@ export const chapter2MoreMarketCards: StoryCard[] = [
   },
   {
     id: 'ch2_gang_war_opportunity',
-    chapter: 2,
     weight: 3,
-    storyPhase: 'entangled',
     title: 'Gang War Creates Opportunity',
     body: ['Two major gangs war over territory. Neutral zone opens up for independent operators. Danger, but profit.'],
     choices: [
@@ -334,6 +276,7 @@ export const chapter2MoreMarketCards: StoryCard[] = [
           { kind: 'gold', delta: 150 },
           { kind: 'stat', stat: 'nerve', delta: 1 },
           { kind: 'narrate', text: 'You operate in the chaos. One misstep means death.' },
+          heat('mafia'),
         ],
       },
       {
@@ -348,9 +291,7 @@ export const chapter2MoreMarketCards: StoryCard[] = [
 export const chapter2MoreDangerCards: StoryCard[] = [
   {
     id: 'ch2_gang_enforcer_visit',
-    chapter: 2,
     weight: 4,
-    storyPhase: 'entangled',
     title: 'Gang Enforcer Demands Payment',
     body: ['A gang enforcer arrives at your door. "We\'ve been protecting your operations. Time to pay what\'s owed. 200g."'],
     choices: [
@@ -377,9 +318,7 @@ export const chapter2MoreDangerCards: StoryCard[] = [
   },
   {
     id: 'ch2_betrayal_by_partner',
-    chapter: 2,
     weight: 3,
-    storyPhase: 'entangled',
     title: 'Partner Betrays You',
     body: ['Your business partner disappears with all the profits. You\'ve been robbed for 180g.'],
     choices: [
@@ -405,9 +344,7 @@ export const chapter2MoreDangerCards: StoryCard[] = [
   },
   {
     id: 'ch2_witness_to_murder',
-    chapter: 2,
     weight: 2,
-    storyPhase: 'entangled',
     title: 'You Witness a Murder',
     body: ['You see someone important killed by gang rivals. They notice you watching. "You didn\'t see anything, right?"'],
     choices: [
@@ -433,9 +370,7 @@ export const chapter2MoreDangerCards: StoryCard[] = [
   },
   {
     id: 'ch2_kidnapping_threat',
-    chapter: 2,
     weight: 2,
-    storyPhase: 'entangled',
     title: 'Kidnapping Threat Against You',
     body: ['A rival gang threatens to kidnap you. "Pay 220g or you disappear."'],
     choices: [
@@ -458,6 +393,15 @@ export const chapter2MoreDangerCards: StoryCard[] = [
           { kind: 'narrate', text: 'Armed guards now follow you. You live, but in constant vigilance.' },
         ],
       },
+      {
+        id: 'go_into_hiding',
+        label: 'Go into hiding',
+        effects: [
+          { kind: 'advanceDays', days: 7 },
+          { kind: 'stat', stat: 'nerve', delta: -1 },
+          { kind: 'narrate', text: 'You vanish for a week, sleeping in cellars. The gang loses interest, but you lose your nerve.' },
+        ],
+      },
     ],
   },
 ]
@@ -465,9 +409,7 @@ export const chapter2MoreDangerCards: StoryCard[] = [
 export const chapter2RecoveryCards: StoryCard[] = [
   {
     id: 'ch2_safe_house_refuge',
-    chapter: 2,
     weight: 2,
-    storyPhase: 'entangled',
     title: 'Find Refuge in a Safe House',
     body: ['When the heat is on, a trusted associate offers you shelter in their safe house. No questions asked.'],
     choices: [

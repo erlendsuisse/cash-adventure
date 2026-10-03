@@ -1,12 +1,20 @@
 import { z } from 'zod'
 
 // Validates authored content shape (catches typos in effect/requirement `kind`
-// values etc). Hand-written and checked against engine/types.ts by the
-// "schema matches engine types" test - never derived via z.infer, so the
-// engine keeps zero dependency on zod.
+// values, misspelled or unknown keys via strictObject, out-of-range chapters).
+// Hand-written to mirror engine/types.ts - never derived via z.infer, so the
+// engine keeps zero dependency on zod. Keep the two in step by hand.
 
 const statId = z.enum(['grit', 'savvy', 'charm', 'nerve'])
 const storyPhase = z.enum(['early_game', 'climbing', 'entangled', 'reckoning', 'recovery'])
+const chapter = z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5), z.literal(6), z.literal(7)])
+const commodity = z.enum(['spice', 'salt', 'iron'])
+// Market sectors have a live price index; asset sectors are labels for owned assets.
+const marketSector = z.enum(['salt', 'spice', 'iron'])
+const assetSector = z.enum([
+  'salt', 'spice', 'iron', 'property', 'craft', 'trade', 'underworld', 'military',
+  'banking', 'plague', 'health', 'espionage', 'transcendence', 'charity',
+])
 
 const requirement: z.ZodType<unknown> = z.lazy(() =>
   z.discriminatedUnion('kind', [
@@ -25,12 +33,14 @@ const requirement: z.ZodType<unknown> = z.lazy(() =>
   ]),
 )
 
-const ownedAsset = z.object({
+const ownedAsset = z.strictObject({
   id: z.string(),
   label: z.string(),
   cost: z.number(),
   monthlyCashflow: z.number(),
-  sector: z.string(),
+  sector: assetSector,
+  visualEffect: z.enum(['headgear', 'clothing', 'accessories']).optional(),
+  quantity: z.number().optional(),
 })
 
 const effect: z.ZodType<unknown> = z.lazy(() =>
@@ -45,24 +55,24 @@ const effect: z.ZodType<unknown> = z.lazy(() =>
     z.object({ kind: z.literal('loan'), principal: z.number(), monthlyPayment: z.number() }),
     z.object({ kind: z.literal('advanceDays'), days: z.number() }),
     z.object({ kind: z.literal('queueCard'), card: z.string(), front: z.boolean().optional() }),
-    z.object({ kind: z.literal('marketShift'), sector: z.string(), delta: z.number() }),
+    z.object({ kind: z.literal('marketShift'), sector: marketSector, delta: z.number() }),
     z.object({ kind: z.literal('grantBoon'), boon: z.string() }),
     z.object({ kind: z.literal('advancePhase'), to: storyPhase }),
     z.object({ kind: z.literal('reckoning') }),
     z.object({ kind: z.literal('narrate'), text: z.string() }),
     z.object({ kind: z.literal('end'), status: z.literal('won'), summary: z.string() }),
     z.object({ kind: z.literal('if'), when: requirement, then: z.array(effect), else: z.array(effect).optional() }),
-    z.object({ kind: z.literal('commodity'), type: z.enum(['spice', 'salt', 'iron']), delta: z.number() }),
+    z.object({ kind: z.literal('commodity'), type: commodity, delta: z.number() }),
   ]),
 )
 
-const outcome = z.object({
+const outcome = z.strictObject({
   text: z.string(),
   effects: z.array(effect).optional(),
   goto: z.string().optional(),
 })
 
-const skillCheck = z.object({
+const skillCheck = z.strictObject({
   stat: statId,
   dc: z.number(),
   die: z.number().optional(),
@@ -75,7 +85,7 @@ const skillCheck = z.object({
 
 const proseBlock = z.union([z.string(), z.object({ if: requirement, text: z.string() })])
 
-const choice = z.object({
+const choice = z.strictObject({
   id: z.string(),
   label: z.string(),
   requires: z.array(requirement).optional(),
@@ -85,7 +95,13 @@ const choice = z.object({
   goto: z.string().optional(),
 })
 
-export const storyCardSchema = z.object({
+const visual = z.strictObject({
+  backgroundId: z.string().optional(),
+  characterMood: z.enum(['neutral', 'tense', 'triumphant', 'fearful']).optional(),
+  soundEvents: z.array(z.strictObject({ trigger: z.enum(['onEnter', 'onChoice']), eventType: z.string() })).optional(),
+})
+
+export const storyCardSchema = z.strictObject({
   id: z.string(),
   title: z.string().optional(),
   body: z.array(proseBlock),
@@ -96,4 +112,6 @@ export const storyCardSchema = z.object({
   requires: z.array(requirement).optional(),
   minTier: z.number().optional(),
   storyPhase: storyPhase.optional(),
+  chapter: chapter.optional(),
+  visual: visual.optional(),
 })

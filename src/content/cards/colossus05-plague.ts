@@ -1,4 +1,5 @@
 import type { StoryCard } from '../../engine/types'
+import { enterChapter } from './factories'
 
 const colossus05_start: StoryCard = {
   id: 'colossus05_start',
@@ -87,6 +88,7 @@ const colossus05_outcome: StoryCard = {
     { kind: 'grantBoon', boon: 'plague_survivor' },
     { kind: 'reckoning' },
     { kind: 'advancePhase', to: 'recovery' },
+    ...enterChapter(6),
     { kind: 'queueCard', card: 'plague_aftermath' },
     { kind: 'narrate', text: 'The plague breaks as mysteriously as it came. The city slowly returns to life, but it is not the same city you knew. And you are not the same person who entered it. You have learned what truly matters. Your fortune returns, but it is now weighted with understanding.' },
   ],

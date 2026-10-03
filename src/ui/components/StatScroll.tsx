@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { GameState } from '../../engine/types'
-import { totalMonthlyIncome } from '../../engine/selectors'
+import { isFree, totalMonthlyIncome } from '../../engine/selectors'
 import { useGame } from '../GameProvider'
 import styles from './StatScroll.module.css'
 
@@ -12,7 +12,7 @@ export function StatScroll({ state }: { state: GameState }) {
   const monthlyIncome = totalMonthlyIncome(state)
   const monthlyExpenses = finances.monthlyExpenses
   const netIncome = monthlyIncome - monthlyExpenses
-  const isFree = netIncome >= 0
+  const free = isFree(state)
 
   return (
     <div className={styles.scroll}>
@@ -115,11 +115,11 @@ export function StatScroll({ state }: { state: GameState }) {
             </div>
             <div className={`${styles.flowItem} ${styles.net}`}>
               <span>Net Income</span>
-              <span className={isFree ? styles.positive : styles.negative}>
-                {isFree ? '+' : '−'}{Math.abs(netIncome)}g
+              <span className={netIncome >= 0 ? styles.positive : styles.negative}>
+                {netIncome >= 0 ? '+' : '−'}{Math.abs(netIncome)}g
               </span>
             </div>
-            {isFree && <div className={styles.freeFlag}>🏆 FINANCIALLY FREE</div>}
+            {free && <div className={styles.freeFlag}>🏆 FINANCIALLY FREE</div>}
           </div>
         </div>
 

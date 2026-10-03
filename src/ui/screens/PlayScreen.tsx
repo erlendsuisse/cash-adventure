@@ -23,7 +23,7 @@ export function PlayScreen() {
   return (
     <div className={styles.screen}>
       {/* Background layer with fade-in animation */}
-      <Background cardId={state.currentCardId} mood={mood} />
+      <Background cardId={state.currentCardId} chapter={card?.chapter} mood={mood} />
 
       {/* Minimal top bar with critical info only */}
       <LedgerBar state={state} />

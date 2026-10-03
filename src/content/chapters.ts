@@ -1,11 +1,16 @@
+import type { ChapterNumber } from '../engine/types'
+
+// Display metadata only. Which chapter is active is engine logic: see
+// currentChapter() in engine/selectors.ts.
+
 export interface ChapterDefinition {
-  number: number
+  number: ChapterNumber
   name: string
   requiredColossiDefeated: number
   baseTier: number
 }
 
-export const CHAPTERS: Record<number, ChapterDefinition> = {
+export const CHAPTERS: Record<ChapterNumber, ChapterDefinition> = {
   1: {
     number: 1,
     name: 'Merchant City',
@@ -48,14 +53,4 @@ export const CHAPTERS: Record<number, ChapterDefinition> = {
     requiredColossiDefeated: 6,
     baseTier: 7,
   },
-}
-
-export function getCurrentChapter(colossiDefeated: number): number {
-  if (colossiDefeated >= 6) return 7
-  if (colossiDefeated >= 5) return 6
-  if (colossiDefeated >= 4) return 5
-  if (colossiDefeated >= 3) return 4
-  if (colossiDefeated >= 2) return 3
-  if (colossiDefeated >= 1) return 2
-  return 1
 }

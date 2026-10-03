@@ -32,6 +32,20 @@ function cardTargets(card: StoryCard): string[] {
   return [...fromOnEnter, ...fromNext, ...fromChoices]
 }
 
+function flattenEffects(effects: Effect[] = []): Effect[] {
+  return effects.flatMap((e) => (e.kind === 'if' ? [e, ...flattenEffects(e.then), ...flattenEffects(e.else)] : [e]))
+}
+
+/** Every effect a card can apply - onEnter, choices, every check outcome, and
+ *  both branches of nested `if`s. */
+export function cardEffects(card: StoryCard): Effect[] {
+  const fromChoices = card.choices.flatMap((choice) => {
+    const outcomes = choice.check ? [choice.check.success, choice.check.failure, choice.check.critSuccess, choice.check.critFailure] : []
+    return [...(choice.effects ?? []), ...outcomes.flatMap((o) => o?.effects ?? [])]
+  })
+  return flattenEffects([...(card.onEnter ?? []), ...fromChoices])
+}
+
 export interface IntegrityReport {
   danglingReferences: { fromCard: string; targetCardId: string }[]
   unreachableCards: string[]

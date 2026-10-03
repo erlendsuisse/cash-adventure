@@ -90,7 +90,7 @@ const contrarian_success: StoryCard = {
     {
       id: 'stayed_calm_respect',
       label: 'Earn respect for steadiness (stayed calm during panic)',
-      requires: [{ kind: 'flag', id: 'merchant_panic', atLeast: 0 }, { kind: 'not', of: { kind: 'flag', id: 'contrarian_investor', atLeast: 1 } }],
+      requires: [{ kind: 'not', of: { kind: 'flag', id: 'contrarian_investor', atLeast: 1 } }],
       effects: [
         { kind: 'gold', delta: 50 },
         { kind: 'stat', stat: 'nerve', delta: 1 },

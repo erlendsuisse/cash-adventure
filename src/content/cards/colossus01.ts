@@ -1,4 +1,5 @@
 import type { StoryCard } from '../../engine/types'
+import { enterChapter } from './factories'
 
 const colossus01_start: StoryCard = {
   id: 'colossus01_start',
@@ -82,6 +83,7 @@ const colossus01_outcome: StoryCard = {
     { kind: 'grantBoon', boon: 'ledger_wyrm_scale' },
     { kind: 'reckoning' },
     { kind: 'advancePhase', to: 'recovery' },
+    ...enterChapter(2),
     { kind: 'queueCard', card: 'mafia_notice' },
     { kind: 'narrate', text: 'The Ledger-Wyrm sinks back into the vaults. Your holdings are stripped to pay for its passing - but you are still standing, and you have earned its scale as a boon.' },
   ],

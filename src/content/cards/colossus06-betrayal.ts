@@ -1,4 +1,5 @@
 import type { StoryCard } from '../../engine/types'
+import { enterChapter } from './factories'
 
 const colossus06_start: StoryCard = {
   id: 'colossus06_start',
@@ -88,6 +89,7 @@ const colossus06_outcome: StoryCard = {
     { kind: 'grantBoon', boon: 'syndicate_grace' },
     { kind: 'reckoning' },
     { kind: 'advancePhase', to: 'recovery' },
+    ...enterChapter(7),
     { kind: 'queueCard', card: 'betrayal_aftermath' },
     { kind: 'narrate', text: 'You survive the Syndicate\'s judgment. You emerge changed—lighter or darker depending on the choices you made. Your empire is smaller now, but it is yours in a way it never was before. The Syndicate leaves you alone. You have become something they recognize: a survivor who knows the cost of living in the grey.' },
   ],

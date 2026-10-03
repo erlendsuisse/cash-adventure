@@ -26,16 +26,8 @@ import { wealthBuildingDeck } from './cards/wealth-building'
 import { commodityTradingCards } from './cards/commodity-trading'
 import { opportunityDealCards } from './cards/opportunity-deals'
 import { dangerCards } from './cards/dangers-and-penalties'
-import { chapterOneCards, chapterTwoCards, chapterThreeCards, chapterFourCards } from './cards/chapter-decks'
 import { marketOpportunityCards } from './cards/market-opportunities'
-import { chapter2CommodityCards, chapter2MarketCards, chapter2DangerCards } from './cards/chapter-2-underworld'
-import { chapter2VentureCards, chapter2StoryCards, chapter2MoreMarketCards, chapter2MoreDangerCards, chapter2RecoveryCards } from './cards/chapter-2-expanded'
-import { chapter3CommodityCards, chapter3MarketCards, chapter3DangerCards } from './cards/chapter-3-warfare'
-import { chapter3MilitaryVentureCards, chapter3WarScenarioCards, chapter3WarEconomyCards, chapter3WarDangerCards, chapter3RecoveryCards } from './cards/chapter-3-expanded'
-import { chapter4CommodityCards, chapter4MarketCards, chapter4DangerCards } from './cards/chapter-4-banking'
-import { chapter5CommodityCards, chapter5MarketCards, chapter5DangerCards } from './cards/chapter-5-plague'
-import { chapter6CommodityCards, chapter6MarketCards, chapter6DangerCards } from './cards/chapter-6-betrayal'
-import { chapter7CommodityCards, chapter7MarketCards, chapter7DangerCards } from './cards/chapter-7-transcendence'
+import { CHAPTER_DECKS } from './chapterDecks'
 import { consequenceTuning, initial, SECTORS, tuning } from './tuning'
 
 const allCards: StoryCard[] = [
@@ -46,38 +38,7 @@ const allCards: StoryCard[] = [
   ...commodityTradingCards,
   ...marketOpportunityCards,
   ...dangerCards,
-  ...chapterOneCards,
-  ...chapterTwoCards,
-  ...chapterThreeCards,
-  ...chapterFourCards,
-  ...chapter2CommodityCards,
-  ...chapter2MarketCards,
-  ...chapter2DangerCards,
-  ...chapter2VentureCards,
-  ...chapter2StoryCards,
-  ...chapter2MoreMarketCards,
-  ...chapter2MoreDangerCards,
-  ...chapter2RecoveryCards,
-  ...chapter3CommodityCards,
-  ...chapter3MarketCards,
-  ...chapter3DangerCards,
-  ...chapter3MilitaryVentureCards,
-  ...chapter3WarScenarioCards,
-  ...chapter3WarEconomyCards,
-  ...chapter3WarDangerCards,
-  ...chapter3RecoveryCards,
-  ...chapter4CommodityCards,
-  ...chapter4MarketCards,
-  ...chapter4DangerCards,
-  ...chapter5CommodityCards,
-  ...chapter5MarketCards,
-  ...chapter5DangerCards,
-  ...chapter6CommodityCards,
-  ...chapter6MarketCards,
-  ...chapter6DangerCards,
-  ...chapter7CommodityCards,
-  ...chapter7MarketCards,
-  ...chapter7DangerCards,
+  ...Object.values(CHAPTER_DECKS).flat(),
   ...adventureDeckCards,
   ...storyEventCards,
   ...statTrainingCards,
@@ -103,75 +64,19 @@ const allCards: StoryCard[] = [
 
 const cards: Record<string, StoryCard> = {}
 for (const card of allCards) {
+  // Fail loudly: a duplicate id would silently replace the earlier card.
+  if (cards[card.id]) throw new Error(`Duplicate card id: ${card.id}`)
   cards[card.id] = card
 }
 
-const allDeckCards = [
-  ...deckCards,
-  ...adventureDeckCards,
-  ...storyEventCards,
-  ...statTrainingCards,
-  ...assetLiquidationCards,
-  ...marketEventCards,
-  ...colossiInvestigationCards,
-  ...expansionCards,
-  ...storyExpansionCards,
-  ...storyExpansion2Cards,
-  ...recoveryDeckCards,
-  ...recoveryPhaseCards,
-  ...narrativeConsequenceCards,
-  ...colossuAftermath,
-  ...opportunityDealCards,
-  ...wealthBuildingDeck,
-  ...commodityTradingCards,
-  ...marketOpportunityCards,
-  ...dangerCards,
-  ...chapterOneCards,
-  ...chapterTwoCards,
-  ...chapterThreeCards,
-  ...chapterFourCards,
-  ...chapter2CommodityCards,
-  ...chapter2MarketCards,
-  ...chapter2DangerCards,
-  ...chapter2VentureCards,
-  ...chapter2StoryCards,
-  ...chapter2MoreMarketCards,
-  ...chapter2MoreDangerCards,
-  ...chapter2RecoveryCards,
-  ...chapter3CommodityCards,
-  ...chapter3MarketCards,
-  ...chapter3DangerCards,
-  ...chapter3MilitaryVentureCards,
-  ...chapter3WarScenarioCards,
-  ...chapter3WarEconomyCards,
-  ...chapter3WarDangerCards,
-  ...chapter3RecoveryCards,
-  ...chapter4CommodityCards,
-  ...chapter4MarketCards,
-  ...chapter4DangerCards,
-  ...chapter5CommodityCards,
-  ...chapter5MarketCards,
-  ...chapter5DangerCards,
-  ...chapter6CommodityCards,
-  ...chapter6MarketCards,
-  ...chapter6DangerCards,
-  ...chapter7CommodityCards,
-  ...chapter7MarketCards,
-  ...chapter7DangerCards,
-]
 
 export const campaign: Campaign = Object.freeze({
   startCardId: 'prologue',
   cards: Object.freeze(cards),
-  deckCardIds: allDeckCards.filter((c) => c.weight !== undefined).map((c) => c.id),
+  // Every weighted card is drawable; there is no separate deck list to keep in sync.
+  deckCardIds: allCards.filter((c) => c.weight !== undefined).map((c) => c.id),
   sectors: SECTORS,
   colossusCardIds: ['colossus01_start', 'colossus02_start', 'colossus03_start', 'colossus04_start', 'colossus05_start', 'colossus06_start', 'colossus07_start'],
-  colossusPathCards: {
-    mafia: 'colossus01_start',        // Ledger-Wyrm: financial reckoning
-    police: 'colossus02_start',       // The Inquisitor: moral judgment
-    war: 'colossus03_start',          // The Tide: uncontrollable chaos
-    banking: 'colossus04_start',      // The Machine: market disruption
-  },
   marketDayCardId: marketDayCard.id,
   tuning,
   consequenceTuning,

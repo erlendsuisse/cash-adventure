@@ -1,92 +1,66 @@
 import type { StoryCard } from '../../engine/types'
+import { venture } from './factories'
 
 export const chapter7CommodityCards: StoryCard[] = [
-  {
+  venture({
     id: 'ch7_artifact_collection',
-    chapter: 7,
     weight: 5,
-    storyPhase: 'reckoning',
     title: 'Ancient Artifact Collection',
-    body: ['A collector of forbidden artifacts offers to sell you access to reality-warping items. "These objects transcend commerce. 400 gold buys entry to the impossible."'],
-    choices: [
-      {
-        id: 'collect_artifacts',
-        label: 'Buy artifact collection (400g)',
-        requires: [{ kind: 'goldAtLeast', amount: 400 }],
-        effects: [
-          { kind: 'gold', delta: -400 },
-          {
-            kind: 'acquireAsset',
-            asset: { id: 'ch7_artifacts', label: 'Forbidden Artifact Collection', cost: 400, monthlyCashflow: 150, sector: 'transcendence' },
-          },
-          { kind: 'stat', stat: 'nerve', delta: 2 },
-          { kind: 'narrate', text: 'You touch forces beyond mortal understanding. The artifacts whisper secrets.' },
-        ],
-      },
-      { id: 'refuse_artifacts', label: 'Refuse (fear the unknown)', effects: [{ kind: 'narrate', text: 'Some knowledge is better left unknown.' }] },
+    body: [
+      'A collector of forbidden artifacts offers to sell you access to reality-warping items. "These objects transcend commerce. 400 gold buys entry to the impossible."',
     ],
-  },
+    asset: { id: 'ch7_artifacts', label: 'Forbidden Artifact Collection', cost: 400, monthlyCashflow: 150, sector: 'transcendence' },
+    accept: {
+      id: 'collect_artifacts',
+      label: 'Buy artifact collection (400g)',
+      effects: [
+        { kind: 'stat', stat: 'nerve', delta: 2 },
+        { kind: 'narrate', text: 'You touch forces beyond mortal understanding. The artifacts whisper secrets.' },
+      ],
+    },
+    decline: { id: 'refuse_artifacts', label: 'Refuse (fear the unknown)', text: 'Some knowledge is better left unknown.' },
+  }),
 
-  {
+  venture({
     id: 'ch7_dimensional_trade',
-    chapter: 7,
     weight: 4,
-    storyPhase: 'reckoning',
     title: 'Dimensional Trade Route',
     body: ['A merchant claims to traffic goods from alternate dimensions. "Impossible goods at impossible prices. 380 gold opens the gateway."'],
-    choices: [
-      {
-        id: 'open_gateway',
-        label: 'Open the dimensional gateway (380g)',
-        requires: [{ kind: 'goldAtLeast', amount: 380 }],
-        effects: [
-          { kind: 'gold', delta: -380 },
-          {
-            kind: 'acquireAsset',
-            asset: { id: 'ch7_gateway', label: 'Dimensional Trade Gateway', cost: 380, monthlyCashflow: 140, sector: 'transcendence' },
-          },
-          { kind: 'flag', id: 'dimensional_trader', set: 1 },
-          { kind: 'narrate', text: 'Reality bends around your warehouse. Goods from impossible places now flow through your hands.' },
-        ],
-      },
-      { id: 'stay_mundane', label: 'Stay in your dimension', effects: [{ kind: 'narrate', text: 'Perhaps this is safer.' }] },
-    ],
-  },
+    asset: { id: 'ch7_gateway', label: 'Dimensional Trade Gateway', cost: 380, monthlyCashflow: 140, sector: 'transcendence' },
+    accept: {
+      id: 'open_gateway',
+      label: 'Open the dimensional gateway (380g)',
+      effects: [
+        { kind: 'flag', id: 'dimensional_trader', set: 1 },
+        { kind: 'narrate', text: 'Reality bends around your warehouse. Goods from impossible places now flow through your hands.' },
+      ],
+    },
+    decline: { id: 'stay_mundane', label: 'Stay in your dimension', text: 'Perhaps this is safer.' },
+  }),
 
-  {
+  venture({
     id: 'ch7_consciousness_trade',
-    chapter: 7,
     weight: 3,
-    storyPhase: 'reckoning',
     title: 'Trade in Consciousness Itself',
     body: ['A transcendent being offers to teach you consciousness trading. "Minds are currency at this level. 420 gold for enlightenment and profit."'],
-    choices: [
-      {
-        id: 'trade_consciousness',
-        label: 'Learn consciousness trading (420g)',
-        requires: [{ kind: 'goldAtLeast', amount: 420 }],
-        effects: [
-          { kind: 'gold', delta: -420 },
-          {
-            kind: 'acquireAsset',
-            asset: { id: 'ch7_consciousness', label: 'Consciousness Trading Network', cost: 420, monthlyCashflow: 160, sector: 'transcendence' },
-          },
-          { kind: 'stat', stat: 'charm', delta: 1 },
-          { kind: 'flag', id: 'transcendent_being', set: 1 },
-          { kind: 'narrate', text: 'Your mind expands. You trade in concepts that defy description.' },
-        ],
-      },
-      { id: 'stay_human', label: 'Remain human', effects: [{ kind: 'narrate', text: 'Humanity has limits. Perhaps that\'s good.' }] },
-    ],
-  },
+    asset: { id: 'ch7_consciousness', label: 'Consciousness Trading Network', cost: 420, monthlyCashflow: 160, sector: 'transcendence' },
+    accept: {
+      id: 'trade_consciousness',
+      label: 'Learn consciousness trading (420g)',
+      effects: [
+        { kind: 'stat', stat: 'charm', delta: 1 },
+        { kind: 'flag', id: 'transcendent_being', set: 1 },
+        { kind: 'narrate', text: 'Your mind expands. You trade in concepts that defy description.' },
+      ],
+    },
+    decline: { id: 'stay_human', label: 'Remain human', text: 'Humanity has limits. Perhaps that\'s good.' },
+  }),
 ]
 
 export const chapter7MarketCards: StoryCard[] = [
   {
     id: 'ch7_reality_fractures',
-    chapter: 7,
     weight: 5,
-    storyPhase: 'reckoning',
     title: 'Reality Begins to Fracture',
     body: ['The very fabric of reality tears. Multiple dimensions bleed into each other. Time, space, and economics cease to function normally.'],
     choices: [
@@ -95,7 +69,7 @@ export const chapter7MarketCards: StoryCard[] = [
         label: 'Ride the reality wave (+500g)',
         effects: [
           { kind: 'gold', delta: 500 },
-          { kind: 'marketShift', sector: 'transcendence', delta: 50 },
+          { kind: 'marketShift', sector: 'spice', delta: 50 },
           { kind: 'stat', stat: 'nerve', delta: 2 },
           { kind: 'narrate', text: 'You surf the edge of chaos. Reality-shattering profits await.' },
         ],
@@ -114,9 +88,7 @@ export const chapter7MarketCards: StoryCard[] = [
 
   {
     id: 'ch7_time_market_chaos',
-    chapter: 7,
     weight: 4,
-    storyPhase: 'reckoning',
     title: 'Time Market Collapses',
     body: ['Markets exist in multiple time-streams simultaneously. Past, present, and future transactions conflict. Fortunes materialize and vanish instantly.'],
     choices: [
@@ -125,7 +97,7 @@ export const chapter7MarketCards: StoryCard[] = [
         label: 'Exploit time arbitrage (+450g)',
         effects: [
           { kind: 'gold', delta: 450 },
-          { kind: 'marketShift', sector: 'transcendence', delta: 40 },
+          { kind: 'marketShift', sector: 'salt', delta: 40 },
           { kind: 'narrate', text: 'You trade across time itself. The profits defy explanation.' },
         ],
       },
@@ -143,9 +115,7 @@ export const chapter7MarketCards: StoryCard[] = [
 
   {
     id: 'ch7_cosmic_event',
-    chapter: 7,
     weight: 3,
-    storyPhase: 'reckoning',
     title: 'Cosmic Event Reshapes Economy',
     body: ['A cosmic force sweeps through space-time. The old economy is dead. Something new emerges from the chaos.'],
     choices: [
@@ -154,7 +124,7 @@ export const chapter7MarketCards: StoryCard[] = [
         label: 'Lead the new economy (+550g)',
         effects: [
           { kind: 'gold', delta: 550 },
-          { kind: 'marketShift', sector: 'transcendence', delta: 60 },
+          { kind: 'marketShift', sector: 'iron', delta: 60 },
           { kind: 'stat', stat: 'charm', delta: 1 },
           { kind: 'narrate', text: 'You lead humanity into a new era. Your wealth is incomprehensible.' },
         ],
@@ -175,9 +145,7 @@ export const chapter7MarketCards: StoryCard[] = [
 export const chapter7DangerCards: StoryCard[] = [
   {
     id: 'ch7_entity_confrontation',
-    chapter: 7,
     weight: 5,
-    storyPhase: 'reckoning',
     title: 'Ancient Entity Demands Reckoning',
     body: ['An entity older than civilization confronts you. "You have accumulated power beyond your understanding. Now you must answer for it."'],
     choices: [
@@ -206,9 +174,7 @@ export const chapter7DangerCards: StoryCard[] = [
 
   {
     id: 'ch7_mind_unraveling',
-    chapter: 7,
     weight: 4,
-    storyPhase: 'reckoning',
     title: 'Your Mind Begins to Unravel',
     body: ['The knowledge you\'ve accumulated breaks your sanity. Reality and illusion blur. You see truths humans should not know.'],
     choices: [
@@ -237,9 +203,7 @@ export const chapter7DangerCards: StoryCard[] = [
 
   {
     id: 'ch7_final_choice',
-    chapter: 7,
     weight: 5,
-    storyPhase: 'reckoning',
     title: 'The Final Choice: Ascension or Legacy',
     body: ['You stand at the precipice. You can ascend beyond humanity, or return to help your species. You cannot do both. Choose.'],
     choices: [

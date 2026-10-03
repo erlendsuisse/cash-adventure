@@ -1,4 +1,5 @@
 import type { StoryCard } from '../../engine/types'
+import { enterChapter } from './factories'
 
 const colossus03_start: StoryCard = {
   id: 'colossus03_start',
@@ -85,6 +86,7 @@ const colossus03_outcome: StoryCard = {
     { kind: 'grantBoon', boon: 'tide_survivor' },
     { kind: 'reckoning' },
     { kind: 'advancePhase', to: 'recovery' },
+    ...enterChapter(4),
     { kind: 'queueCard', card: 'war_contracts' },
     { kind: 'narrate', text: 'The Tide withdraws as mysteriously as it came. The sky clears. The harbor settles. But you have learned an ancient lesson: the ocean is older than gold, and no merchant truly commands it. You are still alive—scarred, diminished, but alive. That is the only victory the Tide permits.' },
   ],

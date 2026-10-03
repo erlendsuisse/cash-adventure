@@ -158,7 +158,7 @@ const guard_problem: StoryCard = {
 
 const fortune_teller: StoryCard = {
   storyPhase: 'climbing',
-  id: 'fortune_teller',
+  id: 'seers_warning',
   weight: 4,
   title: 'The Seer\'s Warning',
   body: [

@@ -1,30 +1,23 @@
 import { useEffect, useState } from 'react'
 import { getBackground } from '../../../assets/backgrounds/metadata'
+import type { ChapterNumber } from '../../../engine/types'
 import styles from './Background.module.css'
 
 interface BackgroundProps {
   cardId: string
+  /** The card's own chapter, if it belongs to a chapter deck. */
+  chapter?: ChapterNumber
   mood?: 'neutral' | 'tense' | 'triumphant' | 'fearful'
-}
-
-function getChapterTheme(cardId: string): 'ch1' | 'ch2' | 'ch3' | 'ch4' | 'ch5' | 'ch6' | 'ch7' | 'default' {
-  if (cardId.startsWith('ch2_')) return 'ch2'
-  if (cardId.startsWith('ch3_')) return 'ch3'
-  if (cardId.startsWith('ch4_')) return 'ch4'
-  if (cardId.startsWith('ch5_')) return 'ch5'
-  if (cardId.startsWith('ch6_')) return 'ch6'
-  if (cardId.startsWith('ch7_')) return 'ch7'
-  return 'default'
 }
 
 /**
  * Background image layer for cards with fade-in animation
  * Loads image and fades in, allowing card to appear after 0.5s
  */
-export function Background({ cardId, mood = 'neutral' }: BackgroundProps) {
+export function Background({ cardId, chapter, mood = 'neutral' }: BackgroundProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [imageUrl, setImageUrl] = useState<string | null>(null)
-  const chapterTheme = getChapterTheme(cardId)
+  const chapterTheme = chapter ? `ch${chapter}` : 'default'
 
   const backgroundAsset = getBackground(cardId)
 

@@ -1,88 +1,58 @@
 import type { StoryCard } from '../../engine/types'
+import { heat, venture } from './factories'
 
 export const chapter2CommodityCards: StoryCard[] = [
-  {
+  venture({
     id: 'ch2_spice_smuggling',
-    chapter: 2,
     weight: 4,
-    storyPhase: 'entangled',
     title: 'Underground Spice Network',
-    body: ['A smuggler offers to cut you in on an underground spice distribution network. "We move high-margin spice through back channels. No taxes, no tariffs - just profit."'],
-    choices: [
-      {
-        id: 'join_spice_smuggle',
-        label: 'Join the smuggling ring (150g)',
-        requires: [{ kind: 'goldAtLeast', amount: 150 }],
-        effects: [
-          { kind: 'gold', delta: -150 },
-          {
-            kind: 'acquireAsset',
-            asset: { id: 'ch2_spice_ring', label: 'Spice Smuggling Ring', cost: 150, monthlyCashflow: 35, sector: 'spice' },
-          },
-          { kind: 'narrate', text: 'You enter the underground spice trade. The profits are excellent, but so are the risks.' },
-        ],
-      },
-      { id: 'refuse_spice_ring', label: 'Too risky', effects: [{ kind: 'narrate', text: 'The smuggler vanishes into the shadows.' }] },
+    body: [
+      'A smuggler offers to cut you in on an underground spice distribution network. "We move high-margin spice through back channels. No taxes, no tariffs - just profit."',
     ],
-  },
+    asset: { id: 'ch2_spice_ring', label: 'Spice Smuggling Ring', cost: 150, monthlyCashflow: 35, sector: 'spice' },
+    accept: {
+      id: 'join_spice_smuggle',
+      label: 'Join the smuggling ring (150g)',
+      effects: [{ kind: 'narrate', text: 'You enter the underground spice trade. The profits are excellent, but so are the risks.' }, heat('police')],
+    },
+    decline: { id: 'refuse_spice_ring', label: 'Too risky', text: 'The smuggler vanishes into the shadows.' },
+  }),
 
-  {
+  venture({
     id: 'ch2_salt_black_market',
-    chapter: 2,
     weight: 3,
-    storyPhase: 'entangled',
     title: 'Black Market Salt Supplier',
-    body: ['A dealer in restricted goods offers partnership. "Salt is heavily controlled. We move it illegally at premium prices. Your network, my supply - we split the take."'],
-    choices: [
-      {
-        id: 'partner_salt_black',
-        label: 'Partner with black market (140g)',
-        requires: [{ kind: 'goldAtLeast', amount: 140 }],
-        effects: [
-          { kind: 'gold', delta: -140 },
-          {
-            kind: 'acquireAsset',
-            asset: { id: 'ch2_salt_black', label: 'Black Market Salt Operation', cost: 140, monthlyCashflow: 32, sector: 'salt' },
-          },
-          { kind: 'narrate', text: 'You move restricted salt. The authorities would pay to catch you.' },
-        ],
-      },
-      { id: 'refuse_salt_black', label: 'Decline', effects: [{ kind: 'narrate', text: 'The dealer moves on.' }] },
+    body: [
+      'A dealer in restricted goods offers partnership. "Salt is heavily controlled. We move it illegally at premium prices. Your network, my supply - we split the take."',
     ],
-  },
+    asset: { id: 'ch2_salt_black', label: 'Black Market Salt Operation', cost: 140, monthlyCashflow: 32, sector: 'salt' },
+    accept: {
+      id: 'partner_salt_black',
+      label: 'Partner with black market (140g)',
+      effects: [{ kind: 'narrate', text: 'You move restricted salt. The authorities would pay to catch you.' }, heat('police')],
+    },
+    decline: { id: 'refuse_salt_black', label: 'Decline', text: 'The dealer moves on.' },
+  }),
 
-  {
+  venture({
     id: 'ch2_iron_theft_fence',
-    chapter: 2,
     weight: 3,
-    storyPhase: 'entangled',
     title: 'Stolen Iron Fence',
     body: ['A criminal offers to sell you stolen military-grade iron at 60% below market. "No questions asked. We just need a distributor."'],
-    choices: [
-      {
-        id: 'fence_stolen_iron',
-        label: 'Distribute stolen iron (130g)',
-        requires: [{ kind: 'goldAtLeast', amount: 130 }],
-        effects: [
-          { kind: 'gold', delta: -130 },
-          {
-            kind: 'acquireAsset',
-            asset: { id: 'ch2_iron_fence', label: 'Stolen Iron Distribution', cost: 130, monthlyCashflow: 40, sector: 'iron' },
-          },
-          { kind: 'narrate', text: 'You fence stolen iron. The military will want it back.' },
-        ],
-      },
-      { id: 'refuse_iron_fence', label: 'Stay clean', effects: [{ kind: 'narrate', text: 'The fence shrugs and leaves.' }] },
-    ],
-  },
+    asset: { id: 'ch2_iron_fence', label: 'Stolen Iron Distribution', cost: 130, monthlyCashflow: 40, sector: 'iron' },
+    accept: {
+      id: 'fence_stolen_iron',
+      label: 'Distribute stolen iron (130g)',
+      effects: [{ kind: 'narrate', text: 'You fence stolen iron. The military will want it back.' }, heat('police')],
+    },
+    decline: { id: 'refuse_iron_fence', label: 'Stay clean', text: 'The fence shrugs and leaves.' },
+  }),
 ]
 
 export const chapter2MarketCards: StoryCard[] = [
   {
     id: 'ch2_turf_war_spike',
-    chapter: 2,
     weight: 5,
-    storyPhase: 'entangled',
     title: 'Turf War Erupts',
     body: ['Two criminal syndicates clash over territory. Market prices spike as supply chains are disrupted. This could be an opportunity - or a disaster.'],
     choices: [
@@ -110,9 +80,7 @@ export const chapter2MarketCards: StoryCard[] = [
 
   {
     id: 'ch2_protection_racket_squeeze',
-    chapter: 2,
     weight: 4,
-    storyPhase: 'entangled',
     title: 'Protection Money Squeeze',
     body: ['The syndicate that "protects" your operations demands a payment increase. "Business is good. Time to pay more."'],
     choices: [
@@ -138,9 +106,7 @@ export const chapter2MarketCards: StoryCard[] = [
 
   {
     id: 'ch2_informant_tip',
-    chapter: 2,
     weight: 3,
-    storyPhase: 'entangled',
     title: 'A Timely Informant Tip',
     body: ['Your informant warns of incoming supply. "Shipment from the north. High quality, cheap. Get there first."'],
     choices: [
@@ -166,9 +132,7 @@ export const chapter2MarketCards: StoryCard[] = [
 export const chapter2DangerCards: StoryCard[] = [
   {
     id: 'ch2_rival_merchant',
-    chapter: 2,
     weight: 4,
-    storyPhase: 'entangled',
     title: 'A Rival Merchant Challenges You',
     body: ['A competing merchant corners you. "You\'re cutting into my territory. This ends now - pay me 80 gold protection or we settle this in the streets."'],
     choices: [
@@ -196,9 +160,7 @@ export const chapter2DangerCards: StoryCard[] = [
 
   {
     id: 'ch2_police_shakedown',
-    chapter: 2,
     weight: 3,
-    storyPhase: 'entangled',
     title: 'Police Shakedown',
     body: ['Corrupt police stop you on the street. "We hear you\'re doing good business. Time for an informal tax."'],
     choices: [
@@ -226,9 +188,7 @@ export const chapter2DangerCards: StoryCard[] = [
 
   {
     id: 'ch2_loan_collector',
-    chapter: 2,
     weight: 3,
-    storyPhase: 'entangled',
     title: 'Aggressive Loan Collector',
     body: ['A collector from the underworld appears. "Your debt has interest. Time to pay 120 gold or we take it from your assets."'],
     choices: [

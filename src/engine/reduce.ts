@@ -22,25 +22,30 @@ export function reduce(state: GameState, action: Action, campaign: Campaign): Ga
           gold: state.finances.gold + action.principal,
           debt: state.finances.debt + action.principal,
           monthlyExpenses: state.finances.monthlyExpenses + action.monthlyPayment,
+          loanPayments: (state.finances.loanPayments ?? 0) + action.monthlyPayment,
         },
         log: [...state.log, { day: state.clock.day, text: `Took loan: +${action.principal}g (payment: ${action.monthlyPayment}g/month)` }],
       }
     case 'payLoan': {
       const oldDebt = state.finances.debt
-      const newDebt = Math.max(0, oldDebt - action.amount)
-      const debtReduction = oldDebt - newDebt
-      const proportionPaid = oldDebt > 0 ? debtReduction / oldDebt : 0
-      const expenseReduction = Math.round(state.finances.monthlyExpenses * proportionPaid)
+      // Can't pay with gold you don't have, or pay off more than you owe.
+      const paid = Math.min(action.amount, oldDebt)
+      if (paid <= 0 || paid > state.finances.gold) return state
+      const proportionPaid = paid / oldDebt
+      // Only the loan-servicing share of expenses goes away, never base living costs.
+      const loanPayments = state.finances.loanPayments ?? 0
+      const expenseReduction = Math.round(loanPayments * proportionPaid)
 
       return {
         ...state,
         finances: {
           ...state.finances,
-          gold: state.finances.gold - action.amount,
-          debt: newDebt,
+          gold: state.finances.gold - paid,
+          debt: oldDebt - paid,
           monthlyExpenses: Math.max(0, state.finances.monthlyExpenses - expenseReduction),
+          loanPayments: loanPayments - expenseReduction,
         },
-        log: [...state.log, { day: state.clock.day, text: `Paid loan: −${action.amount}g (−${expenseReduction}g/month)` }],
+        log: [...state.log, { day: state.clock.day, text: `Paid loan: −${paid}g (−${expenseReduction}g/month)` }],
       }
     }
     case 'sellCommodity': {
@@ -92,15 +97,15 @@ export function reduce(state: GameState, action: Action, campaign: Campaign): Ga
       if (!asset) return state
 
       const salePrice = Math.round(asset.cost * action.priceMultiplier)
-      const expenseReduction = Math.max(0, asset.monthlyCashflow)
 
+      // Passive income is derived from owned assets, so removing the asset is
+      // the whole cashflow change - expenses are untouched.
       return {
         ...state,
         finances: {
           ...state.finances,
           gold: state.finances.gold + salePrice,
           assets: state.finances.assets.filter((a) => a.id !== action.id),
-          monthlyExpenses: state.finances.monthlyExpenses - expenseReduction,
         },
         log: [
           ...state.log,
@@ -158,6 +163,9 @@ function hasSignificantEffects(summary: EffectSummary): boolean {
 }
 
 function applyChoose(state: GameState, choiceId: string, campaign: Campaign): GameState {
+  // An outcome on screen must be acknowledged (advance) first; choosing again
+  // would re-apply the same card's choice.
+  if (state.pendingOutcome) return state
   const card = campaign.cards[state.currentCardId]
   if (!card) return state
   const choice = card.choices.find((c) => c.id === choiceId)
@@ -206,7 +214,11 @@ function applyAdvance(state: GameState, campaign: Campaign): GameState {
 
 /** Shared tail for both actions: advance the clock by one turn (plus any
  *  authored advanceDays on top), run the economy for the elapsed days,
- *  resolve the next card id (authored goto, else a random draw), and enter it. */
+ *  resolve the next card id, and enter it. Priority: an authored goto (so
+ *  chains like a Colossus trial aren't cut), then the oldest queued interrupt,
+ *  then a fresh random draw. Drawing only when the queue is empty matters: a
+ *  draw parked behind an interrupt would play turns later, after the phase or
+ *  chapter that made it eligible has passed. */
 function resolveNext(before: GameState, working: GameState, explicitTarget: CardId | undefined, campaign: Campaign): GameState {
   const authoredDays = working.clock.day - before.clock.day
   const daysAdvanced = authoredDays + campaign.tuning.daysPerTurn
@@ -214,26 +226,13 @@ function resolveNext(before: GameState, working: GameState, explicitTarget: Card
   s = tick(s, daysAdvanced, campaign)
   if (s.status !== 'playing') return s
 
-  let target = explicitTarget
-  if (!target) {
-    const drawn = drawCard(s, campaign)
-    s = { ...s, rng: drawn.rng }
-    target = drawn.cardId ?? campaign.startCardId
-  }
+  if (explicitTarget) return enterCard(s, explicitTarget, campaign)
 
-  // If there's an explicit target (from choice goto), it takes priority
-  // Otherwise, use pending cards first
-  let nextCardId: CardId
-  if (explicitTarget) {
-    nextCardId = target
-    s = { ...s, pendingCards: s.pendingCards }  // Keep pending for later
-  } else {
-    const queue = [...s.pendingCards, target]
-    nextCardId = queue[0] as CardId
-    s = { ...s, pendingCards: queue.slice(1) }
-  }
+  const [queued, ...rest] = s.pendingCards
+  if (queued) return enterCard({ ...s, pendingCards: rest }, queued, campaign)
 
-  return enterCard(s, nextCardId, campaign)
+  const drawn = drawCard(s, campaign)
+  return enterCard({ ...s, rng: drawn.rng }, drawn.cardId ?? campaign.startCardId, campaign)
 }
 
 function enterCard(state: GameState, cardId: CardId, campaign: Campaign): GameState {

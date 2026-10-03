@@ -1,4 +1,5 @@
 import type { StoryCard } from '../../engine/types'
+import { enterChapter } from './factories'
 
 const colossus04_start: StoryCard = {
   id: 'colossus04_start',
@@ -85,6 +86,7 @@ const colossus04_outcome: StoryCard = {
     { kind: 'grantBoon', boon: 'machine_sponsor' },
     { kind: 'reckoning' },
     { kind: 'advancePhase', to: 'recovery' },
+    ...enterChapter(5),
     { kind: 'queueCard', card: 'market_collapse' },
     { kind: 'narrate', text: 'The Machine grinds on, indifferent to your choices. Your old assets are worthless now—the guild recognizes them no longer. Your wages, redefined by the factory\'s logic, are stripped to what industrial efficiency requires. But you survived. More than that: you adapted. And in a world remade by machines, adaptation is the only victory that matters.' },
   ],

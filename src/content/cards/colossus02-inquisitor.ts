@@ -1,4 +1,5 @@
 import type { StoryCard } from '../../engine/types'
+import { enterChapter } from './factories'
 
 const colossus02_start: StoryCard = {
   id: 'colossus02_start',
@@ -83,6 +84,7 @@ const colossus02_outcome: StoryCard = {
     { kind: 'grantBoon', boon: 'inquisitor_grace' },
     { kind: 'reckoning' },
     { kind: 'advancePhase', to: 'recovery' },
+    ...enterChapter(3),
     { kind: 'queueCard', card: 'wanted_poster' },
     { kind: 'narrate', text: 'The Inquisitor rises. "You are neither saint nor monster," he says. "You are merely human, with a human\'s appetites and a human\'s desperate compromises. The temple forgives you—but not without cost. Go, and sin less." He disappears as mysteriously as he came, leaving only the scent of incense.' },
   ],

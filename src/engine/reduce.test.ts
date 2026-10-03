@@ -82,22 +82,67 @@ describe('reduce - choose', () => {
     expect(s.currentCardId).toBe('drawn')
   })
 
-  it('queues an interrupt ahead of the authored goto and resumes afterward', () => {
+  it('lets an authored goto finish its chain before a queued interrupt plays', () => {
+    // An interrupt cutting into a goto chain would break multi-card sequences
+    // like a Colossus trial, so it waits in the queue and plays on the next draw.
     const campaign = makeCampaign(
       [
         card('start', { choices: [{ id: 'go', label: 'Go', effects: [{ kind: 'advanceDays', days: 1 }], goto: 'story_continues' }] }),
-        card('story_continues'),
+        card('story_continues', { choices: [{ id: 'onward', label: 'Onward' }] }),
       ],
       { tuning: { marketDayInterval: 1, marketDriftRange: 0, freedomDaysToTrial: 1000, daysPerTurn: 0, paydayInterval: 1000 } },
     )
     const state = newGame(1, campaign)
     const s = reduce(state, { type: 'choose', choiceId: 'go' }, campaign)
-    expect(s.currentCardId).toBe('market_day')
-    expect(s.pendingCards).toEqual(['story_continues'])
+    expect(s.currentCardId).toBe('story_continues')
+    expect(s.pendingCards).toEqual(['market_day'])
 
-    const s2 = reduce(s, { type: 'choose', choiceId: 'ack' }, campaign)
-    // the market_day card in this test has no choices, so 'ack' matches nothing - use advance instead
-    expect(s2).toEqual(s)
+    const s2 = reduce(s, { type: 'choose', choiceId: 'onward' }, campaign)
+    expect(s2.currentCardId).toBe('market_day')
+    expect(s2.pendingCards).not.toContain('market_day') // this turn's draw waits behind it instead
+  })
+
+  it('plays a queued interrupt instead of drawing, so draws never pile up behind it', () => {
+    const campaign = makeCampaign([card('start', { choices: [{ id: 'go', label: 'Go' }] }), card('interrupt')])
+    const state = { ...newGame(1, campaign), pendingCards: ['interrupt'] }
+    const s = reduce(state, { type: 'choose', choiceId: 'go' }, campaign)
+    expect(s.currentCardId).toBe('interrupt')
+    expect(s.pendingCards).toEqual([])
+    expect(s.rng).toEqual(state.rng) // nothing was drawn
+  })
+
+  it('ignores a choice while an outcome is waiting to be acknowledged', () => {
+    const campaign = makeCampaign([card('start', { choices: [{ id: 'buy', label: 'Buy', effects: [{ kind: 'gold', delta: -10 }] }] })])
+    const s = reduce(newGame(1, campaign), { type: 'choose', choiceId: 'buy' }, campaign)
+    expect(s.pendingOutcome).toBeDefined()
+    expect(reduce(s, { type: 'choose', choiceId: 'buy' }, campaign)).toBe(s)
+  })
+
+  it('repaying a loan removes only its payments, never base living costs', () => {
+    const campaign = makeCampaign([card('start')])
+    let s = newGame(1, campaign) // base expenses 0 in the test campaign
+    s = { ...s, finances: { ...s.finances, monthlyExpenses: 20 } }
+    s = reduce(s, { type: 'takeLoan', principal: 100, monthlyPayment: 10 }, campaign)
+    expect(s.finances.monthlyExpenses).toBe(30)
+    s = reduce(s, { type: 'payLoan', amount: 500 }, campaign) // overpaying is capped at the debt
+    expect(s.finances.debt).toBe(0)
+    expect(s.finances.monthlyExpenses).toBe(20)
+    expect(s.finances.gold).toBe(100) // 100 start + 100 borrowed - 100 repaid
+  })
+
+  it('refuses a loan payment the player cannot afford', () => {
+    const campaign = makeCampaign([card('start')])
+    const s = { ...newGame(1, campaign), finances: { ...newGame(1, campaign).finances, gold: 10, debt: 100 } }
+    expect(reduce(s, { type: 'payLoan', amount: 50 }, campaign)).toBe(s)
+  })
+
+  it('selling an asset changes cashflow only through the lost income', () => {
+    const campaign = makeCampaign([card('start')])
+    const base = newGame(1, campaign)
+    const s = { ...base, finances: { ...base.finances, monthlyExpenses: 20, assets: [{ id: 'a', label: 'A', cost: 100, monthlyCashflow: 30, sector: 'salt' }] } }
+    const sold = reduce(s, { type: 'sellAsset', id: 'a', priceMultiplier: 0.5 }, campaign)
+    expect(sold.finances.monthlyExpenses).toBe(20)
+    expect(sold.finances.gold).toBe(base.finances.gold + 50)
   })
 
   it('stops advancing once the game has ended', () => {

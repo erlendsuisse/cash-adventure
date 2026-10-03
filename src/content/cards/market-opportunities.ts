@@ -121,15 +121,14 @@ export const marketOpportunityCards: StoryCard[] = [
   },
 
   {
-    id: 'market_crash',
+    id: 'market_panic',
     title: 'Market Panic',
     body: [
       'A major merchant house collapses, owing gold to half the city. Panic spreads. Everyone is liquidating.',
       'Prices for everything are plummeting as panicked sellers dump goods.',
     ],
-    storyPhase: 'entangled',
     weight: 6,
-    requires: [{ kind: 'goldAtLeast', amount: 50 }],
+    requires: [{ kind: 'goldAtLeast', amount: 50 }, { kind: 'colossiAtLeast', count: 1 }], // mid-game danger (was gated on the never-entered 'entangled' phase)
     choices: [
       {
         id: 'buy_panic',

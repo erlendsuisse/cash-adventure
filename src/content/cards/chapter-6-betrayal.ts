@@ -1,92 +1,65 @@
 import type { StoryCard } from '../../engine/types'
+import { heat, venture } from './factories'
 
 export const chapter6CommodityCards: StoryCard[] = [
-  {
+  venture({
     id: 'ch6_intelligence_trade',
-    chapter: 6,
     weight: 5,
-    storyPhase: 'reckoning',
     title: 'Intelligence Trading Network',
     body: ['A spymaster offers to sell you intelligence on your rivals. "Know their secrets before they move. 350 gold gets you complete access."'],
-    choices: [
-      {
-        id: 'buy_intelligence',
-        label: 'Buy intelligence network (350g)',
-        requires: [{ kind: 'goldAtLeast', amount: 350 }],
-        effects: [
-          { kind: 'gold', delta: -350 },
-          {
-            kind: 'acquireAsset',
-            asset: { id: 'ch6_intel', label: 'Intelligence Trading Network', cost: 350, monthlyCashflow: 110, sector: 'espionage' },
-          },
-          { kind: 'narrate', text: 'You buy secrets. Knowledge is power, but enemies are everywhere.' },
-        ],
-      },
-      { id: 'refuse_intelligence', label: 'Refuse (too dangerous)', effects: [{ kind: 'narrate', text: 'Ignorance might be safer.' }] },
-    ],
-  },
+    asset: { id: 'ch6_intel', label: 'Intelligence Trading Network', cost: 350, monthlyCashflow: 110, sector: 'espionage' },
+    accept: {
+      id: 'buy_intelligence',
+      label: 'Buy intelligence network (350g)',
+      effects: [{ kind: 'narrate', text: 'You buy secrets. Knowledge is power, but enemies are everywhere.' }],
+    },
+    decline: { id: 'refuse_intelligence', label: 'Refuse (too dangerous)', text: 'Ignorance might be safer.' },
+  }),
 
-  {
+  venture({
     id: 'ch6_conspiracy_network',
-    chapter: 6,
     weight: 4,
-    storyPhase: 'reckoning',
     title: 'Conspiracy Network Partnership',
     body: ['Conspirators offer you a seat at their table. "We topple governments and make fortunes. Join us for 320 gold and you share the spoils."'],
-    choices: [
-      {
-        id: 'join_conspiracy',
-        label: 'Join the conspiracy (320g)',
-        requires: [{ kind: 'goldAtLeast', amount: 320 }],
-        effects: [
-          { kind: 'gold', delta: -320 },
-          {
-            kind: 'acquireAsset',
-            asset: { id: 'ch6_conspiracy', label: 'Conspiracy Network Share', cost: 320, monthlyCashflow: 95, sector: 'espionage' },
-          },
-          { kind: 'flag', id: 'conspirator', set: 1 },
-          { kind: 'stat', stat: 'nerve', delta: 1 },
-          { kind: 'narrate', text: 'You join the conspiracy. No turning back now.' },
-        ],
-      },
-      { id: 'refuse_conspiracy', label: 'Refuse (too risky)', effects: [{ kind: 'narrate', text: 'You walk away. They watch you leave.' }] },
-    ],
-  },
+    asset: { id: 'ch6_conspiracy', label: 'Conspiracy Network Share', cost: 320, monthlyCashflow: 95, sector: 'espionage' },
+    accept: {
+      id: 'join_conspiracy',
+      label: 'Join the conspiracy (320g)',
+      effects: [
+        { kind: 'flag', id: 'conspirator', set: 1 },
+        { kind: 'stat', stat: 'nerve', delta: 1 },
+        { kind: 'narrate', text: 'You join the conspiracy. No turning back now.' },
+      ],
+    },
+    decline: { id: 'refuse_conspiracy', label: 'Refuse (too risky)', text: 'You walk away. They watch you leave.' },
+  }),
 
-  {
+  venture({
     id: 'ch6_blackmail_operation',
-    chapter: 6,
     weight: 3,
-    storyPhase: 'reckoning',
     title: 'Blackmail Operation',
-    body: ['A criminal offers to run blackmail operations with you as financial partner. "Secrets are currency. We collect them, we profit. 300 gold partnership."'],
-    choices: [
-      {
-        id: 'fund_blackmail',
-        label: 'Fund the blackmail ring (300g)',
-        requires: [{ kind: 'goldAtLeast', amount: 300 }],
-        effects: [
-          { kind: 'gold', delta: -300 },
-          {
-            kind: 'acquireAsset',
-            asset: { id: 'ch6_blackmail', label: 'Blackmail Operation', cost: 300, monthlyCashflow: 120, sector: 'espionage' },
-          },
-          { kind: 'stat', stat: 'charm', delta: -2 },
-          { kind: 'flag', id: 'blackmailer', set: 1 },
-          { kind: 'narrate', text: 'You profit from secrets and shame. The money is excellent. Your soul is forfeit.' },
-        ],
-      },
-      { id: 'refuse_blackmail', label: 'Refuse (retain honor)', effects: [{ kind: 'narrate', text: 'Some profit is not worth the price.' }] },
+    body: [
+      'A criminal offers to run blackmail operations with you as financial partner. "Secrets are currency. We collect them, we profit. 300 gold partnership."',
     ],
-  },
+    asset: { id: 'ch6_blackmail', label: 'Blackmail Operation', cost: 300, monthlyCashflow: 120, sector: 'espionage' },
+    accept: {
+      id: 'fund_blackmail',
+      label: 'Fund the blackmail ring (300g)',
+      effects: [
+        { kind: 'stat', stat: 'charm', delta: -2 },
+        { kind: 'flag', id: 'blackmailer', set: 1 },
+        { kind: 'narrate', text: 'You profit from secrets and shame. The money is excellent. Your soul is forfeit.' },
+        heat('police'),
+      ],
+    },
+    decline: { id: 'refuse_blackmail', label: 'Refuse (retain honor)', text: 'Some profit is not worth the price.' },
+  }),
 ]
 
 export const chapter6MarketCards: StoryCard[] = [
   {
     id: 'ch6_faction_war',
-    chapter: 6,
     weight: 5,
-    storyPhase: 'reckoning',
     title: 'Faction War Erupts',
     body: ['Political factions war openly for control. Alliances crumble. Former allies become enemies. The market is in chaos.'],
     choices: [
@@ -95,7 +68,7 @@ export const chapter6MarketCards: StoryCard[] = [
         label: 'Back the winning faction (+350g)',
         effects: [
           { kind: 'gold', delta: 350 },
-          { kind: 'marketShift', sector: 'espionage', delta: 30 },
+          { kind: 'marketShift', sector: 'iron', delta: 30 },
           { kind: 'narrate', text: 'You pick the right side. Politics rewards the ruthless.' },
         ],
       },
@@ -112,9 +85,7 @@ export const chapter6MarketCards: StoryCard[] = [
 
   {
     id: 'ch6_trust_collapses',
-    chapter: 6,
     weight: 4,
-    storyPhase: 'reckoning',
     title: 'Market Trust Collapses',
     body: ['Evidence of widespread fraud rocks the market. No one knows who to trust. Contracts mean nothing.'],
     choices: [
@@ -123,7 +94,7 @@ export const chapter6MarketCards: StoryCard[] = [
         label: 'Exploit the distrust (+300g)',
         effects: [
           { kind: 'gold', delta: 300 },
-          { kind: 'marketShift', sector: 'espionage', delta: -45 },
+          { kind: 'marketShift', sector: 'spice', delta: -45 },
           { kind: 'flag', id: 'trust_exploiter', set: 1 },
           { kind: 'narrate', text: 'You profit from chaos and broken promises.' },
         ],
@@ -142,9 +113,7 @@ export const chapter6MarketCards: StoryCard[] = [
 
   {
     id: 'ch6_political_upheaval',
-    chapter: 6,
     weight: 3,
-    storyPhase: 'reckoning',
     title: 'Government Overthrown',
     body: ['The government falls in a coup. A new regime takes power. Old alliances become death sentences.'],
     choices: [
@@ -174,9 +143,7 @@ export const chapter6MarketCards: StoryCard[] = [
 export const chapter6DangerCards: StoryCard[] = [
   {
     id: 'ch6_assassination_contract',
-    chapter: 6,
     weight: 5,
-    storyPhase: 'reckoning',
     title: 'Assassination Contract on You',
     body: ['You learn someone has hired assassins to kill you. You have one night to prepare.'],
     choices: [
@@ -205,9 +172,7 @@ export const chapter6DangerCards: StoryCard[] = [
 
   {
     id: 'ch6_trusted_friend_betrays',
-    chapter: 6,
     weight: 4,
-    storyPhase: 'reckoning',
     title: 'Closest Friend Betrays You',
     body: ['Your oldest, most trusted friend reveals they\'ve been spying on you the whole time. They sell your secrets to your rivals.'],
     choices: [
@@ -235,9 +200,7 @@ export const chapter6DangerCards: StoryCard[] = [
 
   {
     id: 'ch6_poison_conspiracy',
-    chapter: 6,
     weight: 3,
-    storyPhase: 'reckoning',
     title: 'Poisoning Conspiracy Discovered',
     body: ['You discover a poisoning conspiracy against you. Multiple conspirators. You must act.'],
     choices: [

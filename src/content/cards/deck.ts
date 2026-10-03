@@ -227,7 +227,7 @@ const iron_mine_collapse: StoryCard = {
 }
 
 const iron_boom: StoryCard = {
-  id: 'iron_boom',
+  id: 'iron_market_boom',
   weight: 2,
   storyPhase: 'climbing',
   title: 'Iron Boom',
@@ -261,6 +261,15 @@ const iron_boom: StoryCard = {
         { kind: 'flag', id: 'quick_iron_profit', set: 1 },
         { kind: 'narrate', text: 'You flip iron for quick profit. Easy money while it lasts.' },
         { kind: 'advanceDays', days: 5 },
+      ],
+    },
+    {
+      id: 'watch_boom',
+      label: 'Watch from the sidelines',
+      requires: [{ kind: 'not', of: { kind: 'flag', id: 'iron_boom_seen', atLeast: 1 } }],
+      effects: [
+        { kind: 'flag', id: 'iron_boom_seen', set: 1 },
+        { kind: 'narrate', text: 'Your purse is too thin to ride this one. You watch others grow rich on the crown\'s iron.' },
       ],
     },
     {
