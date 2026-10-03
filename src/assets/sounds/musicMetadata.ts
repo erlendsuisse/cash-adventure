@@ -72,11 +72,6 @@ export const MUSIC_TRACKS: Record<string, MusicTrack> = {
   },
 }
 
-/**
- * Determine which music track should play based on story state
- * Cycles through available tracks for continuous musical variety
- * Returns track ID or null if music should stop
- */
 export function getTracksForPhase(
   storyPhase: StoryPhase,
   colossiDefeated: number,
@@ -125,13 +120,4 @@ export function getTracksForPhase(
   }
 
   return []
-}
-
-export function selectMusicTrack(
-  storyPhase: StoryPhase,
-  colossiDefeated: number,
-  currentPath: ConsequencePath | undefined
-): string | null {
-  const tracks = getTracksForPhase(storyPhase, colossiDefeated, currentPath)
-  return tracks.length > 0 ? tracks[0]! : null
 }

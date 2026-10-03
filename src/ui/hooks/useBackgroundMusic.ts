@@ -28,7 +28,7 @@ export function useBackgroundMusic(state: GameState, enabled: boolean = true) {
 
     // Reset to first track when phase changes
     stateRef.current.trackIndex = 0
-    const currentTrack = tracks[0]!
+    const currentTrack: string = tracks[0]!
 
     console.log('[Music] Phase changed to:', state.progress.storyPhase, 'Playing:', currentTrack)
 
@@ -38,9 +38,9 @@ export function useBackgroundMusic(state: GameState, enabled: boolean = true) {
     }
 
     // If switching to a different track, fade out current and fade in new
-    if (stateRef.current.current && currentTrack !== stateRef.current.current) {
+    if (stateRef.current.current !== null && currentTrack !== stateRef.current.current) {
       fadeOutThenPlayNew(currentTrack)
-    } else if (!stateRef.current.current && currentTrack) {
+    } else if (stateRef.current.current === null) {
       // Starting music for the first time
       playTrack(currentTrack)
     }
