@@ -167,6 +167,16 @@ export const BACKGROUND_MAP: Record<CardId, BackgroundAsset> = {
   'savvy_recovery_training': { id: 'savvy_recovery_training', cardId: 'savvy_recovery_training', url: '/backgrounds/savvy_recovery_training.webp', alt: 'Decipher the Future', aspectRatio: 16 / 9 },
   'nerve_recovery_training': { id: 'nerve_recovery_training', cardId: 'nerve_recovery_training', url: '/backgrounds/nerve_recovery_training.webp', alt: 'Dance With Danger', aspectRatio: 16 / 9 },
   'charm_recovery_training': { id: 'charm_recovery_training', cardId: 'charm_recovery_training', url: '/backgrounds/charm_recovery_training.webp', alt: 'Become Unforgettable', aspectRatio: 16 / 9 },
+
+  // Wealth-building cards
+  'iron_broker_visit': { id: 'iron_broker_visit', cardId: 'iron_broker_visit', url: '/backgrounds/iron_broker_visit.webp', alt: 'The Iron Broker', aspectRatio: 16 / 9 },
+  'mining_syndicate_offer': { id: 'mining_syndicate_offer', cardId: 'mining_syndicate_offer', url: '/backgrounds/mining_syndicate_offer.webp', alt: 'The Mining Syndicate', aspectRatio: 16 / 9 },
+  'scrap_iron_collection': { id: 'scrap_iron_collection', cardId: 'scrap_iron_collection', url: '/backgrounds/scrap_iron_collection.webp', alt: 'Scrap Iron Opportunity', aspectRatio: 16 / 9 },
+  'spice_merchant_contact': { id: 'spice_merchant_contact', cardId: 'spice_merchant_contact', url: '/backgrounds/spice_merchant_contact.webp', alt: 'A Spice Merchants Offer', aspectRatio: 16 / 9 },
+  'spice_warehouse_venture': { id: 'spice_warehouse_venture', cardId: 'spice_warehouse_venture', url: '/backgrounds/spice_warehouse_venture.webp', alt: 'The Warehouse Opportunity', aspectRatio: 16 / 9 },
+  'merchant_route_offer': { id: 'merchant_route_offer', cardId: 'merchant_route_offer', url: '/backgrounds/merchant_route_offer.webp', alt: 'A Trade Route Opens', aspectRatio: 16 / 9 },
+  'expand_merchant_routes': { id: 'expand_merchant_routes', cardId: 'expand_merchant_routes', url: '/backgrounds/expand_merchant_routes.webp', alt: 'Expand Your Routes', aspectRatio: 16 / 9 },
+  'guild_partnership': { id: 'guild_partnership', cardId: 'guild_partnership', url: '/backgrounds/guild_partnership.webp', alt: 'Guild Partnership Proposal', aspectRatio: 16 / 9 },
 }
 
 export const BACKGROUND_FALLBACKS = [

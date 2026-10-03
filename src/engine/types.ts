@@ -25,6 +25,7 @@ export interface OwnedAsset {
   monthlyCashflow: number
   sector: SectorId
   visualEffect?: EquipmentSlot // if this asset has a visual equipment effect
+  quantity?: number // for assets that accumulate (merchant routes, etc)
 }
 
 export interface Finances {

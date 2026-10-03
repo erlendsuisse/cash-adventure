@@ -43,21 +43,30 @@ export function StatScroll({ state }: { state: GameState }) {
         </div>
 
         {/* Assets Section */}
-        {finances.assets.length > 0 && (
-          <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Holdings</h4>
-            <div className={styles.assets}>
-              {finances.assets.map((asset) => (
+        <div className={styles.section}>
+          <h4 className={styles.sectionTitle}>Holdings</h4>
+          <div className={styles.assets}>
+            {finances.assets.length > 0 ? (
+              finances.assets.map((asset) => (
                 <div key={asset.id} className={styles.asset}>
-                  <span className={styles.assetLabel}>{asset.label}</span>
+                  <div className={styles.assetInfo}>
+                    <span className={styles.assetLabel}>{asset.label}</span>
+                    {asset.quantity && asset.quantity > 1 && (
+                      <span className={styles.assetQuantity}>×{asset.quantity}</span>
+                    )}
+                  </div>
                   <span className={styles.assetFlow}>
                     +{asset.monthlyCashflow}g/mo
                   </span>
                 </div>
-              ))}
-            </div>
+              ))
+            ) : (
+              <div className={styles.emptyHoldings}>
+                No holdings yet. Seek investment opportunities.
+              </div>
+            )}
           </div>
-        )}
+        </div>
 
         {/* Income Section */}
         <div className={styles.section}>

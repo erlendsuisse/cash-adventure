@@ -16,11 +16,30 @@ export function apply(effect: Effect, state: GameState): GameState {
       return { ...state, flags: { ...state.flags, [effect.id]: next } }
     }
 
-    case 'acquireAsset':
+    case 'acquireAsset': {
+      const existing = state.finances.assets.find((a) => a.id === effect.asset.id)
+      if (existing) {
+        // Asset already owned: update quantity and increase monthly cashflow
+        const newAssets = state.finances.assets.map((a) =>
+          a.id === effect.asset.id
+            ? {
+                ...a,
+                quantity: (a.quantity ?? 1) + (effect.asset.quantity ?? 1),
+                monthlyCashflow: a.monthlyCashflow + effect.asset.monthlyCashflow,
+              }
+            : a
+        )
+        return {
+          ...state,
+          finances: { ...state.finances, assets: newAssets },
+        }
+      }
+      // New asset: add to list
       return {
         ...state,
         finances: { ...state.finances, assets: [...state.finances.assets, effect.asset] },
       }
+    }
 
     case 'sellAsset': {
       const asset = state.finances.assets.find((a) => a.id === effect.id)
