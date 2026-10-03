@@ -11,12 +11,41 @@ export function Portfolio({ state }: { state: GameState }) {
   const monthlyExpenses = finances.monthlyExpenses
   const netIncome = monthlyIncome - monthlyExpenses
   const [sellAmounts, setSellAmounts] = useState<Record<'spice' | 'salt' | 'iron', number>>({ spice: 0, salt: 0, iron: 0 })
+  const [buyAmounts, setBuyAmounts] = useState<Record<'spice' | 'salt' | 'iron', number>>({ spice: 0, salt: 0, iron: 0 })
 
   // Get market prices from game state
   const getMarketPrice = (commodity: 'spice' | 'salt' | 'iron'): number => {
     const basePrice: Record<'spice' | 'salt' | 'iron', number> = { spice: 15, salt: 8, iron: 12 }
     const sectorPrice = state.market[commodity] ?? 100
     return Math.round(((basePrice[commodity] ?? 0) * sectorPrice) / 100)
+  }
+
+  // Get buy price (10% markup on market price)
+  const getBuyPrice = (commodity: 'spice' | 'salt' | 'iron'): number => {
+    return Math.round(getMarketPrice(commodity) * 1.1)
+  }
+
+  // Calculate price trend (compare to previous)
+  const getPriceTrend = (commodity: 'spice' | 'salt' | 'iron'): 'up' | 'down' | 'stable' => {
+    const sectorPrice = state.market[commodity] ?? 100
+    if (sectorPrice > 105) return 'up'
+    if (sectorPrice < 95) return 'down'
+    return 'stable'
+  }
+
+  // Handle commodity purchases
+  const handleBuyCommodity = (commodity: 'spice' | 'salt' | 'iron', amount: number) => {
+    if (amount <= 0) return
+    const price = getBuyPrice(commodity)
+    const totalCost = amount * price
+    if (totalCost > finances.gold) return
+    dispatch({
+      type: 'buyCommodity',
+      commodity,
+      amount,
+      pricePerUnit: price,
+    })
+    setBuyAmounts({ ...buyAmounts, [commodity]: 0 })
   }
 
   // Calculate net worth
@@ -98,115 +127,218 @@ export function Portfolio({ state }: { state: GameState }) {
           </div>
         </div>
 
-        {/* Commodities for Trading */}
-        {(finances.commodities.spice > 0 || finances.commodities.salt > 0 || finances.commodities.iron > 0) && (
-          <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Commodities</h4>
-            <div className={styles.commoditiesPanel}>
-              {/* Spice */}
-              {finances.commodities.spice > 0 && (
-                <div className={styles.commodityCard}>
-                  <div className={styles.commodityHeader}>
-                    <span className={styles.commodityName}>Spice</span>
-                    <span className={styles.commodityQuantity}>{finances.commodities.spice} units</span>
+        {/* Market Prices & Trading */}
+        <div className={styles.section}>
+          <h4 className={styles.sectionTitle}>Market Prices</h4>
+          <div className={styles.marketPrices}>
+            {(['spice', 'salt', 'iron'] as const).map((commodity) => {
+              const buyPrice = getBuyPrice(commodity)
+              const sellPrice = getMarketPrice(commodity)
+              const trend = getPriceTrend(commodity)
+              const trendIcon = trend === 'up' ? '📈' : trend === 'down' ? '📉' : '→'
+
+              return (
+                <div key={commodity} className={styles.priceRow}>
+                  <div className={styles.priceLabel}>
+                    <span className={styles.commodityName}>{commodity}</span>
+                    <span className={styles.trendIcon}>{trendIcon}</span>
                   </div>
-                  <div className={styles.commodityPrice}>
-                    <span className={styles.label}>Market Price</span>
-                    <span className={styles.price}>{getMarketPrice('spice')}g/unit</span>
-                  </div>
-                  <div className={styles.commodityValue}>
-                    Total: {finances.commodities.spice * getMarketPrice('spice')}g
-                  </div>
-                  <div className={styles.sellForm}>
-                    <input
-                      type="number"
-                      min="0"
-                      max={finances.commodities.spice}
-                      value={sellAmounts.spice ?? 0}
-                      onChange={(e) => setSellAmounts({ ...sellAmounts, spice: Number(e.target.value) || 0 })}
-                      placeholder="Sell amount"
-                    />
-                    <button
-                      className={styles.sellBtn}
-                      onClick={() => handleSellCommodity('spice', sellAmounts.spice ?? 0)}
-                      disabled={(sellAmounts.spice ?? 0) <= 0}
-                    >
-                      Sell {(sellAmounts.spice ?? 0) > 0 ? `(${(sellAmounts.spice ?? 0) * getMarketPrice('spice')}g)` : ''}
-                    </button>
+                  <div className={styles.priceValues}>
+                    <span className={styles.sellPrice}>Sell {sellPrice}g</span>
+                    <span className={styles.buyPrice}>Buy {buyPrice}g</span>
                   </div>
                 </div>
-              )}
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Commodities for Trading */}
+        <div className={styles.section}>
+          <h4 className={styles.sectionTitle}>Commodities</h4>
+          <div className={styles.commoditiesPanel}>
+              {/* Spice */}
+              {/* Spice */}
+              <div className={styles.commodityCard}>
+                <div className={styles.commodityHeader}>
+                  <span className={styles.commodityName}>Spice</span>
+                  {finances.commodities.spice > 0 && (
+                    <span className={styles.commodityQuantity}>Own: {finances.commodities.spice}</span>
+                  )}
+                </div>
+
+                {/* Sell Section */}
+                {finances.commodities.spice > 0 && (
+                  <div className={styles.tradeSection}>
+                    <div className={styles.tradeLabel}>Sell</div>
+                    <div className={styles.tradeForm}>
+                      <input
+                        type="number"
+                        min="0"
+                        max={finances.commodities.spice}
+                        value={sellAmounts.spice ?? 0}
+                        onChange={(e) => setSellAmounts({ ...sellAmounts, spice: Number(e.target.value) || 0 })}
+                        placeholder="Amount"
+                        className={styles.tradeInput}
+                      />
+                      <button
+                        className={styles.tradeBtn}
+                        onClick={() => handleSellCommodity('spice', sellAmounts.spice ?? 0)}
+                        disabled={(sellAmounts.spice ?? 0) <= 0}
+                      >
+                        {(sellAmounts.spice ?? 0) > 0 ? `+${(sellAmounts.spice ?? 0) * getMarketPrice('spice')}g` : 'Sell'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Buy Section */}
+                {finances.gold > 0 && (
+                  <div className={styles.tradeSection}>
+                    <div className={styles.tradeLabel}>Buy</div>
+                    <div className={styles.tradeForm}>
+                      <input
+                        type="number"
+                        min="0"
+                        max={Math.floor(finances.gold / getBuyPrice('spice'))}
+                        value={buyAmounts.spice ?? 0}
+                        onChange={(e) => setBuyAmounts({ ...buyAmounts, spice: Number(e.target.value) || 0 })}
+                        placeholder="Amount"
+                        className={styles.tradeInput}
+                      />
+                      <button
+                        className={styles.buyBtn}
+                        onClick={() => handleBuyCommodity('spice', buyAmounts.spice ?? 0)}
+                        disabled={(buyAmounts.spice ?? 0) <= 0 || (buyAmounts.spice ?? 0) * getBuyPrice('spice') > finances.gold}
+                      >
+                        {(buyAmounts.spice ?? 0) > 0 ? `-${(buyAmounts.spice ?? 0) * getBuyPrice('spice')}g` : 'Buy'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* Salt */}
-              {finances.commodities.salt > 0 && (
-                <div className={styles.commodityCard}>
-                  <div className={styles.commodityHeader}>
-                    <span className={styles.commodityName}>Salt</span>
-                    <span className={styles.commodityQuantity}>{finances.commodities.salt} units</span>
-                  </div>
-                  <div className={styles.commodityPrice}>
-                    <span className={styles.label}>Market Price</span>
-                    <span className={styles.price}>{getMarketPrice('salt')}g/unit</span>
-                  </div>
-                  <div className={styles.commodityValue}>
-                    Total: {finances.commodities.salt * getMarketPrice('salt')}g
-                  </div>
-                  <div className={styles.sellForm}>
-                    <input
-                      type="number"
-                      min="0"
-                      max={finances.commodities.salt}
-                      value={sellAmounts.salt ?? 0}
-                      onChange={(e) => setSellAmounts({ ...sellAmounts, salt: Number(e.target.value) || 0 })}
-                      placeholder="Sell amount"
-                    />
-                    <button
-                      className={styles.sellBtn}
-                      onClick={() => handleSellCommodity('salt', sellAmounts.salt ?? 0)}
-                      disabled={(sellAmounts.salt ?? 0) <= 0}
-                    >
-                      Sell {(sellAmounts.salt ?? 0) > 0 ? `(${(sellAmounts.salt ?? 0) * getMarketPrice('salt')}g)` : ''}
-                    </button>
-                  </div>
+              <div className={styles.commodityCard}>
+                <div className={styles.commodityHeader}>
+                  <span className={styles.commodityName}>Salt</span>
+                  {finances.commodities.salt > 0 && (
+                    <span className={styles.commodityQuantity}>Own: {finances.commodities.salt}</span>
+                  )}
                 </div>
-              )}
+
+                {/* Sell Section */}
+                {finances.commodities.salt > 0 && (
+                  <div className={styles.tradeSection}>
+                    <div className={styles.tradeLabel}>Sell</div>
+                    <div className={styles.tradeForm}>
+                      <input
+                        type="number"
+                        min="0"
+                        max={finances.commodities.salt}
+                        value={sellAmounts.salt ?? 0}
+                        onChange={(e) => setSellAmounts({ ...sellAmounts, salt: Number(e.target.value) || 0 })}
+                        placeholder="Amount"
+                        className={styles.tradeInput}
+                      />
+                      <button
+                        className={styles.tradeBtn}
+                        onClick={() => handleSellCommodity('salt', sellAmounts.salt ?? 0)}
+                        disabled={(sellAmounts.salt ?? 0) <= 0}
+                      >
+                        {(sellAmounts.salt ?? 0) > 0 ? `+${(sellAmounts.salt ?? 0) * getMarketPrice('salt')}g` : 'Sell'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Buy Section */}
+                {finances.gold > 0 && (
+                  <div className={styles.tradeSection}>
+                    <div className={styles.tradeLabel}>Buy</div>
+                    <div className={styles.tradeForm}>
+                      <input
+                        type="number"
+                        min="0"
+                        max={Math.floor(finances.gold / getBuyPrice('salt'))}
+                        value={buyAmounts.salt ?? 0}
+                        onChange={(e) => setBuyAmounts({ ...buyAmounts, salt: Number(e.target.value) || 0 })}
+                        placeholder="Amount"
+                        className={styles.tradeInput}
+                      />
+                      <button
+                        className={styles.buyBtn}
+                        onClick={() => handleBuyCommodity('salt', buyAmounts.salt ?? 0)}
+                        disabled={(buyAmounts.salt ?? 0) <= 0 || (buyAmounts.salt ?? 0) * getBuyPrice('salt') > finances.gold}
+                      >
+                        {(buyAmounts.salt ?? 0) > 0 ? `-${(buyAmounts.salt ?? 0) * getBuyPrice('salt')}g` : 'Buy'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* Iron */}
-              {finances.commodities.iron > 0 && (
-                <div className={styles.commodityCard}>
-                  <div className={styles.commodityHeader}>
-                    <span className={styles.commodityName}>Iron</span>
-                    <span className={styles.commodityQuantity}>{finances.commodities.iron} units</span>
-                  </div>
-                  <div className={styles.commodityPrice}>
-                    <span className={styles.label}>Market Price</span>
-                    <span className={styles.price}>{getMarketPrice('iron')}g/unit</span>
-                  </div>
-                  <div className={styles.commodityValue}>
-                    Total: {finances.commodities.iron * getMarketPrice('iron')}g
-                  </div>
-                  <div className={styles.sellForm}>
-                    <input
-                      type="number"
-                      min="0"
-                      max={finances.commodities.iron}
-                      value={sellAmounts.iron ?? 0}
-                      onChange={(e) => setSellAmounts({ ...sellAmounts, iron: Number(e.target.value) || 0 })}
-                      placeholder="Sell amount"
-                    />
-                    <button
-                      className={styles.sellBtn}
-                      onClick={() => handleSellCommodity('iron', sellAmounts.iron ?? 0)}
-                      disabled={(sellAmounts.iron ?? 0) <= 0}
-                    >
-                      Sell {(sellAmounts.iron ?? 0) > 0 ? `(${(sellAmounts.iron ?? 0) * getMarketPrice('iron')}g)` : ''}
-                    </button>
-                  </div>
+              <div className={styles.commodityCard}>
+                <div className={styles.commodityHeader}>
+                  <span className={styles.commodityName}>Iron</span>
+                  {finances.commodities.iron > 0 && (
+                    <span className={styles.commodityQuantity}>Own: {finances.commodities.iron}</span>
+                  )}
                 </div>
-              )}
+
+                {/* Sell Section */}
+                {finances.commodities.iron > 0 && (
+                  <div className={styles.tradeSection}>
+                    <div className={styles.tradeLabel}>Sell</div>
+                    <div className={styles.tradeForm}>
+                      <input
+                        type="number"
+                        min="0"
+                        max={finances.commodities.iron}
+                        value={sellAmounts.iron ?? 0}
+                        onChange={(e) => setSellAmounts({ ...sellAmounts, iron: Number(e.target.value) || 0 })}
+                        placeholder="Amount"
+                        className={styles.tradeInput}
+                      />
+                      <button
+                        className={styles.tradeBtn}
+                        onClick={() => handleSellCommodity('iron', sellAmounts.iron ?? 0)}
+                        disabled={(sellAmounts.iron ?? 0) <= 0}
+                      >
+                        {(sellAmounts.iron ?? 0) > 0 ? `+${(sellAmounts.iron ?? 0) * getMarketPrice('iron')}g` : 'Sell'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Buy Section */}
+                {finances.gold > 0 && (
+                  <div className={styles.tradeSection}>
+                    <div className={styles.tradeLabel}>Buy</div>
+                    <div className={styles.tradeForm}>
+                      <input
+                        type="number"
+                        min="0"
+                        max={Math.floor(finances.gold / getBuyPrice('iron'))}
+                        value={buyAmounts.iron ?? 0}
+                        onChange={(e) => setBuyAmounts({ ...buyAmounts, iron: Number(e.target.value) || 0 })}
+                        placeholder="Amount"
+                        className={styles.tradeInput}
+                      />
+                      <button
+                        className={styles.buyBtn}
+                        onClick={() => handleBuyCommodity('iron', buyAmounts.iron ?? 0)}
+                        disabled={(buyAmounts.iron ?? 0) <= 0 || (buyAmounts.iron ?? 0) * getBuyPrice('iron') > finances.gold}
+                      >
+                        {(buyAmounts.iron ?? 0) > 0 ? `-${(buyAmounts.iron ?? 0) * getBuyPrice('iron')}g` : 'Buy'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        )}
 
         {/* Assets Summary */}
         {finances.assets.length > 0 && (

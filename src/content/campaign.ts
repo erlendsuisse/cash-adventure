@@ -27,6 +27,7 @@ import { commodityTradingCards } from './cards/commodity-trading'
 import { opportunityDealCards } from './cards/opportunity-deals'
 import { dangerCards } from './cards/dangers-and-penalties'
 import { chapterOneCards, chapterTwoCards, chapterThreeCards, chapterFourCards } from './cards/chapter-decks'
+import { marketOpportunityCards } from './cards/market-opportunities'
 import { consequenceTuning, initial, SECTORS, tuning } from './tuning'
 
 const allCards: StoryCard[] = [
@@ -35,6 +36,7 @@ const allCards: StoryCard[] = [
   ...opportunityDealCards,
   ...wealthBuildingDeck,
   ...commodityTradingCards,
+  ...marketOpportunityCards,
   ...dangerCards,
   ...chapterOneCards,
   ...chapterTwoCards,
@@ -86,6 +88,7 @@ const allDeckCards = [
   ...opportunityDealCards,
   ...wealthBuildingDeck,
   ...commodityTradingCards,
+  ...marketOpportunityCards,
   ...dangerCards,
   ...chapterOneCards,
   ...chapterTwoCards,

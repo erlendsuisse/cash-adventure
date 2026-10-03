@@ -64,6 +64,29 @@ export function reduce(state: GameState, action: Action, campaign: Campaign): Ga
         ],
       }
     }
+    case 'buyCommodity': {
+      const totalCost = action.amount * action.pricePerUnit
+      if (totalCost > state.finances.gold) return state
+
+      const commodities = { ...state.finances.commodities }
+      commodities[action.commodity] += action.amount
+
+      return {
+        ...state,
+        finances: {
+          ...state.finances,
+          gold: state.finances.gold - totalCost,
+          commodities,
+        },
+        log: [
+          ...state.log,
+          {
+            day: state.clock.day,
+            text: `Bought ${action.amount} units of ${action.commodity} for ${totalCost}g (${action.pricePerUnit}g/unit)`,
+          },
+        ],
+      }
+    }
   }
 }
 

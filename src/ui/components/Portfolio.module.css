@@ -275,3 +275,140 @@
   font-weight: bold;
   white-space: nowrap;
 }
+
+/* Market Prices Section */
+.marketPrices {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px;
+  background: rgba(20, 16, 12, 0.6);
+  border-radius: 2px;
+}
+
+.priceLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.commodityName {
+  color: var(--gold);
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.trendIcon {
+  font-size: 10px;
+}
+
+.priceValues {
+  display: flex;
+  gap: 8px;
+  font-size: 10px;
+}
+
+.sellPrice {
+  color: #5cb85c;
+}
+
+.buyPrice {
+  color: #d9534f;
+}
+
+/* Trade Mechanics */
+.tradeSection {
+  padding: 6px 0;
+  border-top: 1px solid rgba(193, 120, 23, 0.2);
+}
+
+.tradeSection:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.tradeLabel {
+  font-size: 10px;
+  font-weight: bold;
+  color: #aaa;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tradeForm {
+  display: flex;
+  gap: 4px;
+}
+
+.tradeInput {
+  flex: 1;
+  padding: 3px 4px;
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--gold);
+  border: 1px solid rgba(193, 120, 23, 0.4);
+  border-radius: 2px;
+  font-size: 10px;
+  font-family: inherit;
+}
+
+.tradeInput:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.tradeBtn {
+  padding: 3px 6px;
+  background: linear-gradient(to bottom, #8b4513, #5c2e0f);
+  color: #fefef0;
+  border: 1px solid #8b4513;
+  border-radius: 2px;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.tradeBtn:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #a0581a, #6b3a15);
+  box-shadow: 0 0 6px rgba(193, 120, 23, 0.3);
+}
+
+.tradeBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Buy Button Specific */
+.buyBtn {
+  padding: 3px 6px;
+  background: linear-gradient(to bottom, #4a7c59, #2d5236);
+  color: #c8e6c9;
+  border: 1px solid #4a7c59;
+  border-radius: 2px;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.buyBtn:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #5a9d6b, #3a683f);
+  box-shadow: 0 0 6px rgba(92, 184, 92, 0.3);
+}
+
+.buyBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
