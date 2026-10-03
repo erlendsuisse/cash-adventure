@@ -43,6 +43,27 @@ export function reduce(state: GameState, action: Action, campaign: Campaign): Ga
         log: [...state.log, { day: state.clock.day, text: `Paid loan: −${action.amount}g (−${expenseReduction}g/month)` }],
       }
     }
+    case 'sellCommodity': {
+      const totalValue = action.amount * action.pricePerUnit
+      const commodities = { ...state.finances.commodities }
+      commodities[action.commodity] -= action.amount
+
+      return {
+        ...state,
+        finances: {
+          ...state.finances,
+          gold: state.finances.gold + totalValue,
+          commodities,
+        },
+        log: [
+          ...state.log,
+          {
+            day: state.clock.day,
+            text: `Sold ${action.amount} units of ${action.commodity} for ${totalValue}g (${action.pricePerUnit}g/unit)`,
+          },
+        ],
+      }
+    }
   }
 }
 

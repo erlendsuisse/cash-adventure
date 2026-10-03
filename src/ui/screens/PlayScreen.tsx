@@ -4,6 +4,7 @@ import { Background } from '../components/Background/Background'
 import { EncounterCard } from '../components/EncounterCard'
 import { LedgerBar } from '../components/LedgerBar'
 import { StatScroll } from '../components/StatScroll'
+import { Portfolio } from '../components/Portfolio'
 import { useGame } from '../GameProvider'
 import { getCharacterMood } from '../../engine/characterSelectors'
 import { useBackgroundMusic } from '../hooks/useBackgroundMusic'
@@ -27,9 +28,9 @@ export function PlayScreen() {
       {/* Minimal top bar with critical info only */}
       <LedgerBar state={state} />
 
-      {/* Main layout: Sidebar + Card area */}
+      {/* Main layout: Left sidebar + Card area + Right sidebar */}
       <div className={styles.mainLayout}>
-        {/* Left sidebar with detailed information */}
+        {/* Left sidebar with character stats and holdings */}
         <div className={styles.sidebar}>
           <StatScroll state={state} />
         </div>
@@ -54,6 +55,11 @@ export function PlayScreen() {
               <p>The story has nowhere left to go ({state.currentCardId}).</p>
             </div>
           )}
+        </div>
+
+        {/* Right sidebar with portfolio and commodities */}
+        <div className={styles.rightSidebar}>
+          <Portfolio state={state} />
         </div>
       </div>
 

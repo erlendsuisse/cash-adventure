@@ -38,6 +38,30 @@
   border-radius: 3px;
 }
 
+.rightSidebar {
+  flex: 0 0 240px;
+  background: linear-gradient(to bottom, #2a2219 0%, #1f1a14 100%);
+  border-left: 3px solid #c17817;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #c17817 #1f1a14;
+  padding: 0;
+}
+
+.rightSidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.rightSidebar::-webkit-scrollbar-track {
+  background: var(--dark);
+}
+
+.rightSidebar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
 .cardContainer {
   flex: 1;
   display: flex;
