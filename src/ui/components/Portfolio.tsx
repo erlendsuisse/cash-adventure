@@ -4,19 +4,15 @@ import { totalMonthlyIncome } from '../../engine/selectors'
 import { useGame } from '../GameProvider'
 import styles from './Portfolio.module.css'
 
-type TabType = 'overview' | 'market' | 'commodities' | 'assets'
-
 export function Portfolio({ state }: { state: GameState }) {
   const { dispatch } = useGame()
   const { finances } = state
   const monthlyIncome = totalMonthlyIncome(state)
   const monthlyExpenses = finances.monthlyExpenses
   const netIncome = monthlyIncome - monthlyExpenses
-  const [activeTab, setActiveTab] = useState<TabType>('overview')
   const [sellAmounts, setSellAmounts] = useState<Record<'spice' | 'salt' | 'iron', number>>({ spice: 0, salt: 0, iron: 0 })
   const [buyAmounts, setBuyAmounts] = useState<Record<'spice' | 'salt' | 'iron', number>>({ spice: 0, salt: 0, iron: 0 })
 
-  // Get market prices from game state
   const getMarketPrice = (commodity: 'spice' | 'salt' | 'iron'): number => {
     const basePrice: Record<'spice' | 'salt' | 'iron', number> = { spice: 15, salt: 8, iron: 12 }
     const sectorPrice = state.market[commodity] ?? 100
@@ -53,7 +49,6 @@ export function Portfolio({ state }: { state: GameState }) {
     }
   }
 
-  // Calculations
   const assetValue = finances.assets.reduce((sum, asset) => sum + asset.cost, 0)
   const commodityValue =
     finances.commodities.spice * getMarketPrice('spice') +
@@ -63,126 +58,67 @@ export function Portfolio({ state }: { state: GameState }) {
 
   return (
     <div className={styles.portfolio}>
-      {/* Tab Navigation */}
-      <div className={styles.tabs}>
-        <button
-          className={`${styles.tab} ${activeTab === 'overview' ? styles.active : ''}`}
-          onClick={() => setActiveTab('overview')}
-        >
-          Overview
-        </button>
-        <button
-          className={`${styles.tab} ${activeTab === 'market' ? styles.active : ''}`}
-          onClick={() => setActiveTab('market')}
-        >
-          Market
-        </button>
-        <button
-          className={`${styles.tab} ${activeTab === 'commodities' ? styles.active : ''}`}
-          onClick={() => setActiveTab('commodities')}
-        >
-          Trade
-        </button>
-        {finances.assets.length > 0 && (
-          <button
-            className={`${styles.tab} ${activeTab === 'assets' ? styles.active : ''}`}
-            onClick={() => setActiveTab('assets')}
-          >
-            Assets
-          </button>
-        )}
-      </div>
+      <div className={styles.inner}>
+        <h3 className={styles.title}>Portfolio</h3>
 
-      <div className={styles.content}>
-        {/* Overview Tab */}
-        {activeTab === 'overview' && (
-          <div className={styles.tabContent}>
-            <div className={styles.stat}>
-              <span>Gold</span>
-              <span className={styles.value}>{finances.gold}g</span>
-            </div>
-            <div className={styles.stat}>
-              <span>Net Worth</span>
-              <span className={netWorth >= 0 ? styles.positive : styles.negative}>{netWorth}g</span>
-            </div>
-            <div className={styles.stat}>
-              <span>Income</span>
-              <span className={styles.positive}>+{monthlyIncome}g</span>
-            </div>
-            <div className={styles.stat}>
-              <span>Expenses</span>
-              <span className={styles.negative}>−{monthlyExpenses}g</span>
-            </div>
-            <div className={styles.stat}>
-              <span>Net/mo</span>
-              <span className={netIncome >= 0 ? styles.positive : styles.negative}>
-                {netIncome >= 0 ? '+' : '−'}{Math.abs(netIncome)}g
-              </span>
-            </div>
-            {finances.debt > 0 && (
-              <div className={styles.stat}>
-                <span>Debt</span>
-                <span className={styles.negative}>{finances.debt}g</span>
-              </div>
-            )}
-            <div className={styles.breakdown}>
-              <div className={styles.breakdownItem}>
-                <span>Assets</span>
-                <span>{assetValue}g</span>
-              </div>
-              <div className={styles.breakdownItem}>
-                <span>Commodities</span>
-                <span>{commodityValue}g</span>
-              </div>
-            </div>
+        {/* Net Worth - Super Compact */}
+        <div className={styles.section}>
+          <div className={styles.compactRow}>
+            <span>Gold</span>
+            <span className={styles.gold}>{finances.gold}g</span>
           </div>
-        )}
+          <div className={styles.compactRow}>
+            <span>Worth</span>
+            <span className={netWorth >= 0 ? styles.positive : styles.negative}>{netWorth}g</span>
+          </div>
+        </div>
 
-        {/* Market Tab */}
-        {activeTab === 'market' && (
-          <div className={styles.tabContent}>
+        {/* Monthly Flow - Compact */}
+        <div className={styles.section}>
+          <div className={styles.compactRow}>
+            <span>+{monthlyIncome}g</span>
+            <span className={styles.negative}>−{monthlyExpenses}g</span>
+            <span className={netIncome >= 0 ? styles.positive : styles.negative}>{netIncome > 0 ? '+' : ''}{netIncome}g</span>
+          </div>
+        </div>
+
+        {/* Market Prices - Grid */}
+        <div className={styles.section}>
+          <div className={styles.pricesGrid}>
             {(['spice', 'salt', 'iron'] as const).map((commodity) => {
-              const buyPrice = getBuyPrice(commodity)
-              const sellPrice = getMarketPrice(commodity)
               const trend = getPriceTrend(commodity)
               const trendIcon = trend === 'up' ? '📈' : trend === 'down' ? '📉' : '→'
-
               return (
-                <div key={commodity} className={styles.priceCard}>
-                  <div className={styles.priceHeader}>
-                    <span className={styles.commodityName}>{commodity}</span>
-                    <span className={styles.trendIcon}>{trendIcon}</span>
+                <div key={commodity} className={styles.priceGridItem}>
+                  <div className={styles.priceTop}>
+                    <span>{commodity[0]}</span>
+                    <span>{trendIcon}</span>
                   </div>
-                  <div className={styles.priceRow}>
-                    <span>Sell</span>
-                    <span className={styles.sellPrice}>{sellPrice}g</span>
-                  </div>
-                  <div className={styles.priceRow}>
-                    <span>Buy</span>
-                    <span className={styles.buyPrice}>{buyPrice}g</span>
+                  <div className={styles.priceMid}>
+                    <span className={styles.sellPrice}>{getMarketPrice(commodity)}</span>
+                    <span className={styles.buyPrice}>{getBuyPrice(commodity)}</span>
                   </div>
                   {finances.commodities[commodity] > 0 && (
-                    <div className={styles.priceRow}>
-                      <span>Own</span>
-                      <span>{finances.commodities[commodity]}</span>
-                    </div>
+                    <div className={styles.priceBot}>×{finances.commodities[commodity]}</div>
                   )}
                 </div>
               )
             })}
           </div>
-        )}
+        </div>
 
-        {/* Commodities Tab */}
-        {activeTab === 'commodities' && (
-          <div className={styles.tabContent}>
-            {(['spice', 'salt', 'iron'] as const).map((commodity) => (
-              <div key={commodity} className={styles.commodityTrade}>
-                <div className={styles.commodityName}>{commodity}</div>
+        {/* Trading - Compact 3-column */}
+        <div className={styles.section}>
+          <div className={styles.tradeGrid}>
+            {(['spice', 'salt', 'iron'] as const).map((commodity) => {
+              const firstLetter = commodity.charAt(0).toUpperCase()
+              return (
+              <div key={commodity} className={styles.tradeGridItem}>
+                <div className={styles.tradeName}>{firstLetter}</div>
 
                 {/* Sell */}
                 {finances.commodities[commodity] > 0 && (
-                  <div className={styles.tradeRow}>
+                  <div className={styles.tradeInputGroup}>
                     <input
                       type="number"
                       min="0"
@@ -190,21 +126,22 @@ export function Portfolio({ state }: { state: GameState }) {
                       value={sellAmounts[commodity] ?? 0}
                       onChange={(e) => setSellAmounts({ ...sellAmounts, [commodity]: Number(e.target.value) || 0 })}
                       placeholder="Sell"
-                      className={styles.tradeInputSmall}
+                      className={styles.tinyInput}
                     />
                     <button
-                      className={styles.sellBtnSmall}
+                      className={styles.tinySellBtn}
                       onClick={() => handleSellCommodity(commodity, sellAmounts[commodity] ?? 0)}
                       disabled={(sellAmounts[commodity] ?? 0) <= 0}
+                      title="Sell"
                     >
-                      Sell
+                      S
                     </button>
                   </div>
                 )}
 
                 {/* Buy */}
                 {finances.gold > 0 && (
-                  <div className={styles.tradeRow}>
+                  <div className={styles.tradeInputGroup}>
                     <input
                       type="number"
                       min="0"
@@ -212,31 +149,42 @@ export function Portfolio({ state }: { state: GameState }) {
                       value={buyAmounts[commodity] ?? 0}
                       onChange={(e) => setBuyAmounts({ ...buyAmounts, [commodity]: Number(e.target.value) || 0 })}
                       placeholder="Buy"
-                      className={styles.tradeInputSmall}
+                      className={styles.tinyInput}
                     />
                     <button
-                      className={styles.buyBtnSmall}
+                      className={styles.tinyBuyBtn}
                       onClick={() => handleBuyCommodity(commodity, buyAmounts[commodity] ?? 0)}
                       disabled={(buyAmounts[commodity] ?? 0) <= 0 || (buyAmounts[commodity] ?? 0) * getBuyPrice(commodity) > finances.gold}
+                      title="Buy"
                     >
-                      Buy
+                      B
                     </button>
                   </div>
                 )}
+              </div>
+            )
+            })}
+          </div>
+        </div>
+
+        {/* Assets - Compact List */}
+        {finances.assets.length > 0 && (
+          <div className={styles.section}>
+            {finances.assets.map((asset) => (
+              <div key={asset.id} className={styles.assetMini}>
+                <span className={styles.assetMiniName}>{asset.label}</span>
+                <span className={styles.assetMiniIncome}>+{asset.monthlyCashflow}g</span>
               </div>
             ))}
           </div>
         )}
 
-        {/* Assets Tab */}
-        {activeTab === 'assets' && finances.assets.length > 0 && (
-          <div className={styles.tabContent}>
-            {finances.assets.map((asset) => (
-              <div key={asset.id} className={styles.assetRowSmall}>
-                <div className={styles.assetNameSmall}>{asset.label}</div>
-                <div className={styles.assetIncomeSmall}>+{asset.monthlyCashflow}g</div>
-              </div>
-            ))}
+        {/* Debt Warning */}
+        {finances.debt > 0 && (
+          <div className={styles.section}>
+            <div className={styles.debtWarning}>
+              Debt: {finances.debt}g
+            </div>
           </div>
         )}
       </div>
