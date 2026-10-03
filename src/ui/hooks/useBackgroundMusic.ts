@@ -1,34 +1,36 @@
 import { useEffect, useRef, useState } from 'react'
 import type { GameState } from '../../engine/types'
-import { selectMusicTrack, MUSIC_TRACKS } from '../../assets/sounds/musicMetadata'
+import { selectMusicTrack, MUSIC_TRACKS, getTracksForPhase } from '../../assets/sounds/musicMetadata'
 
 interface AudioState {
   current: string | null
   fadingOut: string | null
+  trackIndex: number // Track position in current phase's playlist
 }
 
 export function useBackgroundMusic(state: GameState, enabled: boolean = true) {
   const [userInteracted, setUserInteracted] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
-  const stateRef = useRef<AudioState>({ current: null, fadingOut: null })
+  const stateRef = useRef<AudioState>({ current: null, fadingOut: null, trackIndex: 0 })
   const fadeIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
     if (!enabled || !userInteracted) return
 
-    const currentTrack = selectMusicTrack(
+    // Get first track when story phase changes
+    const tracks = getTracksForPhase(
       state.progress.storyPhase,
       state.progress.colossiDefeated,
-      state.progress.currentPath,
-      state.clock.day
+      state.progress.currentPath
     )
 
-    console.log('[Music] Effect running. Current:', stateRef.current.current, 'Selected:', currentTrack)
+    if (tracks.length === 0) return
 
-    // No change needed
-    if (currentTrack === stateRef.current.current) {
-      return
-    }
+    // Reset to first track when phase changes
+    stateRef.current.trackIndex = 0
+    const currentTrack = tracks[0]
+
+    console.log('[Music] Phase changed to:', state.progress.storyPhase, 'Playing:', currentTrack)
 
     // Stop any existing fade interval
     if (fadeIntervalRef.current) {
@@ -36,7 +38,7 @@ export function useBackgroundMusic(state: GameState, enabled: boolean = true) {
     }
 
     // If switching to a different track, fade out current and fade in new
-    if (stateRef.current.current && currentTrack && currentTrack !== stateRef.current.current) {
+    if (stateRef.current.current && currentTrack !== stateRef.current.current) {
       fadeOutThenPlayNew(currentTrack)
     } else if (!stateRef.current.current && currentTrack) {
       // Starting music for the first time
@@ -68,16 +70,17 @@ export function useBackgroundMusic(state: GameState, enabled: boolean = true) {
     audioRef.current.volume = 0.5 // Start at 50% volume for ambient
     audioRef.current.loop = false
 
-    // When track ends, select and play the next one
+    // When track ends, play next in rotation
     audioRef.current.onended = () => {
-      console.log('[Music] Track ended, selecting next one')
-      const nextTrack = selectMusicTrack(
+      console.log('[Music] Track ended, playing next in rotation')
+      const tracks = getTracksForPhase(
         state.progress.storyPhase,
         state.progress.colossiDefeated,
-        state.progress.currentPath,
-        state.clock.day + 1
+        state.progress.currentPath
       )
-      if (nextTrack) {
+      if (tracks.length > 0) {
+        stateRef.current.trackIndex = (stateRef.current.trackIndex + 1) % tracks.length
+        const nextTrack = tracks[stateRef.current.trackIndex]
         playTrack(nextTrack)
       }
     }

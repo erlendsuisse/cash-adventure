@@ -77,56 +77,61 @@ export const MUSIC_TRACKS: Record<string, MusicTrack> = {
  * Cycles through available tracks for continuous musical variety
  * Returns track ID or null if music should stop
  */
-export function selectMusicTrack(
+export function getTracksForPhase(
   storyPhase: StoryPhase,
   colossiDefeated: number,
-  currentPath: ConsequencePath | undefined,
-  dayOfWeek: number = 0 // Use day to determine position in rotation
-): string | null {
+  currentPath: ConsequencePath | undefined
+): string[] {
   // If currently facing/just defeated a colossus
   if (colossiDefeated > 0) {
     if (currentPath) {
-      return 'dark-reckoning'
+      return ['dark-reckoning']
     }
-    return 'rising-dread'
+    return ['rising-dread']
   }
 
   // Early game: Rotate through early tracks
   if (storyPhase === 'early_game') {
-    const earlyTracks = ['optimistic-venture', 'exploration-calm']
-    return earlyTracks[dayOfWeek % earlyTracks.length]!
+    return ['optimistic-venture', 'exploration-calm']
   }
 
   // Climbing: Cycle through all 4 climbing tracks for variety
   if (storyPhase === 'climbing') {
-    const climbingTracks = [
+    return [
       'merchant-gambit',
       'merchant-gambit-alt',
       'exploration-calm',
       'tension-rising',
     ]
-    return climbingTracks[dayOfWeek % climbingTracks.length]!
   }
 
   // Entangled: Merchant themes
   if (storyPhase === 'entangled') {
-    const entangledTracks = ['merchant-gambit', 'merchant-gambit-alt', 'tension-rising']
-    return entangledTracks[dayOfWeek % entangledTracks.length]!
+    return ['merchant-gambit', 'merchant-gambit-alt', 'tension-rising']
   }
 
   // Reckoning: Dread tracks
   if (storyPhase === 'reckoning') {
-    return 'rising-dread'
+    return ['rising-dread']
   }
 
   // Recovery: Victory or consequence
   if (storyPhase === 'recovery') {
     if (currentPath) {
-      return 'dark-reckoning'
+      return ['dark-reckoning']
     } else {
-      return 'victory-peace'
+      return ['victory-peace']
     }
   }
 
-  return null
+  return []
+}
+
+export function selectMusicTrack(
+  storyPhase: StoryPhase,
+  colossiDefeated: number,
+  currentPath: ConsequencePath | undefined
+): string | null {
+  const tracks = getTracksForPhase(storyPhase, colossiDefeated, currentPath)
+  return tracks.length > 0 ? tracks[0] : null
 }
