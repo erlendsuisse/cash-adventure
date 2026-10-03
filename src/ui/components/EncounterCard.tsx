@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react'
 import type { GameState, StoryCard } from '../../engine/types'
 import { resolveProse } from '../prose'
+import { getCardArtworkPath } from '../artwork'
 import { ChoiceList } from './ChoiceList'
 import { EffectSummary } from './EffectSummary'
 import styles from './EncounterCard.module.css'
@@ -17,10 +19,24 @@ export function EncounterCard({
 }) {
   const paragraphs = resolveProse(card.body, state)
   const showingOutcome = !!state.pendingOutcome
+  const artworkPath = getCardArtworkPath(card)
+  const [artworkError, setArtworkError] = useState(false)
+
+  useEffect(() => {
+    setArtworkError(false)
+  }, [card.id])
 
   return (
     <div className={styles.wrap}>
       <div className={styles.card}>
+        {artworkPath && !artworkError && (
+          <img
+            src={artworkPath}
+            alt={card.title}
+            className={styles.artwork}
+            onError={() => setArtworkError(true)}
+          />
+        )}
         {card.title && <h2 className={styles.title}>{card.title}</h2>}
         <div className={styles.body}>
           {showingOutcome ? (
