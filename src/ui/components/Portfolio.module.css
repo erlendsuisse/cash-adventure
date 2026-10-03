@@ -4,102 +4,92 @@
   flex-direction: column;
   background: linear-gradient(to bottom, #2a2219 0%, #1f1a14 100%);
   border-left: 3px solid #c17817;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-width: thin;
-  scrollbar-color: #c17817 #1f1a14;
-  padding: 12px 10px;
+  overflow: hidden;
+  padding: 0;
 }
 
-.portfolio::-webkit-scrollbar {
-  width: 6px;
-}
-
-.portfolio::-webkit-scrollbar-track {
-  background: var(--dark);
-}
-
-.portfolio::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 3px;
-}
-
-.inner {
+/* Tab Navigation */
+.tabs {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  gap: 0;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid #c17817;
+  padding: 0;
+  flex-shrink: 0;
 }
 
-.title {
-  font-size: 16px;
+.tab {
+  flex: 1;
+  padding: 8px 4px;
+  background: transparent;
+  color: #aaa;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 11px;
   font-weight: bold;
-  color: var(--gold);
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  text-shadow: 0 0 8px rgba(193, 120, 23, 0.3);
-}
-
-.section {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 10px;
-  background: rgba(20, 16, 12, 0.4);
-  border: 1px solid rgba(193, 120, 23, 0.3);
-  border-radius: 4px;
-}
-
-.sectionTitle {
-  font-size: 12px;
-  font-weight: bold;
-  color: var(--gold);
-  margin: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
   text-transform: uppercase;
   letter-spacing: 1px;
-  opacity: 0.8;
 }
 
-/* Net Worth */
-.netWorth {
+.tab:hover {
+  color: var(--gold);
+}
+
+.tab.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+  background: rgba(193, 120, 23, 0.1);
+}
+
+/* Tab Content */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #c17817 #1f1a14;
+}
+
+.content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: #c17817;
+  border-radius: 2px;
+}
+
+.tabContent {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  font-size: 13px;
 }
 
-.netWorthRow {
+/* Overview Styles */
+.stat {
   display: flex;
   justify-content: space-between;
-  padding: 4px 0;
-  border-bottom: 1px solid rgba(193, 120, 23, 0.1);
+  padding: 4px 6px;
+  background: rgba(20, 16, 12, 0.6);
+  border-left: 2px solid #c17817;
+  font-size: 11px;
+  border-radius: 2px;
 }
 
-.netWorthRow:last-child {
-  border-bottom: none;
+.stat span:first-child {
+  color: #aaa;
 }
 
-.netWorthRow.total {
+.value {
+  color: var(--gold);
   font-weight: bold;
-  padding-top: 8px;
-  border-top: 2px solid var(--gold);
-  border-bottom: none;
-}
-
-.gold {
-  color: #ffd700;
-}
-
-.asset {
-  color: #a8a87f;
-}
-
-.commodity {
-  color: #c17817;
-}
-
-.debt {
-  color: #d9534f;
 }
 
 .positive {
@@ -110,210 +100,75 @@
   color: #d9534f;
 }
 
-/* Monthly Flow */
-.monthlyFlow {
+.breakdown {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 13px;
+  gap: 4px;
+  margin-top: 4px;
 }
 
-.flowRow {
+.breakdownItem {
+  flex: 1;
   display: flex;
   justify-content: space-between;
-  padding: 4px 0;
+  padding: 4px 6px;
+  background: rgba(40, 30, 20, 0.4);
+  border: 1px solid rgba(193, 120, 23, 0.2);
+  border-radius: 2px;
+  font-size: 10px;
 }
 
-.flowRow.net {
+.breakdownItem span:first-child {
+  color: #999;
+}
+
+.breakdownItem span:last-child {
+  color: var(--gold);
   font-weight: bold;
-  padding-top: 8px;
-  border-top: 1px solid rgba(193, 120, 23, 0.2);
 }
 
-/* Commodities Trading */
-.commoditiesPanel {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+/* Market Styles */
+.priceCard {
+  padding: 6px;
+  background: rgba(20, 16, 12, 0.6);
+  border: 1px solid rgba(193, 120, 23, 0.3);
+  border-radius: 2px;
+  font-size: 10px;
 }
 
-.commodityCard {
-  padding: 10px;
-  background: rgba(40, 30, 20, 0.5);
-  border: 1px solid rgba(193, 120, 23, 0.4);
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font-size: 12px;
-}
-
-.commodityHeader {
+.priceHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 4px;
   font-weight: bold;
+  border-bottom: 1px solid rgba(193, 120, 23, 0.2);
+  padding-bottom: 2px;
 }
 
 .commodityName {
   color: var(--gold);
-  font-size: 13px;
-}
-
-.commodityQuantity {
-  color: #999;
+  text-transform: capitalize;
   font-size: 11px;
 }
 
-.commodityPrice {
-  display: flex;
-  justify-content: space-between;
-  padding: 4px;
-  background: rgba(20, 16, 12, 0.6);
-  border-radius: 2px;
-}
-
-.label {
-  color: #aaa;
-}
-
-.price {
-  color: var(--gold);
-  font-weight: bold;
-}
-
-.commodityValue {
-  padding: 4px;
-  color: #ccc;
-  text-align: right;
-  font-size: 11px;
-}
-
-.sellForm {
-  display: flex;
-  gap: 6px;
-}
-
-.sellForm input {
-  flex: 1;
-  padding: 4px 6px;
-  background: rgba(0, 0, 0, 0.3);
-  color: var(--gold);
-  border: 1px solid rgba(193, 120, 23, 0.5);
-  border-radius: 2px;
-  font-size: 11px;
-  font-family: inherit;
-}
-
-.sellForm input:focus {
-  outline: none;
-  border-color: var(--gold);
-  background: rgba(0, 0, 0, 0.5);
-}
-
-.sellBtn {
-  padding: 4px 8px;
-  background: linear-gradient(to bottom, #c17817, #8b4513);
-  color: #fefef0;
-  border: 1px solid #c17817;
-  border-radius: 2px;
-  font-size: 11px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.sellBtn:hover:not(:disabled) {
-  background: linear-gradient(to bottom, #d4933f, #a0581a);
-  transform: scale(1.05);
-  box-shadow: 0 0 8px rgba(193, 120, 23, 0.4);
-}
-
-.sellBtn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-/* Assets List */
-.assetsList {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 12px;
-}
-
-.assetRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px;
-  background: rgba(20, 16, 12, 0.6);
-  border-radius: 2px;
-  border-left: 2px solid var(--gold);
-}
-
-.assetInfo {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex: 1;
-}
-
-.assetName {
-  color: #ddd;
-  font-weight: 500;
-}
-
-.assetQty {
-  color: #999;
-  font-size: 11px;
-}
-
-.assetIncome {
-  color: #5cb85c;
-  font-weight: bold;
-  white-space: nowrap;
-}
-
-/* Market Prices Section */
-.marketPrices {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 11px;
+.trendIcon {
+  font-size: 9px;
 }
 
 .priceRow {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 6px;
-  background: rgba(20, 16, 12, 0.6);
-  border-radius: 2px;
+  padding: 2px 0;
+  color: #ccc;
 }
 
-.priceLabel {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex: 1;
+.priceRow span:first-child {
+  color: #999;
+  font-size: 9px;
 }
 
-.commodityName {
-  color: var(--gold);
+.priceRow span:last-child {
   font-weight: bold;
-  text-transform: capitalize;
-}
-
-.trendIcon {
-  font-size: 10px;
-}
-
-.priceValues {
-  display: flex;
-  gap: 8px;
-  font-size: 10px;
 }
 
 .sellPrice {
@@ -324,32 +179,34 @@
   color: #d9534f;
 }
 
-/* Trade Mechanics */
-.tradeSection {
-  padding: 6px 0;
-  border-top: 1px solid rgba(193, 120, 23, 0.2);
+/* Commodities Trade Styles */
+.commodityTrade {
+  padding: 6px;
+  background: rgba(20, 16, 12, 0.6);
+  border: 1px solid rgba(193, 120, 23, 0.3);
+  border-radius: 2px;
 }
 
-.tradeSection:first-child {
-  border-top: none;
-  padding-top: 0;
-}
-
-.tradeLabel {
-  font-size: 10px;
+.commodityName {
+  font-size: 11px;
   font-weight: bold;
-  color: #aaa;
+  color: var(--gold);
   margin-bottom: 4px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  text-transform: capitalize;
+  display: block;
 }
 
-.tradeForm {
+.tradeRow {
   display: flex;
-  gap: 4px;
+  gap: 3px;
+  margin-bottom: 3px;
 }
 
-.tradeInput {
+.tradeRow:last-child {
+  margin-bottom: 0;
+}
+
+.tradeInputSmall {
   flex: 1;
   padding: 3px 4px;
   background: rgba(0, 0, 0, 0.3);
@@ -360,55 +217,71 @@
   font-family: inherit;
 }
 
-.tradeInput:focus {
+.tradeInputSmall:focus {
   outline: none;
   border-color: var(--gold);
   background: rgba(0, 0, 0, 0.5);
 }
 
-.tradeBtn {
+.sellBtnSmall,
+.buyBtnSmall {
   padding: 3px 6px;
-  background: linear-gradient(to bottom, #8b4513, #5c2e0f);
-  color: #fefef0;
-  border: 1px solid #8b4513;
+  border: 1px solid;
   border-radius: 2px;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.15s ease;
   white-space: nowrap;
 }
 
-.tradeBtn:hover:not(:disabled) {
-  background: linear-gradient(to bottom, #a0581a, #6b3a15);
-  box-shadow: 0 0 6px rgba(193, 120, 23, 0.3);
-}
-
-.tradeBtn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-/* Buy Button Specific */
-.buyBtn {
-  padding: 3px 6px;
+.sellBtnSmall {
   background: linear-gradient(to bottom, #4a7c59, #2d5236);
   color: #c8e6c9;
-  border: 1px solid #4a7c59;
-  border-radius: 2px;
-  font-size: 10px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  white-space: nowrap;
+  border-color: #4a7c59;
 }
 
-.buyBtn:hover:not(:disabled) {
+.sellBtnSmall:hover:not(:disabled) {
   background: linear-gradient(to bottom, #5a9d6b, #3a683f);
-  box-shadow: 0 0 6px rgba(92, 184, 92, 0.3);
+  box-shadow: 0 0 4px rgba(92, 184, 92, 0.2);
 }
 
-.buyBtn:disabled {
+.buyBtnSmall {
+  background: linear-gradient(to bottom, #8b4513, #5c2e0f);
+  color: #fefef0;
+  border-color: #8b4513;
+}
+
+.buyBtnSmall:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #a0581a, #6b3a15);
+  box-shadow: 0 0 4px rgba(193, 120, 23, 0.2);
+}
+
+.sellBtnSmall:disabled,
+.buyBtnSmall:disabled {
   opacity: 0.3;
   cursor: not-allowed;
+}
+
+/* Assets Styles */
+.assetRowSmall {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 6px;
+  background: rgba(20, 16, 12, 0.6);
+  border-left: 2px solid var(--gold);
+  border-radius: 2px;
+  font-size: 10px;
+}
+
+.assetNameSmall {
+  color: #ddd;
+  flex: 1;
+  font-weight: 500;
+}
+
+.assetIncomeSmall {
+  color: #5cb85c;
+  font-weight: bold;
 }
