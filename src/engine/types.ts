@@ -223,6 +223,7 @@ export type Action =
   | { type: 'payLoan'; amount: number }
   | { type: 'sellCommodity'; commodity: 'spice' | 'salt' | 'iron'; amount: number; pricePerUnit: number }
   | { type: 'buyCommodity'; commodity: 'spice' | 'salt' | 'iron'; amount: number; pricePerUnit: number }
+  | { type: 'sellAsset'; id: string; priceMultiplier: number }
 
 export interface Tuning {
   marketDayInterval: number // days between market ticks

@@ -87,6 +87,30 @@ export function reduce(state: GameState, action: Action, campaign: Campaign): Ga
         ],
       }
     }
+    case 'sellAsset': {
+      const asset = state.finances.assets.find((a) => a.id === action.id)
+      if (!asset) return state
+
+      const salePrice = Math.round(asset.cost * action.priceMultiplier)
+      const expenseReduction = Math.max(0, asset.monthlyCashflow)
+
+      return {
+        ...state,
+        finances: {
+          ...state.finances,
+          gold: state.finances.gold + salePrice,
+          assets: state.finances.assets.filter((a) => a.id !== action.id),
+          monthlyExpenses: state.finances.monthlyExpenses - expenseReduction,
+        },
+        log: [
+          ...state.log,
+          {
+            day: state.clock.day,
+            text: `Sold ${asset.label} for ${salePrice}g (${Math.round(action.priceMultiplier * 100)}% of value)`,
+          },
+        ],
+      }
+    }
   }
 }
 
