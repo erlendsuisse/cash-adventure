@@ -133,5 +133,5 @@ export function selectMusicTrack(
   currentPath: ConsequencePath | undefined
 ): string | null {
   const tracks = getTracksForPhase(storyPhase, colossiDefeated, currentPath)
-  return tracks.length > 0 ? tracks[0] : null
+  return tracks.length > 0 ? tracks[0]! : null
 }

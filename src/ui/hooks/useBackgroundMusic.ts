@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { GameState } from '../../engine/types'
-import { selectMusicTrack, MUSIC_TRACKS, getTracksForPhase } from '../../assets/sounds/musicMetadata'
+import { MUSIC_TRACKS, getTracksForPhase } from '../../assets/sounds/musicMetadata'
 
 interface AudioState {
   current: string | null
@@ -28,7 +28,7 @@ export function useBackgroundMusic(state: GameState, enabled: boolean = true) {
 
     // Reset to first track when phase changes
     stateRef.current.trackIndex = 0
-    const currentTrack = tracks[0]
+    const currentTrack = tracks[0]!
 
     console.log('[Music] Phase changed to:', state.progress.storyPhase, 'Playing:', currentTrack)
 
@@ -80,7 +80,7 @@ export function useBackgroundMusic(state: GameState, enabled: boolean = true) {
       )
       if (tracks.length > 0) {
         stateRef.current.trackIndex = (stateRef.current.trackIndex + 1) % tracks.length
-        const nextTrack = tracks[stateRef.current.trackIndex]
+        const nextTrack = tracks[stateRef.current.trackIndex]!
         playTrack(nextTrack)
       }
     }
