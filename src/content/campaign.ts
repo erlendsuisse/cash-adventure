@@ -28,6 +28,8 @@ import { opportunityDealCards } from './cards/opportunity-deals'
 import { dangerCards } from './cards/dangers-and-penalties'
 import { chapterOneCards, chapterTwoCards, chapterThreeCards, chapterFourCards } from './cards/chapter-decks'
 import { marketOpportunityCards } from './cards/market-opportunities'
+import { chapter2CommodityCards, chapter2MarketCards, chapter2DangerCards } from './cards/chapter-2-underworld'
+import { chapter3CommodityCards, chapter3MarketCards, chapter3DangerCards } from './cards/chapter-3-warfare'
 import { consequenceTuning, initial, SECTORS, tuning } from './tuning'
 
 const allCards: StoryCard[] = [
@@ -42,6 +44,12 @@ const allCards: StoryCard[] = [
   ...chapterTwoCards,
   ...chapterThreeCards,
   ...chapterFourCards,
+  ...chapter2CommodityCards,
+  ...chapter2MarketCards,
+  ...chapter2DangerCards,
+  ...chapter3CommodityCards,
+  ...chapter3MarketCards,
+  ...chapter3DangerCards,
   ...adventureDeckCards,
   ...storyEventCards,
   ...statTrainingCards,
@@ -94,6 +102,12 @@ const allDeckCards = [
   ...chapterTwoCards,
   ...chapterThreeCards,
   ...chapterFourCards,
+  ...chapter2CommodityCards,
+  ...chapter2MarketCards,
+  ...chapter2DangerCards,
+  ...chapter3CommodityCards,
+  ...chapter3MarketCards,
+  ...chapter3DangerCards,
 ]
 
 export const campaign: Campaign = Object.freeze({
