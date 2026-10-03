@@ -82,7 +82,8 @@ const colossus01_outcome: StoryCard = {
   body: [
     'You have survived the First Reckoning. Your assets are gone, your wages halved, and the road to freedom starts again - but you are no longer the merchant who arrived at Vessarin with fifty gold and nothing else.',
   ],
-  choices: [{ id: 'rebuild', label: 'Rebuild', effects: [] }],
+  choices: [{ id: 'rebuild', label: 'Rebuild and continue', effects: [] }],
+  next: undefined, // Let it draw from pending or random deck
 }
 
 export const colossus01Cards: StoryCard[] = [
