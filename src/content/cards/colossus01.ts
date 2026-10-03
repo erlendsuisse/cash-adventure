@@ -38,6 +38,12 @@ const colossus01_trial_grit: StoryCard = {
         },
       },
     },
+    {
+      id: 'flee_auditors',
+      label: 'Flee (moves to next trial)',
+      effects: [{ kind: 'narrate', text: 'You abandon your post.' }],
+      goto: 'colossus01_outcome',
+    },
   ],
 }
 

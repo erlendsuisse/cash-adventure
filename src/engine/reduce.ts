@@ -153,9 +153,17 @@ function resolveNext(before: GameState, working: GameState, explicitTarget: Card
     target = drawn.cardId ?? campaign.startCardId
   }
 
-  const queue = [...s.pendingCards, target]
-  const nextCardId = queue[0] as CardId
-  s = { ...s, pendingCards: queue.slice(1) }
+  // If there's an explicit target (from choice goto), it takes priority
+  // Otherwise, use pending cards first
+  let nextCardId: CardId
+  if (explicitTarget) {
+    nextCardId = target
+    s = { ...s, pendingCards: s.pendingCards }  // Keep pending for later
+  } else {
+    const queue = [...s.pendingCards, target]
+    nextCardId = queue[0] as CardId
+    s = { ...s, pendingCards: queue.slice(1) }
+  }
 
   return enterCard(s, nextCardId, campaign)
 }
