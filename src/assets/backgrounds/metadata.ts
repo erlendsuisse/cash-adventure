@@ -205,7 +205,6 @@ export const BACKGROUND_MAP: Record<CardId, BackgroundAsset> = {
   'competition_undercutting': { id: 'competition_undercutting', cardId: 'competition_undercutting', url: '/backgrounds/competition_undercutting.webp', alt: 'A Competitor Undercuts You', aspectRatio: 16 / 9 },
   'fire_at_warehouse': { id: 'fire_at_warehouse', cardId: 'fire_at_warehouse', url: '/backgrounds/fire_at_warehouse.webp', alt: 'Fire at Your Warehouse', aspectRatio: 16 / 9 },
   'betrayal_by_partner': { id: 'betrayal_by_partner', cardId: 'betrayal_by_partner', url: '/backgrounds/betrayal_by_partner.webp', alt: 'Your Partner Betrays You', aspectRatio: 16 / 9 },
-  'market_crash': { id: 'market_crash', cardId: 'market_crash', url: '/backgrounds/market_crash.webp', alt: 'The Market Crashes', aspectRatio: 16 / 9 },
   'extortion_racket': { id: 'extortion_racket', cardId: 'extortion_racket', url: '/backgrounds/extortion_racket.webp', alt: 'The Mob Wants a Cut', aspectRatio: 16 / 9 },
   'noble_seizure': { id: 'noble_seizure', cardId: 'noble_seizure', url: '/backgrounds/noble_seizure.webp', alt: 'A Noble Claims Your Assets', aspectRatio: 16 / 9 },
   'sabotaged_supply': { id: 'sabotaged_supply', cardId: 'sabotaged_supply', url: '/backgrounds/sabotaged_supply.webp', alt: 'Your Supply Chain Is Sabotaged', aspectRatio: 16 / 9 },
