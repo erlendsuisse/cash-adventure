@@ -83,6 +83,14 @@ const allDeckCards = [
   ...recoveryPhaseCards,
   ...narrativeConsequenceCards,
   ...colossuAftermath,
+  ...opportunityDealCards,
+  ...wealthBuildingDeck,
+  ...commodityTradingCards,
+  ...dangerCards,
+  ...chapterOneCards,
+  ...chapterTwoCards,
+  ...chapterThreeCards,
+  ...chapterFourCards,
 ]
 
 export const campaign: Campaign = Object.freeze({
