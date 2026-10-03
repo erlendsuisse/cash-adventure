@@ -46,21 +46,46 @@ export function StatScroll({ state }: { state: GameState }) {
         <div className={styles.section}>
           <h4 className={styles.sectionTitle}>Holdings</h4>
           <div className={styles.assets}>
-            {finances.assets.length > 0 ? (
-              finances.assets.map((asset) => (
-                <div key={asset.id} className={styles.asset}>
-                  <div className={styles.assetInfo}>
-                    <span className={styles.assetLabel}>{asset.label}</span>
-                    {asset.quantity && asset.quantity > 1 && (
-                      <span className={styles.assetQuantity}>×{asset.quantity}</span>
-                    )}
-                  </div>
-                  <span className={styles.assetFlow}>
-                    +{asset.monthlyCashflow}g/mo
-                  </span>
+            {/* Financial Assets */}
+            {finances.assets.map((asset) => (
+              <div key={asset.id} className={styles.asset}>
+                <div className={styles.assetInfo}>
+                  <span className={styles.assetLabel}>{asset.label}</span>
+                  {asset.quantity && asset.quantity > 1 && (
+                    <span className={styles.assetQuantity}>×{asset.quantity}</span>
+                  )}
                 </div>
-              ))
-            ) : (
+                <span className={styles.assetFlow}>
+                  +{asset.monthlyCashflow}g/mo
+                </span>
+              </div>
+            ))}
+
+            {/* Commodities */}
+            {(finances.commodities.spice > 0 || finances.commodities.salt > 0 || finances.commodities.iron > 0) && (
+              <div className={styles.commoditiesSection}>
+                {finances.commodities.spice > 0 && (
+                  <div className={styles.commodity}>
+                    <span className={styles.commodityLabel}>Spice</span>
+                    <span className={styles.commodityAmount}>{finances.commodities.spice} units</span>
+                  </div>
+                )}
+                {finances.commodities.salt > 0 && (
+                  <div className={styles.commodity}>
+                    <span className={styles.commodityLabel}>Salt</span>
+                    <span className={styles.commodityAmount}>{finances.commodities.salt} units</span>
+                  </div>
+                )}
+                {finances.commodities.iron > 0 && (
+                  <div className={styles.commodity}>
+                    <span className={styles.commodityLabel}>Iron</span>
+                    <span className={styles.commodityAmount}>{finances.commodities.iron} units</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {finances.assets.length === 0 && finances.commodities.spice === 0 && finances.commodities.salt === 0 && finances.commodities.iron === 0 && (
               <div className={styles.emptyHoldings}>
                 No holdings yet. Seek investment opportunities.
               </div>

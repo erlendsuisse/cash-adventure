@@ -34,6 +34,11 @@ export interface Finances {
   monthlyExpenses: number
   debt: number
   assets: OwnedAsset[]
+  commodities: {
+    spice: number
+    salt: number
+    iron: number
+  }
 }
 
 export interface Progress {
@@ -139,6 +144,7 @@ export type Effect =
   | { kind: 'narrate'; text: string }
   | { kind: 'end'; status: 'won'; summary: string }
   | { kind: 'if'; when: Requirement; then: Effect[]; else?: Effect[] }
+  | { kind: 'commodity'; type: 'spice' | 'salt' | 'iron'; delta: number }
 
 // ---- Content: cards, choices, checks ----
 

@@ -13,7 +13,7 @@ function makeCampaign(overrides: Partial<Campaign> = {}): Campaign {
     colossusCardIds: ['colossus1'],
     marketDayCardId: 'market_day',
     tuning: { marketDayInterval: 14, marketDriftRange: 4, freedomDaysToTrial: 5, daysPerTurn: 0, paydayInterval: 999 },
-    initial: { stats: { grit: 2, savvy: 2, charm: 2, nerve: 2 }, finances: { gold: 0, wages: 0, monthlyExpenses: 0, debt: 0, assets: [] }, market: { salt: 100, spice: 100, iron: 100 } },
+    initial: { stats: { grit: 2, savvy: 2, charm: 2, nerve: 2 }, finances: { gold: 0, wages: 0, monthlyExpenses: 0, debt: 0, assets: [], commodities: { spice: 0, salt: 0, iron: 0 } }, market: { salt: 100, spice: 100, iron: 100 } },
     ...overrides,
   }
 }
@@ -36,14 +36,14 @@ describe('tick', () => {
 
   it('accrues freedomDays only while passive income covers expenses, and resets otherwise', () => {
     const free = makeState({
-      finances: { gold: 0, wages: 0, monthlyExpenses: 10, debt: 0, assets: [{ id: 'a', label: 'A', cost: 1, monthlyCashflow: 10, sector: 'salt' }] },
+      finances: { gold: 0, wages: 0, monthlyExpenses: 10, debt: 0, assets: [{ id: 'a', label: 'A', cost: 1, monthlyCashflow: 10, sector: 'salt' }], commodities: { spice: 0, salt: 0, iron: 0 } },
       clock: { day: 0, nextMarketDay: 999, nextPayday: 999 },
     })
     const s = tick(free, 3, makeCampaign())
     expect(s.progress.freedomDays).toBe(3)
 
     const notFree = makeState({
-      finances: { gold: 0, wages: 0, monthlyExpenses: 10, debt: 0, assets: [] },
+      finances: { gold: 0, wages: 0, monthlyExpenses: 10, debt: 0, assets: [], commodities: { spice: 0, salt: 0, iron: 0 } },
       progress: { colossiDefeated: 0, boons: [], freedomDays: 5, tier: 1, storyPhase: 'early_game', currentPath: undefined },
       clock: { day: 0, nextMarketDay: 999, nextPayday: 999 },
     })
@@ -53,7 +53,7 @@ describe('tick', () => {
 
   it('queues the next Colossus trial once freedomDays reaches the threshold, and only once', () => {
     const free = makeState({
-      finances: { gold: 0, wages: 0, monthlyExpenses: 10, debt: 0, assets: [{ id: 'a', label: 'A', cost: 1, monthlyCashflow: 10, sector: 'salt' }] },
+      finances: { gold: 0, wages: 0, monthlyExpenses: 10, debt: 0, assets: [{ id: 'a', label: 'A', cost: 1, monthlyCashflow: 10, sector: 'salt' }], commodities: { spice: 0, salt: 0, iron: 0 } },
       clock: { day: 0, nextMarketDay: 999, nextPayday: 999 },
     })
     const s = tick(free, 5, makeCampaign()) // freedomDaysToTrial = 5
@@ -65,7 +65,7 @@ describe('tick', () => {
 
   it('does not queue a trial once all Colossi are defeated', () => {
     const free = makeState({
-      finances: { gold: 0, wages: 0, monthlyExpenses: 10, debt: 0, assets: [{ id: 'a', label: 'A', cost: 1, monthlyCashflow: 10, sector: 'salt' }] },
+      finances: { gold: 0, wages: 0, monthlyExpenses: 10, debt: 0, assets: [{ id: 'a', label: 'A', cost: 1, monthlyCashflow: 10, sector: 'salt' }], commodities: { spice: 0, salt: 0, iron: 0 } },
       progress: { colossiDefeated: 1, boons: [], freedomDays: 0, tier: 1, storyPhase: 'early_game', currentPath: undefined },
       clock: { day: 0, nextMarketDay: 999, nextPayday: 999 },
     })

@@ -5,7 +5,7 @@ import type { Effect } from './types'
 
 describe('apply', () => {
   it('gold', () => {
-    const s = apply({ kind: 'gold', delta: -30 }, makeState({ finances: { gold: 100, wages: 0, monthlyExpenses: 20, debt: 0, assets: [] } }))
+    const s = apply({ kind: 'gold', delta: -30 }, makeState({ finances: { gold: 100, wages: 0, monthlyExpenses: 20, debt: 0, assets: [], commodities: { spice: 0, salt: 0, iron: 0 } } }))
     expect(s.finances.gold).toBe(70)
   })
 
@@ -34,7 +34,7 @@ describe('apply', () => {
 
   it('sellAsset removes the asset and pays its cost times multiplier', () => {
     const state = makeState({
-      finances: { gold: 0, wages: 0, monthlyExpenses: 0, debt: 0, assets: [{ id: 'a', label: 'A', cost: 100, monthlyCashflow: 5, sector: 'salt' }] },
+      finances: { gold: 0, wages: 0, monthlyExpenses: 0, debt: 0, assets: [{ id: 'a', label: 'A', cost: 100, monthlyCashflow: 5, sector: 'salt' }], commodities: { spice: 0, salt: 0, iron: 0 } },
     })
     const s = apply({ kind: 'sellAsset', id: 'a', priceMultiplier: 0.5 }, state)
     expect(s.finances.gold).toBe(50)
@@ -91,7 +91,7 @@ describe('apply', () => {
   it('reckoning strips assets, halves wages, and advances progress', () => {
     const state = makeState({
       progress: { colossiDefeated: 0, boons: [], freedomDays: 30, tier: 1, storyPhase: 'early_game', currentPath: undefined },
-      finances: { gold: 0, wages: 100, monthlyExpenses: 0, debt: 0, assets: [{ id: 'a', label: 'A', cost: 1, monthlyCashflow: 1, sector: 'salt' }] },
+      finances: { gold: 0, wages: 100, monthlyExpenses: 0, debt: 0, assets: [{ id: 'a', label: 'A', cost: 1, monthlyCashflow: 1, sector: 'salt' }], commodities: { spice: 0, salt: 0, iron: 0 } },
     })
     const s = apply({ kind: 'reckoning' }, state)
     expect(s.finances.assets).toEqual([])

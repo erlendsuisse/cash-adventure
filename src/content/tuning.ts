@@ -19,6 +19,6 @@ export const consequenceTuning: ConsequenceTuning = {
 
 export const initial: Campaign['initial'] = {
   stats: { grit: 2, savvy: 2, charm: 2, nerve: 2 },
-  finances: { gold: 50, wages: 0, monthlyExpenses: 20, debt: 0, assets: [] },
+  finances: { gold: 50, wages: 0, monthlyExpenses: 20, debt: 0, assets: [], commodities: { spice: 0, salt: 0, iron: 0 } },
   market: { salt: 100, spice: 100, iron: 100 },
 }

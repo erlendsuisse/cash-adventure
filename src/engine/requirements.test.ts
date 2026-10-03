@@ -24,14 +24,14 @@ describe('isMet', () => {
   })
 
   it('ownsAsset', () => {
-    const state = makeState({ finances: { gold: 0, wages: 0, monthlyExpenses: 0, debt: 0, assets: [{ id: 'a', label: 'A', cost: 1, monthlyCashflow: 1, sector: 'salt' }] } })
+    const state = makeState({ finances: { gold: 0, wages: 0, monthlyExpenses: 0, debt: 0, assets: [{ id: 'a', label: 'A', cost: 1, monthlyCashflow: 1, sector: 'salt' }], commodities: { spice: 0, salt: 0, iron: 0 } } })
     expect(isMet({ kind: 'ownsAsset', id: 'a' }, state)).toBe(true)
     expect(isMet({ kind: 'ownsAsset', id: 'b' }, state)).toBe(false)
   })
 
   it('isFree compares passive income to expenses', () => {
-    const free = makeState({ finances: { gold: 0, wages: 0, monthlyExpenses: 10, debt: 0, assets: [{ id: 'a', label: 'A', cost: 1, monthlyCashflow: 10, sector: 'salt' }] } })
-    const notFree = makeState({ finances: { gold: 0, wages: 0, monthlyExpenses: 10, debt: 0, assets: [{ id: 'a', label: 'A', cost: 1, monthlyCashflow: 5, sector: 'salt' }] } })
+    const free = makeState({ finances: { gold: 0, wages: 0, monthlyExpenses: 10, debt: 0, assets: [{ id: 'a', label: 'A', cost: 1, monthlyCashflow: 10, sector: 'salt' }], commodities: { spice: 0, salt: 0, iron: 0 } } })
+    const notFree = makeState({ finances: { gold: 0, wages: 0, monthlyExpenses: 10, debt: 0, assets: [{ id: 'a', label: 'A', cost: 1, monthlyCashflow: 5, sector: 'salt' }], commodities: { spice: 0, salt: 0, iron: 0 } } })
     expect(isMet({ kind: 'isFree' }, free)).toBe(true)
     expect(isMet({ kind: 'isFree' }, notFree)).toBe(false)
   })

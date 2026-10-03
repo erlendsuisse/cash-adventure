@@ -130,6 +130,18 @@ export function apply(effect: Effect, state: GameState): GameState {
     case 'end':
       return { ...state, status: effect.status }
 
+    case 'commodity': {
+      const current = state.finances.commodities[effect.type]
+      const newAmount = Math.max(0, current + effect.delta)
+      return {
+        ...state,
+        finances: {
+          ...state.finances,
+          commodities: { ...state.finances.commodities, [effect.type]: newAmount },
+        },
+      }
+    }
+
     case 'if':
       return applyAll(isMet(effect.when, state) ? effect.then : effect.else ?? [], state)
   }

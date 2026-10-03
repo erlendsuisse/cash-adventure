@@ -177,6 +177,13 @@ export const BACKGROUND_MAP: Record<CardId, BackgroundAsset> = {
   'merchant_route_offer': { id: 'merchant_route_offer', cardId: 'merchant_route_offer', url: '/backgrounds/merchant_route_offer.webp', alt: 'A Trade Route Opens', aspectRatio: 16 / 9 },
   'expand_merchant_routes': { id: 'expand_merchant_routes', cardId: 'expand_merchant_routes', url: '/backgrounds/expand_merchant_routes.webp', alt: 'Expand Your Routes', aspectRatio: 16 / 9 },
   'guild_partnership': { id: 'guild_partnership', cardId: 'guild_partnership', url: '/backgrounds/guild_partnership.webp', alt: 'Guild Partnership Proposal', aspectRatio: 16 / 9 },
+
+  // Commodity trading cards
+  'salt_shipment_offer': { id: 'salt_shipment_offer', cardId: 'salt_shipment_offer', url: '/backgrounds/salt_shipment_offer.webp', alt: 'A Salt Shipment Arrives', aspectRatio: 16 / 9 },
+  'spice_acquisition': { id: 'spice_acquisition', cardId: 'spice_acquisition', url: '/backgrounds/spice_acquisition.webp', alt: 'Spice Market Opportunity', aspectRatio: 16 / 9 },
+  'iron_stock_available': { id: 'iron_stock_available', cardId: 'iron_stock_available', url: '/backgrounds/iron_stock_available.webp', alt: 'Iron Ore Available', aspectRatio: 16 / 9 },
+  'sell_commodities_boom': { id: 'sell_commodities_boom', cardId: 'sell_commodities_boom', url: '/backgrounds/sell_commodities_boom.webp', alt: 'Market Surge', aspectRatio: 16 / 9 },
+  'trader_bulk_purchase': { id: 'trader_bulk_purchase', cardId: 'trader_bulk_purchase', url: '/backgrounds/trader_bulk_purchase.webp', alt: 'A Bulk Buyer Arrives', aspectRatio: 16 / 9 },
 }
 
 export const BACKGROUND_FALLBACKS = [
