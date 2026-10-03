@@ -26,6 +26,7 @@ import { wealthBuildingDeck } from './cards/wealth-building'
 import { commodityTradingCards } from './cards/commodity-trading'
 import { opportunityDealCards } from './cards/opportunity-deals'
 import { dangerCards } from './cards/dangers-and-penalties'
+import { chapterOneCards, chapterTwoCards, chapterThreeCards, chapterFourCards } from './cards/chapter-decks'
 import { consequenceTuning, initial, SECTORS, tuning } from './tuning'
 
 const allCards: StoryCard[] = [
@@ -35,6 +36,10 @@ const allCards: StoryCard[] = [
   ...wealthBuildingDeck,
   ...commodityTradingCards,
   ...dangerCards,
+  ...chapterOneCards,
+  ...chapterTwoCards,
+  ...chapterThreeCards,
+  ...chapterFourCards,
   ...adventureDeckCards,
   ...storyEventCards,
   ...statTrainingCards,
