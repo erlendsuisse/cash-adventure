@@ -24,11 +24,13 @@ import { colossuAftermath } from './cards/colossus-aftermath'
 import { colossiInvestigationCards } from './cards/colossi-investigation'
 import { wealthBuildingDeck } from './cards/wealth-building'
 import { commodityTradingCards } from './cards/commodity-trading'
+import { opportunityDealCards } from './cards/opportunity-deals'
 import { consequenceTuning, initial, SECTORS, tuning } from './tuning'
 
 const allCards: StoryCard[] = [
   ...prologueCards,
   ...deckCards,
+  ...opportunityDealCards,
   ...wealthBuildingDeck,
   ...commodityTradingCards,
   ...adventureDeckCards,

@@ -184,6 +184,19 @@ export const BACKGROUND_MAP: Record<CardId, BackgroundAsset> = {
   'iron_stock_available': { id: 'iron_stock_available', cardId: 'iron_stock_available', url: '/backgrounds/iron_stock_available.webp', alt: 'Iron Ore Available', aspectRatio: 16 / 9 },
   'sell_commodities_boom': { id: 'sell_commodities_boom', cardId: 'sell_commodities_boom', url: '/backgrounds/sell_commodities_boom.webp', alt: 'Market Surge', aspectRatio: 16 / 9 },
   'trader_bulk_purchase': { id: 'trader_bulk_purchase', cardId: 'trader_bulk_purchase', url: '/backgrounds/trader_bulk_purchase.webp', alt: 'A Bulk Buyer Arrives', aspectRatio: 16 / 9 },
+
+  // Opportunity deal cards
+  'tavern_investment': { id: 'tavern_investment', cardId: 'tavern_investment', url: '/backgrounds/tavern_investment.webp', alt: 'A Tavern Investment', aspectRatio: 16 / 9 },
+  'workshop_partnership': { id: 'workshop_partnership', cardId: 'workshop_partnership', url: '/backgrounds/workshop_partnership.webp', alt: 'A Craftspersons Partnership', aspectRatio: 16 / 9 },
+  'fishing_fleet_share': { id: 'fishing_fleet_share', cardId: 'fishing_fleet_share', url: '/backgrounds/fishing_fleet_share.webp', alt: 'A Fishing Fleet Share', aspectRatio: 16 / 9 },
+  'brewery_venture': { id: 'brewery_venture', cardId: 'brewery_venture', url: '/backgrounds/brewery_venture.webp', alt: 'A Brewery Proposition', aspectRatio: 16 / 9 },
+  'vineyard_opportunity': { id: 'vineyard_opportunity', cardId: 'vineyard_opportunity', url: '/backgrounds/vineyard_opportunity.webp', alt: 'A Vineyard Investment', aspectRatio: 16 / 9 },
+  'bookbinder_deal': { id: 'bookbinder_deal', cardId: 'bookbinder_deal', url: '/backgrounds/bookbinder_deal.webp', alt: 'A Bookbinders Opportunity', aspectRatio: 16 / 9 },
+  'perfumer_investment': { id: 'perfumer_investment', cardId: 'perfumer_investment', url: '/backgrounds/perfumer_investment.webp', alt: 'A Perfumers Gambit', aspectRatio: 16 / 9 },
+  'bakery_chain': { id: 'bakery_chain', cardId: 'bakery_chain', url: '/backgrounds/bakery_chain.webp', alt: 'A Bakery Chain', aspectRatio: 16 / 9 },
+  'stable_investment': { id: 'stable_investment', cardId: 'stable_investment', url: '/backgrounds/stable_investment.webp', alt: 'A Horse Stable', aspectRatio: 16 / 9 },
+  'library_endowment': { id: 'library_endowment', cardId: 'library_endowment', url: '/backgrounds/library_endowment.webp', alt: 'A Library Endowment', aspectRatio: 16 / 9 },
+  'mill_partnership': { id: 'mill_partnership', cardId: 'mill_partnership', url: '/backgrounds/mill_partnership.webp', alt: 'A Mill Partnership', aspectRatio: 16 / 9 },
 }
 
 export const BACKGROUND_FALLBACKS = [
