@@ -52,6 +52,7 @@ const effect: z.ZodType<unknown> = z.lazy(() =>
     z.object({ kind: z.literal('narrate'), text: z.string() }),
     z.object({ kind: z.literal('end'), status: z.literal('won'), summary: z.string() }),
     z.object({ kind: z.literal('if'), when: requirement, then: z.array(effect), else: z.array(effect).optional() }),
+    z.object({ kind: z.literal('commodity'), type: z.enum(['spice', 'salt', 'iron']), delta: z.number() }),
   ]),
 )
 
