@@ -25,6 +25,7 @@ import { colossiInvestigationCards } from './cards/colossi-investigation'
 import { wealthBuildingDeck } from './cards/wealth-building'
 import { commodityTradingCards } from './cards/commodity-trading'
 import { opportunityDealCards } from './cards/opportunity-deals'
+import { dangerCards } from './cards/dangers-and-penalties'
 import { consequenceTuning, initial, SECTORS, tuning } from './tuning'
 
 const allCards: StoryCard[] = [
@@ -33,6 +34,7 @@ const allCards: StoryCard[] = [
   ...opportunityDealCards,
   ...wealthBuildingDeck,
   ...commodityTradingCards,
+  ...dangerCards,
   ...adventureDeckCards,
   ...storyEventCards,
   ...statTrainingCards,

@@ -197,6 +197,23 @@ export const BACKGROUND_MAP: Record<CardId, BackgroundAsset> = {
   'stable_investment': { id: 'stable_investment', cardId: 'stable_investment', url: '/backgrounds/stable_investment.webp', alt: 'A Horse Stable', aspectRatio: 16 / 9 },
   'library_endowment': { id: 'library_endowment', cardId: 'library_endowment', url: '/backgrounds/library_endowment.webp', alt: 'A Library Endowment', aspectRatio: 16 / 9 },
   'mill_partnership': { id: 'mill_partnership', cardId: 'mill_partnership', url: '/backgrounds/mill_partnership.webp', alt: 'A Mill Partnership', aspectRatio: 16 / 9 },
+
+  // Danger and penalty cards
+  'petty_theft': { id: 'petty_theft', cardId: 'petty_theft', url: '/backgrounds/petty_theft.webp', alt: 'Petty Theft at the Market', aspectRatio: 16 / 9 },
+  'spoiled_shipment': { id: 'spoiled_shipment', cardId: 'spoiled_shipment', url: '/backgrounds/spoiled_shipment.webp', alt: 'A Shipment Spoils', aspectRatio: 16 / 9 },
+  'creditor_pressure': { id: 'creditor_pressure', cardId: 'creditor_pressure', url: '/backgrounds/creditor_pressure.webp', alt: 'A Creditor Presses Hard', aspectRatio: 16 / 9 },
+  'competition_undercutting': { id: 'competition_undercutting', cardId: 'competition_undercutting', url: '/backgrounds/competition_undercutting.webp', alt: 'A Competitor Undercuts You', aspectRatio: 16 / 9 },
+  'fire_at_warehouse': { id: 'fire_at_warehouse', cardId: 'fire_at_warehouse', url: '/backgrounds/fire_at_warehouse.webp', alt: 'Fire at Your Warehouse', aspectRatio: 16 / 9 },
+  'betrayal_by_partner': { id: 'betrayal_by_partner', cardId: 'betrayal_by_partner', url: '/backgrounds/betrayal_by_partner.webp', alt: 'Your Partner Betrays You', aspectRatio: 16 / 9 },
+  'market_crash': { id: 'market_crash', cardId: 'market_crash', url: '/backgrounds/market_crash.webp', alt: 'The Market Crashes', aspectRatio: 16 / 9 },
+  'extortion_racket': { id: 'extortion_racket', cardId: 'extortion_racket', url: '/backgrounds/extortion_racket.webp', alt: 'The Mob Wants a Cut', aspectRatio: 16 / 9 },
+  'noble_seizure': { id: 'noble_seizure', cardId: 'noble_seizure', url: '/backgrounds/noble_seizure.webp', alt: 'A Noble Claims Your Assets', aspectRatio: 16 / 9 },
+  'sabotaged_supply': { id: 'sabotaged_supply', cardId: 'sabotaged_supply', url: '/backgrounds/sabotaged_supply.webp', alt: 'Your Supply Chain Is Sabotaged', aspectRatio: 16 / 9 },
+  'economic_downturn': { id: 'economic_downturn', cardId: 'economic_downturn', url: '/backgrounds/economic_downturn.webp', alt: 'Economic Downturn Hits', aspectRatio: 16 / 9 },
+  'debt_collector_violence': { id: 'debt_collector_violence', cardId: 'debt_collector_violence', url: '/backgrounds/debt_collector_violence.webp', alt: 'Debt Collectors Turn Violent', aspectRatio: 16 / 9 },
+  'supply_plague': { id: 'supply_plague', cardId: 'supply_plague', url: '/backgrounds/supply_plague.webp', alt: 'Plague Strikes Your Supply Routes', aspectRatio: 16 / 9 },
+  'lawsuit_catastrophe': { id: 'lawsuit_catastrophe', cardId: 'lawsuit_catastrophe', url: '/backgrounds/lawsuit_catastrophe.webp', alt: 'A Lawsuit Destroys Your Credibility', aspectRatio: 16 / 9 },
+  'warehouse_hostage': { id: 'warehouse_hostage', cardId: 'warehouse_hostage', url: '/backgrounds/warehouse_hostage.webp', alt: 'Your Warehouse Is Taken Hostage', aspectRatio: 16 / 9 },
 }
 
 export const BACKGROUND_FALLBACKS = [
