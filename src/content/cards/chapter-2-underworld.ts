@@ -81,6 +81,7 @@ export const chapter2MarketCards: StoryCard[] = [
   {
     id: 'ch2_protection_racket_squeeze',
     weight: 4,
+    once: true,
     title: 'Protection Money Squeeze',
     body: ['The syndicate that "protects" your operations demands a payment increase. "Business is good. Time to pay more."'],
     choices: [
@@ -133,6 +134,7 @@ export const chapter2DangerCards: StoryCard[] = [
   {
     id: 'ch2_rival_merchant',
     weight: 4,
+    once: true,
     title: 'A Rival Merchant Challenges You',
     body: ['A competing merchant corners you. "You\'re cutting into my territory. This ends now - pay me 80 gold protection or we settle this in the streets."'],
     choices: [
@@ -161,6 +163,7 @@ export const chapter2DangerCards: StoryCard[] = [
   {
     id: 'ch2_police_shakedown',
     weight: 3,
+    once: true,
     title: 'Police Shakedown',
     body: ['Corrupt police stop you on the street. "We hear you\'re doing good business. Time for an informal tax."'],
     choices: [
@@ -189,6 +192,7 @@ export const chapter2DangerCards: StoryCard[] = [
   {
     id: 'ch2_loan_collector',
     weight: 3,
+    once: true,
     title: 'Aggressive Loan Collector',
     body: ['A collector from the underworld appears. "Your debt has interest. Time to pay 120 gold or we take it from your assets."'],
     choices: [

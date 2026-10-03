@@ -180,13 +180,16 @@ export const dangerCards: StoryCard[] = [
       'Dark figures visit your businesses. "We provide protection. The fee is 15% of monthly profits. Or bad things happen." You have to choose.',
     ],
     weight: 10,
-    requires: [{ kind: 'colossiAtLeast', count: 2 }],
+    once: true,
+    // Once you pay protection the mob stops asking, so the cost can't stack.
+    requires: [{ kind: 'colossiAtLeast', count: 2 }, { kind: 'not', of: { kind: 'flag', id: 'paying_protection', atLeast: 1 } }],
     choices: [
       {
         id: 'pay_protection',
         label: 'Pay the protection racket',
         effects: [
           { kind: 'expense', delta: 15 },
+          { kind: 'flag', id: 'paying_protection', set: 1 },
           { kind: 'narrate', text: 'You pay 15 gold per month for "protection." Welcome to the criminal economy.' },
         ],
       },
@@ -208,6 +211,7 @@ export const dangerCards: StoryCard[] = [
       'A powerful noble decides your warehouse is the perfect location for their new palace. They offer "compensation" far below its worth, and soldiers back the offer.',
     ],
     weight: 8,
+    once: true,
     requires: [{ kind: 'colossiAtLeast', count: 2 }],
     choices: [
       {
@@ -236,6 +240,7 @@ export const dangerCards: StoryCard[] = [
       'Competitors have poisoned wells, burned fields, and destroyed shipments. Your supply of goods vanishes overnight. Economic warfare.',
     ],
     weight: 9,
+    once: true,
     requires: [{ kind: 'colossiAtLeast', count: 3 }],
     choices: [
       {
@@ -263,6 +268,7 @@ export const dangerCards: StoryCard[] = [
     title: 'Economic Downturn Hits',
     body: ['The city\'s economy contracts. Trade dries up. Nobles stop spending. Merchants struggle to survive. Your income plummets.'],
     weight: 10,
+    once: true,
     requires: [{ kind: 'colossiAtLeast', count: 2 }],
     choices: [
       {
@@ -291,7 +297,9 @@ export const dangerCards: StoryCard[] = [
       'Your creditors have sent enforcers. They break your storefront and rough up your workers. "Pay up or this gets worse," they growl.',
     ],
     weight: 11,
-    requires: [{ kind: 'colossiAtLeast', count: 4 }],
+    once: true,
+    // Once you've hired guards the collectors stop coming, so the cost can't stack.
+    requires: [{ kind: 'colossiAtLeast', count: 4 }, { kind: 'not', of: { kind: 'flag', id: 'hired_guards', atLeast: 1 } }],
     choices: [
       {
         id: 'pay_extortion',
@@ -306,6 +314,7 @@ export const dangerCards: StoryCard[] = [
         label: 'Hire guards (ongoing cost)',
         effects: [
           { kind: 'expense', delta: 20 },
+          { kind: 'flag', id: 'hired_guards', set: 1 },
           { kind: 'narrate', text: 'You hire guards for 20 gold per month. Your safety has a price.' },
         ],
       },
@@ -319,6 +328,7 @@ export const dangerCards: StoryCard[] = [
       'Disease ravages the regions where your goods come from. Entire villages are quarantined. Your suppliers are dead or dying. Supply halts.',
     ],
     weight: 9,
+    once: true,
     requires: [{ kind: 'colossiAtLeast', count: 5 }],
     choices: [
       {
@@ -347,6 +357,7 @@ export const dangerCards: StoryCard[] = [
       'A disgruntled customer sues for damages. The case is high-profile. Even if you win, the damage to your reputation is catastrophic.',
     ],
     weight: 8,
+    once: true,
     requires: [{ kind: 'colossiAtLeast', count: 3 }],
     choices: [
       {
@@ -375,6 +386,7 @@ export const dangerCards: StoryCard[] = [
       'Criminals seize your warehouse and demand ransom. "Pay 300 gold or we burn everything inside." They\'re serious. Your inventory could be destroyed.',
     ],
     weight: 10,
+    once: true,
     requires: [{ kind: 'colossiAtLeast', count: 4 }],
     choices: [
       {

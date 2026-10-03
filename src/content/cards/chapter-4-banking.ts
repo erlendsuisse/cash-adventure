@@ -79,6 +79,7 @@ export const chapter4MarketCards: StoryCard[] = [
   {
     id: 'ch4_crown_devalues_currency',
     weight: 4,
+    once: true,
     title: 'Crown Devalues Currency',
     body: ['The crown secretly devalues the currency to pay war debts. Those in the know profit enormously. Everyone else loses.'],
     choices: [
@@ -106,6 +107,7 @@ export const chapter4MarketCards: StoryCard[] = [
   {
     id: 'ch4_tax_amnesty',
     weight: 3,
+    once: true,
     title: 'Royal Tax Amnesty Announced',
     body: ['The crown announces a tax amnesty for the wealthy. Political favor can get you on the list. It costs gold upfront.'],
     choices: [
@@ -132,6 +134,7 @@ export const chapter4DangerCards: StoryCard[] = [
   {
     id: 'ch4_financial_audit',
     weight: 4,
+    once: true,
     title: 'Royal Financial Audit',
     body: ['Crown auditors arrive at your door. "We\'re examining all major merchants. Cooperation is mandatory."'],
     choices: [
@@ -161,6 +164,7 @@ export const chapter4DangerCards: StoryCard[] = [
   {
     id: 'ch4_loan_foreclosure',
     weight: 4,
+    once: true,
     title: 'Loan Foreclosure Threat',
     body: ['Your creditors come calling. "Your debt is due. Full payment now, or we seize your assets."'],
     choices: [
@@ -189,6 +193,7 @@ export const chapter4DangerCards: StoryCard[] = [
   {
     id: 'ch4_market_manipulation_caught',
     weight: 3,
+    once: true,
     title: 'Caught Market Manipulating',
     body: ['Securities regulators investigate suspicious trading patterns. They suspect you of market manipulation.'],
     choices: [

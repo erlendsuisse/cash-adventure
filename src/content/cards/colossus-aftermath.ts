@@ -4,7 +4,7 @@ import type { StoryCard } from '../../engine/types'
 
 const plague_aftermath: StoryCard = {
   id: 'plague_aftermath',
-  weight: 4,
+  // Queue-only: its Colossus outcome plays it; never a random draw.
   storyPhase: 'recovery',
   title: 'The City Rebuilds',
   body: [
@@ -36,7 +36,7 @@ const plague_aftermath: StoryCard = {
 
 const betrayal_aftermath: StoryCard = {
   id: 'betrayal_aftermath',
-  weight: 4,
+  // Queue-only: its Colossus outcome plays it; never a random draw.
   storyPhase: 'recovery',
   title: 'New Alliances Form',
   body: [
@@ -71,7 +71,7 @@ const betrayal_aftermath: StoryCard = {
 
 const legacy_choice: StoryCard = {
   id: 'legacy_choice',
-  weight: 4,
+  // Queue-only: its Colossus outcome plays it; never a random draw.
   storyPhase: 'recovery',
   title: 'Your Legacy Begins',
   body: [

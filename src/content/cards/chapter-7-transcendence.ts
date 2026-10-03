@@ -146,6 +146,7 @@ export const chapter7DangerCards: StoryCard[] = [
   {
     id: 'ch7_entity_confrontation',
     weight: 5,
+    once: true,
     title: 'Ancient Entity Demands Reckoning',
     body: ['An entity older than civilization confronts you. "You have accumulated power beyond your understanding. Now you must answer for it."'],
     choices: [
@@ -175,6 +176,7 @@ export const chapter7DangerCards: StoryCard[] = [
   {
     id: 'ch7_mind_unraveling',
     weight: 4,
+    once: true,
     title: 'Your Mind Begins to Unravel',
     body: ['The knowledge you\'ve accumulated breaks your sanity. Reality and illusion blur. You see truths humans should not know.'],
     choices: [
@@ -195,7 +197,10 @@ export const chapter7DangerCards: StoryCard[] = [
           stat: 'grit',
           dc: 16,
           success: { text: 'You cling to sanity through sheer will.', effects: [{ kind: 'stat', stat: 'grit', delta: 3 }] },
-          failure: { text: 'The madness claims you. You become a shell.', effects: [{ kind: 'end', status: 'won', summary: 'You achieved ultimate wealth but lost your mind in the process.' }] },
+          failure: {
+            text: 'The madness takes hold for a season. When you come back to yourself, your clerks have been running your affairs - badly.',
+            effects: [{ kind: 'gold', delta: -300 }, { kind: 'stat', stat: 'savvy', delta: -1 }, { kind: 'advanceDays', days: 28 }],
+          },
         },
       },
     ],
@@ -204,34 +209,38 @@ export const chapter7DangerCards: StoryCard[] = [
   {
     id: 'ch7_final_choice',
     weight: 5,
-    title: 'The Final Choice: Ascension or Legacy',
-    body: ['You stand at the precipice. You can ascend beyond humanity, or return to help your species. You cannot do both. Choose.'],
+    once: true,
+    title: 'A Choice Before the Mirror',
+    body: ['Before the last Colossus comes, a voice offers you a vision of who you might become: something beyond humanity, the founder of a legacy, or simply yourself. Whatever you choose, you will carry it into the final trial.'],
     choices: [
       {
         id: 'ascend',
-        label: 'Ascend beyond humanity',
+        label: 'Reach beyond humanity',
         effects: [
           { kind: 'stat', stat: 'nerve', delta: 2 },
           { kind: 'stat', stat: 'savvy', delta: 2 },
-          { kind: 'end', status: 'won', summary: 'You transcended. You became something more than human. The world was left behind.' },
+          { kind: 'flag', id: 'chose_ascension', set: 1 },
+          { kind: 'narrate', text: 'Something vast brushes against your mind and leaves you sharper, colder, braver.' },
         ],
       },
       {
         id: 'return_legacy',
-        label: 'Return to build a legacy',
+        label: 'Build a legacy for those who come after',
         effects: [
           { kind: 'stat', stat: 'charm', delta: 3 },
           { kind: 'gold', delta: 500 },
-          { kind: 'end', status: 'won', summary: 'You returned with knowledge to transform your world. Your legacy will guide humanity.' },
+          { kind: 'flag', id: 'chose_legacy', set: 1 },
+          { kind: 'narrate', text: 'You fund schools and guildhalls. People begin to speak your name with warmth.' },
         ],
       },
       {
         id: 'reject_both',
-        label: 'Reject the choice and live quietly',
+        label: 'Refuse the vision and stay yourself',
         effects: [
-          { kind: 'stat', stat: 'grit', delta: 1 },
-          { kind: 'gold', delta: -1000 },
-          { kind: 'end', status: 'won', summary: 'You walked away from power. Some say that was the wisest choice of all.' },
+          { kind: 'stat', stat: 'grit', delta: 2 },
+          { kind: 'stat', stat: 'charm', delta: 1 },
+          { kind: 'flag', id: 'chose_self', set: 1 },
+          { kind: 'narrate', text: 'You turn the voice away. Whatever the Mirror shows you, it will show you as you are.' },
         ],
       },
     ],

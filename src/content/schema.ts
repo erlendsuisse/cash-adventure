@@ -109,6 +109,7 @@ export const storyCardSchema = z.strictObject({
   choices: z.array(choice),
   next: z.string().optional(),
   weight: z.number().optional(),
+  once: z.boolean().optional(),
   requires: z.array(requirement).optional(),
   minTier: z.number().optional(),
   storyPhase: storyPhase.optional(),

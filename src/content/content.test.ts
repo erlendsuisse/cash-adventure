@@ -106,6 +106,26 @@ describe('deck coverage', () => {
     expect(unguarded).toEqual([])
   })
 
+  it('every chapter offers a ladder of ventures, from cheap restarts to premium deals', () => {
+    // Buying in is the fun part: there should always be something affordable
+    // after a reckoning, and something big and lucrative to work toward.
+    for (const chapter of [2, 3, 4, 5, 6, 7]) {
+      const assets = deck
+        .filter((c) => c.chapter === chapter)
+        .flatMap((c) => cardEffects(c).flatMap((e) => (e.kind === 'acquireAsset' && e.asset.monthlyCashflow > 0 ? [e.asset] : [])))
+      const priciest = Math.max(...assets.map((a) => a.cost))
+      const cheap = assets.filter((a) => a.cost <= priciest * 0.35)
+      const premium = assets.filter((a) => a.cost >= priciest * 0.6 && a.monthlyCashflow / a.cost >= 0.4)
+      expect(cheap.length, `chapter ${chapter} cheap ventures`).toBeGreaterThanOrEqual(2)
+      expect(premium.length, `chapter ${chapter} premium ventures`).toBeGreaterThanOrEqual(1)
+    }
+  })
+
+  it('no randomly drawn card can end the game', () => {
+    // Only beating the seventh Colossus wins; setbacks fail forward instead.
+    expect(deck.filter((c) => cardEffects(c).some((e) => e.kind === 'end')).map((c) => c.id)).toEqual([])
+  })
+
   it('every consequence path can actually build heat', () => {
     const written = new Set(allCards.flatMap((c) => cardEffects(c).flatMap((e) => (e.kind === 'flag' && (e.delta ?? 0) > 0 ? [e.id] : []))))
     for (const { flagId } of Object.values(consequenceTuning)) expect(written.has(flagId), flagId).toBe(true)

@@ -5,7 +5,7 @@ import type { StoryCard } from '../../engine/types'
 
 const mafia_notice: StoryCard = {
   id: 'mafia_notice',
-  weight: 4,
+  // Queue-only: its Colossus outcome plays it; never a random draw.
   storyPhase: 'recovery',
   title: 'The Underworld Stirs',
   body: [
@@ -92,7 +92,7 @@ const refugee_crisis: StoryCard = {
 
 const wanted_poster: StoryCard = {
   id: 'wanted_poster',
-  weight: 4,
+  // Queue-only: its Colossus outcome plays it; never a random draw.
   storyPhase: 'recovery',
   title: 'Your Face on a Wanted Poster',
   body: [
@@ -160,7 +160,7 @@ const wanted_poster: StoryCard = {
 
 const war_contracts: StoryCard = {
   id: 'war_contracts',
-  weight: 4,
+  // Queue-only: its Colossus outcome plays it; never a random draw.
   storyPhase: 'recovery',
   title: 'The Crown Needs Supplies',
   body: [
@@ -232,7 +232,7 @@ const war_contracts: StoryCard = {
 
 const market_collapse: StoryCard = {
   id: 'market_collapse',
-  weight: 4,
+  // Queue-only: its Colossus outcome plays it; never a random draw.
   storyPhase: 'recovery',
   title: 'The Market Transforms',
   body: [

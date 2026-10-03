@@ -5,6 +5,7 @@ export const chapter3CommodityCards: StoryCard[] = [
   {
     id: 'ch3_war_profiteer_iron',
     weight: 5,
+    once: true,
     title: 'War Profiteering - Iron',
     body: ['The kingdom mobilizes for war. A military contractor offers to buy iron at inflated prices. "We need weapons, armor, fortifications. Name your price."'],
     choices: [
@@ -48,6 +49,7 @@ export const chapter3CommodityCards: StoryCard[] = [
   {
     id: 'ch3_refugee_trade',
     weight: 3,
+    once: true,
     title: 'Trading with Refugees',
     body: ['Refugees fleeing the war sell their goods at desperate prices. You could buy cheap and resell to the army at profit. Or you could help them escape with passage.'],
     choices: [
@@ -133,6 +135,7 @@ export const chapter3MarketCards: StoryCard[] = [
   {
     id: 'ch3_military_convoy_raid',
     weight: 3,
+    once: true,
     title: 'Military Convoy Raided',
     body: ['Bandits raid a military supply convoy. Soldiers chase them into the city. Your warehouse is caught in the crossfire.'],
     choices: [
@@ -161,6 +164,7 @@ export const chapter3DangerCards: StoryCard[] = [
   {
     id: 'ch3_conscription_notice',
     weight: 4,
+    once: true,
     title: 'Conscription Notice',
     body: ['The kingdom conscripts able-bodied merchants for the war effort. You\'re summoned to serve. Refusal means losing trading privileges or worse.'],
     choices: [
@@ -197,6 +201,7 @@ export const chapter3DangerCards: StoryCard[] = [
   {
     id: 'ch3_soldier_demands_goods',
     weight: 3,
+    once: true,
     title: 'Soldiers Demand Tribute',
     body: ['A contingent of soldiers arrives. "The kingdom takes what it needs. Give us supplies or we take them by force."'],
     choices: [
@@ -224,6 +229,7 @@ export const chapter3DangerCards: StoryCard[] = [
   {
     id: 'ch3_spy_recruitment',
     weight: 3,
+    once: true,
     title: 'Spies Approach You',
     body: ['An agent appears. "You trade with many people. Report on them. We\'ll pay well. Refuse and we\'ll suspect you\'re spying for the enemy."'],
     choices: [

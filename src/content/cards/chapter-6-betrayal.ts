@@ -114,6 +114,7 @@ export const chapter6MarketCards: StoryCard[] = [
   {
     id: 'ch6_political_upheaval',
     weight: 3,
+    once: true,
     title: 'Government Overthrown',
     body: ['The government falls in a coup. A new regime takes power. Old alliances become death sentences.'],
     choices: [
@@ -144,6 +145,7 @@ export const chapter6DangerCards: StoryCard[] = [
   {
     id: 'ch6_assassination_contract',
     weight: 5,
+    once: true,
     title: 'Assassination Contract on You',
     body: ['You learn someone has hired assassins to kill you. You have one night to prepare.'],
     choices: [
@@ -164,7 +166,10 @@ export const chapter6DangerCards: StoryCard[] = [
           stat: 'nerve',
           dc: 18,
           success: { text: 'You intimidate them. They abandon the contract.', effects: [{ kind: 'stat', stat: 'nerve', delta: 3 }] },
-          failure: { text: 'They kill you in the confrontation.', effects: [{ kind: 'end', status: 'won', summary: 'Assassinated. Your reign ends.' }] },
+          failure: {
+            text: 'The blade finds you. You survive - barely - and spend a fortune on physicians and a month in hiding.',
+            effects: [{ kind: 'gold', delta: -300 }, { kind: 'stat', stat: 'nerve', delta: -1 }, { kind: 'advanceDays', days: 28 }],
+          },
         },
       },
     ],
@@ -173,6 +178,7 @@ export const chapter6DangerCards: StoryCard[] = [
   {
     id: 'ch6_trusted_friend_betrays',
     weight: 4,
+    once: true,
     title: 'Closest Friend Betrays You',
     body: ['Your oldest, most trusted friend reveals they\'ve been spying on you the whole time. They sell your secrets to your rivals.'],
     choices: [
@@ -201,6 +207,7 @@ export const chapter6DangerCards: StoryCard[] = [
   {
     id: 'ch6_poison_conspiracy',
     weight: 3,
+    once: true,
     title: 'Poisoning Conspiracy Discovered',
     body: ['You discover a poisoning conspiracy against you. Multiple conspirators. You must act.'],
     choices: [
@@ -221,7 +228,10 @@ export const chapter6DangerCards: StoryCard[] = [
           stat: 'savvy',
           dc: 15,
           success: { text: 'You gather evidence and expose them. Justice is served.', effects: [{ kind: 'stat', stat: 'savvy', delta: 2 }] },
-          failure: { text: 'The authorities don\'t believe you. The poison takes effect.', effects: [{ kind: 'end', status: 'won', summary: 'Poisoned by a conspiracy you failed to prove.' }] },
+          failure: {
+            text: 'The authorities don\'t believe you, and the poison reaches your cup. You live, but the antidote costs dearly and you are weeks recovering.',
+            effects: [{ kind: 'gold', delta: -250 }, { kind: 'stat', stat: 'grit', delta: -1 }, { kind: 'advanceDays', days: 21 }],
+          },
         },
       },
     ],

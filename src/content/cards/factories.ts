@@ -1,4 +1,4 @@
-import type { ChapterNumber, ConsequencePath, Effect, OwnedAsset, StoryCard } from '../../engine/types'
+import type { ChapterNumber, ConsequencePath, Effect, OwnedAsset, Requirement, StoryCard } from '../../engine/types'
 import { CHAPTER_DRAW_WEIGHT, consequenceTuning, LIVING_COST_RISE, STATION_WAGE_SHARE } from '../tuning'
 
 // Authoring helpers for the card shapes that repeat across chapter decks.
@@ -35,8 +35,10 @@ export function enterChapter(chapter: Exclude<ChapterNumber, 1>): Effect[] {
 
 export interface VentureSpec extends Omit<StoryCard, 'choices' | 'chapter'> {
   asset: OwnedAsset
-  /** Buying in: costs `asset.cost` gold and requires holding that much. */
-  accept: { id: string; label: string; showLockedAs?: string; effects?: Effect[] }
+  /** Buying in: costs `asset.cost` gold and requires holding that much, plus any
+   *  extra `requires` (e.g. a stat gate). With `showLockedAs` the choice stays
+   *  visible but disabled until it's met - a goal to work toward. */
+  accept: { id: string; label: string; requires?: Requirement[]; showLockedAs?: string; effects?: Effect[] }
   decline: { id: string; label: string; text: string }
 }
 
@@ -48,7 +50,7 @@ export function venture({ asset, accept, decline, ...card }: VentureSpec): Story
       {
         id: accept.id,
         label: accept.label,
-        requires: [{ kind: 'goldAtLeast', amount: asset.cost }],
+        requires: [{ kind: 'goldAtLeast', amount: asset.cost }, ...(accept.requires ?? [])],
         ...(accept.showLockedAs ? { showLockedAs: accept.showLockedAs } : {}),
         effects: [{ kind: 'gold', delta: -asset.cost }, { kind: 'acquireAsset', asset }, ...(accept.effects ?? [])],
       },

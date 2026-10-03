@@ -115,6 +115,7 @@ export const chapter2StoryCards: StoryCard[] = [
   {
     id: 'ch2_street_hustler_friend',
     weight: 3,
+    once: true,
     title: 'An Old Friend from the Streets',
     body: ['Someone you used to know appears, street-worn and desperate. "I remember when you had nothing too. You\'ve made it big. Help me out?"'],
     choices: [
@@ -142,6 +143,7 @@ export const chapter2StoryCards: StoryCard[] = [
   {
     id: 'ch2_gang_initiation_offer',
     weight: 3,
+    once: true,
     title: 'Gang Initiation Offer',
     body: ['A gang leader approaches. "You\'re making serious money. Join us officially. Get protection, influence, and a cut of everything."'],
     choices: [
@@ -168,6 +170,7 @@ export const chapter2StoryCards: StoryCard[] = [
   {
     id: 'ch2_informant_recruitment',
     weight: 2,
+    once: true,
     title: 'Recruit an Informant',
     body: ['A desperate guard offers to sell you information about shipments, schedules, and opportunities. "I need 50g just to stay alive."'],
     choices: [
@@ -187,6 +190,7 @@ export const chapter2StoryCards: StoryCard[] = [
   {
     id: 'ch2_rival_merchant_cooperation',
     weight: 2,
+    once: true,
     title: 'Propose Cooperation to Rival',
     body: ['Your old rival merchant approaches with a proposition. "We\'re destroying each other. Partners instead of enemies?"'],
     choices: [
@@ -216,6 +220,7 @@ export const chapter2MoreMarketCards: StoryCard[] = [
   {
     id: 'ch2_police_crackdown',
     weight: 4,
+    once: true,
     title: 'Police Crackdown on Crime',
     body: ['New police commissioner cracks down hard on the underworld. Street-level operations collapse. Prices spike from scarcity.'],
     choices: [
@@ -244,6 +249,7 @@ export const chapter2MoreMarketCards: StoryCard[] = [
   {
     id: 'ch2_supply_drought',
     weight: 3,
+    once: true,
     title: 'Supply Route Drought',
     body: ['Border patrol tightens. Smugglers can\'t get goods through. Prices spike for smuggled items, crash for legitimate goods.'],
     choices: [
@@ -266,6 +272,7 @@ export const chapter2MoreMarketCards: StoryCard[] = [
   {
     id: 'ch2_gang_war_opportunity',
     weight: 3,
+    once: true,
     title: 'Gang War Creates Opportunity',
     body: ['Two major gangs war over territory. Neutral zone opens up for independent operators. Danger, but profit.'],
     choices: [
@@ -292,6 +299,7 @@ export const chapter2MoreDangerCards: StoryCard[] = [
   {
     id: 'ch2_gang_enforcer_visit',
     weight: 4,
+    once: true,
     title: 'Gang Enforcer Demands Payment',
     body: ['A gang enforcer arrives at your door. "We\'ve been protecting your operations. Time to pay what\'s owed. 200g."'],
     choices: [
@@ -319,6 +327,7 @@ export const chapter2MoreDangerCards: StoryCard[] = [
   {
     id: 'ch2_betrayal_by_partner',
     weight: 3,
+    once: true,
     title: 'Partner Betrays You',
     body: ['Your business partner disappears with all the profits. You\'ve been robbed for 180g.'],
     choices: [
@@ -345,6 +354,7 @@ export const chapter2MoreDangerCards: StoryCard[] = [
   {
     id: 'ch2_witness_to_murder',
     weight: 2,
+    once: true,
     title: 'You Witness a Murder',
     body: ['You see someone important killed by gang rivals. They notice you watching. "You didn\'t see anything, right?"'],
     choices: [
@@ -371,6 +381,7 @@ export const chapter2MoreDangerCards: StoryCard[] = [
   {
     id: 'ch2_kidnapping_threat',
     weight: 2,
+    once: true,
     title: 'Kidnapping Threat Against You',
     body: ['A rival gang threatens to kidnap you. "Pay 220g or you disappear."'],
     choices: [
@@ -410,6 +421,7 @@ export const chapter2RecoveryCards: StoryCard[] = [
   {
     id: 'ch2_safe_house_refuge',
     weight: 2,
+    once: true,
     title: 'Find Refuge in a Safe House',
     body: ['When the heat is on, a trusted associate offers you shelter in their safe house. No questions asked.'],
     choices: [

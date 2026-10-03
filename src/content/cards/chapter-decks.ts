@@ -124,6 +124,7 @@ export const chapter2IntroCards: StoryCard[] = [
       'A dangerous figure makes a simple offer. "150 gold at 20% monthly interest. Fast approval, no questions, but be warned - we collect on time. Every time."',
     ],
     weight: 9,
+    once: true,
     requires: [{ kind: 'colossiAtLeast', count: 1 }],
     choices: [
       {
@@ -379,6 +380,7 @@ export const chapter4IntroCards: StoryCard[] = [
       'The worst of the underworld. A slaver offers capital. "Help move merchandise. Desperate people willing to work for nothing. Big profits, bigger risks."',
     ],
     weight: 8,
+    once: true,
     requires: [{ kind: 'colossiAtLeast', count: 3 }],
     choices: [
       {

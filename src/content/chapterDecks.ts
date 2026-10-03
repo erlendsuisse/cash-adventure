@@ -9,6 +9,14 @@ import { chapter5CommodityCards, chapter5DangerCards, chapter5MarketCards } from
 import { chapter6CommodityCards, chapter6DangerCards, chapter6MarketCards } from './cards/chapter-6-betrayal'
 import { chapter7CommodityCards, chapter7DangerCards, chapter7MarketCards } from './cards/chapter-7-transcendence'
 import { defineChapterDeck } from './cards/factories'
+import {
+  chapter2TraderVentures,
+  chapter3TraderVentures,
+  chapter4TraderVentures,
+  chapter5TraderVentures,
+  chapter6TraderVentures,
+  chapter7TraderVentures,
+} from './cards/trader-ventures'
 
 // The one place chapter content is registered. Each deck's cards get `chapter`
 // stamped here, so card files never set it. Chapter decks should not set
@@ -25,6 +33,7 @@ export const CHAPTER_DECKS: Partial<Record<ChapterNumber, StoryCard[]>> = {
     ...chapter2MoreMarketCards,
     ...chapter2MoreDangerCards,
     ...chapter2RecoveryCards,
+    ...chapter2TraderVentures,
   ]),
   3: defineChapterDeck(3, [
     ...chapter3IntroCards,
@@ -36,9 +45,10 @@ export const CHAPTER_DECKS: Partial<Record<ChapterNumber, StoryCard[]>> = {
     ...chapter3WarEconomyCards,
     ...chapter3WarDangerCards,
     ...chapter3RecoveryCards,
+    ...chapter3TraderVentures,
   ]),
-  4: defineChapterDeck(4, [...chapter4IntroCards, ...chapter4CommodityCards, ...chapter4MarketCards, ...chapter4DangerCards]),
-  5: defineChapterDeck(5, [...chapter5IntroCards, ...chapter5CommodityCards, ...chapter5MarketCards, ...chapter5DangerCards]),
-  6: defineChapterDeck(6, [...chapter6CommodityCards, ...chapter6MarketCards, ...chapter6DangerCards]),
-  7: defineChapterDeck(7, [...chapter7CommodityCards, ...chapter7MarketCards, ...chapter7DangerCards]),
+  4: defineChapterDeck(4, [...chapter4IntroCards, ...chapter4CommodityCards, ...chapter4MarketCards, ...chapter4DangerCards, ...chapter4TraderVentures]),
+  5: defineChapterDeck(5, [...chapter5IntroCards, ...chapter5CommodityCards, ...chapter5MarketCards, ...chapter5DangerCards, ...chapter5TraderVentures]),
+  6: defineChapterDeck(6, [...chapter6CommodityCards, ...chapter6MarketCards, ...chapter6DangerCards, ...chapter6TraderVentures]),
+  7: defineChapterDeck(7, [...chapter7CommodityCards, ...chapter7MarketCards, ...chapter7DangerCards, ...chapter7TraderVentures]),
 }

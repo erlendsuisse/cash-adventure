@@ -16,16 +16,17 @@ export function drawCard(
 ): { cardId: CardId | undefined; rng: RngState } {
   const chapter = currentChapter(state)
 
+  const seen = new Set(state.seenCardIds)
   const eligible = campaign.deckCardIds.filter((id) => {
     const card = campaign.cards[id]
     if (!card || !card.weight || card.weight <= 0) return false
+    if (card.once && seen.has(id)) return false
     if ((card.minTier ?? 0) > state.progress.tier) return false
     if (card.storyPhase && card.storyPhase !== state.progress.storyPhase) return false
     if (card.chapter && card.chapter !== chapter) return false
     return (card.requires ?? []).every((r) => isMet(r, state))
   })
 
-  const seen = new Set(state.seenCardIds)
   const fresh = eligible.filter((id) => !seen.has(id) && !state.recentlyDrawn.includes(id))
   const pool = fresh.length > 0 ? fresh : eligible
   if (pool.length === 0) return { cardId: undefined, rng: state.rng }

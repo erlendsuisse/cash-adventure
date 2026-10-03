@@ -58,6 +58,14 @@ describe('drawCard', () => {
     expect(['a', 'b']).toContain(cardId)
   })
 
+  it('never redraws a one-time card once seen, even when the deck is exhausted', () => {
+    const campaign = makeCampaign([card('event', { once: true }), card('venture')])
+    const state = makeState({ seenCardIds: ['event', 'venture'], recentlyDrawn: [] })
+    for (let cursor = 0; cursor < 30; cursor++) {
+      expect(drawCard({ ...state, rng: { seed: 1, cursor } }, campaign).cardId).toBe('venture')
+    }
+  })
+
   it('returns undefined when nothing is eligible', () => {
     const campaign = makeCampaign([card('a', { requires: [{ kind: 'goldAtLeast', amount: 1000 }] })])
     const { cardId } = drawCard(makeState(), campaign)

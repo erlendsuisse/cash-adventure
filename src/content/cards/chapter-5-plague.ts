@@ -84,6 +84,7 @@ export const chapter5MarketCards: StoryCard[] = [
   {
     id: 'ch5_quarantine_economy',
     weight: 4,
+    once: true,
     title: 'Quarantine Zones Form',
     body: ['Cities partition into quarantine zones. Trade between zones is forbidden. Black market smuggling explodes.'],
     choices: [
@@ -136,6 +137,7 @@ export const chapter5DangerCards: StoryCard[] = [
   {
     id: 'ch5_infection_risk',
     weight: 5,
+    once: true,
     title: 'Infection Risk Strikes You',
     body: ['You fall ill with plague symptoms. Fever, weakness. You have hours to find treatment or face death.'],
     choices: [
@@ -156,7 +158,10 @@ export const chapter5DangerCards: StoryCard[] = [
           stat: 'grit',
           dc: 17,
           success: { text: 'Your body fights back. You survive without cure.', effects: [{ kind: 'stat', stat: 'grit', delta: 3 }] },
-          failure: { text: 'The plague takes you. You die.', effects: [{ kind: 'end', status: 'won', summary: 'Died from plague. Your wealth passes to your heirs.' }] },
+          failure: {
+            text: 'The plague nearly takes you. You lie in fever for weeks while your business runs itself into the ground.',
+            effects: [{ kind: 'gold', delta: -250 }, { kind: 'stat', stat: 'grit', delta: -1 }, { kind: 'advanceDays', days: 21 }],
+          },
         },
       },
     ],
@@ -165,6 +170,7 @@ export const chapter5DangerCards: StoryCard[] = [
   {
     id: 'ch5_plague_riot',
     weight: 4,
+    once: true,
     title: 'Desperate Mob Attacks',
     body: ['Desperate plague victims, mad from fever, attack your storehouse. They\'re looking for medicine. They don\'t care if you die.'],
     choices: [
@@ -193,6 +199,7 @@ export const chapter5DangerCards: StoryCard[] = [
   {
     id: 'ch5_healer_betrayal',
     weight: 3,
+    once: true,
     title: 'Your Healer Betrays You',
     body: ['The healer you trusted spreads plague to your household intentionally. "The wealthy should suffer too."'],
     choices: [

@@ -86,6 +86,8 @@ Artwork images are:
 ### Automatic Generation (via Stability.ai)
 
 Scripts for generating artwork (each skips cards that already have a `.webp`):
+- `scripts/generate-card-artwork.mjs` - **use this for new cards**: one prompt per card id,
+  with a shared style suffix so new art matches. Add a `[chapter, cardId, prompt]` row and run it.
 - `scripts/generate-ch2-ch3-artwork.mjs` - Chapters 2-3, original decks
 - `scripts/generate-expanded-ch2-ch3-artwork.mjs` - Chapters 2-3, expanded decks
 - `scripts/generate-ch4-ch7-artwork.mjs` - Chapters 4-7
@@ -99,7 +101,7 @@ Scripts for generating artwork (each skips cards that already have a `.webp`):
 export STABILITY_API_KEY=$(grep STABILITY_API_KEY .env | cut -d'=' -f2)
 node scripts/generate-ch2-ch3-artwork.mjs
 # or
-node scripts/generate-ch4-ch7-artwork.mjs
+node scripts/generate-card-artwork.mjs
 node scripts/optimize-artwork.mjs   # converts the new PNGs to WebP, deletes the PNGs
 ```
 

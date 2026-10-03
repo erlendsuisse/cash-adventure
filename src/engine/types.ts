@@ -202,6 +202,7 @@ export interface StoryCard {
   choices: Choice[]
   next?: CardId // no choices + next = auto-advance (economy interrupts)
   weight?: number // relative draw weight for the random deck (undrawable if absent)
+  once?: boolean // a one-time event: never drawn again once seen (ventures, by contrast, can recur and stack)
   requires?: Requirement[] // gates whether the card can be drawn
   minTier?: number
   storyPhase?: StoryPhase // optional phase gate: card only drawable in this phase

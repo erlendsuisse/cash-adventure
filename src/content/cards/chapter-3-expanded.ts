@@ -78,6 +78,7 @@ export const chapter3WarScenarioCards: StoryCard[] = [
   {
     id: 'ch3_soldier_deserter',
     weight: 3,
+    once: true,
     title: 'A Deserting Soldier Seeks Your Help',
     body: ['A young soldier, fleeing the war, finds you. "I can\'t kill anymore. Will you help me escape? I have 60g."'],
     choices: [
@@ -105,6 +106,7 @@ export const chapter3WarScenarioCards: StoryCard[] = [
   {
     id: 'ch3_refugee_family_encounter',
     weight: 2,
+    once: true,
     title: 'Refugee Family Needs Shelter',
     body: ['A family of refugees seeks shelter from the war. "We have 30g. Will that buy us safety?"'],
     choices: [
@@ -133,6 +135,7 @@ export const chapter3WarScenarioCards: StoryCard[] = [
   {
     id: 'ch3_officer_proposition',
     weight: 2,
+    once: true,
     title: 'Military Officer Proposition',
     body: ['A high-ranking officer approaches. "I\'m planning to desert with my regiment\'s treasury. Need a trustworthy partner to hide the gold."'],
     choices: [
@@ -156,6 +159,7 @@ export const chapter3WarScenarioCards: StoryCard[] = [
   {
     id: 'ch3_battle_witness',
     weight: 3,
+    once: true,
     title: 'You Witness a Battle',
     body: ['You see a major battle play out—thousands dying. The winning general approaches. "You saw what happened here. What will you tell people?"'],
     choices: [
@@ -186,6 +190,7 @@ export const chapter3WarEconomyCards: StoryCard[] = [
   {
     id: 'ch3_armistice_threat',
     weight: 4,
+    once: true,
     title: 'Peace Threatens Your Profits',
     body: ['Rumors of armistice talks spread. War profits will evaporate if peace comes. What do you do?'],
     choices: [
@@ -214,6 +219,7 @@ export const chapter3WarEconomyCards: StoryCard[] = [
   {
     id: 'ch3_enemy_territory_trade',
     weight: 3,
+    once: true,
     title: 'Smuggle to Enemy Territory',
     body: ['Both sides need goods the other side has. You could smuggle contraband across enemy lines for huge profit. (+220g for one run)'],
     choices: [
@@ -238,6 +244,7 @@ export const chapter3WarEconomyCards: StoryCard[] = [
   {
     id: 'ch3_inflation_surge',
     weight: 3,
+    once: true,
     title: 'War Inflation Surges',
     body: ['War spending creates massive inflation. Money in the bank becomes worthless. Goods appreciate. Time to invest in real assets.'],
     choices: [
@@ -267,6 +274,7 @@ export const chapter3WarDangerCards: StoryCard[] = [
   {
     id: 'ch3_army_requisition',
     weight: 4,
+    once: true,
     title: 'Army Requisitions Your Goods',
     body: ['Soldiers arrive and seize your supplies for military use. "Wartime requisition. Your country needs this."'],
     choices: [
@@ -293,6 +301,7 @@ export const chapter3WarDangerCards: StoryCard[] = [
   {
     id: 'ch3_caught_trading_enemies',
     weight: 3,
+    once: true,
     title: 'Caught Trading with the Enemy',
     body: ['Your government discovers you\'ve been selling to the enemy side. Treason is a capital offense.'],
     choices: [
@@ -321,6 +330,7 @@ export const chapter3WarDangerCards: StoryCard[] = [
   {
     id: 'ch3_ambush_on_supply_run',
     weight: 3,
+    once: true,
     title: 'Ambushed During Supply Run',
     body: ['Bandits ambush your supply convoy. "Stand down or we kill everyone."'],
     choices: [
@@ -347,6 +357,7 @@ export const chapter3WarDangerCards: StoryCard[] = [
   {
     id: 'ch3_informant_demands',
     weight: 2,
+    once: true,
     title: 'Informant Threatens Exposure',
     body: ['An informant you paid demands more money or they expose your dealings to authorities. "Pay up or lose everything."'],
     choices: [
@@ -377,6 +388,7 @@ export const chapter3RecoveryCards: StoryCard[] = [
   {
     id: 'ch3_neutral_city_escape',
     weight: 2,
+    once: true,
     title: 'Escape to Neutral City',
     body: ['War-torn but still standing, a neutral city offers refuge. "Here, neither side has control. You can breathe."'],
     choices: [
