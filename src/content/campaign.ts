@@ -30,6 +30,10 @@ import { chapterOneCards, chapterTwoCards, chapterThreeCards, chapterFourCards }
 import { marketOpportunityCards } from './cards/market-opportunities'
 import { chapter2CommodityCards, chapter2MarketCards, chapter2DangerCards } from './cards/chapter-2-underworld'
 import { chapter3CommodityCards, chapter3MarketCards, chapter3DangerCards } from './cards/chapter-3-warfare'
+import { chapter4CommodityCards, chapter4MarketCards, chapter4DangerCards } from './cards/chapter-4-banking'
+import { chapter5CommodityCards, chapter5MarketCards, chapter5DangerCards } from './cards/chapter-5-plague'
+import { chapter6CommodityCards, chapter6MarketCards, chapter6DangerCards } from './cards/chapter-6-betrayal'
+import { chapter7CommodityCards, chapter7MarketCards, chapter7DangerCards } from './cards/chapter-7-transcendence'
 import { consequenceTuning, initial, SECTORS, tuning } from './tuning'
 
 const allCards: StoryCard[] = [
@@ -50,6 +54,18 @@ const allCards: StoryCard[] = [
   ...chapter3CommodityCards,
   ...chapter3MarketCards,
   ...chapter3DangerCards,
+  ...chapter4CommodityCards,
+  ...chapter4MarketCards,
+  ...chapter4DangerCards,
+  ...chapter5CommodityCards,
+  ...chapter5MarketCards,
+  ...chapter5DangerCards,
+  ...chapter6CommodityCards,
+  ...chapter6MarketCards,
+  ...chapter6DangerCards,
+  ...chapter7CommodityCards,
+  ...chapter7MarketCards,
+  ...chapter7DangerCards,
   ...adventureDeckCards,
   ...storyEventCards,
   ...statTrainingCards,
@@ -108,6 +124,18 @@ const allDeckCards = [
   ...chapter3CommodityCards,
   ...chapter3MarketCards,
   ...chapter3DangerCards,
+  ...chapter4CommodityCards,
+  ...chapter4MarketCards,
+  ...chapter4DangerCards,
+  ...chapter5CommodityCards,
+  ...chapter5MarketCards,
+  ...chapter5DangerCards,
+  ...chapter6CommodityCards,
+  ...chapter6MarketCards,
+  ...chapter6DangerCards,
+  ...chapter7CommodityCards,
+  ...chapter7MarketCards,
+  ...chapter7DangerCards,
 ]
 
 export const campaign: Campaign = Object.freeze({
