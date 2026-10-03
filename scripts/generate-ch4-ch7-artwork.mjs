@@ -88,6 +88,10 @@ function getTypeModifier(type) {
 }
 
 async function generateArtwork(card, outputDir) {
+  if (fs.existsSync(path.join(outputDir, `${card.id}.webp`))) {
+    console.log(`✓ ${card.id} already has artwork, skipping`)
+    return
+  }
   const prompt = buildPrompt(card)
   console.log(`\n🎨 Generating: ${card.title}`)
 
@@ -171,7 +175,7 @@ async function main() {
   console.log(`Chapter 7 artwork: ${chapter7Dir}`)
 }
 
-main().catch((error) => {
+main().then(() => console.log('\nNext: node scripts/optimize-artwork.mjs (converts new PNGs to WebP)')).catch((error) => {
   console.error('Fatal error:', error)
   process.exit(1)
 })

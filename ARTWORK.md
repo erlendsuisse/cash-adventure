@@ -8,26 +8,22 @@ Artwork is organized by chapter in the following structure:
 
 ```
 src/assets/artwork/
-├── chapter2/          # Underworld theme (9 images)
-├── chapter3/          # Warfare theme (9 images)
-├── chapter4/          # Banking & Finance theme (9 images)
-├── chapter5/          # Plague & Decay theme (9 images)
-├── chapter6/          # Betrayal theme (9 images)
-└── chapter7/          # Transcendence theme (9 images)
+├── chapter2/          # Underworld theme
+├── chapter3/          # Warfare theme
+├── chapter4/          # Banking & Finance theme
+├── chapter5/          # Plague & Decay theme
+├── chapter6/          # Betrayal theme
+└── chapter7/          # Transcendence theme
 ```
 
-Each folder contains 9 PNG images (16:9 aspect ratio, ~3.7MB each):
-- 3 Commodity/Opportunity cards
-- 3 Market Event cards
-- 3 Danger cards
-
-**Total: 54 images across all chapters**
+Images are WebP, at most 1200px wide, roughly 100KB each. `src/ui/artwork.test.ts`
+fails if a file isn't WebP or doesn't match a card in that chapter.
 
 ## File Naming Convention
 
 Artwork files are named after their card ID:
-- `ch2_spice_smuggling.png` for card `ch2_spice_smuggling`
-- `ch3_war_profiteer_iron.png` for card `ch3_war_profiteer_iron`
+- `ch2_spice_smuggling.webp` for card `ch2_spice_smuggling`
+- `ch3_war_profiteer_iron.webp` for card `ch3_war_profiteer_iron`
 - etc.
 
 ## Theme Guidelines
@@ -72,10 +68,9 @@ The artwork display is implemented in:
 ### How It Works
 
 When a card is displayed:
-1. `getCardArtworkPath()` checks if the card has a chapter number
-2. If yes, it returns the path: `/assets/artwork/chapter{N}/{cardId}.png`
-3. The image is loaded and displayed above the card title
-4. If the image fails to load, the card displays without artwork
+1. `getCardArtworkPath()` looks the card id up in an `import.meta.glob` of `src/assets/artwork`
+2. If a file exists, Vite serves it under a hashed URL; otherwise it returns null and nothing is requested
+3. Cards without artwork fall back to their chapter's gradient background (Background.tsx)
 
 ### Styling
 
@@ -90,8 +85,9 @@ Artwork images are:
 
 ### Automatic Generation (via Stability.ai)
 
-Scripts for generating artwork:
-- `scripts/generate-ch2-ch3-artwork.mjs` - Chapters 2-3
+Scripts for generating artwork (each skips cards that already have a `.webp`):
+- `scripts/generate-ch2-ch3-artwork.mjs` - Chapters 2-3, original decks
+- `scripts/generate-expanded-ch2-ch3-artwork.mjs` - Chapters 2-3, expanded decks
 - `scripts/generate-ch4-ch7-artwork.mjs` - Chapters 4-7
 
 **Requirements:**
@@ -104,37 +100,30 @@ export STABILITY_API_KEY=$(grep STABILITY_API_KEY .env | cut -d'=' -f2)
 node scripts/generate-ch2-ch3-artwork.mjs
 # or
 node scripts/generate-ch4-ch7-artwork.mjs
+node scripts/optimize-artwork.mjs   # converts the new PNGs to WebP, deletes the PNGs
 ```
 
-**Output:** PNG images saved to `src/assets/artwork/chapter{N}/`
+**Output:** PNGs in `src/assets/artwork/chapter{N}/`, which `optimize-artwork.mjs` turns into WebP.
+
+**Moderation blocks:** Stability rejects prompts that describe violence or crime in
+progress. Describe the setting, objects or aftermath instead (a ransom note on a
+door, not a bound hostage). Cards without art still get the chapter gradient.
 
 ### Custom Artwork
 
 To add custom artwork:
-1. Create PNG files (16:9 aspect ratio recommended)
+1. Create PNG or JPG files (16:9 aspect ratio recommended)
 2. Name them after the card ID: `{cardId}.png`
 3. Place in correct chapter folder: `src/assets/artwork/chapter{N}/`
-4. No code changes needed - artwork auto-displays if file exists
+4. Run `node scripts/optimize-artwork.mjs` - no code changes needed
 
 ## Card Artwork Display
 
 For a card to display artwork, it must:
-1. Have a `chapter` field in the card definition (e.g., `chapter: 2`)
-2. Have a corresponding artwork file in the correct folder
-
-Chapter 1 cards (no chapter field) will not display artwork.
+1. Be registered in a chapter deck in `src/content/chapterDecks.ts` (which stamps its `chapter`)
+2. Have a corresponding artwork file in that chapter's folder
 
 ## Performance
 
-- Each image: ~3.7MB PNG (16:9, full-color)
-- Total for all 54 images: ~200MB
-- Images load on-demand as cards are displayed
-- Graceful fallback if image fails to load
-
-## Future Enhancements
-
-- [ ] Lazy loading for image optimization
-- [ ] Image compression/optimization
-- [ ] Alternative artwork themes (light, dark, stylized)
-- [ ] Custom artwork submission system
-- [ ] Artwork caching strategy
+- Artwork is bundled by Vite with hashed filenames (cache-friendly) and loads per card
+- No requests are made for cards without artwork

@@ -20,6 +20,10 @@ interface CardMetadata {
 }
 
 async function generateArtwork(card: CardMetadata, outputDir: string): Promise<void> {
+  if (fs.existsSync(path.join(outputDir, `${card.id}.webp`))) {
+    console.log(`✓ ${card.id} already has artwork, skipping`)
+    return
+  }
   const prompt = buildPrompt(card)
   console.log(`Generating artwork for ${card.id}...`)
   console.log(`Prompt: ${prompt}`)
@@ -120,7 +124,7 @@ async function main() {
   console.log('✓ Artwork generation complete')
 }
 
-main().catch((error) => {
+main().then(() => console.log('\nNext: node scripts/optimize-artwork.mjs (converts new PNGs to WebP)')).catch((error) => {
   console.error('Fatal error:', error)
   process.exit(1)
 })

@@ -39,15 +39,11 @@ The generator creates themed artwork based on:
 
 ## Output
 
-Generated images are saved to:
+Generated images are saved to `src/assets/artwork/chapter{N}/{cardId}.png`. Then run
+`node scripts/optimize-artwork.mjs`, which converts them to the `.webp` files the game
+actually loads (see ARTWORK.md):
 ```
-src/assets/artwork/chapter{N}/{cardId}.png
-```
-
-Example:
-```
-src/assets/artwork/chapter1/merchant_gambit.png
-src/assets/artwork/chapter2/mob_protection_offer.png
+src/assets/artwork/chapter2/mob_protection_offer.webp
 ```
 
 ## Integrating with Card Metadata
