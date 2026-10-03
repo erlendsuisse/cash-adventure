@@ -1,3 +1,4 @@
+import { standingFlagIds, trackedFlagLabel } from '../../content/standings'
 import type { EffectSummary } from '../../engine/types'
 import styles from './EffectSummary.module.css'
 
@@ -37,6 +38,18 @@ export function EffectSummary({ summary }: { summary: EffectSummary }) {
             </span>
           </div>
         )}
+        {Object.entries(summary.trackedFlagDeltas ?? {}).map(([flagId, delta]) => {
+          // Standing going up is good; heat going up is not.
+          const good = standingFlagIds.includes(flagId) ? delta > 0 : delta < 0
+          return (
+            <div key={flagId} className={styles.item}>
+              <span className={styles.label}>{trackedFlagLabel(flagId)}</span>
+              <span className={good ? styles.positive : styles.negative}>
+                {delta > 0 ? '+' : ''}{delta}
+              </span>
+            </div>
+          )
+        })}
         {summary.debt !== 0 && (
           <div className={styles.item}>
             <span className={styles.label}>Debt</span>

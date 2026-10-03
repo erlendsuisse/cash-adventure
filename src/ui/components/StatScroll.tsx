@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { GameState } from '../../engine/types'
 import { isFree, totalMonthlyIncome } from '../../engine/selectors'
+import { FACTIONS, HEAT_PATHS, STANDING_THRESHOLD, standingTier } from '../../content/standings'
 import { useGame } from '../GameProvider'
 import styles from './StatScroll.module.css'
 
@@ -41,6 +42,54 @@ export function StatScroll({ state }: { state: GameState }) {
             </div>
           </div>
         </div>
+
+        {/* Reputation: what each faction thinks of you, and what it's worth */}
+        <div className={styles.section}>
+          <h4 className={styles.sectionTitle}>Reputation</h4>
+          <div className={styles.stats}>
+            {Object.values(FACTIONS).map((faction) => {
+              const value = state.flags[faction.flagId] ?? 0
+              const reach = Math.min(Math.abs(value), 5) * 10 // % of the bar each side of centre
+              return (
+                <div key={faction.flagId} className={styles.reputation} title={`${faction.blurb}. At ${STANDING_THRESHOLD} they do you favours; at -${STANDING_THRESHOLD} they work against you.`}>
+                  <div className={styles.reputationRow}>
+                    <span className={styles.label}>{faction.label}</span>
+                    <span className={value > 0 ? styles.positive : value < 0 ? styles.negative : styles.tier}>
+                      {standingTier(value)} ({value > 0 ? '+' : ''}{value})
+                    </span>
+                  </div>
+                  <div className={styles.reputationBar}>
+                    <div
+                      className={value >= 0 ? styles.reputationFillPositive : styles.reputationFillNegative}
+                      style={value >= 0 ? { left: '50%', width: `${reach}%` } : { right: '50%', width: `${reach}%` }}
+                    />
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Heat: misconduct draws attention; full heat summons the next Colossus early */}
+        {HEAT_PATHS.some((h) => (state.flags[h.flagId] ?? 0) > 0) && (
+          <div className={styles.section}>
+            <h4 className={styles.sectionTitle} title="Misconduct draws attention. When a meter fills, the next Colossus comes early.">Attention</h4>
+            <div className={styles.stats}>
+              {HEAT_PATHS.filter((h) => (state.flags[h.flagId] ?? 0) > 0).map((heat) => {
+                const value = Math.min(state.flags[heat.flagId] ?? 0, heat.threshold)
+                return (
+                  <div key={heat.flagId} className={styles.stat}>
+                    <span className={styles.label}>{heat.label}</span>
+                    <span className={styles.heatPips} aria-label={`${value} of ${heat.threshold}`}>
+                      {'●'.repeat(value)}
+                      <span className={styles.heatEmpty}>{'○'.repeat(heat.threshold - value)}</span>
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Assets Section */}
         <div className={styles.section}>

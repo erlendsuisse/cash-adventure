@@ -1,4 +1,5 @@
 import type { StoryCard } from '../../engine/types'
+import { favour } from '../standings'
 import { heat, venture } from './factories'
 
 export const chapter5CommodityCards: StoryCard[] = [
@@ -193,6 +194,11 @@ export const chapter5DangerCards: StoryCard[] = [
           failure: { text: 'They breach your defenses. You lose everything.', effects: [{ kind: 'gold', delta: -500 }] },
         },
       },
+      favour('folk', {
+        id: 'speak_to_the_crowd',
+        label: 'Speak to the crowd - they know you',
+        effects: [{ kind: 'narrate', text: 'Someone shouts your name: you were the one who helped. The mob lowers its torches and goes home.' }],
+      }),
     ],
   },
 

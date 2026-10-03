@@ -1,4 +1,5 @@
 import type { StoryCard } from '../../engine/types'
+import { favour } from '../standings'
 import { heat, venture } from './factories'
 
 // CHAPTER 3 EXPANDED: Warfare & Conflict
@@ -296,6 +297,11 @@ export const chapter3WarDangerCards: StoryCard[] = [
           failure: { text: 'They find everything and punish you for resistance.', effects: [{ kind: 'gold', delta: -400 }] },
         },
       },
+      favour('crown', {
+        id: 'show_royal_papers',
+        label: 'Show your papers of royal favour',
+        effects: [{ kind: 'narrate', text: 'The sergeant reads the seal, salutes, and moves on to the next warehouse.' }],
+      }),
     ],
   },
   {

@@ -27,7 +27,9 @@ import { commodityTradingCards } from './cards/commodity-trading'
 import { opportunityDealCards } from './cards/opportunity-deals'
 import { dangerCards } from './cards/dangers-and-penalties'
 import { marketOpportunityCards } from './cards/market-opportunities'
+import { reputationEventCards } from './cards/reputation-events'
 import { CHAPTER_DECKS } from './chapterDecks'
+import { standingFlagIds, withReputation } from './standings'
 import { consequenceTuning, initial, SECTORS, tuning } from './tuning'
 
 const allCards: StoryCard[] = [
@@ -39,6 +41,7 @@ const allCards: StoryCard[] = [
   ...marketOpportunityCards,
   ...dangerCards,
   ...Object.values(CHAPTER_DECKS).flat(),
+  ...reputationEventCards,
   ...adventureDeckCards,
   ...storyEventCards,
   ...statTrainingCards,
@@ -63,7 +66,9 @@ const allCards: StoryCard[] = [
 ]
 
 const cards: Record<string, StoryCard> = {}
-for (const card of allCards) {
+// Every card gets its reputation wiring (standings from story flags, standing
+// bonuses on skill checks) here, so card files only record what happened.
+for (const card of allCards.map(withReputation)) {
   // Fail loudly: a duplicate id would silently replace the earlier card.
   if (cards[card.id]) throw new Error(`Duplicate card id: ${card.id}`)
   cards[card.id] = card
@@ -74,11 +79,13 @@ export const campaign: Campaign = Object.freeze({
   startCardId: 'prologue',
   cards: Object.freeze(cards),
   // Every weighted card is drawable; there is no separate deck list to keep in sync.
-  deckCardIds: allCards.filter((c) => c.weight !== undefined).map((c) => c.id),
+  deckCardIds: Object.values(cards).filter((c) => c.weight !== undefined).map((c) => c.id),
   sectors: SECTORS,
   colossusCardIds: ['colossus01_start', 'colossus02_start', 'colossus03_start', 'colossus04_start', 'colossus05_start', 'colossus06_start', 'colossus07_start'],
   marketDayCardId: marketDayCard.id,
   tuning,
   consequenceTuning,
+  // Shown to the player: standing per faction, and heat per consequence path.
+  trackedFlags: [...standingFlagIds, ...Object.values(consequenceTuning).map((t) => t.flagId)],
   initial,
 })

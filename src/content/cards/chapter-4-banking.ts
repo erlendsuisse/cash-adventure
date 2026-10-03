@@ -1,4 +1,5 @@
 import type { StoryCard } from '../../engine/types'
+import { favour } from '../standings'
 import { heat, venture } from './factories'
 
 export const chapter4CommodityCards: StoryCard[] = [
@@ -158,6 +159,11 @@ export const chapter4DangerCards: StoryCard[] = [
           failure: { text: 'They find discrepancies. You pay heavy fines.', effects: [{ kind: 'gold', delta: -400 }] },
         },
       },
+      favour('guilds', {
+        id: 'guild_vouches_books',
+        label: 'Have guild accountants vouch for your books',
+        effects: [{ kind: 'narrate', text: 'Three guild masters sign off on your ledgers. The auditors take their word and leave by lunchtime.' }],
+      }),
     ],
   },
 

@@ -1,4 +1,5 @@
 import type { StoryCard } from '../../engine/types'
+import { favour } from '../standings'
 import { heat, venture } from './factories'
 
 // CHAPTER 2 EXPANDED: Underworld Rising
@@ -322,6 +323,11 @@ export const chapter2MoreDangerCards: StoryCard[] = [
           failure: { text: 'They beat you senseless and take 300g anyway.', effects: [{ kind: 'gold', delta: -300 }, { kind: 'stat', stat: 'grit', delta: -1 }] },
         },
       },
+      favour('underworld', {
+        id: 'drop_a_name',
+        label: 'Drop a name the gang respects',
+        effects: [{ kind: 'narrate', text: 'The enforcer hears who you drink with and leaves without another word.' }],
+      }),
     ],
   },
   {

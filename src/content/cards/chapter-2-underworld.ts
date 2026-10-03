@@ -1,4 +1,5 @@
 import type { StoryCard } from '../../engine/types'
+import { favour } from '../standings'
 import { heat, venture } from './factories'
 
 export const chapter2CommodityCards: StoryCard[] = [
@@ -186,6 +187,11 @@ export const chapter2DangerCards: StoryCard[] = [
           failure: { text: 'They get angry. You pay double: 180g.', effects: [{ kind: 'gold', delta: -180 }] },
         },
       },
+      favour('crown', {
+        id: 'name_friends_at_court',
+        label: 'Mention your friends at court',
+        effects: [{ kind: 'narrate', text: 'The constable hears whose name you drop, pales, and wishes you a pleasant evening.' }],
+      }),
     ],
   },
 

@@ -341,3 +341,65 @@
     font-size: 11px;
   }
 }
+
+.reputation {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 4px 8px;
+}
+
+.reputationRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.tier {
+  color: #c9b79a;
+  font-weight: 600;
+}
+
+.reputationBar {
+  position: relative;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+}
+
+.reputationBar::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  width: 1px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.reputationFillPositive,
+.reputationFillNegative {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 2px;
+}
+
+.reputationFillPositive {
+  background: #90ee90;
+}
+
+.reputationFillNegative {
+  background: #ff6b6b;
+}
+
+.heatPips {
+  color: #ff8c42;
+  letter-spacing: 2px;
+  font-size: 12px;
+}
+
+.heatEmpty {
+  color: rgba(255, 255, 255, 0.3);
+}

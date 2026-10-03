@@ -119,7 +119,7 @@ export function reduce(state: GameState, action: Action, campaign: Campaign): Ga
   }
 }
 
-function calculateEffectSummary(before: GameState, after: GameState): EffectSummary {
+function calculateEffectSummary(before: GameState, after: GameState, campaign: Campaign): EffectSummary {
   const statDeltas: Record<string, number> = {}
   for (const stat of ['grit', 'savvy', 'charm', 'nerve'] as const) {
     const delta = after.stats[stat] - before.stats[stat]
@@ -138,6 +138,12 @@ function calculateEffectSummary(before: GameState, after: GameState): EffectSumm
     .filter(([id, value]) => (before.flags[id] ?? 0) !== value && value > 0)
     .map(([id]) => id)
 
+  const trackedFlagDeltas: Record<string, number> = {}
+  for (const id of campaign.trackedFlags ?? []) {
+    const delta = (after.flags[id] ?? 0) - (before.flags[id] ?? 0)
+    if (delta !== 0) trackedFlagDeltas[id] = delta
+  }
+
   return {
     stats: statDeltas,
     gold: after.finances.gold - before.finances.gold,
@@ -147,6 +153,7 @@ function calculateEffectSummary(before: GameState, after: GameState): EffectSumm
     assetsGained,
     assetsLost,
     flagsSet,
+    trackedFlagDeltas,
   }
 }
 
@@ -158,7 +165,8 @@ function hasSignificantEffects(summary: EffectSummary): boolean {
     summary.monthlyExpenses !== 0 ||
     summary.debt !== 0 ||
     summary.assetsGained.length > 0 ||
-    summary.assetsLost.length > 0
+    summary.assetsLost.length > 0 ||
+    Object.keys(summary.trackedFlagDeltas).length > 0
   )
 }
 
@@ -179,12 +187,14 @@ function applyChoose(state: GameState, choiceId: string, campaign: Campaign): Ga
     const { result, outcome, rng } = resolveCheck(choice.check, working)
     working = { ...working, rng, log: [...working.log, { day: working.clock.day, text: formatCheck(result) }] }
     if (outcome.text) working = { ...working, log: [...working.log, { day: working.clock.day, text: outcome.text }] }
+    const beforeOutcome = working
     working = applyAll(outcome.effects ?? [], working)
     target = outcome.goto
 
     // If check outcome has no goto, show outcome on card and wait for advance
     if (!target) {
-      return { ...working, pendingOutcome: { text: outcome.text, checkResult: result } }
+      const summary = calculateEffectSummary(beforeOutcome, working, campaign)
+      return { ...working, pendingOutcome: { text: outcome.text, checkResult: result, ...(hasSignificantEffects(summary) ? { effectSummary: summary } : {}) } }
     }
   } else {
     const before = working
@@ -192,7 +202,7 @@ function applyChoose(state: GameState, choiceId: string, campaign: Campaign): Ga
     target = choice.goto
 
     // If regular choice has effects, show a summary before proceeding
-    const summary = calculateEffectSummary(before, working)
+    const summary = calculateEffectSummary(before, working, campaign)
     if (hasSignificantEffects(summary) && !target) {
       return { ...working, pendingOutcome: { text: 'Effects applied.', effectSummary: summary } }
     }

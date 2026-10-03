@@ -85,6 +85,7 @@ export interface EffectSummary {
   assetsGained: string[]
   assetsLost: string[]
   flagsSet: string[]
+  trackedFlagDeltas: Record<FlagId, number> // changes to Campaign.trackedFlags (e.g. reputation), for display
 }
 
 export interface PendingOutcome {
@@ -255,6 +256,7 @@ export interface Campaign {
   marketDayCardId: CardId
   tuning: Tuning
   consequenceTuning?: ConsequenceTuning // thresholds for consequence triggers
+  trackedFlags?: FlagId[] // flags the player is shown (reputation, heat): their changes count as visible effects
   initial: {
     stats: Stats
     finances: Finances

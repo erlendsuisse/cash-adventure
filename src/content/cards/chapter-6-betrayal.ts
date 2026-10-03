@@ -1,4 +1,5 @@
 import type { StoryCard } from '../../engine/types'
+import { favour } from '../standings'
 import { heat, venture } from './factories'
 
 export const chapter6CommodityCards: StoryCard[] = [
@@ -172,6 +173,11 @@ export const chapter6DangerCards: StoryCard[] = [
           },
         },
       },
+      favour('underworld', {
+        id: 'buy_off_contract',
+        label: 'Have your network buy out the contract (-100g)',
+        effects: [{ kind: 'gold', delta: -100 }, { kind: 'narrate', text: 'A friend in the trade finds the killer first. For a modest fee, the contract is quietly torn up.' }],
+      }),
     ],
   },
 

@@ -1,5 +1,6 @@
 // Dangers and penalties - scale with game progression and Colossi defeats
 import type { StoryCard } from '../../engine/types'
+import { favour } from '../standings'
 
 export const dangerCards: StoryCard[] = [
   // EARLY GAME DANGERS (small losses, educational)
@@ -230,6 +231,11 @@ export const dangerCards: StoryCard[] = [
           { kind: 'narrate', text: 'You hire the best lawyers and fight for 200 gold. It\'s not worth it. You lose anyway.' },
         ],
       },
+      favour('crown', {
+        id: 'petition_crown',
+        label: 'Petition the Crown',
+        effects: [{ kind: 'narrate', text: 'A royal clerk reviews the noble\'s claim and finds it wanting. Your property stays yours.' }],
+      }),
     ],
   },
 
@@ -318,6 +324,11 @@ export const dangerCards: StoryCard[] = [
           { kind: 'narrate', text: 'You hire guards for 20 gold per month. Your safety has a price.' },
         ],
       },
+      favour('underworld', {
+        id: 'call_in_underworld',
+        label: 'Have friends in low places lean on them',
+        effects: [{ kind: 'narrate', text: 'A quiet word in the right tavern. The enforcers apologise for the mess and never come back.' }],
+      }),
     ],
   },
 
@@ -376,6 +387,11 @@ export const dangerCards: StoryCard[] = [
           { kind: 'narrate', text: 'Legal fees and damages total 400 gold. Justice is expensive.' },
         ],
       },
+      favour('guilds', {
+        id: 'guild_arbitration',
+        label: 'Ask the guild to arbitrate (-40g fee)',
+        effects: [{ kind: 'gold', delta: -40 }, { kind: 'narrate', text: 'The guild hears the case in a back room. Your fellow merchants find for you, and the plaintiff takes a token settlement.' }],
+      }),
     ],
   },
 
@@ -405,6 +421,11 @@ export const dangerCards: StoryCard[] = [
           { kind: 'narrate', text: 'The guard intervenes but demands 150 gold for "assistance." Corruption runs deep.' },
         ],
       },
+      favour('folk', {
+        id: 'neighbourhood_rallies',
+        label: 'Call on the neighbourhood',
+        effects: [{ kind: 'narrate', text: 'Half the street turns out with lanterns and cudgels. The thieves slip away before dawn, empty-handed.' }],
+      }),
     ],
   },
 ]

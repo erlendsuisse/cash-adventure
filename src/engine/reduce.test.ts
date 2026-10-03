@@ -111,6 +111,12 @@ describe('reduce - choose', () => {
     expect(s.rng).toEqual(state.rng) // nothing was drawn
   })
 
+  it('shows changes to tracked flags (like reputation) in the effect summary', () => {
+    const campaign = makeCampaign([card('start', { choices: [{ id: 'help', label: 'Help', effects: [{ kind: 'flag', id: 'rep', delta: 1 }, { kind: 'flag', id: 'secret', set: 1 }] }] })], { trackedFlags: ['rep'] })
+    const s = reduce(newGame(1, campaign), { type: 'choose', choiceId: 'help' }, campaign)
+    expect(s.pendingOutcome?.effectSummary?.trackedFlagDeltas).toEqual({ rep: 1 })
+  })
+
   it('ignores a choice while an outcome is waiting to be acknowledged', () => {
     const campaign = makeCampaign([card('start', { choices: [{ id: 'buy', label: 'Buy', effects: [{ kind: 'gold', delta: -10 }] }] })])
     const s = reduce(newGame(1, campaign), { type: 'choose', choiceId: 'buy' }, campaign)

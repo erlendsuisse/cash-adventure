@@ -78,3 +78,30 @@
   font-style: italic;
   margin-top: 2px;
 }
+
+.roll {
+  font-size: 13px;
+  padding: 8px 10px;
+  margin-bottom: 12px;
+  border-left: 3px solid var(--gold);
+  background: rgba(169, 119, 47, 0.08);
+  color: var(--ink-soft);
+}
+
+.rollBonus {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.rollPenalty {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.rollPass {
+  color: var(--success);
+}
+
+.rollFail {
+  color: var(--danger);
+}
