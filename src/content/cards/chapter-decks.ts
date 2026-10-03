@@ -5,6 +5,7 @@ export const chapterOneCards: StoryCard[] = [
   // After Colossus 1: The underworld begins to notice you
   {
     id: 'mob_protection_offer',
+    chapter: 2,
     title: 'The Syndicate Makes an Offer',
     body: [
       'A sleek figure in an expensive coat finds you in a quiet corner. "You\'re making noise in our city. We could work together. Protection, favors, connections - all yours. Cost? A small cut of your business."',
@@ -42,6 +43,7 @@ export const chapterOneCards: StoryCard[] = [
 
   {
     id: 'criminal_informant',
+    chapter: 2,
     title: 'A Criminal Informant',
     body: [
       'A shady figure offers you information for sale. "I know who\'s moving what, when they\'re vulnerable. That\'s worth 90 gold to someone smart."',
@@ -78,6 +80,7 @@ export const chapterOneCards: StoryCard[] = [
 
   {
     id: 'stolen_goods_fence',
+    chapter: 2,
     title: 'A Fence Needs a Partner',
     body: [
       'A dealer in "found merchandise" approaches. "I need someone to move goods. You provide the network, I provide the goods. We split profits 50-50."',
@@ -115,6 +118,7 @@ export const chapterOneCards: StoryCard[] = [
 
   {
     id: 'loan_shark_capital',
+    chapter: 2,
     title: 'A Loan Shark Offers Capital',
     body: [
       'A dangerous figure makes a simple offer. "150 gold at 20% monthly interest. Fast approval, no questions, but be warned - we collect on time. Every time."',
@@ -151,6 +155,7 @@ export const chapterOneCards: StoryCard[] = [
 
   {
     id: 'smuggler_partnership',
+    chapter: 2,
     title: 'A Smuggler Seeks Partnership',
     body: [
       'A captain with a fast boat and no morals offers you a deal. "Partners in smuggling. High risk, high reward. We could make 200 gold worth of deals happen."',
@@ -190,6 +195,7 @@ export const chapterTwoCards: StoryCard[] = [
   // After Colossus 2: Deeper crime, syndicates consolidate power
   {
     id: 'syndicate_muscle',
+    chapter: 3,
     title: 'The Syndicate Offers Muscle',
     body: [
       'The same sleek figure from before returns. "You\'ve been useful. We want to formalize this. For 160 gold, you get muscle on call. Competitors disappear. Problems vanish."',
@@ -226,6 +232,7 @@ export const chapterTwoCards: StoryCard[] = [
 
   {
     id: 'black_market_supplier',
+    chapter: 3,
     title: 'A Black Market Supplier',
     body: [
       'Goods that don\'t exist officially. Weapons, poisons, secrets. A supplier offers you exclusive access. "130 gold membership. You\'ll never want for anything."',
@@ -262,6 +269,7 @@ export const chapterTwoCards: StoryCard[] = [
 
   {
     id: 'crime_boss_lieutenant',
+    chapter: 3,
     title: 'The Crime Boss Wants You',
     body: [
       'The crime boss himself summons you. "I need someone ambitious in my organization. Lieutenant position. 180 gold, and you run operations for me. Excellent salary guaranteed."',
@@ -299,6 +307,7 @@ export const chapterTwoCards: StoryCard[] = [
 
   {
     id: 'counterfeiter_partnership',
+    chapter: 3,
     title: 'A Counterfeiter Offers Partnership',
     body: [
       'Money that looks real. A master counterfeiter wants a distributor. "140 gold and you move notes. Untraceable, undetectable."',
@@ -338,6 +347,7 @@ export const chapterThreeCards: StoryCard[] = [
   // After Colossus 3: Desperation, true survival mode
   {
     id: 'assassin_contract_broker',
+    chapter: 4,
     title: 'An Assassin Contract Broker',
     body: [
       'Death for hire. A broker in blood offers you a percentage. "For 200 gold, you broker contracts between killers and those who want targets dead. Very profitable."',
@@ -374,6 +384,7 @@ export const chapterThreeCards: StoryCard[] = [
 
   {
     id: 'human_trafficking_opportunity',
+    chapter: 4,
     title: 'A Slaver Wants Your Help',
     body: [
       'The worst of the underworld. A slaver offers capital. "Help move merchandise. Desperate people willing to work for nothing. Big profits, bigger risks."',
@@ -392,6 +403,7 @@ export const chapterThreeCards: StoryCard[] = [
 
   {
     id: 'drug_empire_partnership',
+    chapter: 4,
     title: 'A Drug Lord Offers Partnership',
     body: [
       'The fastest way to wealth and death. A drug lord offers you a percentage. "200 gold gets you into distribution. Drugs sell themselves. So do addicts."',
@@ -431,6 +443,7 @@ export const chapterFourCards: StoryCard[] = [
   // After Colossus 4+: Endgame, corruption complete or escape begins
   {
     id: 'government_corruption',
+    chapter: 5,
     title: 'A Corrupt Official',
     body: [
       'Power beyond power. A high-ranking official offers partnership. "250 gold. You provide bribes, I provide permits, licenses, and immunity. Endless profit."',
@@ -467,6 +480,7 @@ export const chapterFourCards: StoryCard[] = [
 
   {
     id: 'escape_boat',
+    chapter: 5,
     title: 'A Captain Offers Escape',
     body: [
       'A ship captain with no allegiances. "I can get you out. Anywhere in the world, untraceable. 180 gold and you\'ve got passage for life if you need it. Insurance against apocalypse."',

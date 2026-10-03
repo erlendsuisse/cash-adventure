@@ -201,6 +201,7 @@ export interface StoryCard {
   requires?: Requirement[] // gates whether the card can be drawn
   minTier?: number
   storyPhase?: StoryPhase // optional phase gate: card only drawable in this phase
+  chapter?: number // optional chapter gate: 1-7, undefined = all chapters
   visual?: VisualMetadata // optional visual metadata for UI rendering
 }
 

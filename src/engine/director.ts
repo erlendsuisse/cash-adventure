@@ -1,3 +1,4 @@
+import { getCurrentChapter } from '../content/chapters'
 import { isMet } from './requirements'
 import { rollWeighted } from './rng'
 import type { Campaign, CardId, GameState, RngState } from './types'
@@ -13,11 +14,14 @@ export function drawCard(
   state: GameState,
   campaign: Campaign,
 ): { cardId: CardId | undefined; rng: RngState } {
+  const currentChapter = getCurrentChapter(state.progress.colossiDefeated)
+
   const eligible = campaign.deckCardIds.filter((id) => {
     const card = campaign.cards[id]
     if (!card || !card.weight || card.weight <= 0) return false
     if ((card.minTier ?? 0) > state.progress.tier) return false
     if (card.storyPhase && card.storyPhase !== state.progress.storyPhase) return false
+    if (card.chapter && card.chapter !== currentChapter) return false
     return (card.requires ?? []).every((r) => isMet(r, state))
   })
 
