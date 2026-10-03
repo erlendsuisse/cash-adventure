@@ -1,0 +1,20 @@
+.strip {
+  display: flex;
+  gap: 16px;
+  padding: 6px 20px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--border);
+}
+
+.sector {
+  text-transform: capitalize;
+}
+
+.up {
+  color: var(--success);
+}
+
+.down {
+  color: var(--danger);
+}

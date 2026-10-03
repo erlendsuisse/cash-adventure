@@ -1,0 +1,89 @@
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(42, 34, 25, 0.8), rgba(31, 26, 20, 0.8));
+  border: 2px solid #8b7355;
+  border-radius: 4px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  border-left: 3px solid #8b7355;
+}
+
+.label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #c9a961;
+  opacity: 0.9;
+}
+
+.positive {
+  color: #90ee90;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.negative {
+  color: #ff6b6b;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.assets {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.assetGroup {
+  flex: 1;
+  min-width: 150px;
+}
+
+.assetLabel {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #c9a961;
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.assetList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.assetList li {
+  font-size: 0.9rem;
+  padding: 0.3rem 0.5rem;
+  border-left: 3px solid;
+}
+
+.assetList li.positive {
+  border-color: #90ee90;
+}
+
+.assetList li.negative {
+  border-color: #ff6b6b;
+}
