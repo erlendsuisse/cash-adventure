@@ -15,6 +15,45 @@
   background: linear-gradient(135deg, #f4ecd8 0%, #e6dcc0 100%);
 }
 
+/* Chapter-themed fallback gradients */
+.fallback-default {
+  background: linear-gradient(135deg, #f4ecd8 0%, #e6dcc0 100%);
+}
+
+.fallback-ch1 {
+  background: linear-gradient(135deg, #f4ecd8 0%, #e6dcc0 100%);
+}
+
+.fallback-ch2 {
+  /* Underworld: dark shadowy */
+  background: linear-gradient(135deg, #2a2520 0%, #1a1410 100%);
+}
+
+.fallback-ch3 {
+  /* Warfare: red and grey chaos */
+  background: linear-gradient(135deg, #4a3f3a 0%, #2a2218 100%);
+}
+
+.fallback-ch4 {
+  /* Banking: gold and marble */
+  background: linear-gradient(135deg, #3d3428 0%, #2d2820 100%);
+}
+
+.fallback-ch5 {
+  /* Plague: dark decay */
+  background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+}
+
+.fallback-ch6 {
+  /* Betrayal: twisted shadows */
+  background: linear-gradient(135deg, #2a2a2a 0%, #151515 100%);
+}
+
+.fallback-ch7 {
+  /* Transcendence: cosmic */
+  background: linear-gradient(135deg, #1a0f2e 0%, #0a0510 100%);
+}
+
 .image {
   position: absolute;
   width: 100%;

@@ -7,6 +7,16 @@ interface BackgroundProps {
   mood?: 'neutral' | 'tense' | 'triumphant' | 'fearful'
 }
 
+function getChapterTheme(cardId: string): 'ch1' | 'ch2' | 'ch3' | 'ch4' | 'ch5' | 'ch6' | 'ch7' | 'default' {
+  if (cardId.startsWith('ch2_')) return 'ch2'
+  if (cardId.startsWith('ch3_')) return 'ch3'
+  if (cardId.startsWith('ch4_')) return 'ch4'
+  if (cardId.startsWith('ch5_')) return 'ch5'
+  if (cardId.startsWith('ch6_')) return 'ch6'
+  if (cardId.startsWith('ch7_')) return 'ch7'
+  return 'default'
+}
+
 /**
  * Background image layer for cards with fade-in animation
  * Loads image and fades in, allowing card to appear after 0.5s
@@ -14,6 +24,7 @@ interface BackgroundProps {
 export function Background({ cardId, mood = 'neutral' }: BackgroundProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [imageUrl, setImageUrl] = useState<string | null>(null)
+  const chapterTheme = getChapterTheme(cardId)
 
   const backgroundAsset = getBackground(cardId)
 
@@ -44,9 +55,9 @@ export function Background({ cardId, mood = 'neutral' }: BackgroundProps) {
   }, [backgroundAsset])
 
   return (
-    <div className={`${styles.background} ${styles[`mood-${mood}`]}`}>
-      {/* Fallback gradient when no image loaded */}
-      <div className={styles.fallback} />
+    <div className={`${styles.background} ${styles[`mood-${mood}`]} ${styles[`theme-${chapterTheme}`]}`}>
+      {/* Fallback gradient when no image loaded - themed by chapter */}
+      <div className={`${styles.fallback} ${styles[`fallback-${chapterTheme}`]}`} />
 
       {/* Background image with fade-in animation (0.8s) */}
       {/* Card appears 0.5s after image starts fading in */}
