@@ -8,21 +8,27 @@ interface BackgroundProps {
   /** The card's own chapter, if it belongs to a chapter deck. */
   chapter?: ChapterNumber
   mood?: 'neutral' | 'tense' | 'triumphant' | 'fearful'
+  /** Chapter card artwork; takes priority over the cardId background registry. */
+  artworkUrl?: string | null
 }
 
 /**
  * Background image layer for cards with fade-in animation
  * Loads image and fades in, allowing card to appear after 0.5s
  */
-export function Background({ cardId, chapter, mood = 'neutral' }: BackgroundProps) {
+export function Background({ cardId, chapter, mood = 'neutral', artworkUrl }: BackgroundProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const chapterTheme = chapter ? `ch${chapter}` : 'default'
 
-  const backgroundAsset = getBackground(cardId)
+  const registered = getBackground(cardId)
+  const url = artworkUrl ?? registered?.url ?? null
+  const alt = artworkUrl ? '' : registered?.alt
 
   useEffect(() => {
-    if (!backgroundAsset) {
+    if (!url) {
+      // Clear the previous card's image so it doesn't linger behind cards without art
+      setImageUrl(null)
       setIsLoading(false)
       return
     }
@@ -33,19 +39,19 @@ export function Background({ cardId, chapter, mood = 'neutral' }: BackgroundProp
     img.onload = () => {
       // Trigger card reveal animation after image loads
       // The card will appear 0.5s after the image starts fading in
-      setImageUrl(backgroundAsset.url)
+      setImageUrl(url)
       setIsLoading(false)
     }
 
     img.onerror = () => {
-      console.warn(`Failed to load background: ${backgroundAsset.url}`)
+      console.warn(`Failed to load background: ${url}`)
       // Still show the card even if background fails to load
       setImageUrl(null)
       setIsLoading(false)
     }
 
-    img.src = backgroundAsset.url
-  }, [backgroundAsset])
+    img.src = url
+  }, [url])
 
   return (
     <div className={`${styles.background} ${styles[`mood-${mood}`]} ${styles[`theme-${chapterTheme}`]}`}>
@@ -54,7 +60,7 @@ export function Background({ cardId, chapter, mood = 'neutral' }: BackgroundProp
 
       {/* Background image with fade-in animation (0.8s) */}
       {/* Card appears 0.5s after image starts fading in */}
-      {imageUrl && <img src={imageUrl} alt={backgroundAsset?.alt} className={styles.image} />}
+      {imageUrl && <img src={imageUrl} alt={alt} className={styles.image} />}
 
       {/* Mood-based overlay/vignette for visual enhancement */}
       <div className={`${styles.overlay} ${styles[`overlay-${mood}`]}`} />

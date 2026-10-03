@@ -33,16 +33,6 @@
   }
 }
 
-.artwork {
-  width: 100%;
-  height: auto;
-  max-height: 300px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin: -28px -32px 20px -32px;
-  display: block;
-}
-
 .title {
   margin: 0 0 14px;
   font-size: 22px;

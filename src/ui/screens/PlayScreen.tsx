@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { campaign } from '../../content/campaign'
 import { Background } from '../components/Background/Background'
+import { getCardArtworkPath } from '../artwork'
 import { EncounterCard } from '../components/EncounterCard'
 import { LedgerBar } from '../components/LedgerBar'
 import { StatScroll } from '../components/StatScroll'
@@ -23,7 +24,12 @@ export function PlayScreen() {
   return (
     <div className={styles.screen}>
       {/* Background layer with fade-in animation */}
-      <Background cardId={state.currentCardId} chapter={card?.chapter} mood={mood} />
+      <Background
+        cardId={state.currentCardId}
+        chapter={card?.chapter}
+        mood={mood}
+        artworkUrl={card ? getCardArtworkPath(card) : null}
+      />
 
       {/* Minimal top bar with critical info only */}
       <LedgerBar state={state} />
