@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import type { GameState } from '../../engine/types'
 import { currentChapter } from '../../engine/selectors'
 import { playlistForChapter } from '../music'
+import { useSpeaking } from '../voice'
 
 const VOLUME = 0.5
+const DUCKED_VOLUME = 0.15 // while the narrator reads a card
 const FADE_STEP_MS = 50
 const CHAPTER_FADE_OUT_MS = 2000
 const CHAPTER_FADE_IN_MS = 3000
@@ -23,6 +25,9 @@ export function useBackgroundMusic(state: GameState, enabled: boolean = true) {
   const indexRef = useRef(0)
   const failuresRef = useRef(0)
   const fadeRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const speaking = useSpeaking()
+  const volumeRef = useRef(VOLUME)
+  volumeRef.current = speaking ? DUCKED_VOLUME : VOLUME
 
   // These only touch refs, so the copies captured by audio callbacks never go stale.
   function stopFade() {
@@ -54,7 +59,7 @@ export function useBackgroundMusic(state: GameState, enabled: boolean = true) {
     audio.src = track
     audio.volume = 0
     audio.play().then(
-      () => fadeTo(VOLUME, fadeInMs),
+      () => fadeTo(volumeRef.current, fadeInMs),
       (error: unknown) => {
         // Autoplay refused: forget the playlist so the next interaction starts it again
         if (error instanceof DOMException && error.name === 'NotAllowedError') {
@@ -107,6 +112,13 @@ export function useBackgroundMusic(state: GameState, enabled: boolean = true) {
       document.removeEventListener('keydown', unlock)
     }
   }, [unlocked])
+
+  // Duck under the narrator, and come back up when it stops
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio || audio.paused || playlistRef.current.length === 0) return
+    fadeTo(volumeRef.current, 500)
+  }, [speaking])
 
   // Switch playlists only when the chapter changes
   useEffect(() => {

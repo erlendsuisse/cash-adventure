@@ -384,6 +384,7 @@
   top: 0;
   height: 100%;
   border-radius: 2px;
+  transition: width 0.8s ease-out; /* standing grows and shrinks smoothly */
 }
 
 .reputationFillPositive {
@@ -402,4 +403,55 @@
 
 .heatEmpty {
   color: rgba(255, 255, 255, 0.3);
+}
+
+/* A stat that just went up glows and sparkles for a moment */
+.statUp {
+  position: relative;
+  animation: statGlow 1.4s ease-out;
+}
+
+.statUp::after {
+  content: '✦';
+  position: absolute;
+  right: 26px;
+  top: 50%;
+  color: #ffd700;
+  font-size: 14px;
+  pointer-events: none;
+  animation: sparkleUp 1.2s ease-out forwards;
+}
+
+@keyframes statGlow {
+  0% {
+    background: rgba(255, 215, 0, 0.45);
+    box-shadow: 0 0 14px rgba(255, 215, 0, 0.6);
+  }
+}
+
+@keyframes sparkleUp {
+  from {
+    opacity: 1;
+    transform: translateY(-50%) scale(0.6);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-180%) scale(1.4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .statUp,
+  .statUp::after {
+    animation: none;
+  }
+
+  .statUp::after {
+    display: none;
+  }
+
+  .reputationFillPositive,
+  .reputationFillNegative {
+    transition: none;
+  }
 }

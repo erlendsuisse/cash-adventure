@@ -1,0 +1,132 @@
+/* Payday comes every few cards, so it's a corner notice that never blocks the card */
+.wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 108px 20px 16px;
+  pointer-events: none;
+}
+
+.coins {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.coin {
+  position: absolute;
+  top: -30px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff3c4 0%, #f2c14e 40%, #b07b22 100%);
+  box-shadow: 0 0 8px rgba(242, 193, 78, 0.7);
+  animation: fall 2.4s ease-in both;
+}
+
+.banner {
+  position: relative;
+  width: min(280px, 100%);
+  padding: 12px 16px 10px;
+  pointer-events: auto;
+  cursor: pointer;
+  text-align: center;
+  color: #f7ecd2;
+  background: linear-gradient(160deg, #3a2a16 0%, #241a0e 100%);
+  border: 2px solid #c8922f;
+  border-radius: 16px;
+  box-shadow:
+    0 0 30px rgba(242, 193, 78, 0.35),
+    0 14px 40px rgba(0, 0, 0, 0.55);
+  animation: drop 0.5s cubic-bezier(0.3, 1.5, 0.5, 1) both;
+}
+
+.title {
+  font-family: 'Cinzel Decorative', 'Cinzel', Georgia, serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffd700;
+}
+
+.net {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.gain {
+  color: #8fe388;
+}
+
+.loss {
+  color: #ff9d94;
+}
+
+.lines {
+  margin: 10px 0 6px;
+  padding: 8px 0 0;
+  list-style: none;
+  border-top: 1px solid rgba(200, 146, 47, 0.4);
+  font-size: 14px;
+}
+
+.lines li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 0;
+  text-align: left;
+}
+
+.more {
+  justify-content: center !important;
+  color: #c9b994;
+}
+
+.hint {
+  font-size: 12px;
+  color: #a8987a;
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.9);
+  }
+}
+
+@keyframes fall {
+  from {
+    opacity: 0;
+    transform: translateY(0) rotateY(0);
+  }
+  15% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(70vh) rotateY(540deg);
+  }
+}
+
+@media (max-width: 900px) {
+  .wrap {
+    justify-content: center;
+    padding-top: 96px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner {
+    animation: none;
+  }
+
+  .coins {
+    display: none;
+  }
+}

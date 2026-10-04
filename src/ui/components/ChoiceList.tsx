@@ -1,5 +1,6 @@
 import { isMet } from '../../engine/requirements'
 import type { Choice, GameState } from '../../engine/types'
+import { RichText } from '../RichText'
 import styles from './EncounterCard.module.css'
 
 export function ChoiceList({ choices, state, onChoose }: { choices: Choice[]; state: GameState; onChoose: (choiceId: string) => void }) {
@@ -12,7 +13,7 @@ export function ChoiceList({ choices, state, onChoose }: { choices: Choice[]; st
         const locked = unmet.length > 0
         return (
           <button key={choice.id} type="button" className={styles.choice} disabled={locked} onClick={() => onChoose(choice.id)}>
-            {choice.label}
+            <RichText text={choice.label} />
             {locked && choice.showLockedAs ? <span className={styles.reason}>{choice.showLockedAs}</span> : null}
           </button>
         )

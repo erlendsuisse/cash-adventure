@@ -5,6 +5,7 @@ import { CHAPTERS } from '../../content/chapters'
 import { isMet } from '../../engine/requirements'
 import { currentChapter, isFree, passiveIncome } from '../../engine/selectors'
 import type { GameState } from '../../engine/types'
+import { RichText } from '../RichText'
 import styles from './ChapterBanner.module.css'
 
 /** What to do right now, in one line, from the player's actual situation. */
@@ -27,13 +28,15 @@ export function ChapterBanner({ state }: { state: GameState }) {
   const chapter = CHAPTERS[currentChapter(state)]
   const goal = objective(state)
   return (
-    <div className={styles.banner}>
+    <div className={styles.banner} data-tour="goal">
       <button type="button" className={styles.heading} onClick={() => setOpen((o) => !o)} aria-expanded={open} title="What is this chapter about?">
         <span className={styles.chapter}>Chapter {chapter.numeral}</span>
         <span className={styles.name}>{chapter.name}</span>
         <span className={styles.toggle}>{open ? '▴' : '▾'}</span>
       </button>
-      <span className={`${styles.objective} ${styles[goal.tone]}`}>{goal.text}</span>
+      <span className={`${styles.objective} ${styles[goal.tone]}`}>
+        <RichText text={goal.text} />
+      </span>
       {open && (
         <div className={styles.details}>
           <p>{chapter.theme}</p>

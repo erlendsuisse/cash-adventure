@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import type { GameState } from '../../engine/types'
+import { useEffect, useRef, useState } from 'react'
+import type { GameState, StatId } from '../../engine/types'
 import { isFree, totalMonthlyIncome } from '../../engine/selectors'
 import { FACTIONS, HEAT_PATHS, STANDING_THRESHOLD, standingTier } from '../../content/standings'
 import { useGame } from '../GameProvider'
@@ -14,6 +14,7 @@ export function StatScroll({ state }: { state: GameState }) {
   const monthlyExpenses = finances.monthlyExpenses
   const netIncome = monthlyIncome - monthlyExpenses
   const free = isFree(state)
+  const raised = useRaisedStats(state)
 
   return (
     <div className={styles.scroll}>
@@ -24,22 +25,12 @@ export function StatScroll({ state }: { state: GameState }) {
         <div className={styles.section}>
           <h4 className={styles.sectionTitle}>Attributes</h4>
           <div className={styles.stats}>
-            <div className={styles.stat}>
-              <span className={styles.label}>Grit</span>
-              <span className={styles.value}>{stats.grit}</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.label}>Savvy</span>
-              <span className={styles.value}>{stats.savvy}</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.label}>Charm</span>
-              <span className={styles.value}>{stats.charm}</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.label}>Nerve</span>
-              <span className={styles.value}>{stats.nerve}</span>
-            </div>
+            {(['grit', 'savvy', 'charm', 'nerve'] as const).map((stat) => (
+              <div key={`${stat}-${raised[stat] ?? 0}`} className={`${styles.stat} ${raised[stat] ? styles.statUp : ''}`}>
+                <span className={styles.label}>{stat[0]!.toUpperCase() + stat.slice(1)}</span>
+                <span className={styles.value}>{stats[stat]}</span>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -244,4 +235,18 @@ export function StatScroll({ state }: { state: GameState }) {
       </div>
     </div>
   )
+}
+
+/** Which stats just went up, so they can sparkle; the value changes each time to restart the animation. */
+function useRaisedStats(state: GameState): Partial<Record<StatId, number>> {
+  const [raised, setRaised] = useState<Partial<Record<StatId, number>>>({})
+  const previous = useRef(state.stats)
+  useEffect(() => {
+    const before = previous.current
+    previous.current = state.stats
+    const up = (Object.keys(state.stats) as StatId[]).filter((stat) => state.stats[stat] > before[stat])
+    if (up.length === 0) return
+    setRaised((r) => ({ ...r, ...Object.fromEntries(up.map((stat) => [stat, (r[stat] ?? 0) + 1])) }))
+  }, [state.stats])
+  return raised
 }

@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { campaign } from '../../content/campaign'
 import { Background } from '../components/Background/Background'
 import { getCardArtworkPath } from '../artwork'
 import { EncounterCard } from '../components/EncounterCard'
+import { GuideTour, type TourTab } from '../components/GuideTour'
+import { PaydayBanner } from '../components/PaydayBanner'
 import { VictoryScreen } from '../components/VictoryScreen'
 import { ChapterBanner } from '../components/ChapterBanner'
 import { LedgerBar } from '../components/LedgerBar'
@@ -10,7 +12,9 @@ import { StatScroll } from '../components/StatScroll'
 import { Portfolio } from '../components/Portfolio'
 import { useGame } from '../GameProvider'
 import { getCharacterMood } from '../../engine/characterSelectors'
+import { currentChapter } from '../../engine/selectors'
 import { useBackgroundMusic } from '../hooks/useBackgroundMusic'
+import { updateSettings, useSettings } from '../settings'
 import styles from './PlayScreen.module.css'
 
 export function PlayScreen() {
@@ -18,7 +22,25 @@ export function PlayScreen() {
   const [seedInput, setSeedInput] = useState('42')
   const [victoryClosed, setVictoryClosed] = useState(false)
   // Narrow screens show one panel at a time, picked from the bottom tab bar
-  const [tab, setTab] = useState<'you' | 'story' | 'trade'>('story')
+  const [tab, setTab] = useState<TourTab>('story')
+  const settings = useSettings()
+  // Old Tobias shows new players around once; ⚙️ > How to play brings him back
+  const [touring, setTouring] = useState(() => !settings.tourDone && state.seenCardIds.length <= 1)
+  const endTour = useCallback(() => {
+    setTouring(false)
+    updateSettings({ tourDone: true })
+  }, [])
+
+  // Payday: spot the economy's payday log entry as it arrives and celebrate it
+  const [payday, setPayday] = useState<number | null>(null)
+  const seenLog = useRef(state.log.length)
+  useEffect(() => {
+    const fresh = state.log.slice(Math.min(seenLog.current, state.log.length))
+    seenLog.current = state.log.length
+    const entry = fresh.findLast((e) => e.text.startsWith('Payday:'))
+    if (entry) setPayday(Number(entry.text.match(/-?\d+/)?.[0] ?? 0))
+  }, [state.log])
+  const closePayday = useCallback(() => setPayday(null), [])
 
   function startNewGame(seed: number) {
     if (state.status === 'playing' && !window.confirm('Start a new game? Your current game will be lost.')) return
@@ -27,8 +49,8 @@ export function PlayScreen() {
     dispatch({ type: 'restart', seed })
   }
 
-  // Background music playback based on story phase
-  useBackgroundMusic(state)
+  // Background music by chapter, if the player has it on
+  useBackgroundMusic(state, settings.music)
 
   const card = campaign.cards[state.currentCardId]
   const mood = getCharacterMood(state)
@@ -39,12 +61,13 @@ export function PlayScreen() {
       <Background
         cardId={state.currentCardId}
         chapter={card?.chapter}
+        ambientChapter={currentChapter(state)}
         mood={mood}
         artworkUrl={card ? getCardArtworkPath(card) : null}
       />
 
       {/* Minimal top bar with critical info only */}
-      <LedgerBar state={state} />
+      <LedgerBar state={state} onShowTour={() => setTouring(true)} />
 
       {/* Which chapter, what it's about, and what to do right now */}
       <ChapterBanner state={state} />
@@ -52,7 +75,7 @@ export function PlayScreen() {
       {/* Main layout: Left sidebar + Card area + Right sidebar */}
       <div className={styles.mainLayout} data-tab={tab}>
         {/* Left sidebar with character stats and holdings */}
-        <div className={styles.sidebar}>
+        <div className={styles.sidebar} data-tour="you">
           <StatScroll state={state} />
           <button type="button" className={styles.mobileNewGame} onClick={() => startNewGame(Math.floor(Math.random() * 1_000_000))}>
             New Game
@@ -60,7 +83,7 @@ export function PlayScreen() {
         </div>
 
         {/* Center: Card and narrative */}
-        <div className={styles.cardContainer}>
+        <div className={styles.cardContainer} data-tour="card">
           {state.status === 'won' ? (
             <div className={styles.ending}>
               <h1 className={styles.endingTitle}>Victory!</h1>
@@ -85,10 +108,14 @@ export function PlayScreen() {
         </div>
 
         {/* Right sidebar with portfolio and commodities */}
-        <div className={styles.rightSidebar}>
+        <div className={styles.rightSidebar} data-tour="trade">
           <Portfolio state={state} />
         </div>
       </div>
+
+      {payday !== null && state.status === 'playing' && !touring && <PaydayBanner state={state} net={payday} onClose={closePayday} />}
+
+      {touring && <GuideTour onTab={setTab} onDone={endTour} />}
 
       {state.status === 'won' && !victoryClosed && (
         <VictoryScreen
