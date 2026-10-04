@@ -9,14 +9,24 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "android:sync": "npm run build && npx cap sync android",
+    "android:apk": "npm run android:sync && cd android && JAVA_HOME=$HOME/opt/$(ls $HOME/opt | grep jdk-21 | head -1) ANDROID_HOME=$HOME/Android/Sdk ./gradlew assembleDebug",
+    "android:bundle": "npm run android:sync && cd android && JAVA_HOME=$HOME/opt/$(ls $HOME/opt | grep jdk-21 | head -1) ANDROID_HOME=$HOME/Android/Sdk ./gradlew bundleRelease"
   },
   "dependencies": {
+    "@capacitor-community/text-to-speech": "^6.1.0",
+    "@capacitor/android": "^7.6.9",
+    "@capacitor/core": "^7.6.9",
+    "@fontsource/cinzel": "^5.3.0",
+    "@fontsource/cinzel-decorative": "^5.3.0",
     "lucide-react": "^1.52.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^7.6.9",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",

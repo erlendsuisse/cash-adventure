@@ -135,21 +135,24 @@ export function PlayScreen() {
 
       {/* Footer with controls */}
       <div className={styles.footer}>
-        <label>
-          Seed:{' '}
-          <input value={seedInput} onChange={(e) => setSeedInput(e.target.value)} inputMode="numeric" />
-        </label>
-        <button type="button" onClick={() => startNewGame(Number(seedInput) || 0)}>
+        {/* Developer tools: a fixed seed for repeatable games, and save export */}
+        {import.meta.env.DEV && (
+          <label>
+            Seed:{' '}
+            <input value={seedInput} onChange={(e) => setSeedInput(e.target.value)} inputMode="numeric" />
+          </label>
+        )}
+        <button type="button" onClick={() => startNewGame(import.meta.env.DEV ? Number(seedInput) || 0 : Math.floor(Math.random() * 1_000_000))}>
           New Game
         </button>
-        <button
+        {import.meta.env.DEV && <button
           type="button"
           onClick={() => {
             void navigator.clipboard.writeText(exportSave())
           }}
         >
           Export Save
-        </button>
+        </button>}
       </div>
       <nav className={styles.tabBar} aria-label="Game panels">
         {([

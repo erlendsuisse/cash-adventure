@@ -42,7 +42,7 @@ export const chapter6CommodityCards: StoryCard[] = [
     body: [
       'A smooth-talking rogue fans out a stack of stolen letters. "Everyone has secrets they\'ll pay to hide," he says. "Back me with 300 gold, and we share the takings."',
     ],
-    asset: { id: 'ch6_blackmail', label: 'Blackmail Operation', cost: 300, monthlyCashflow: 120, sector: 'espionage' },
+    asset: { id: 'ch6_blackmail', label: 'Secret Letters Ring', cost: 300, monthlyCashflow: 120, sector: 'espionage' },
     accept: {
       id: 'fund_blackmail',
       label: 'Back his scheme (300g)',

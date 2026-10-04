@@ -24,15 +24,15 @@ export const chapter2VentureCards: StoryCard[] = [
   venture({
     id: 'ch2_gambling_house_invest',
     weight: 3,
-    title: 'The Gambling Den',
-    body: ['Dice clatter and cards slap down in a smoky cellar. The owner flashes a gold tooth. "The house always wins, friend. Help me grow, and we split the winnings."'],
-    asset: { id: 'ch2_gambling_den', label: 'Underground Casino', cost: 160, monthlyCashflow: 55, sector: 'underworld' },
+    title: 'The Skittles Hall',
+    body: ['Skittles crash and darts thunk in a busy cellar hall, open till midnight. The owner flashes a gold tooth. "Every sailor in port plays here. Help me grow, and we split the takings."'],
+    asset: { id: 'ch2_gambling_den', label: 'Skittles & Games Hall', cost: 160, monthlyCashflow: 55, sector: 'underworld' },
     accept: {
       id: 'fund_gambling',
-      label: 'Buy a share of the den (160g)',
-      effects: [{ kind: 'narrate', text: 'You own a piece of the house now. Somebody else always loses.' }, heat('mafia')],
+      label: 'Buy a share of the hall (160g)',
+      effects: [{ kind: 'narrate', text: 'You own a piece of the hall now. It is noisy, rowdy and full every night. The gangs love it too.' }, heat('mafia')],
     },
-    decline: { id: 'refuse_gambling', label: 'Walk back up the stairs', text: 'The owner shrugs and deals another hand.' },
+    decline: { id: 'refuse_gambling', label: 'Walk back up the stairs', text: 'The owner shrugs and sets the skittles up again.' },
   }),
   venture({
     id: 'ch2_counterfeiting_operation',
@@ -54,15 +54,15 @@ export const chapter2VentureCards: StoryCard[] = [
   venture({
     id: 'ch2_brothel_investment',
     weight: 2,
-    title: 'The Velvet Card Club',
-    body: ['Behind velvet curtains, rich merchants play cards until dawn. The club\'s hostess smiles at the door. "Rich people love to lose money in style. Invest with me, darling."'],
-    asset: { id: 'ch2_brothel', label: 'Sex Work Enterprise', cost: 170, monthlyCashflow: 50, sector: 'underworld' },
+    title: 'The Velvet Theatre Club',
+    body: ['Behind velvet curtains, rich merchants watch plays and dance until dawn. The club\'s hostess smiles at the door. "Rich people love to spend their money in style. Invest with me, darling."'],
+    asset: { id: 'ch2_brothel', label: 'Velvet Theatre Club', cost: 170, monthlyCashflow: 50, sector: 'underworld' },
     accept: {
       id: 'fund_brothel',
       label: 'Invest in the club (170g)',
       effects: [
         { kind: 'stat', stat: 'charm', delta: -1 },
-        { kind: 'narrate', text: 'The club fills every night. The money is good, but some players lose far more than they can afford.' },
+        { kind: 'narrate', text: 'The club fills every night. The money is good, but the shady guests make honest folk wary of you.' },
       ],
     },
     decline: { id: 'refuse_brothel', label: 'Not your kind of place', text: 'The hostess nods and draws the velvet curtain closed.' },
@@ -72,7 +72,7 @@ export const chapter2VentureCards: StoryCard[] = [
     weight: 3,
     title: 'Rooms for Smugglers',
     body: ['Smugglers need quiet houses to hide their goods. A landlord jingles a ring of keys. "Rent them these old townhouses. They pay double, and never ask for repairs."'],
-    asset: { id: 'ch2_drug_landlord', label: 'Drug House Landlord', cost: 110, monthlyCashflow: 42, sector: 'underworld' },
+    asset: { id: 'ch2_drug_landlord', label: 'Smugglers\' Townhouses', cost: 110, monthlyCashflow: 42, sector: 'underworld' },
     accept: {
       id: 'rent_to_dealers',
       label: 'Rent to the smugglers (110g)',
@@ -102,7 +102,7 @@ export const chapter2VentureCards: StoryCard[] = [
     weight: 3,
     title: 'A Bundle of Secrets',
     body: ['A con artist in a top hat unties a bundle of letters. "Rich people\'s secrets," he whispers. "They\'ll pay us well to keep them quiet."'],
-    asset: { id: 'ch2_extortion', label: 'Extortion Scheme', cost: 105, monthlyCashflow: 48, sector: 'underworld' },
+    asset: { id: 'ch2_extortion', label: 'Secret Letters Scheme', cost: 105, monthlyCashflow: 48, sector: 'underworld' },
     accept: {
       id: 'run_extortion',
       label: 'Join his scheme (105g)',

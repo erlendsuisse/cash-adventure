@@ -1,9 +1,14 @@
+import { Capacitor } from '@capacitor/core'
+import { TextToSpeech } from '@capacitor-community/text-to-speech'
 import { useSyncExternalStore } from 'react'
 import { getSettings } from './settings'
 
-// Card narration using the device's built-in voices (Web Speech API): free,
-// works offline, and iPads/Macs ship good English voices. Music listens to
-// isSpeaking() to duck while the narrator talks.
+// Card narration using the device's built-in voices: free and offline. On the
+// web that's the Web Speech API (iPads/Macs ship good English voices); inside
+// the Android/iOS app it's the platform's own text-to-speech, because Android's
+// WebView has no Web Speech. Music listens to isSpeaking() to duck while the
+// narrator talks.
+const native = Capacitor.isNativePlatform()
 let speaking = false
 const listeners = new Set<() => void>()
 
@@ -13,8 +18,10 @@ function setSpeaking(value: boolean) {
   listeners.forEach((listener) => listener())
 }
 
+const webSpeech = (): boolean => typeof window !== 'undefined' && 'speechSynthesis' in window
+
 export function voiceSupported(): boolean {
-  return typeof window !== 'undefined' && 'speechSynthesis' in window
+  return native || webSpeech()
 }
 
 // The game is in English, so narration always is - even on a device set to
@@ -32,7 +39,7 @@ function loadVoices() {
   voices = window.speechSynthesis.getVoices().filter((v) => v.lang.replace('_', '-').toLowerCase().startsWith('en'))
 }
 
-if (voiceSupported()) {
+if (!native && webSpeech()) {
   loadVoices()
   window.speechSynthesis.addEventListener?.('voiceschanged', loadVoices)
 }
@@ -56,7 +63,7 @@ function activated(): boolean {
   return activation ? activation.hasBeenActive : true
 }
 
-if (voiceSupported()) {
+if (!native && webSpeech()) {
   const onFirstInteraction = () => {
     document.removeEventListener('click', onFirstInteraction, true)
     document.removeEventListener('keydown', onFirstInteraction, true)
@@ -73,13 +80,18 @@ if (voiceSupported()) {
 /** Reads the text aloud, replacing anything already being read. `force` speaks even when narration is off (the read-aloud button). */
 export function speak(text: string, force = false) {
   if (!voiceSupported() || (!force && !getSettings().voice) || !text.trim()) return
+  const spoken = text.replace(/(\d)g\b/g, '$1 gold').replace(/\/mo(nth)?\b/g, ' a month')
+  if (native) {
+    speakNative(spoken)
+    return
+  }
   if (!activated()) {
     pending = text
     return
   }
   const synth = window.speechSynthesis
   synth.cancel()
-  const utterance = new SpeechSynthesisUtterance(text.replace(/(\d)g\b/g, '$1 gold').replace(/\/mo(nth)?\b/g, ' a month'))
+  const utterance = new SpeechSynthesisUtterance(spoken)
   // lang alone makes the browser pick an English voice if no specific one is known yet
   utterance.lang = LANG
   const voice = pickVoice()
@@ -94,8 +106,29 @@ export function speak(text: string, force = false) {
   synth.speak(utterance)
 }
 
+// Each native utterance gets a number, so a finished old one can't mark a newer one as done
+let nativeTurn = 0
+
+function speakNative(text: string) {
+  const turn = ++nativeTurn
+  setSpeaking(true)
+  void TextToSpeech.stop()
+    .catch(() => undefined)
+    .then(() => TextToSpeech.speak({ text, lang: LANG, rate: 0.95, pitch: 1, volume: 1, category: 'ambient' }))
+    .catch(() => undefined)
+    .finally(() => {
+      if (turn === nativeTurn) setSpeaking(false)
+    })
+}
+
 export function stopSpeaking() {
-  if (!voiceSupported()) return
+  if (native) {
+    nativeTurn++
+    void TextToSpeech.stop().catch(() => undefined)
+    setSpeaking(false)
+    return
+  }
+  if (!webSpeech()) return
   window.speechSynthesis.cancel()
   setSpeaking(false)
 }

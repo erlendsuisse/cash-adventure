@@ -355,7 +355,7 @@ export const chapter4IntroCards: StoryCard[] = [
             kind: 'acquireAsset',
             asset: {
               id: 'assassination_broker',
-              label: 'Assassination Broker Network',
+              label: 'Dirty Tricks Network',
               cost: 200,
               monthlyCashflow: 40,
               sector: 'underworld',
@@ -410,7 +410,7 @@ export const chapter4IntroCards: StoryCard[] = [
             kind: 'acquireAsset',
             asset: {
               id: 'drug_distribution',
-              label: 'Drug Distribution Network',
+              label: 'Fake Tonic Business',
               cost: 200,
               monthlyCashflow: 60,
               sector: 'underworld',

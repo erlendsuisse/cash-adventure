@@ -516,26 +516,26 @@ const gambling_den: StoryCard = {
   storyPhase: 'climbing',
   id: 'gambling_den',
   weight: 2,
-  title: 'The Dice Den',
-  body: ['Down a lantern-lit alley, dice rattle on a barrel top. A grinning sailor slides them toward you. "30 gold a throw. Feeling lucky?"'],
+  title: 'The Darts Contest',
+  body: ['In the tavern yard, sailors take turns at a battered dartboard. A grinning champion holds out three darts. "30 gold to enter. Beat my score, and you win double!"'],
   choices: [
     {
       id: 'wager_dice',
-      label: 'Throw the dice for 30 gold (Nerve check, DC 12)',
+      label: 'Enter the darts contest for 30 gold (Nerve check, DC 12)',
       requires: [{ kind: 'goldAtLeast', amount: 30 }],
       check: {
         stat: 'nerve',
         dc: 12,
-        critSuccess: { text: 'The house is stunned. You walk out with double your wager.', effects: [{ kind: 'gold', delta: 60 }] },
-        success: { text: 'Double sixes! The sailor groans as you scoop up the coins.', effects: [{ kind: 'gold', delta: 30 }] },
-        failure: { text: 'Snake eyes. The sailor grins and scoops up your gold.', effects: [{ kind: 'gold', delta: -30 }] },
+        critSuccess: { text: 'Three bullseyes in a row! The yard goes wild, and you win a double prize.', effects: [{ kind: 'gold', delta: 60 }] },
+        success: { text: 'Your last dart lands dead centre. The champion groans and hands over the prize.', effects: [{ kind: 'gold', delta: 30 }] },
+        failure: { text: 'Your darts wobble wide. The champion grins and keeps your entry fee.', effects: [{ kind: 'gold', delta: -30 }] },
         critFailure: {
-          text: 'You are caught palming a die. It costs you dearly.',
+          text: 'Someone accuses you of stepping over the line. The argument costs you dearly.',
           effects: [{ kind: 'gold', delta: -60 }, { kind: 'flag', id: 'bad_reputation', delta: 1 }],
         },
       },
     },
-    { id: 'skip_dice', label: 'Not tonight', effects: [{ kind: 'narrate', text: 'You walk back into the lantern light, purse still full.' }] },
+    { id: 'skip_dice', label: 'Just watch tonight', effects: [{ kind: 'narrate', text: 'You cheer from the side, purse still full.' }] },
   ],
 }
 

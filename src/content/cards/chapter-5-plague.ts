@@ -39,7 +39,7 @@ export const chapter5CommodityCards: StoryCard[] = [
     weight: 3,
     title: 'Treasure from Empty Houses',
     body: ['Many families have fled the fever, leaving their houses locked and empty. Two looters grin at you. "Full of treasure, those houses. Pay us 250 gold, and we split what we find."'],
-    asset: { id: 'ch5_grave_robbing', label: 'Grave Robbing Operation', cost: 250, monthlyCashflow: 70, sector: 'plague' },
+    asset: { id: 'ch5_grave_robbing', label: 'Empty-House Looting', cost: 250, monthlyCashflow: 70, sector: 'plague' },
     accept: {
       id: 'fund_grave_robbing',
       label: 'Pay the looters (250g)',

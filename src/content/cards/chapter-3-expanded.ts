@@ -13,7 +13,7 @@ export const chapter3MilitaryVentureCards: StoryCard[] = [
     body: [
       'A sly trader taps his nose. "Both armies need swords and shields. Why pick a side? We sell to both! Put in 350 gold, and we split the profit."',
     ],
-    asset: { id: 'ch3_weapons_smuggle', label: 'Weapons Smuggling Network', cost: 350, monthlyCashflow: 120, sector: 'military' },
+    asset: { id: 'ch3_weapons_smuggle', label: 'Two-Sided Arms Trade', cost: 350, monthlyCashflow: 120, sector: 'military' },
     accept: {
       id: 'smuggle_weapons',
       label: 'Sell arms to both armies (350g)',

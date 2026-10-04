@@ -219,19 +219,19 @@ const scholar_sage: StoryCard = {
 
 const nerve_master: StoryCard = {
   id: 'nerve_master',
-  title: 'The Card Room',
+  title: 'The Stage Magician',
   weight: 1,
   requires: [{ kind: 'statAtLeast', stat: 'nerve', value: 5 }],
   storyPhase: 'climbing',
   body: [
-    'In a plush card room, a woman with a calm, unreadable face studies you over her cards. "You\'ve got the look," she says.',
-    '"The biggest fortunes go to people who can bluff without blinking. Even when everything is at stake."',
+    'Backstage at the theatre, a famous stage magician with a calm, unreadable face studies you. "You\'ve got the look," she says.',
+    '"The best deals go to people who can keep a straight face, even when their heart is pounding."',
     '"I can teach you. If you\'ve got the nerve."',
   ],
   choices: [
     {
       id: 'nerve_training',
-      label: 'Learn to bluff (200g)',
+      label: 'Learn to keep a straight face (200g)',
       requires: [{ kind: 'goldAtLeast', amount: 200 }],
       effects: [
         { kind: 'gold', delta: -200 },
@@ -331,7 +331,7 @@ const dockside_tavern: StoryCard = {
   storyPhase: 'climbing',
   body: [
     'Smoke, fiddle music and laughter spill out of the Anchor & Coin. Sailors, smugglers and merchants all drink here.',
-    'The bartender knows everyone\'s business. In the back room, the card games run for big stakes.',
+    'The bartender knows everyone\'s business. In the back room, sailors hold an arm-wrestling championship, with a fat prize for the winner.',
     '"What\'ll it be?" she asks with a wink.',
   ],
   choices: [
@@ -342,19 +342,19 @@ const dockside_tavern: StoryCard = {
     },
     {
       id: 'tavern_game',
-      label: 'Join the big card game (Nerve check, DC 14)',
+      label: 'Enter the arm-wrestling championship (Nerve check, DC 14)',
       check: {
         stat: 'nerve',
         dc: 14,
         success: {
-          text: 'You play brilliantly! You walk out 150 gold richer, and the regulars raise their mugs to you.',
+          text: 'You beat the harbour champion! You walk out 150 gold richer, and the regulars raise their mugs to you.',
           effects: [
             { kind: 'gold', delta: 150 },
             { kind: 'flag', id: 'tavern_patron', set: 2 },
           ],
         },
         failure: {
-          text: 'You lose badly. 100 gold gone, and a lesson learned.',
+          text: 'Your arm hits the table. The entry fee and side costs come to 100 gold. A lesson learned.',
           effects: [{ kind: 'gold', delta: -100 }],
         },
       },
