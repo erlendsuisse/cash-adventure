@@ -80,6 +80,12 @@ export const sfx = {
     tone(ctx, 330, ctx.currentTime, 0.35, 0.05, 'triangle')
     tone(ctx, 262, ctx.currentTime + 0.18, 0.45, 0.05, 'triangle')
   },
+  /** Bad news: a soft, slightly comic "wah-wah", sad but never scary. */
+  bad() {
+    const ctx = audio()
+    if (!ctx) return
+    ;[392, 349, 294].forEach((f, i) => tone(ctx, f, ctx.currentTime + i * 0.2, 0.4, 0.05, 'triangle'))
+  },
   /** Paper swish when a card is dealt. */
   card() {
     const ctx = audio()

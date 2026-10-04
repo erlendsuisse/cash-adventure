@@ -78,6 +78,11 @@
   animation: rise 0.35s ease-out both;
 }
 
+/* Text may wrap beside a stamp; the summary box always gets the full width */
+.reveal > div:not(.stamp) {
+  clear: both;
+}
+
 @keyframes rise {
   from {
     opacity: 0;
@@ -94,8 +99,81 @@
   transition: box-shadow 0.4s ease;
 }
 
-.cardFail {
-  animation: wobble 0.45s ease-in-out;
+/* Bad news: a gentle wobble and a red edge that fades */
+.cardBad {
+  position: relative;
+  animation:
+    wobble 0.45s ease-in-out,
+    badGlow 1.6s ease-out;
+}
+
+@keyframes badGlow {
+  0%,
+  30% {
+    box-shadow:
+      0 0 0 3px rgba(200, 70, 60, 0.55),
+      0 0 30px rgba(200, 70, 60, 0.35),
+      0 16px 32px rgba(43, 32, 22, 0.25);
+  }
+}
+
+/* A little rain cloud drifts over the card */
+.rainCloud {
+  position: absolute;
+  top: -34px;
+  right: 18px;
+  font-size: 46px;
+  line-height: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.35));
+  animation: cloud 3.2s ease-in-out forwards;
+}
+
+@keyframes cloud {
+  0% {
+    opacity: 0;
+    transform: translate(40px, -10px);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  30%,
+  60% {
+    transform: translate(-6px, 3px);
+  }
+  45% {
+    transform: translate(4px, -2px);
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-30px, -6px);
+  }
+}
+
+/* Soft red at the screen edges, once */
+.badVignette {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(170, 40, 30, 0.35) 100%);
+  animation: vignette 1.4s ease-out forwards;
+}
+
+@keyframes vignette {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes wobble {
@@ -119,6 +197,13 @@
   box-shadow: 0 3px 8px rgba(80, 10, 0, 0.4);
   transform: rotate(-12deg);
   animation: stamp 0.45s cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+
+.stampLost {
+  color: #eef2f5;
+  background: radial-gradient(circle at 35% 30%, #7d8a96 0%, #4a5560 70%);
+  border-color: rgba(220, 230, 240, 0.7);
+  box-shadow: 0 3px 8px rgba(20, 30, 40, 0.4);
 }
 
 @keyframes stamp {
@@ -285,7 +370,9 @@
   .flipIn,
   .reveal,
   .stamp,
-  .cardFail,
+  .cardBad,
+  .rainCloud,
+  .badVignette,
   .dieRolling,
   .diePass,
   .dieFail {

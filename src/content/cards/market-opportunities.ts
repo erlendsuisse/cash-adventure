@@ -185,7 +185,7 @@ export const marketOpportunityCards: StoryCard[] = [
         effects: [
           {
             kind: 'narrate',
-            text: 'You purchase spice and immediately sell to the merchant. Quick profit. Use the Portfolio to buy and track commodities.',
+            text: 'You purchase spice and immediately sell to the merchant. Quick profit.',
           },
           { kind: 'gold', delta: 25 },
         ],

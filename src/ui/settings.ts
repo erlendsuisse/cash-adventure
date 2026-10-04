@@ -10,13 +10,20 @@ export interface Settings {
   tourDone: boolean
 }
 
-const STORAGE_KEY = 'cash-adventure:settings:v1'
-const DEFAULTS: Settings = { sound: true, music: true, voice: false, tourDone: false }
+// v2: the narrator became on-by-default. v1 saved voice: false for everyone
+// who'd seen the tour, so only sound, music and tourDone carry over from it.
+const STORAGE_KEY = 'cash-adventure:settings:v2'
+const V1_KEY = 'cash-adventure:settings:v1'
+const DEFAULTS: Settings = { sound: true, music: true, voice: true, tourDone: false }
 
 function load(): Settings {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? { ...DEFAULTS, ...(JSON.parse(raw) as Partial<Settings>) } : DEFAULTS
+    if (raw) return { ...DEFAULTS, ...(JSON.parse(raw) as Partial<Settings>) }
+    const v1 = localStorage.getItem(V1_KEY)
+    if (!v1) return DEFAULTS
+    const { sound, music, tourDone } = JSON.parse(v1) as Partial<Settings>
+    return { ...DEFAULTS, ...(sound !== undefined && { sound }), ...(music !== undefined && { music }), ...(tourDone !== undefined && { tourDone }) }
   } catch {
     return DEFAULTS
   }

@@ -14,7 +14,7 @@ export function StatScroll({ state }: { state: GameState }) {
   const monthlyExpenses = finances.monthlyExpenses
   const netIncome = monthlyIncome - monthlyExpenses
   const free = isFree(state)
-  const raised = useRaisedStats(state)
+  const changed = useStatChanges(state)
 
   return (
     <div className={styles.scroll}>
@@ -26,7 +26,10 @@ export function StatScroll({ state }: { state: GameState }) {
           <h4 className={styles.sectionTitle}>Attributes</h4>
           <div className={styles.stats}>
             {(['grit', 'savvy', 'charm', 'nerve'] as const).map((stat) => (
-              <div key={`${stat}-${raised[stat] ?? 0}`} className={`${styles.stat} ${raised[stat] ? styles.statUp : ''}`}>
+              <div
+                key={`${stat}-${changed[stat]?.count ?? 0}`}
+                className={`${styles.stat} ${changed[stat]?.up ? styles.statUp : ''} ${changed[stat] && !changed[stat].up ? styles.statDown : ''}`}
+              >
                 <span className={styles.label}>{stat[0]!.toUpperCase() + stat.slice(1)}</span>
                 <span className={styles.value}>{stats[stat]}</span>
               </div>
@@ -237,16 +240,20 @@ export function StatScroll({ state }: { state: GameState }) {
   )
 }
 
-/** Which stats just went up, so they can sparkle; the value changes each time to restart the animation. */
-function useRaisedStats(state: GameState): Partial<Record<StatId, number>> {
-  const [raised, setRaised] = useState<Partial<Record<StatId, number>>>({})
+/** Which stats just changed and which way, so they can sparkle (up) or flash red (down);
+ *  the count changes each time to restart the animation. */
+function useStatChanges(state: GameState): Partial<Record<StatId, { count: number; up: boolean }>> {
+  const [changed, setChanged] = useState<Partial<Record<StatId, { count: number; up: boolean }>>>({})
   const previous = useRef(state.stats)
   useEffect(() => {
     const before = previous.current
     previous.current = state.stats
-    const up = (Object.keys(state.stats) as StatId[]).filter((stat) => state.stats[stat] > before[stat])
-    if (up.length === 0) return
-    setRaised((r) => ({ ...r, ...Object.fromEntries(up.map((stat) => [stat, (r[stat] ?? 0) + 1])) }))
+    const moved = (Object.keys(state.stats) as StatId[]).filter((stat) => state.stats[stat] !== before[stat])
+    if (moved.length === 0) return
+    setChanged((c) => ({
+      ...c,
+      ...Object.fromEntries(moved.map((stat) => [stat, { count: (c[stat]?.count ?? 0) + 1, up: state.stats[stat] > before[stat] }])),
+    }))
   }, [state.stats])
-  return raised
+  return changed
 }

@@ -38,8 +38,9 @@ export function LedgerBar({ state, onShowTour }: { state: GameState; onShowTour:
     const id = Date.now() + Math.random()
     setFloaters((list) => [...list, { id, delta }])
     setTimeout(() => setFloaters((list) => list.filter((f) => f.id !== id)), 1400)
-    setBump((n) => n + 1)
-    if (delta > 0 && purseRef.current) flyCoins(purseRef.current, Math.min(8, 2 + Math.floor(Math.log10(delta + 1) * 2)))
+    setBump((n) => (delta > 0 ? Math.abs(n) + 1 : -(Math.abs(n) + 1))) // sign picks bounce or shake
+    const coins = Math.min(8, 2 + Math.floor(Math.log10(Math.abs(delta) + 1) * 2))
+    if (purseRef.current) (delta > 0 ? flyCoins : dropCoins)(purseRef.current, coins)
   }, [gold, state.clock.day])
 
   return (
@@ -47,7 +48,7 @@ export function LedgerBar({ state, onShowTour }: { state: GameState; onShowTour:
       <div
         ref={purseRef}
         key={bump}
-        className={`${styles.group} ${styles.purse} ${bump > 0 ? styles.purseBump : ''}`}
+        className={`${styles.group} ${styles.purse} ${bump > 0 ? styles.purseBump : bump < 0 ? styles.purseShake : ''}`}
         title="Gold in your purse"
         data-tour="purse"
       >
@@ -143,6 +144,29 @@ function flyCoins(purse: HTMLElement, count: number) {
         { transform: `translate(${endX}px, ${endY}px) scale(0.5)`, opacity: 0.9 },
       ],
       { duration: 650 + i * 70, delay: i * 60, easing: 'cubic-bezier(0.4, 0, 0.6, 1)', fill: 'both' },
+    )
+    animation.onfinish = () => coin.remove()
+  }
+}
+
+/** Losing gold: a few coins tumble out of the purse and fall away. */
+function dropCoins(purse: HTMLElement, count: number) {
+  const from = purse.getBoundingClientRect()
+  for (let i = 0; i < count; i++) {
+    const coin = document.createElement('span')
+    coin.className = `${styles.flyingCoin} ${styles.lostCoin}`
+    document.body.appendChild(coin)
+    const startX = from.left + 22 + (Math.random() - 0.5) * 16
+    const startY = from.top + from.height / 2
+    const endX = startX + (Math.random() - 0.3) * 140
+    const endY = startY + 160 + Math.random() * 120
+    const animation = coin.animate(
+      [
+        { transform: `translate(${startX}px, ${startY}px) rotate(0deg)`, opacity: 1 },
+        { transform: `translate(${(startX + endX) / 2}px, ${startY - 30}px) rotate(180deg)`, opacity: 1, offset: 0.3 },
+        { transform: `translate(${endX}px, ${endY}px) rotate(540deg)`, opacity: 0 },
+      ],
+      { duration: 800 + i * 60, delay: i * 50, easing: 'cubic-bezier(0.5, 0, 0.9, 0.6)', fill: 'both' },
     )
     animation.onfinish = () => coin.remove()
   }

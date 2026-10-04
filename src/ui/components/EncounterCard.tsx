@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import type { CheckResult, GameState, StoryCard } from '../../engine/types'
+import type { CheckResult, EffectSummary as Summary, GameState, StoryCard } from '../../engine/types'
 import { resolveProse } from '../prose'
 import { RichText } from '../RichText'
 import { prefersReducedMotion } from '../settings'
@@ -45,15 +45,29 @@ export function EncounterCard({
   }, [spokenText, rollLanded])
 
   const outcomeVisible = showingOutcome && rollLanded
-  const acquired = outcomeVisible && (outcome!.effectSummary?.assetsGained.length ?? 0) > 0
+  const summary = outcome?.effectSummary
+  const acquired = outcomeVisible && (summary?.assetsGained.length ?? 0) > 0
+  const lost = outcomeVisible && (summary?.assetsLost.length ?? 0) > 0
+  const badNews = outcomeVisible && (result === 'fail' || isSetback(summary))
 
   useEffect(() => {
     if (acquired) sfx.sparkle()
   }, [acquired])
 
+  // A failed roll already played its own sound
+  useEffect(() => {
+    if (badNews && result !== 'fail') sfx.bad()
+  }, [badNews, result])
+
   return (
     <div className={styles.wrap}>
-      <div className={`${styles.card} ${result === 'pass' ? styles.cardPass : ''} ${result === 'fail' ? styles.cardFail : ''}`}>
+      {badNews && <div className={styles.badVignette} aria-hidden="true" />}
+      <div className={`${styles.card} ${result === 'pass' ? styles.cardPass : ''} ${badNews ? styles.cardBad : ''}`}>
+        {badNews && (
+          <div className={styles.rainCloud} aria-hidden="true">
+            🌧️
+          </div>
+        )}
         <div className={styles.header}>
           {card.title && <h2 className={styles.title}>{card.title}</h2>}
           {voiceSupported() && (
@@ -79,6 +93,11 @@ export function EncounterCard({
                   {acquired && (
                     <div className={styles.stamp} aria-label="Acquired">
                       Acquired!
+                    </div>
+                  )}
+                  {lost && (
+                    <div className={`${styles.stamp} ${styles.stampLost}`} aria-label="Lost">
+                      Lost!
                     </div>
                   )}
                   {outcome!.text && (
@@ -118,6 +137,16 @@ export function EncounterCard({
       </div>
     </div>
   )
+}
+
+/** Bad news: something was lost and nothing gained in return (buying a venture
+ *  or paying for training costs gold but isn't a setback). */
+function isSetback(summary: Summary | undefined): boolean {
+  if (!summary || summary.assetsGained.length > 0) return false
+  if (summary.assetsLost.length > 0) return true
+  const stats = Object.values(summary.stats)
+  if (stats.some((delta) => delta > 0)) return false
+  return summary.gold < 0 || summary.wages < 0 || summary.monthlyExpenses > 0 || stats.some((delta) => delta < 0)
 }
 
 const RESULT_TEXT: Record<CheckResult['result'], string> = {

@@ -29,9 +29,36 @@ function pickVoice(): SpeechSynthesisVoice | undefined {
   return voices.find((v) => v.localService) ?? voices[0]
 }
 
+// Browsers refuse speech until the player has tapped or pressed a key once.
+// Until then, remember the latest text and read it on that first interaction.
+let pending: string | null = null
+
+function activated(): boolean {
+  const activation = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation
+  return activation ? activation.hasBeenActive : true
+}
+
+if (voiceSupported()) {
+  const onFirstInteraction = () => {
+    document.removeEventListener('click', onFirstInteraction, true)
+    document.removeEventListener('keydown', onFirstInteraction, true)
+    if (pending) {
+      const text = pending
+      pending = null
+      speak(text)
+    }
+  }
+  document.addEventListener('click', onFirstInteraction, true)
+  document.addEventListener('keydown', onFirstInteraction, true)
+}
+
 /** Reads the text aloud, replacing anything already being read. `force` speaks even when narration is off (the read-aloud button). */
 export function speak(text: string, force = false) {
   if (!voiceSupported() || (!force && !getSettings().voice) || !text.trim()) return
+  if (!activated()) {
+    pending = text
+    return
+  }
   const synth = window.speechSynthesis
   synth.cancel()
   const utterance = new SpeechSynthesisUtterance(text.replace(/(\d)g\b/g, '$1 gold').replace(/\/mo(nth)?\b/g, ' a month'))

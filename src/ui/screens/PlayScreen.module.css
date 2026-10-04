@@ -15,7 +15,7 @@
 }
 
 .sidebar {
-  flex: 0 0 240px;
+  flex: 0 0 340px; /* the only side panel now, so it gets room for readable text */
   background: linear-gradient(to bottom, #2a2219 0%, #1f1a14 100%);
   border-right: 3px solid #c17817;
   overflow-y: auto;
@@ -34,30 +34,6 @@
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 3px;
-}
-
-.rightSidebar {
-  flex: 0 0 240px;
-  background: linear-gradient(to bottom, #2a2219 0%, #1f1a14 100%);
-  border-left: 3px solid #c17817;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-width: thin;
-  scrollbar-color: #c17817 #1f1a14;
-  padding: 0;
-}
-
-.rightSidebar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.rightSidebar::-webkit-scrollbar-track {
-  background: var(--dark);
-}
-
-.rightSidebar::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 3px;
 }
@@ -146,18 +122,22 @@
   display: none;
 }
 
+@media (max-width: 1100px) and (min-width: 901px) {
+  .sidebar {
+    flex-basis: 300px;
+  }
+}
+
 @media (max-width: 900px) {
   /* One full-width panel at a time, chosen from the tab bar */
   .sidebar,
-  .rightSidebar,
   .cardContainer {
     display: none;
     flex: 1 1 auto;
     border: none;
   }
 
-  .mainLayout[data-tab='you'] .sidebar,
-  .mainLayout[data-tab='trade'] .rightSidebar {
+  .mainLayout[data-tab='you'] .sidebar {
     display: block;
   }
 

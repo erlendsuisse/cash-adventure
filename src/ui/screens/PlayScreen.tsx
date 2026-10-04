@@ -9,7 +9,6 @@ import { VictoryScreen } from '../components/VictoryScreen'
 import { ChapterBanner } from '../components/ChapterBanner'
 import { LedgerBar } from '../components/LedgerBar'
 import { StatScroll } from '../components/StatScroll'
-import { Portfolio } from '../components/Portfolio'
 import { useGame } from '../GameProvider'
 import { getCharacterMood } from '../../engine/characterSelectors'
 import { currentChapter } from '../../engine/selectors'
@@ -107,10 +106,6 @@ export function PlayScreen() {
           )}
         </div>
 
-        {/* Right sidebar with portfolio and commodities */}
-        <div className={styles.rightSidebar} data-tour="trade">
-          <Portfolio state={state} />
-        </div>
       </div>
 
       {payday !== null && state.status === 'playing' && !touring && <PaydayBanner state={state} net={payday} onClose={closePayday} />}
@@ -147,7 +142,6 @@ export function PlayScreen() {
         {([
           ['you', '🧭', 'You'],
           ['story', '📜', 'Story'],
-          ['trade', '⚖️', 'Trade'],
         ] as const).map(([id, icon, label]) => (
           <button
             key={id}

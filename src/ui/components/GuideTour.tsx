@@ -4,7 +4,7 @@ import { RichText } from '../RichText'
 import { speak, stopSpeaking } from '../voice'
 import styles from './GuideTour.module.css'
 
-export type TourTab = 'you' | 'story' | 'trade'
+export type TourTab = 'you' | 'story'
 
 interface Step {
   /** data-tour value of the element to point at; none = centred */
@@ -22,9 +22,8 @@ const STEPS: Step[] = [
   { target: 'net', text: 'Net is what your ventures earn each month minus your living costs. Wages from work are not counted - when Net turns green, you are free!' },
   { target: 'card', tab: 'story', text: 'Each card is a moment in your story. Read it, then tap a choice. Bold numbers tell you what it costs or pays.' },
   { target: 'you', tab: 'you', text: 'Here are your skills - Grit, Savvy, Charm and Nerve. They help you win dice rolls. Your ventures and monthly money are here too.' },
-  { target: 'trade', tab: 'trade', text: 'In Trade you can buy spice, salt and iron when they are cheap, and sell them when prices rise.' },
   { target: 'colossi', tab: 'story', text: 'Grow rich and the 7 Colossi will come to test you, one by one. Beat all 7 to become a legend!' },
-  { target: 'settings', tab: 'story', text: 'Tap here to have cards read aloud, change the sound, or see this tour again. Good luck, merchant!' },
+  { target: 'settings', tab: 'story', text: 'I read every card aloud for you. Tap here to turn me off, change the sound, or see this tour again. Good luck, merchant!' },
 ]
 
 const PAD = 8
