@@ -1,43 +1,65 @@
+/* Solid, high-contrast bar: it must stay readable over any background art */
 .bar {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 10px 20px;
-  background: linear-gradient(to right, var(--parchment-dark), rgba(212, 175, 55, 0.1));
-  border-bottom: 2px solid var(--border);
+  gap: 8px 22px;
+  padding: 8px 20px;
+  background: linear-gradient(to bottom, #2a2219 0%, #1f1a14 100%);
+  border-bottom: 3px solid #c17817;
+  color: #f7ecd2;
   flex-shrink: 0;
 }
 
 .group {
   display: flex;
-  align-items: center;
-  gap: 5px;
+  align-items: baseline;
+  gap: 6px;
   white-space: nowrap;
+}
+
+/* The purse: the number players check most */
+.purse {
+  align-items: center;
+  gap: 8px;
+  padding: 4px 14px 4px 10px;
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.45);
+  border-radius: 999px;
+}
+
+.purseIcon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.purse .value {
+  font-size: 20px;
+  color: #ffd700;
 }
 
 .label {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--ink-soft);
-  font-weight: 600;
+  color: #c9b994;
+  font-weight: 700;
 }
 
 .value {
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
   font-variant-numeric: tabular-nums;
-  color: var(--gold);
-  min-width: 40px;
-  text-align: right;
+  color: #f2c14e;
 }
 
 .positive {
-  color: #90ee90;
+  color: #8fe388;
 }
 
 .negative {
-  color: #ff6b6b;
+  color: #ff8a80;
 }
 
 .spacer {
@@ -46,4 +68,33 @@
 
 .stats {
   display: none;
+}
+
+@media (max-width: 600px) {
+  .bar {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 6px 10px;
+    padding: 8px 12px;
+  }
+
+  .wages {
+    display: none;
+  }
+
+  .purse {
+    padding: 3px 10px 3px 8px;
+  }
+
+  .label {
+    font-size: 10px;
+  }
+
+  .value {
+    font-size: 14px;
+  }
+
+  .purse .value {
+    font-size: 18px;
+  }
 }

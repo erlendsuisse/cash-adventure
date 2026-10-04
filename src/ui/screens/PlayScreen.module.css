@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 100svh;
+  height: 100svh;
   overflow: hidden;
   background: var(--dark);
 }
@@ -66,7 +66,8 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto; /* a long card scrolls instead of being cut off */
   position: relative;
 }
 
@@ -102,9 +103,11 @@
   transition: all 0.2s ease;
 }
 
-.footer button:hover {
-  background: var(--gold);
-  transform: scale(1.05);
+@media (hover: hover) {
+  .footer button:hover {
+    background: var(--gold);
+    transform: scale(1.05);
+  }
 }
 
 .ending {
@@ -135,4 +138,92 @@
   border: 2px solid #fff0b8;
   border-radius: 999px;
   cursor: pointer;
+}
+
+/* Tab bar and its New Game button only appear on narrow screens */
+.tabBar,
+.mobileNewGame {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  /* One full-width panel at a time, chosen from the tab bar */
+  .sidebar,
+  .rightSidebar,
+  .cardContainer {
+    display: none;
+    flex: 1 1 auto;
+    border: none;
+  }
+
+  .mainLayout[data-tab='you'] .sidebar,
+  .mainLayout[data-tab='trade'] .rightSidebar {
+    display: block;
+  }
+
+  .mainLayout[data-tab='story'] .cardContainer {
+    display: flex;
+  }
+
+  .sidebar {
+    padding: 12px;
+  }
+
+  .footer {
+    display: none;
+  }
+
+  .mobileNewGame {
+    display: block;
+    width: 100%;
+    min-height: 48px;
+    margin: 16px 0 8px;
+    font-weight: bold;
+    color: var(--dark);
+    background: var(--parchment);
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .tabBar {
+    display: flex;
+    flex-shrink: 0;
+    padding-bottom: env(safe-area-inset-bottom);
+    background: #1f1a14;
+    border-top: 3px solid #c17817;
+  }
+
+  .tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-height: 60px;
+    padding: 6px 4px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #c9b994;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .tab[aria-current='page'] {
+    color: #ffd700;
+    background: rgba(193, 120, 23, 0.18);
+    box-shadow: inset 0 3px 0 #ffd700;
+  }
+
+  .tabIcon {
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .endingTitle {
+    font-size: 40px;
+  }
 }

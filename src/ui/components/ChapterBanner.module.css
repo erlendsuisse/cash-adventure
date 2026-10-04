@@ -75,3 +75,9 @@
 .market {
   color: #8fd3c8;
 }
+
+@media (max-width: 600px) {
+  .banner {
+    padding: 8px 12px;
+  }
+}

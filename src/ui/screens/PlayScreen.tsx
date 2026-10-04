@@ -17,6 +17,15 @@ export function PlayScreen() {
   const { state, dispatch, exportSave } = useGame()
   const [seedInput, setSeedInput] = useState('42')
   const [victoryClosed, setVictoryClosed] = useState(false)
+  // Narrow screens show one panel at a time, picked from the bottom tab bar
+  const [tab, setTab] = useState<'you' | 'story' | 'trade'>('story')
+
+  function startNewGame(seed: number) {
+    if (state.status === 'playing' && !window.confirm('Start a new game? Your current game will be lost.')) return
+    setVictoryClosed(false)
+    setTab('story')
+    dispatch({ type: 'restart', seed })
+  }
 
   // Background music playback based on story phase
   useBackgroundMusic(state)
@@ -41,10 +50,13 @@ export function PlayScreen() {
       <ChapterBanner state={state} />
 
       {/* Main layout: Left sidebar + Card area + Right sidebar */}
-      <div className={styles.mainLayout}>
+      <div className={styles.mainLayout} data-tab={tab}>
         {/* Left sidebar with character stats and holdings */}
         <div className={styles.sidebar}>
           <StatScroll state={state} />
+          <button type="button" className={styles.mobileNewGame} onClick={() => startNewGame(Math.floor(Math.random() * 1_000_000))}>
+            New Game
+          </button>
         </div>
 
         {/* Center: Card and narrative */}
@@ -81,10 +93,7 @@ export function PlayScreen() {
       {state.status === 'won' && !victoryClosed && (
         <VictoryScreen
           state={state}
-          onPlayAgain={() => {
-            setVictoryClosed(false)
-            dispatch({ type: 'restart', seed: Math.floor(Math.random() * 1_000_000) })
-          }}
+          onPlayAgain={() => startNewGame(Math.floor(Math.random() * 1_000_000))}
           onClose={() => setVictoryClosed(true)}
         />
       )}
@@ -95,7 +104,7 @@ export function PlayScreen() {
           Seed:{' '}
           <input value={seedInput} onChange={(e) => setSeedInput(e.target.value)} inputMode="numeric" />
         </label>
-        <button type="button" onClick={() => dispatch({ type: 'restart', seed: Number(seedInput) || 0 })}>
+        <button type="button" onClick={() => startNewGame(Number(seedInput) || 0)}>
           New Game
         </button>
         <button
@@ -107,6 +116,26 @@ export function PlayScreen() {
           Export Save
         </button>
       </div>
+      <nav className={styles.tabBar} aria-label="Game panels">
+        {([
+          ['you', '🧭', 'You'],
+          ['story', '📜', 'Story'],
+          ['trade', '⚖️', 'Trade'],
+        ] as const).map(([id, icon, label]) => (
+          <button
+            key={id}
+            type="button"
+            className={styles.tab}
+            aria-current={tab === id ? 'page' : undefined}
+            onClick={() => setTab(id)}
+          >
+            <span className={styles.tabIcon} aria-hidden="true">
+              {icon}
+            </span>
+            {label}
+          </button>
+        ))}
+      </nav>
     </div>
   )
 }

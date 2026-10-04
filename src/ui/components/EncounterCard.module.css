@@ -1,14 +1,14 @@
 .wrap {
-  flex: 1;
+  flex: 1 0 auto; /* grow to fill, never shrink: the container scrolls instead */
   display: flex;
-  align-items: flex-end;
   justify-content: center;
-  padding: 24px 24px 40px 24px;
+  padding: 24px;
 }
 
 .card {
   width: 100%;
   max-width: 600px;
+  margin: auto 0; /* vertically centred; a taller card still scrolls from its top */
   background: rgba(255, 253, 247, 0.90);
   backdrop-filter: blur(6px);
   border: 1px solid rgba(139, 115, 85, 0.3);
@@ -104,4 +104,31 @@
 
 .rollFail {
   color: var(--danger);
+}
+
+@media (max-width: 600px) {
+  .wrap {
+    padding: 12px 10px;
+  }
+
+  .card {
+    padding: 20px 18px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+}
+
+@media (pointer: coarse) {
+  .choice {
+    min-height: 48px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    opacity: 1;
+    animation: none;
+  }
 }

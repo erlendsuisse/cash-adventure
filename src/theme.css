@@ -26,6 +26,20 @@ body {
 
 button {
   font: inherit;
+  touch-action: manipulation; /* no double-tap zoom delay on touch screens */
+}
+
+/* Touch screens: fingers need bigger targets, and inputs under 16px make iOS zoom in */
+@media (pointer: coarse) {
+  button {
+    min-height: 44px;
+  }
+
+  input,
+  select {
+    min-height: 44px;
+    font-size: 16px !important;
+  }
 }
 
 #root {

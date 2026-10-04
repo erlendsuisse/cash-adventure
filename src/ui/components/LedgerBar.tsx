@@ -9,11 +9,15 @@ export function LedgerBar({ state }: { state: GameState }) {
   return (
     <div className={styles.bar}>
       {/* Critical info only - compact display */}
-      <div className={styles.group}>
+      <div className={`${styles.group} ${styles.purse}`} title="Gold in your purse">
+        <span className={styles.purseIcon} aria-hidden="true">
+          💰
+        </span>
         <span className={styles.label}>Gold</span>
-        <span className={styles.value}>{state.finances.gold}</span>
+        <span className={styles.value}>{state.finances.gold}g</span>
       </div>
-      <div className={styles.group}>
+      {/* Phones hide wages to fit one line; it's on the You tab too */}
+      <div className={`${styles.group} ${styles.wages}`}>
         <span className={styles.label}>Wages</span>
         <span className={styles.value}>{state.finances.wages}g/mo</span>
       </div>
