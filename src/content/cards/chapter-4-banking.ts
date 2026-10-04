@@ -162,7 +162,7 @@ export const chapter4DangerCards: StoryCard[] = [
       favour('guilds', {
         id: 'guild_vouches_books',
         label: 'Have guild accountants vouch for your books',
-        effects: [{ kind: 'narrate', text: 'Three guild masters sign off on your ledgers. The auditors take their word and leave by lunchtime.' }],
+        effects: [{ kind: 'narrate', text: '3 guild masters sign off on your ledgers. The auditors take their word and leave by lunchtime.' }],
       }),
     ],
   },
@@ -189,7 +189,7 @@ export const chapter4DangerCards: StoryCard[] = [
         check: {
           stat: 'charm',
           dc: 14,
-          success: { text: 'They grant an extension. You have six more months.', effects: [{ kind: 'stat', stat: 'charm', delta: 1 }] },
+          success: { text: 'They grant an extension. You have 6 more months.', effects: [{ kind: 'stat', stat: 'charm', delta: 1 }] },
           failure: { text: 'They refuse. Assets seized. You lose everything.', effects: [{ kind: 'gold', delta: -600 }] },
         },
       },

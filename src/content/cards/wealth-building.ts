@@ -41,7 +41,7 @@ export const wealthBuildingDeck: StoryCard[] = [
   {
     id: 'mining_syndicate_offer',
     title: 'The Mining Syndicate',
-    body: ['A letter arrives sealed with a mark you recognize. The mining syndicate is offering shares in a new iron operation. "Only fifty trusted partners get this opportunity," it reads.'],
+    body: ['A letter arrives sealed with a mark you recognize. The mining syndicate is offering shares in a new iron operation. "Only 50 trusted partners get this opportunity," it reads.'],
     storyPhase: 'climbing',
     weight: 10,
     requires: [{ kind: 'goldAtLeast', amount: 180 }],

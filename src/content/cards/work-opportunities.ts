@@ -68,12 +68,12 @@ const FLAVOUR: Record<ChapterNumber, WorkFlavour> = {
   5: {
     odd: { title: 'Water for the Wards', body: 'The plague wards need water carried, linen boiled and floors scrubbed. It is grim work, and the council pays in coin.', label: 'Work the wards for a few days' },
     steady: { title: 'Steward of a Relief Kitchen', body: 'The council is opening relief kitchens and needs stewards who can keep the stores honest and the queues moving.', label: 'Become a kitchen steward' },
-    contract: { title: 'Medicine Through the Quarantine', body: 'A physician needs a crate of medicine carried through three quarantine checkpoints before nightfall.', label: 'Carry the medicine through', stat: 'grit', success: 'You make every checkpoint. The physician pays in full and then some.', failure: 'You are turned back at the last gate, but the physician pays for the attempt.' },
+    contract: { title: 'Medicine Through the Quarantine', body: 'A physician needs a crate of medicine carried through 3 quarantine checkpoints before nightfall.', label: 'Carry the medicine through', stat: 'grit', success: 'You make every checkpoint. The physician pays in full and then some.', failure: 'You are turned back at the last gate, but the physician pays for the attempt.' },
   },
   6: {
     odd: { title: 'Sealed Letters', body: 'In a city where nobody trusts a messenger, someone with a known face is worth hiring to carry sealed letters by hand.', label: 'Carry letters for a few days' },
     steady: { title: 'Steward to a Noble House', body: 'An old noble family has dismissed its steward for theft. They want someone new to run the household accounts - someone with nothing to gain from betraying them.', label: 'Become the household steward' },
-    contract: { title: 'Mediate a Feud', body: 'Two partners who no longer trust each other will each pay a fee to a mediator who can split their business fairly.', label: 'Mediate between them', stat: 'charm', success: 'Both sides leave satisfied and both pay your fee.', failure: 'They part on bad terms, but one of them still pays.' },
+    contract: { title: 'Mediate a Feud', body: '2 partners who no longer trust each other will each pay a fee to a mediator who can split their business fairly.', label: 'Mediate between them', stat: 'charm', success: 'Both sides leave satisfied and both pay your fee.', failure: 'They part on bad terms, but one of them still pays.' },
   },
   7: {
     odd: { title: 'Cataloguing Strange Artifacts', body: 'The rift keeps spitting out objects nobody understands. The museum pays by the item to have them weighed, drawn and labelled.', label: 'Catalogue artifacts for a few days' },

@@ -55,7 +55,7 @@ export const chapter2MarketCards: StoryCard[] = [
     id: 'ch2_turf_war_spike',
     weight: 5,
     title: 'Turf War Erupts',
-    body: ['Two criminal syndicates clash over territory. Market prices spike as supply chains are disrupted. This could be an opportunity - or a disaster.'],
+    body: ['2 criminal syndicates clash over territory. Market prices spike as supply chains are disrupted. This could be an opportunity - or a disaster.'],
     choices: [
       {
         id: 'profit_turf_war',

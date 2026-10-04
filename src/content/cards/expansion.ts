@@ -69,7 +69,7 @@ const monster_contract: StoryCard = {
         stat: 'grit',
         dc: 13,
         success: {
-          text: 'Three days of tracking through the marsh. You organize hunters and secure the bounty. Glory and coin.',
+          text: '3 days of tracking through the marsh. You organize hunters and secure the bounty. Glory and coin.',
           effects: [{ kind: 'gold', delta: 250 }, { kind: 'stat', stat: 'grit', delta: 2 }],
           goto: 'monster_aftermath',
         },
@@ -227,7 +227,7 @@ const dueling_school: StoryCard = {
   weight: 2,
   body: [
     'The master of the local fencing academy notices your bearing. She offers to train you in the art of negotiation through physical presence.',
-    'Six weeks of intensive training costs 80 gold. By the end, you\'ll carry yourself with more confidence in any deal.',
+    '6 weeks of intensive training costs 80 gold. By the end, you\'ll carry yourself with more confidence in any deal.',
   ],
   storyPhase: 'climbing',
   choices: [
@@ -274,7 +274,7 @@ const charm_school: StoryCard = {
   weight: 2,
   body: [
     'An older merchant takes you aside. "You\'ve got potential, but you dress and speak like a dock worker. Let me fix that."',
-    'She offers lessons in the arts of courtly persuasion and fine manners. Cost: 90 gold. Duration: two months.',
+    'She offers lessons in the arts of courtly persuasion and fine manners. Cost: 90 gold. Duration: 2 months.',
   ],
   storyPhase: 'climbing',
   choices: [

@@ -7,7 +7,7 @@ const colossus01_start: StoryCard = {
   body: [
     'Your passive income has outpaced your expenses for weeks now. Freedom is close—you can feel it. But the city does not surrender its power so easily.',
     'It notices you. The Ledger-Wyrm rises from the vaults beneath the guild towers - not a creature, but a force. It is the accumulated weight of every debt, every tax, every obligation you owe to the systems that govern Vessarin.',
-    'This is the first of seven trials. Seven Colossi stand between you and true freedom. Each represents a force you must overcome: not monsters, but the consequences of your own choices and the city\'s judgment upon you.',
+    'This is the first of 7 trials. 7 Colossi stand between you and true freedom. Each represents a force you must overcome: not monsters, but the consequences of your own choices and the city\'s judgment upon you.',
     'The Ledger-Wyrm embodies fiscal accountability. It will examine every transaction, every asset, every gold piece. You must either prove your books are perfect, or accept punishment. There is no hiding.',
     'There is no running from it.',
   ],
@@ -88,7 +88,7 @@ const colossus01_outcome: StoryCard = {
     { kind: 'narrate', text: 'The Ledger-Wyrm sinks back into the vaults. Your holdings are stripped to pay for its passing - but you are still standing, and you have earned its scale as a boon.' },
   ],
   body: [
-    'You have survived the First Reckoning. Your assets are gone, your wages halved, and the road to freedom starts again - but you are no longer the merchant who arrived at Vessarin with fifty gold and nothing else.',
+    'You have survived the First Reckoning. Your assets are gone, your wages halved, and the road to freedom starts again - but you are no longer the merchant who arrived at Vessarin with 50 gold and nothing else.',
   ],
   choices: [{ id: 'rebuild', label: 'Rebuild and continue', effects: [] }],
   next: undefined, // Let it draw from pending or random deck

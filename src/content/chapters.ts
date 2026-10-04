@@ -22,7 +22,7 @@ export const CHAPTERS: Record<ChapterNumber, ChapterDefinition> = {
     numeral: 'I',
     name: 'Merchant City',
     theme: 'The port of Vessarin is open to anyone with a little gold and a lot of nerve.',
-    hint: 'Take work to get started, then buy ventures until their monthly income covers your expenses. Stay free for three weeks and the first Colossus comes for you.',
+    hint: 'Take work to get started, then buy ventures until their monthly income covers your expenses. Stay free for 3 weeks and the first Colossus comes for you.',
     market: 'Prices hold steady around their usual level - a good time to learn the trade.',
     requiredColossiDefeated: 0,
   },

@@ -6,7 +6,7 @@ const salt_caravan_pitch: StoryCard = {
   storyPhase: 'climbing',
   title: 'A Broker\'s Pitch',
   body: [
-    'A broker corners you near the salt exchange, waving a scroll. "Shares in a salt caravan," he says. "Two hundred gold, fifteen a month back to you. A rare opportunity."',
+    'A broker corners you near the salt exchange, waving a scroll. "Shares in a salt caravan," he says. "200 gold, 15 a month back to you. A rare opportunity."',
   ],
   choices: [
     {
@@ -44,8 +44,8 @@ const salt_caravan_deal: StoryCard = {
   id: 'salt_caravan_deal',
   title: 'Closing the Deal',
   body: [
-    { if: { kind: 'flag', id: 'overpriced_salt', atLeast: 1 }, text: 'Certain of the value now, the broker won\'t budge below two hundred gold.' },
-    { if: { kind: 'not', of: { kind: 'flag', id: 'overpriced_salt', atLeast: 1 } }, text: 'Caught out, the broker mutters and drops his price to one hundred fifty.' },
+    { if: { kind: 'flag', id: 'overpriced_salt', atLeast: 1 }, text: 'Certain of the value now, the broker won\'t budge below 200 gold.' },
+    { if: { kind: 'not', of: { kind: 'flag', id: 'overpriced_salt', atLeast: 1 } }, text: 'Caught out, the broker mutters and drops his price to 150.' },
   ],
   choices: [
     {
@@ -85,7 +85,7 @@ const iron_claim_pitch: StoryCard = {
   weight: 3,
   storyPhase: 'climbing',
   title: 'An Iron Claim',
-  body: ['A prospector offers you a stake in an iron claim in the eastern hills: two hundred fifty gold for twenty a month.'],
+  body: ['A prospector offers you a stake in an iron claim in the eastern hills: 250 gold for 20 a month.'],
   choices: [
     {
       id: 'buy_iron',
@@ -126,7 +126,7 @@ const moneylenders_offer: StoryCard = {
   weight: 2,
   storyPhase: 'climbing',
   title: 'The Moneylender',
-  body: ['A moneylender offers you three hundred gold today, thirty a month against it for as long as it takes.'],
+  body: ['A moneylender offers you 300 gold today, 30 a month against it for as long as it takes.'],
   choices: [
     {
       id: 'take_loan',
@@ -307,7 +307,7 @@ const jeweler_wares: StoryCard = {
   weight: 2,
   storyPhase: 'climbing',
   title: 'A Signet Ring',
-  body: ['A jeweler displays an ornate signet ring. "Merchants of standing wear these," she says with a knowing smile. "Fifty gold - it will pay for itself in trust."'],
+  body: ['A jeweler displays an ornate signet ring. "Merchants of standing wear these," she says with a knowing smile. "50 gold - it will pay for itself in trust."'],
   choices: [
     {
       id: 'buy_ring',
@@ -517,7 +517,7 @@ const gambling_den: StoryCard = {
   id: 'gambling_den',
   weight: 2,
   title: 'The Dice Den',
-  body: ['A dice den in the harbor quarter offers a game of chance. The stakes are thirty gold.'],
+  body: ['A dice den in the harbor quarter offers a game of chance. The stakes are 30 gold.'],
   choices: [
     {
       id: 'wager_dice',
@@ -544,7 +544,7 @@ const bandit_toll: StoryCard = {
   id: 'bandit_toll',
   weight: 2,
   title: 'A Toll on the Road',
-  body: ['Bandits block the coast road, demanding a toll of twenty gold to pass unharmed.'],
+  body: ['Bandits block the coast road, demanding a toll of 20 gold to pass unharmed.'],
   choices: [
     {
       id: 'pay_toll',
@@ -559,7 +559,7 @@ const bandit_toll: StoryCard = {
         stat: 'nerve',
         dc: 13,
         success: { text: 'You talk yourself past them without paying a coin.' },
-        failure: { text: 'They see through you and take thirty gold anyway.', effects: [{ kind: 'gold', delta: -30 }] },
+        failure: { text: 'They see through you and take 30 gold anyway.', effects: [{ kind: 'gold', delta: -30 }] },
       },
     },
   ],

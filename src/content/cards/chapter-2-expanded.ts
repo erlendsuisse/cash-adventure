@@ -275,7 +275,7 @@ export const chapter2MoreMarketCards: StoryCard[] = [
     weight: 3,
     once: true,
     title: 'Gang War Creates Opportunity',
-    body: ['Two major gangs war over territory. Neutral zone opens up for independent operators. Danger, but profit.'],
+    body: ['2 major gangs war over territory. Neutral zone opens up for independent operators. Danger, but profit.'],
     choices: [
       {
         id: 'claim_neutral_zone',

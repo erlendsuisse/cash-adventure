@@ -20,7 +20,7 @@ const colossus03_trial_nerve: StoryCard = {
   body: [
     'Your broker screams: "Sell! Sell now before prices fall further!"',
     'Your advisor whispers: "Hold. The market always recovers. Weather passes."',
-    'Your ledger shows you have enough gold for one week, maybe two, before you must liquidate everything.',
+    'Your ledger shows you have enough gold for 1 week, maybe 2, before you must liquidate everything.',
     'The storm rages outside. Every hour, prices drop further. You must decide: gamble that recovery is coming, or accept losses now?',
   ],
   choices: [
@@ -31,7 +31,7 @@ const colossus03_trial_nerve: StoryCard = {
         stat: 'nerve',
         dc: 15,
         success: {
-          text: 'Three days pass. The storm breaks. Prices rebound. You held when others panicked.',
+          text: '3 days pass. The storm breaks. Prices rebound. You held when others panicked.',
           effects: [
             { kind: 'if', when: { kind: 'flag', id: 'investigated_tide', atLeast: 1 }, then: [{ kind: 'narrate', text: 'The old sailor\'s wisdom echoes in your mind: never overcommit. You held steadily, and your patience is rewarded.' }], else: [] },
           ],
@@ -52,7 +52,7 @@ const colossus03_trial_savvy: StoryCard = {
   title: 'Reading the Waters',
   body: [
     'The immediate crisis has passed, but the market remains volatile. Opportunity lurks in chaos—but so does ruin.',
-    'A merchant from the spice quarter approaches with a proposition: "The storm has destroyed the warehouses of three competitors. We could corner the market if we act now. It will cost everything you have left."',
+    'A merchant from the spice quarter approaches with a proposition: "The storm has destroyed the warehouses of 3 competitors. We could corner the market if we act now. It will cost everything you have left."',
     'You must decide: is this the moment to double down, or to rebuild slowly and safely?',
   ],
   choices: [

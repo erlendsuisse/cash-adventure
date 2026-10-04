@@ -86,7 +86,7 @@ const cursed_artifact: StoryCard = {
   weight: 4,
   title: 'An Antique of Questionable Origin',
   body: [
-    'A nervous collector offers you an ancient relic at an incredibly low price. "I need it gone," he whispers. "Three owners before me—all lost their fortune within a year."',
+    'A nervous collector offers you an ancient relic at an incredibly low price. "I need it gone," he whispers. "3 owners before me—all lost their fortune within a year."',
   ],
   choices: [
     {
@@ -199,7 +199,7 @@ const traveling_bard: StoryCard = {
   weight: 4,
   title: 'Tales of the Colossi',
   body: [
-    'A traveling bard regales patrons with stories of the four great Colossi—ancient entities that rose when Vessarin\'s wealth reached its peak. "The legends say only those of true merit can stand against them."',
+    'A traveling bard regales patrons with stories of the 4 great Colossi—ancient entities that rose when Vessarin\'s wealth reached its peak. "The legends say only those of true merit can stand against them."',
   ],
   choices: [
     {
@@ -225,7 +225,7 @@ const midnight_arrival: StoryCard = {
   weight: 4,
   title: 'Mysterious Strangers',
   body: [
-    'Late at night, three cloaked figures arrive in town asking about a merchant of great wealth and cunning. They leave by dawn. Word spreads. Others begin asking who they seek.',
+    'Late at night, 3 cloaked figures arrive in town asking about a merchant of great wealth and cunning. They leave by dawn. Word spreads. Others begin asking who they seek.',
   ],
   choices: [
     {
@@ -300,7 +300,7 @@ const scholar_encounter: StoryCard = {
   weight: 4,
   title: 'A Learned Merchant',
   body: [
-    'An elderly scholar-merchant offers to share knowledge. "I have spent forty years studying market patterns and the nature of wealth. Most merchants die rich but ignorant. You could be different."',
+    'An elderly scholar-merchant offers to share knowledge. "I have spent 40 years studying market patterns and the nature of wealth. Most merchants die rich but ignorant. You could be different."',
   ],
   choices: [
     {
@@ -419,7 +419,7 @@ const ancient_contract: StoryCard = {
   weight: 1,
   title: 'A Debt Comes Due',
   body: [
-    'A collector approaches you with an ancient contract bearing your family name. "This debt was never paid," they say. "I\'ve tracked it down after thirty years. It\'s time to settle."',
+    'A collector approaches you with an ancient contract bearing your family name. "This debt was never paid," they say. "I\'ve tracked it down after 30 years. It\'s time to settle."',
   ],
   choices: [
     {

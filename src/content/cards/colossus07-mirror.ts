@@ -4,7 +4,7 @@ const colossus07_start: StoryCard = {
   id: 'colossus07_start',
   title: 'The Mirror Appears',
   body: [
-    'You have survived six impossible trials. You have wealth beyond what you imagined. You have power, respect, fear.',
+    'You have survived 6 impossible trials. You have wealth beyond what you imagined. You have power, respect, fear.',
     'And yet, something whispers in the darkness.',
     'The Mirror is the seventh and final Colossus. It is not external—it is you. The sum of every choice, every compromise, every triumph and failure. This is self-knowledge and judgment.',
     'A figure appears—faceless, ageless. "I am not a Colossus like the others," it says. "I am the sum of all your choices. I am what you have become."',

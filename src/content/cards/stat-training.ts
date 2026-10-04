@@ -146,7 +146,7 @@ const savvy_recovery_training: StoryCard = {
       effects: [
         { kind: 'gold', delta: -140 },
         { kind: 'stat', stat: 'savvy', delta: 3 },
-        { kind: 'narrate', text: 'You see three moves ahead. The market reveals its secrets to you.' },
+        { kind: 'narrate', text: 'You see 3 moves ahead. The market reveals its secrets to you.' },
         { kind: 'advanceDays', days: 12 },
       ],
     },
