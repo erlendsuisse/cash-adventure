@@ -17,16 +17,34 @@ export function voiceSupported(): boolean {
   return typeof window !== 'undefined' && 'speechSynthesis' in window
 }
 
+// The game is in English, so narration always is - even on a device set to
+// another language (otherwise e.g. a Norwegian iPad reads with its own voice).
+const LANG = 'en-GB'
+
 // Prefer natural-sounding English voices where the device has them
 const PREFERRED = ['Daniel', 'Samantha', 'Karen', 'Moira', 'Google UK English Male', 'Google UK English Female', 'Microsoft Libby', 'Microsoft Ryan', 'Microsoft Aria']
 
+// Devices (iPads especially) load their voice list a moment after the page,
+// so keep it fresh rather than reading it once while it's still empty
+let voices: SpeechSynthesisVoice[] = []
+
+function loadVoices() {
+  voices = window.speechSynthesis.getVoices().filter((v) => v.lang.replace('_', '-').toLowerCase().startsWith('en'))
+}
+
+if (voiceSupported()) {
+  loadVoices()
+  window.speechSynthesis.addEventListener?.('voiceschanged', loadVoices)
+}
+
 function pickVoice(): SpeechSynthesisVoice | undefined {
-  const voices = window.speechSynthesis.getVoices().filter((v) => v.lang.startsWith('en'))
+  if (voices.length === 0) loadVoices()
   for (const name of PREFERRED) {
     const match = voices.find((v) => v.name.includes(name))
     if (match) return match
   }
-  return voices.find((v) => v.localService) ?? voices[0]
+  const british = voices.filter((v) => v.lang.replace('_', '-') === LANG)
+  return british.find((v) => v.localService) ?? british[0] ?? voices.find((v) => v.localService) ?? voices[0]
 }
 
 // Browsers refuse speech until the player has tapped or pressed a key once.
@@ -62,8 +80,13 @@ export function speak(text: string, force = false) {
   const synth = window.speechSynthesis
   synth.cancel()
   const utterance = new SpeechSynthesisUtterance(text.replace(/(\d)g\b/g, '$1 gold').replace(/\/mo(nth)?\b/g, ' a month'))
+  // lang alone makes the browser pick an English voice if no specific one is known yet
+  utterance.lang = LANG
   const voice = pickVoice()
-  if (voice) utterance.voice = voice
+  if (voice) {
+    utterance.voice = voice
+    utterance.lang = voice.lang
+  }
   utterance.rate = 0.95
   utterance.pitch = 1
   utterance.onstart = () => setSpeaking(true)
