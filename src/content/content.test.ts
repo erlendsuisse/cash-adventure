@@ -76,11 +76,16 @@ describe('deck coverage', () => {
   })
 
   it('every card with choices offers at least one the player can always take', () => {
-    // Safe if some choice is ungated, or one choice needs exactly R and another exactly not-R.
+    // Safe if some choice is ungated, or one choice needs exactly R and another exactly not-R,
+    // or (the prologue's per-class Continue) choices need each of R1..Rn and another needs not-anyOf(R1..Rn).
     const key = (r: unknown) => JSON.stringify(r)
     const alwaysOpen = (c: StoryCard) => {
       const singles = new Set(c.choices.flatMap((ch) => (ch.requires?.length === 1 ? [key(ch.requires[0])] : [])))
-      return c.choices.some((ch) => !ch.requires?.length) || [...singles].some((r) => singles.has(key({ kind: 'not', of: JSON.parse(r) })))
+      const coversAll = [...singles].some((r) => {
+        const req = JSON.parse(r) as { kind: string; of?: { kind: string; of?: unknown[] } }
+        return req.kind === 'not' && req.of?.kind === 'anyOf' && (req.of.of ?? []).every((member) => singles.has(key(member)))
+      })
+      return c.choices.some((ch) => !ch.requires?.length) || coversAll || [...singles].some((r) => singles.has(key({ kind: 'not', of: JSON.parse(r) })))
     }
     const softlocks = allCards.filter((c) => c.choices.length > 0 && !alwaysOpen(c))
     expect(softlocks.map((c) => c.id)).toEqual([])

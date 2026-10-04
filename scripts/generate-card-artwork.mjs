@@ -278,6 +278,13 @@ const PROMPTS = [
   [5, 'side_prospector_ch5', 'A warm healing spring bubbling up in a crystal cave, villagers filling buckets, soft lantern light'],
   [6, 'side_prospector_ch6', 'Rival prospectors waving papers outside a mining camp at dawn, an old woman pulling a map out of her boot'],
   [7, 'side_prospector_ch7', 'A great glowing door in a mountain opening onto a sparkling cave of gold and humming star crystals, an old woman prospector with happy tears'],
+  // Class openings (cards/class-openings.ts)
+  [1, 'opening_guard', 'A GUARDS WANTED notice flapping on a stone harbour gate, a tired friendly caravan boss beside covered wagons, morning sun, gulls'],
+  [1, 'opening_smuggler', 'An old boatman in a small rowing boat at a quiet harbour at night, lantern glow on dark water, moonlight, ships in the distance'],
+  [1, 'opening_alchemist', 'A rickety wooden tonic cart full of colourful clinking bottles on a cobbled market street, an old apothecary leaning on a cane'],
+  [1, 'opening_silverTongue', 'A cosy noisy tavern full of sailors, a small empty stage with a stool, a cheerful landlady behind the bar, warm lantern light'],
+  [1, 'opening_healer', 'A small busy harbour infirmary with three beds, a tired kind doctor, bunches of herbs hanging from the beams, sunlight through a window'],
+  [1, 'opening_prospector', 'A cluttered assay office with scales, rocks and gold nuggets on the counter, an old woman assayer with a magnifying glass'],
 ]
 
 async function generate(chapter, id, prompt) {

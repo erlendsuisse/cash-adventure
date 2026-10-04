@@ -1,4 +1,5 @@
 import type { Campaign, StoryCard } from '../engine/types'
+import { withClassTouches } from './classTouches'
 import { BACKGROUNDS, HERO_CLASSES } from './heroes'
 import { colossus01Cards } from './cards/colossus01'
 import { colossus02Cards } from './cards/colossus02-inquisitor'
@@ -9,6 +10,7 @@ import { colossus06Cards } from './cards/colossus06-betrayal'
 import { colossus07Cards } from './cards/colossus07-mirror'
 import { deckCards } from './cards/deck'
 import { prologueCards } from './cards/prologue'
+import { classOpeningCards } from './cards/class-openings'
 import { marketDayCard } from './cards/systemCards'
 import { expansionCards } from './cards/expansion'
 import { storyExpansionCards } from './cards/story-expansion'
@@ -36,6 +38,7 @@ import { COMMODITY_BASE_PRICE, consequenceTuning, initial, MARKET_REGIMES, SECTO
 
 const allCards: StoryCard[] = [
   ...prologueCards,
+  ...classOpeningCards,
   ...deckCards,
   ...opportunityDealCards,
   ...wealthBuildingDeck,
@@ -71,7 +74,8 @@ const allCards: StoryCard[] = [
 const cards: Record<string, StoryCard> = {}
 // Every card gets its reputation wiring (standings from story flags, standing
 // bonuses on skill checks) here, so card files only record what happened.
-for (const card of allCards.map(withReputation)) {
+// Class touches go first, so class-only choices also get reputation bonuses
+for (const card of allCards.map(withClassTouches).map(withReputation)) {
   // Fail loudly: a duplicate id would silently replace the earlier card.
   if (cards[card.id]) throw new Error(`Duplicate card id: ${card.id}`)
   cards[card.id] = card

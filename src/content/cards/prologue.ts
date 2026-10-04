@@ -1,4 +1,5 @@
 import type { StoryCard } from '../../engine/types'
+import { prologueContinues } from './class-openings'
 
 export const prologueCards: StoryCard[] = [
   {
@@ -10,8 +11,8 @@ export const prologueCards: StoryCard[] = [
       'Gulls scream as your boat bumps against the dock. You step onto the Port of Vessarin with 50 gold and an empty ledger.',
       'Somewhere beyond the guild towers, they say, 7 Colossi sleep. But that is a worry for another day. Right now, you need coin.',
     ],
-    choices: [],
-    next: 'job_offer',
+    // Each hero goes on to their class's own first day (cards/class-openings.ts)
+    choices: prologueContinues,
   },
   {
     id: 'job_offer',

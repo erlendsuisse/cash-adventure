@@ -40,6 +40,7 @@ export interface HeroClass {
   secondStat: StatId // +1 at creation
   ability: { name: string; text: string; rules: AbilityRule[] }
   start: Effect[] // applied once, when the hero is created
+  ending: string // the victory screen's story for this class
 }
 
 export interface Background {

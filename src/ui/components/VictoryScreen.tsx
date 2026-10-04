@@ -45,8 +45,8 @@ export function VictoryScreen({ state, onPlayAgain, onClose }: { state: GameStat
           ✦ ✦ ✦
         </div>
         <p className={styles.story}>
-          You arrived with a few coins and a lot of nerve. Seven Colossi stood in your way, and you outwitted every one of them. Today
-          every bell in the port rings for you, and merchants will tell your story for a hundred years.
+          {(state.hero && campaign.heroClasses?.[state.hero.classId]?.ending) ??
+            'You arrived with a few coins and a lot of nerve. Seven Colossi stood in your way, and you outwitted every one of them. Today every bell in the port rings for you, and merchants will tell your story for a hundred years.'}
         </p>
 
         <dl className={styles.stats}>

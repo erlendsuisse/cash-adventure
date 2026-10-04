@@ -16,6 +16,7 @@ export const HERO_CLASSES: Record<string, HeroClass> = {
     secondStat: 'nerve',
     ability: { name: 'Stand Firm', text: 'Once per chapter, re-roll a failed Grit check.', rules: [{ kind: 'rerollFailed', stat: 'grit' }] },
     start: [standing('crown', 1)],
+    ending: 'You came to Vessarin with a shield and a strong back. Now red feathers mean safety on every road, merchants sleep soundly, and children play at being Road Wardens. Seven Colossi tried to stop you. None of them got past.',
   },
   smuggler: {
     id: 'smuggler',
@@ -27,6 +28,7 @@ export const HERO_CLASSES: Record<string, HeroClass> = {
     secondStat: 'charm',
     ability: { name: 'Shadow Step', text: 'Shady deals draw 1 less Attention.', rules: [{ kind: 'heatReduction', amount: 1 }] },
     start: [standing('underworld', 1)],
+    ending: 'You came to Vessarin with quick hands and an empty boat. Now the Seraphina sails between worlds with Nell at the wheel and Pip in the rigging, and every harbour knows your name. Seven Colossi tried to catch you. Nobody ever does.',
   },
   alchemist: {
     id: 'alchemist',
@@ -38,6 +40,7 @@ export const HERO_CLASSES: Record<string, HeroClass> = {
     secondStat: 'grit',
     ability: { name: 'Foresight', text: '+2 on every Savvy check.', rules: [{ kind: 'checkBonus', stat: 'savvy', mod: 2 }] },
     start: [standing('guilds', 1)],
+    ending: 'You came to Vessarin with a singed notebook and a head full of numbers. Now your laboratory turns starlight into gold, and Professor Quill tells everyone you were his best student. Seven Colossi set you their puzzles. You solved every one.',
   },
   silverTongue: {
     id: 'silverTongue',
@@ -49,6 +52,7 @@ export const HERO_CLASSES: Record<string, HeroClass> = {
     secondStat: 'savvy',
     ability: { name: 'Haggle', text: 'Every venture costs you 10% less.', rules: [{ kind: 'ventureDiscount', percent: 10 }] },
     start: [standing('guilds', 1)],
+    ending: 'You came to Vessarin with a lute and a smile. Now the Grand Bazaar opens under your banner, and the whole city hums your songs. Seven Colossi tried to silence you. You sang louder.',
   },
   healer: {
     id: 'healer',
@@ -60,6 +64,7 @@ export const HERO_CLASSES: Record<string, HeroClass> = {
     secondStat: 'grit',
     ability: { name: 'Kind Hands', text: 'Start as a friend of the Common Folk, and +1 on every Charm check.', rules: [{ kind: 'checkBonus', stat: 'charm', mod: 1 }] },
     start: [standing('folk', 3)],
+    ending: 'You came to Vessarin with a bag of herbs and a kind heart. Now the House of Hope heals the whole kingdom, and Sister Maren calls you the best healer she ever met. Seven Colossi brought fear and fever. You brought hope.',
   },
   prospector: {
     id: 'prospector',
@@ -71,6 +76,7 @@ export const HERO_CLASSES: Record<string, HeroClass> = {
     secondStat: 'savvy',
     ability: { name: 'Lucky Find', text: 'Gold you win from a successful check is 25% bigger.', rules: [{ kind: 'checkGoldBonus', percent: 25 }] },
     start: [{ kind: 'gold', delta: 20 }],
+    ending: 'You came to Vessarin with muddy boots and an old map. Now lanterns glow in the Sunken Mine of Vess, Granny Flint runs it like a queen, and every child wants a pickaxe. Seven Colossi stood in your way. You dug right through them.',
   },
 }
 

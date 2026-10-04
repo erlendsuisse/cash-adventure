@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { campaign } from './campaign'
+import { CLASS_TOUCHES, COLOSSUS_TOUCHES } from './classTouches'
+import { isMet } from '../engine/requirements'
 import { play } from './testBot'
 import { createSave, replay } from '../persist/save'
 import { abilityCheckBonuses, effectiveChoice, effectiveOutcome, keptScore, scoreToStat, STAT_ORDER } from '../engine/hero'
@@ -126,5 +128,42 @@ describe('class abilities', () => {
     expect(rerolled).toBe(true)
     expect(s.pendingOutcome!.checkResult!.stat).toBe('grit')
     expect(s.flags.ability_reroll_ch1 ?? s.flags[`ability_reroll_ch${s.progress.colossiDefeated + 1}`]).toBe(1)
+  })
+})
+
+describe('class-specific journeys', () => {
+  it('each class starts on its own first day; heroless saves keep the old job', () => {
+    for (const classId of Object.keys(campaign.heroClasses!)) {
+      const s = reduce(heroGame(classId), { type: 'choose', choiceId: `continue_${classId}` }, campaign)
+      expect(s.currentCardId).toBe(`opening_${classId}`)
+    }
+    expect(reduce(newGame(7, campaign), { type: 'choose', choiceId: 'continue' }, campaign).currentCardId).toBe('job_offer')
+  })
+
+  it('class touches sit on real cards, and only their class can take them', () => {
+    for (const [cardId, touch] of Object.entries(CLASS_TOUCHES)) {
+      const card = campaign.cards[cardId]
+      expect(card, cardId).toBeDefined()
+      const choice = card!.choices.find((c) => c.id === `class_${touch.classId}`)!
+      expect(choice, cardId).toBeDefined()
+      for (const classId of Object.keys(campaign.heroClasses!)) {
+        const state = heroGame(classId)
+        const classGate = choice.requires!.filter((r) => r.kind === 'heroClass')
+        expect(classGate.every((r) => isMet(r, state)), `${cardId} for ${classId}`).toBe(classId === touch.classId)
+      }
+    }
+  })
+
+  it('every class has its own option on every Colossus trial', () => {
+    for (const trialId of Object.keys(COLOSSUS_TOUCHES)) {
+      const ids = campaign.cards[trialId]!.choices.map((c) => c.id)
+      for (const classId of Object.keys(campaign.heroClasses!)) expect(ids, trialId).toContain(`class_${classId}`)
+    }
+  })
+
+  it('each class has at least 12 class touches', () => {
+    const perClass: Record<string, number> = {}
+    for (const touch of Object.values(CLASS_TOUCHES)) perClass[touch.classId] = (perClass[touch.classId] ?? 0) + 1
+    for (const classId of Object.keys(campaign.heroClasses!)) expect(perClass[classId], classId).toBeGreaterThanOrEqual(12)
   })
 })

@@ -81,6 +81,7 @@ export function choiceIcon(choice: Choice, locked = false): LucideIcon {
   if (choice.check) return STAT_ICON[choice.check.stat]
 
   const label = choice.label.toLowerCase()
+  if (label === 'continue') return ChevronsRight
   const effects = flat(choice.effects)
   // Nothing you can see changes (story text, flags, moving the story on)
   const quiet: Effect['kind'][] = ['narrate', 'flag', 'advancePhase', 'queueCard', 'advanceDays']

@@ -16,8 +16,11 @@ import { standing } from '../standings'
 
 const SIDE_WEIGHT = 12 // high: your own story should turn up early in every chapter
 
+// Chapter 1 can be short, so its side story is far more likely to turn up early
+const FIRST_SIDE_WEIGHT = 30
+
 function side(classId: string, chapter: ChapterNumber, card: Omit<StoryCard, 'id' | 'weight' | 'once' | 'requires'>): StoryCard & { sideChapter: ChapterNumber } {
-  return { ...card, id: `side_${classId}_ch${chapter}`, weight: SIDE_WEIGHT, once: true, requires: [{ kind: 'heroClass', id: classId }], sideChapter: chapter }
+  return { ...card, id: `side_${classId}_ch${chapter}`, weight: chapter === 1 ? FIRST_SIDE_WEIGHT : SIDE_WEIGHT, once: true, requires: [{ kind: 'heroClass', id: classId }], sideChapter: chapter }
 }
 
 /** Buy a venture: pay its cost and own it. Shown locked until you can afford it. */
