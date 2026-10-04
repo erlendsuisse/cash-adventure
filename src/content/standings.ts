@@ -202,6 +202,8 @@ export const FLAG_STANDINGS: Record<string, Partial<Record<Faction, number>>> = 
  *  no faction cares. Listed explicitly so a new flag can't silently go unused
  *  (content.test.ts: every flag is read, mapped above, or listed here). */
 export const STORY_ONLY_FLAGS = [
+  // Side stories (cards/side-stories.ts): moments each class's thread remembers
+  'alch_memorised', 'alch_notebook', 'alch_page2', 'alch_page3', 'alch_page4', 'alch_page5', 'alch_recovered', 'guard_found_cellar', 'guard_hero', 'guard_trap_sprung', 'guard_tried', 'heal_building', 'heal_hero', 'heal_maren', 'heal_safe', 'pros_flint', 'pros_full_map', 'pros_map3', 'pros_shares', 'pros_spring', 'pros_tunnel', 'silver_beat_lucio', 'silver_hope', 'silver_lucio_gone', 'smug_channel', 'smug_figurehead', 'smug_location', 'smug_pip',
   'arcanist_favor', 'avoided_iron_crash', 'bad_luck', 'chose_ascension', 'chose_legacy', 'chose_self',
   'dimensional_trader', 'dragon_rider_ally', 'friend_distant', 'guild_wary', 'guilt_weight', 'harsh_reckoning',
   'has_rival', 'inquisitor_debt', 'knows_bandit_routes', 'knows_colossus_lore', 'lost_to_rival', 'loved_one_lost',

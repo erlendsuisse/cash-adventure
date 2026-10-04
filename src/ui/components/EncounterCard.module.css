@@ -469,3 +469,23 @@
     animation: none;
   }
 }
+
+/* A class ability changed this choice (e.g. Haggle's lower price) */
+.abilityTag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #2f5f2a;
+  background: rgba(70, 140, 60, 0.14);
+  border: 1px solid rgba(47, 107, 58, 0.4);
+  border-radius: 999px;
+  vertical-align: middle;
+}
+
+.rerollNote {
+  display: block;
+  font-weight: 700;
+  color: #6e4316;
+}

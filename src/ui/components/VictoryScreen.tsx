@@ -1,5 +1,6 @@
 import type { GameState } from '../../engine/types'
 import { passiveIncome } from '../../engine/selectors'
+import { campaign } from '../../content/campaign'
 import styles from './VictoryScreen.module.css'
 
 // Falling coins: fixed positions so every render looks the same
@@ -37,7 +38,9 @@ export function VictoryScreen({ state, onPlayAgain, onClose }: { state: GameStat
         <h1 id="victory-title" className={styles.title}>
           Victory!
         </h1>
-        <p className={styles.subtitle}>You are the Legend of Vessarin</p>
+        <p className={styles.subtitle}>
+          {state.hero ? `${state.hero.name} the ${campaign.heroClasses?.[state.hero.classId]?.name ?? 'Merchant'}, Legend of Vessarin` : 'You are the Legend of Vessarin'}
+        </p>
         <div className={styles.divider} aria-hidden="true">
           ✦ ✦ ✦
         </div>

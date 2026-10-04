@@ -2,6 +2,7 @@ import { formatCheck, resolveCheck } from './checks'
 import { drawCard, recordDraw } from './director'
 import { tick } from './economy'
 import { applyAll } from './effects'
+import { abilityCheckBonuses, abilityName, canReroll, effectiveChoice, effectiveOutcome, heroAction, rerollFlagId } from './hero'
 import { newGame } from './init'
 import { commodityBuyPrice, commodityPrice } from './selectors'
 import { isMet } from './requirements'
@@ -13,6 +14,10 @@ export function reduce(state: GameState, action: Action, campaign: Campaign): Ga
       return newGame(action.seed, campaign)
     case 'choose':
       return applyChoose(state, action.choiceId, campaign)
+    case 'rollStats':
+    case 'swapStats':
+    case 'createHero':
+      return heroAction(state, action, campaign)
     case 'advance':
       return applyAdvance(state, campaign)
     case 'takeLoan':
@@ -172,8 +177,10 @@ function applyChoose(state: GameState, choiceId: string, campaign: Campaign): Ga
   if (state.pendingOutcome) return state
   const card = campaign.cards[state.currentCardId]
   if (!card) return state
-  const choice = card.choices.find((c) => c.id === choiceId)
-  if (!choice) return state
+  const authored = card.choices.find((c) => c.id === choiceId)
+  if (!authored) return state
+  // The choice as this hero sees it (class abilities can change prices and heat)
+  const choice = effectiveChoice(authored, state, campaign)
   if ((choice.requires ?? []).some((r) => !isMet(r, state))) return state
 
   let working = state
@@ -183,7 +190,18 @@ function applyChoose(state: GameState, choiceId: string, campaign: Campaign): Ga
   let outcomeText: string | undefined
 
   if (choice.check) {
-    const { result, outcome, rng } = resolveCheck(choice.check, working)
+    const bonuses = abilityCheckBonuses(choice.check.stat, working, campaign)
+    let resolved = resolveCheck(choice.check, working, bonuses)
+    const passed = (r: CheckResult) => r.result === 'success' || r.result === 'critSuccess'
+    // A class ability may re-roll one failed check of its stat per chapter
+    if (!passed(resolved.result) && canReroll(choice.check.stat, working, campaign)) {
+      const first = resolved.result.roll
+      working = { ...working, rng: resolved.rng, flags: { ...working.flags, [rerollFlagId(working)]: 1 } }
+      resolved = resolveCheck(choice.check, working, bonuses)
+      resolved = { ...resolved, result: { ...resolved.result, reroll: { firstRoll: first, ability: abilityName(working, campaign) } } }
+    }
+    const { result, rng } = resolved
+    const outcome = effectiveOutcome(resolved.outcome, passed(result), working, campaign)
     working = { ...working, rng, log: [...working.log, { day: working.clock.day, text: formatCheck(result) }] }
     if (outcome.text) working = { ...working, log: [...working.log, { day: working.clock.day, text: outcome.text }] }
     before = working

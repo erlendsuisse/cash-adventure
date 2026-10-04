@@ -29,6 +29,10 @@ export function isMet(req: Requirement, state: GameState): boolean {
       return state.seenCardIds.includes(req.id)
     case 'cardNotSeen':
       return !state.seenCardIds.includes(req.id)
+    case 'heroClass':
+      return state.hero?.classId === req.id
+    case 'background':
+      return state.hero?.backgroundId === req.id
     case 'not':
       return !isMet(req.of, state)
     case 'allOf':

@@ -1,4 +1,5 @@
 import type { Campaign, StoryCard } from '../engine/types'
+import { BACKGROUNDS, HERO_CLASSES } from './heroes'
 import { colossus01Cards } from './cards/colossus01'
 import { colossus02Cards } from './cards/colossus02-inquisitor'
 import { colossus03Cards } from './cards/colossus03-tide'
@@ -91,5 +92,7 @@ export const campaign: Campaign = Object.freeze({
   marketRegimes: MARKET_REGIMES,
   // Shown to the player: standing per faction, and heat per consequence path.
   trackedFlags: [...standingFlagIds, ...Object.values(consequenceTuning).map((t) => t.flagId)],
+  heroClasses: HERO_CLASSES,
+  backgrounds: BACKGROUNDS,
   initial,
 })

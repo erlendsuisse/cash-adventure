@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import type { GameState, StatId } from '../../engine/types'
 import { isFree, totalMonthlyIncome } from '../../engine/selectors'
 import { FACTIONS, HEAT_PATHS, STANDING_THRESHOLD, standingTier } from '../../content/standings'
+import { campaign } from '../../content/campaign'
 import { useGame } from '../GameProvider'
+import { heroIcon, heroPortrait } from '../heroArt'
 import styles from './StatScroll.module.css'
 
 export function StatScroll({ state }: { state: GameState }) {
@@ -19,7 +21,7 @@ export function StatScroll({ state }: { state: GameState }) {
   return (
     <div className={styles.scroll}>
       <div className={styles.inner}>
-        <h3 className={styles.title}>Character & Fortune</h3>
+        <HeroCard state={state} />
 
         {/* Stats Section */}
         <div className={styles.section}>
@@ -256,4 +258,30 @@ function useStatChanges(state: GameState): Partial<Record<StatId, { count: numbe
     }))
   }, [state.stats])
   return changed
+}
+
+/** Who you are: portrait, name, class, background and the class ability. */
+function HeroCard({ state }: { state: GameState }) {
+  const heroClass = state.hero ? campaign.heroClasses?.[state.hero.classId] : undefined
+  if (!state.hero || !heroClass) return <h3 className={styles.title}>Character & Fortune</h3>
+  const background = campaign.backgrounds?.[state.hero.backgroundId]
+  const Icon = heroIcon(heroClass.id)
+  const portrait = heroPortrait(heroClass.id, state.hero.look)
+  return (
+    <div className={styles.heroCard}>
+      <div className={styles.heroTop}>
+        <span className={styles.heroPortrait}>{portrait ? <img src={portrait} alt="" /> : <Icon size={30} strokeWidth={1.8} />}</span>
+        <span className={styles.heroNames}>
+          <span className={styles.heroName}>{state.hero.name}</span>
+          <span className={styles.heroClass}>
+            {heroClass.name}
+            {background ? ` · ${background.name}` : ''}
+          </span>
+        </span>
+      </div>
+      <div className={styles.heroAbility}>
+        <strong>{heroClass.ability.name}:</strong> {heroClass.ability.text}
+      </div>
+    </div>
+  )
 }

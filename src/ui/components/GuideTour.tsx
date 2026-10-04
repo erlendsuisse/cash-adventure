@@ -16,12 +16,12 @@ interface Step {
 
 // Short lines a 10-year-old can take in at a glance; numbers stay digits so they show bold.
 const STEPS: Step[] = [
-  { text: "Welcome to Vessarin! I'm Old Tobias. Let me show you around - it only takes a minute." },
+  { text: "Welcome to Vessarin! I'm Old Tobias. Along the way you'll have adventures of your own. First, let me show you around - it only takes a minute." },
   { target: 'purse', text: 'This is your purse. You start with 50 gold. Every choice can add gold or cost you some.' },
   { target: 'goal', text: 'Your goal: buy ventures - stalls, crews, workshops - that pay you every month. When they pay more than you spend, you are free!' },
   { target: 'net', text: 'Net is what your ventures earn each month minus your living costs. Wages from work are not counted - when Net turns green, you are free!' },
   { target: 'card', tab: 'story', text: 'Each card is a moment in your story. Read it, then tap a choice. Bold numbers tell you what it costs or pays.' },
-  { target: 'you', tab: 'you', text: 'Here are your skills - Grit, Savvy, Charm and Nerve. They help you win dice rolls. Your ventures and monthly money are here too.' },
+  { target: 'you', tab: 'you', text: 'Here is your hero, with your special ability and your skills: Grit, Savvy, Charm and Nerve. They help you win dice rolls. Your ventures and monthly money are here too.' },
   { target: 'colossi', tab: 'story', text: 'Grow rich and the 7 Colossi will come to test you, one by one. Beat all 7 to become a legend!' },
   { target: 'settings', tab: 'story', text: 'I read every card aloud for you. Tap here to turn me off, change the sound, or see this tour again. Good luck, merchant!' },
 ]

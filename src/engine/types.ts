@@ -19,6 +19,45 @@ export interface Stats {
   nerve: number // risk tolerance / bluffing
 }
 
+export type HeroClassId = string
+export type BackgroundId = string
+
+/** What a class ability does. The engine applies these; content only picks them. */
+export type AbilityRule =
+  | { kind: 'rerollFailed'; stat: StatId } // re-roll one failed check of this stat per chapter
+  | { kind: 'checkBonus'; stat: StatId; mod: number } // always on checks of this stat
+  | { kind: 'heatReduction'; amount: number } // Attention (heat) gains are this much smaller
+  | { kind: 'ventureDiscount'; percent: number } // buying a venture costs this much less
+  | { kind: 'checkGoldBonus'; percent: number } // gold won by a successful check is this much bigger
+
+export interface HeroClass {
+  id: HeroClassId
+  name: string
+  cousin: string // the classic fantasy class it resembles, for players who know them
+  tagline: string
+  description: string
+  mainStat: StatId // +2 at creation
+  secondStat: StatId // +1 at creation
+  ability: { name: string; text: string; rules: AbilityRule[] }
+  start: Effect[] // applied once, when the hero is created
+}
+
+export interface Background {
+  id: BackgroundId
+  name: string
+  text: string
+  start: Effect[]
+}
+
+export type HeroLook = 'female' | 'male'
+
+export interface Hero {
+  name: string
+  classId: HeroClassId
+  backgroundId: BackgroundId
+  look?: HeroLook // which portrait; absent in heroes created before looks existed
+}
+
 export type StatId = keyof Stats
 
 export type Commodity = 'spice' | 'salt' | 'iron'
@@ -115,6 +154,8 @@ export interface GameState {
   log: LogEntry[]
   status: GameStatus
   character: CharacterState // visual state (non-game-logic)
+  hero?: Hero // absent until character creation (and in saves from before heroes existed)
+  creation?: { rolls: number[][] } // 4 dice per stat, in STAT_ORDER, while creating a hero
   pendingOutcome?: PendingOutcome // skill check outcome awaiting player acknowledgment
 }
 
@@ -132,6 +173,8 @@ export type Requirement =
   | { kind: 'storyPhase'; phase: StoryPhase }
   | { kind: 'cardSeen'; id: CardId }
   | { kind: 'cardNotSeen'; id: CardId }
+  | { kind: 'heroClass'; id: HeroClassId }
+  | { kind: 'background'; id: BackgroundId }
   | { kind: 'not'; of: Requirement }
   | { kind: 'allOf'; of: Requirement[] }
   | { kind: 'anyOf'; of: Requirement[] }
@@ -230,6 +273,7 @@ export interface CheckResult {
   total: number
   dc: number
   result: 'critSuccess' | 'success' | 'failure' | 'critFailure'
+  reroll?: { firstRoll: number; ability: string } // a class ability re-rolled a failed first roll
 }
 
 export type Action =
@@ -242,6 +286,10 @@ export type Action =
   | { type: 'sellCommodity'; commodity: Commodity; amount: number; pricePerUnit?: number }
   | { type: 'buyCommodity'; commodity: Commodity; amount: number; pricePerUnit?: number }
   | { type: 'sellAsset'; id: string; priceMultiplier: number }
+  // Character creation: roll 4d6 per stat, optionally swap two results, then create the hero
+  | { type: 'rollStats' }
+  | { type: 'swapStats'; a: StatId; b: StatId }
+  | { type: 'createHero'; name: string; classId: HeroClassId; backgroundId: BackgroundId; look?: HeroLook }
 
 export interface Tuning {
   marketDayInterval: number // days between market ticks
@@ -278,6 +326,8 @@ export interface Campaign {
   commodityBasePrice: Record<Commodity, number> // gold per unit when the market index is 100
   marketRegimes?: Partial<Record<ChapterNumber, MarketRegime>> // how each chapter's market moves on market day
   trackedFlags?: FlagId[] // flags the player is shown (reputation, heat): their changes count as visible effects
+  heroClasses?: Record<HeroClassId, HeroClass>
+  backgrounds?: Record<BackgroundId, Background>
   initial: {
     stats: Stats
     finances: Finances

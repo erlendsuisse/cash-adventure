@@ -214,6 +214,11 @@ function RollBreakdown({ result, onLanded }: { result: CheckResult; onLanded: (p
       </button>
       {landed ? (
         <div className={styles.rollText}>
+          {result.reroll && (
+            <span className={styles.rerollNote}>
+              {result.reroll.ability}! You rolled a {result.reroll.firstRoll}, then rolled again.{' '}
+            </span>
+          )}
           <span>
             d{result.die} rolled <strong>{result.roll}</strong> + {result.stat} {result.statMod}
           </span>

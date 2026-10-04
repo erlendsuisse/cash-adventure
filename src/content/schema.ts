@@ -29,6 +29,8 @@ const requirement: z.ZodType<unknown> = z.lazy(() =>
     z.object({ kind: z.literal('storyPhase'), phase: storyPhase }),
     z.object({ kind: z.literal('cardSeen'), id: z.string() }),
     z.object({ kind: z.literal('cardNotSeen'), id: z.string() }),
+    z.object({ kind: z.literal('heroClass'), id: z.string() }),
+    z.object({ kind: z.literal('background'), id: z.string() }),
     z.object({ kind: z.literal('not'), of: requirement }),
     z.object({ kind: z.literal('allOf'), of: z.array(requirement) }),
     z.object({ kind: z.literal('anyOf'), of: z.array(requirement) }),

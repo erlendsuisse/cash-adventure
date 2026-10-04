@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { campaign } from '../../content/campaign'
 import { Background } from '../components/Background/Background'
 import { getCardArtworkPath } from '../artwork'
+import { CreationScreen } from '../components/CreationScreen'
 import { EncounterCard } from '../components/EncounterCard'
 import { GuideTour, type TourTab } from '../components/GuideTour'
 import { PaydayBanner } from '../components/PaydayBanner'
@@ -23,8 +24,17 @@ export function PlayScreen() {
   // Narrow screens show one panel at a time, picked from the bottom tab bar
   const [tab, setTab] = useState<TourTab>('story')
   const settings = useSettings()
-  // Every new game opens with Old Tobias's tour (Skip ends it); ⚙️ > How to play brings him back
-  const [touring, setTouring] = useState(() => state.seenCardIds.length <= 1 && state.clock.day === 0)
+  // A new game starts with creating a hero (saves from before heroes keep playing without one)
+  const fresh = state.seenCardIds.length <= 1 && state.clock.day === 0
+  const creatingHero = !state.hero && fresh && !!campaign.heroClasses
+  // Then Old Tobias's tour (Skip ends it); ⚙️ > How to play brings him back
+  const [touring, setTouring] = useState(() => fresh && !!state.hero)
+  const heroName = state.hero?.name
+  const hadHero = useRef(!!heroName)
+  useEffect(() => {
+    if (heroName && !hadHero.current) setTouring(true)
+    hadHero.current = !!heroName
+  }, [heroName])
   const endTour = useCallback(() => {
     setTouring(false)
     updateSettings({ tourDone: true })
@@ -45,7 +55,7 @@ export function PlayScreen() {
     if (state.status === 'playing' && !window.confirm('Start a new game? Your current game will be lost.')) return
     setVictoryClosed(false)
     setTab('story')
-    setTouring(true)
+    setTouring(false) // the tour follows character creation
     dispatch({ type: 'restart', seed })
   }
 
@@ -111,7 +121,9 @@ export function PlayScreen() {
 
       {payday !== null && state.status === 'playing' && !touring && <PaydayBanner state={state} net={payday} onClose={closePayday} />}
 
-      {touring && <GuideTour onTab={setTab} onDone={endTour} />}
+      {creatingHero && <CreationScreen state={state} campaign={campaign} dispatch={dispatch} />}
+
+      {touring && !creatingHero && <GuideTour onTab={setTab} onDone={endTour} />}
 
       {state.status === 'won' && !victoryClosed && (
         <VictoryScreen
