@@ -1,11 +1,11 @@
 .summary {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 1rem;
-  background: linear-gradient(135deg, rgba(42, 34, 25, 0.8), rgba(31, 26, 20, 0.8));
-  border: 2px solid #8b7355;
-  border-radius: 4px;
+  gap: 1rem;
+  padding: 0.9rem;
+  background: rgba(120, 80, 35, 0.07);
+  border: 1.5px dashed rgba(120, 80, 35, 0.5);
+  border-radius: 8px;
 }
 
 .grid {
@@ -19,27 +19,27 @@
   flex-direction: column;
   gap: 0.3rem;
   padding: 0.5rem;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 3px;
-  border-left: 3px solid #8b7355;
+  background: rgba(255, 250, 235, 0.6);
+  border-radius: 6px;
+  border-left: 3px solid #a06a32;
 }
 
 .label {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #c9a961;
+  color: #7a5226;
   opacity: 0.9;
 }
 
 .positive {
-  color: #90ee90;
+  color: #2f6b3a;
   font-weight: 600;
   font-size: 1.1rem;
 }
 
 .negative {
-  color: #ff6b6b;
+  color: #a8321f;
   font-weight: 600;
   font-size: 1.1rem;
 }
@@ -60,7 +60,7 @@
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #c9a961;
+  color: #7a5226;
   opacity: 0.9;
   margin-bottom: 0.5rem;
 }
@@ -81,9 +81,9 @@
 }
 
 .assetList li.positive {
-  border-color: #90ee90;
+  border-color: #2f6b3a;
 }
 
 .assetList li.negative {
-  border-color: #ff6b6b;
+  border-color: #a8321f;
 }

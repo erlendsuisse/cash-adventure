@@ -9,6 +9,8 @@
   --success: #2f6b3a;
   --border: #cabd98;
   --shadow: rgba(43, 32, 22, 0.25);
+  --paper-ink: #2e1f0f; /* text on the parchment cards: ~13:1 contrast on the cream */
+  --paper-heading: #74400f;
 
   font: 17px/1.5 Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
   color: var(--ink);

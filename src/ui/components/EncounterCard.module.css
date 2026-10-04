@@ -6,20 +6,48 @@
 }
 
 .card {
+  position: relative;
   width: 100%;
-  max-width: 600px;
+  max-width: 640px;
   margin: auto 0; /* vertically centred; a taller card still scrolls from its top */
-  background: rgba(255, 253, 247, 0.90);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(139, 115, 85, 0.3);
-  border-radius: 12px;
+  padding: 34px 38px 30px;
+  color: var(--paper-ink);
+  /* Old paper: a soft grain, warm cream, and edges darkened with age */
+  background:
+    radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(120, 75, 25, 0.22) 100%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.29 0 0 0 0 0.12 0 0 0 0.09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+    linear-gradient(165deg, #faf0d7 0%, #f1e0b8 55%, #e8d09f 100%);
+  border: 1px solid #b08a4e;
+  border-radius: 6px;
   box-shadow:
-    0 4px 6px rgba(43, 32, 22, 0.15),
-    0 16px 32px rgba(43, 32, 22, 0.25),
-    inset 0 1px 0 rgba(255, 253, 247, 0.8);
-  padding: 28px 32px;
+    inset 0 0 50px rgba(130, 85, 30, 0.22),
+    0 4px 8px rgba(30, 20, 10, 0.25),
+    0 18px 40px rgba(30, 20, 10, 0.4);
   /* Dealt onto the table like a card from a deck */
-  animation: deal 0.55s cubic-bezier(0.2, 0.8, 0.3, 1.1) 0.15s both;
+  animation: deal 0.55s cubic-bezier(0.2, 0.8, 0.3, 1.1) 1.25s both; /* a pause first, to enjoy the new picture */
+}
+
+/* A thin inked border just inside the edge, with small corner ornaments */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 9px;
+  border: 1px solid rgba(120, 80, 35, 0.45);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.card::after {
+  /* Small inked stars in the four corners of the inner border */
+  content: '';
+  position: absolute;
+  inset: 4px;
+  pointer-events: none;
+  background:
+    radial-gradient(circle, rgba(120, 80, 35, 0.75) 0 2px, transparent 2.5px) top left / 12px 12px no-repeat,
+    radial-gradient(circle, rgba(120, 80, 35, 0.75) 0 2px, transparent 2.5px) top right / 12px 12px no-repeat,
+    radial-gradient(circle, rgba(120, 80, 35, 0.75) 0 2px, transparent 2.5px) bottom left / 12px 12px no-repeat,
+    radial-gradient(circle, rgba(120, 80, 35, 0.75) 0 2px, transparent 2.5px) bottom right / 12px 12px no-repeat;
 }
 
 @keyframes deal {
@@ -214,14 +242,31 @@
 }
 
 .title {
+  margin: 0 0 6px;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--paper-heading);
+  letter-spacing: 0.01em;
+}
+
+/* An inked flourish under the title */
+.header + .body::before,
+.header + .flipIn::before {
+  content: '';
+  display: block;
+  height: 10px;
   margin: 0 0 14px;
-  font-size: 22px;
-  color: var(--gold);
-  letter-spacing: 0.02em;
+  background:
+    radial-gradient(circle, var(--paper-heading) 0 2.5px, transparent 3px) center / 12px 10px no-repeat,
+    linear-gradient(to right, transparent, rgba(120, 80, 35, 0.55) 20%, rgba(120, 80, 35, 0.55) 80%, transparent) center / 100% 1px no-repeat;
 }
 
 .body p {
   margin: 0 0 12px;
+  font-size: 18px;
+  line-height: 1.6;
 }
 
 .choices {
@@ -232,29 +277,69 @@
 }
 
 .choice {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 56px;
+  padding: 8px 16px 8px 8px;
   text-align: left;
-  padding: 12px 16px;
-  border: 1px solid var(--gold);
-  border-radius: 6px;
-  background: var(--parchment);
+  font-size: 17px;
+  color: var(--paper-ink);
+  background: rgba(255, 249, 232, 0.72);
+  border: 1.5px solid #b48d52;
+  border-radius: 10px;
+  box-shadow: 0 2px 0 rgba(120, 80, 35, 0.25);
   cursor: pointer;
-  color: var(--ink);
+  transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
 }
 
-.choice:hover:not(:disabled) {
-  background: var(--gold-bright);
-  color: #fffdf7;
+/* The choice's little picture, in a round sepia medallion */
+.choiceIcon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: #fbeed2;
+  background: radial-gradient(circle at 35% 30%, #a06a32 0%, #6e4316 75%);
+  border: 2px solid #e6c88d;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(60, 35, 10, 0.35);
+}
+
+.choiceText {
+  flex: 1;
+  line-height: 1.35;
+}
+
+@media (hover: hover) {
+  .choice:hover:not(:disabled) {
+    background: #fff4d8;
+    border-color: #8a5a22;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 0 rgba(120, 80, 35, 0.3);
+  }
+}
+
+.choice:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(120, 80, 35, 0.3);
 }
 
 .choice:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
-  border-color: var(--border);
+  opacity: 0.55;
+  border-style: dashed;
+}
+
+.choice:disabled .choiceIcon {
+  background: #8f8270;
 }
 
 .reason {
   display: block;
-  font-size: 13px;
+  font-size: 14px;
   font-style: italic;
   margin-top: 2px;
 }
@@ -266,9 +351,10 @@
   font-size: 13px;
   padding: 8px 10px;
   margin-bottom: 12px;
-  border-left: 3px solid var(--gold);
-  background: rgba(169, 119, 47, 0.08);
-  color: var(--ink-soft);
+  border-left: 3px solid #a06a32;
+  background: rgba(120, 80, 35, 0.08);
+  color: var(--paper-ink);
+  font-size: 15px;
 }
 
 .rollText {
@@ -351,11 +437,15 @@
   }
 
   .card {
-    padding: 20px 18px;
+    padding: 26px 20px 22px;
   }
 
   .title {
-    font-size: 20px;
+    font-size: 21px;
+  }
+
+  .body p {
+    font-size: 17px;
   }
 }
 

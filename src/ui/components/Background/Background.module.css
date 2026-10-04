@@ -68,7 +68,7 @@
   height: 100%;
   object-fit: cover;
   will-change: transform;
-  animation-duration: 26s;
+  animation-duration: 10s; /* a card is on screen for seconds, so the camera moves within that time */
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
   animation-direction: alternate;

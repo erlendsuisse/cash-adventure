@@ -23,8 +23,8 @@ export function PlayScreen() {
   // Narrow screens show one panel at a time, picked from the bottom tab bar
   const [tab, setTab] = useState<TourTab>('story')
   const settings = useSettings()
-  // Old Tobias shows new players around once; ⚙️ > How to play brings him back
-  const [touring, setTouring] = useState(() => !settings.tourDone && state.seenCardIds.length <= 1)
+  // Every new game opens with Old Tobias's tour (Skip ends it); ⚙️ > How to play brings him back
+  const [touring, setTouring] = useState(() => state.seenCardIds.length <= 1 && state.clock.day === 0)
   const endTour = useCallback(() => {
     setTouring(false)
     updateSettings({ tourDone: true })
@@ -45,6 +45,7 @@ export function PlayScreen() {
     if (state.status === 'playing' && !window.confirm('Start a new game? Your current game will be lost.')) return
     setVictoryClosed(false)
     setTab('story')
+    setTouring(true)
     dispatch({ type: 'restart', seed })
   }
 

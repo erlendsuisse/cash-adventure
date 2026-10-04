@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { CheckResult, EffectSummary as Summary, GameState, StoryCard } from '../../engine/types'
 import { resolveProse } from '../prose'
+import { ContinueIcon } from '../choiceIcon'
 import { RichText } from '../RichText'
 import { prefersReducedMotion } from '../settings'
 import { sfx } from '../sfx'
@@ -121,7 +122,10 @@ export function EncounterCard({
           rollLanded && (
             <div className={styles.choices}>
               <button type="button" className={styles.choice} onClick={onAdvance}>
-                Continue
+                <span className={styles.choiceIcon} aria-hidden="true">
+                  <ContinueIcon size={20} strokeWidth={2} />
+                </span>
+                <span className={styles.choiceText}>Continue</span>
               </button>
             </div>
           )
@@ -130,7 +134,10 @@ export function EncounterCard({
         ) : card.next ? (
           <div className={styles.choices}>
             <button type="button" className={styles.choice} onClick={onAdvance}>
-              Continue
+              <span className={styles.choiceIcon} aria-hidden="true">
+                <ContinueIcon size={20} strokeWidth={2} />
+              </span>
+              <span className={styles.choiceText}>Continue</span>
             </button>
           </div>
         ) : null}

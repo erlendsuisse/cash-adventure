@@ -1,83 +1,195 @@
+/* The quest banner: a strip of parchment under the top bar with the chapter,
+   what to do right now, and a bar showing how close you are. */
 .banner {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px 16px;
-  padding: 8px 20px;
-  background: rgba(43, 32, 22, 0.82);
-  border-bottom: 1px solid rgba(201, 189, 152, 0.4);
-  color: #e8d4b8;
+  gap: 10px 22px;
+  padding: 10px 24px;
+  color: var(--paper-ink);
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.29 0 0 0 0 0.12 0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+    linear-gradient(to bottom, #f6e8c6 0%, #ead5a6 100%);
+  border-bottom: 2px solid #9c7038;
+  box-shadow: 0 4px 10px rgba(30, 20, 10, 0.35);
   flex-shrink: 0;
 }
 
 .heading {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
   padding: 0;
   border: none;
   background: none;
   color: inherit;
   cursor: pointer;
   font: inherit;
+  text-align: left;
+}
+
+/* Chapter numeral in a round seal */
+.badge {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #fbeed2;
+  background: radial-gradient(circle at 35% 30%, #a06a32 0%, #6e4316 75%);
+  border: 2px solid #e6c88d;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(60, 35, 10, 0.4);
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
 }
 
 .chapter {
-  font-size: 11px;
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: #c8922f;
+  letter-spacing: 0.14em;
+  color: #8a5a22;
   font-weight: 700;
 }
 
 .name {
-  font-size: 16px;
-  font-weight: 800;
-  color: #ffd700;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--paper-heading);
+  white-space: nowrap;
 }
 
 .toggle {
-  font-size: 11px;
-  color: #c9b79a;
+  font-size: 13px;
+  color: #8a5a22;
+}
+
+.quest {
+  flex: 1 1 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .objective {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.35;
+}
+
+/* Progress toward the goal */
+.progress {
+  position: relative;
+  height: 24px;
+  overflow: hidden;
+  background: rgba(110, 70, 25, 0.16);
+  border: 1.5px solid #9c7038;
+  border-radius: 999px;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(to bottom, #e9bf52 0%, #c08a22 100%);
+  border-radius: 999px;
+  transition: width 0.8s ease-out;
+}
+
+.progressLabel {
+  position: absolute;
+  inset: 0;
+  padding: 0 10px;
+  overflow: hidden;
+  line-height: 21px;
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   font-size: 13px;
-  flex: 1 1 320px;
+  font-weight: 700;
+  color: #3b2410;
+  text-shadow: 0 1px 0 rgba(255, 245, 220, 0.7);
 }
 
-.warn {
-  color: #ff9f7a;
+.warn .progressFill {
+  background: linear-gradient(to bottom, #e58b6c 0%, #b4492c 100%);
 }
 
-.goal {
-  color: #e8d4b8;
+.warn .objective {
+  color: #8f2a14;
+  font-weight: 700;
 }
 
-.good {
-  color: #90ee90;
+.good .progressFill {
+  background: linear-gradient(to bottom, #8ed37f 0%, #3f8a3a 100%);
+}
+
+.good .objective {
+  color: #2a5e2a;
+  font-weight: 700;
 }
 
 .details {
   flex-basis: 100%;
-  font-size: 13px;
+  padding-top: 6px;
+  font-size: 16px;
   line-height: 1.5;
+  border-top: 1px dashed rgba(120, 80, 35, 0.45);
 }
 
 .details p {
-  margin: 2px 0;
+  margin: 4px 0;
 }
 
 .hint {
-  color: #ffd700;
+  color: #6e4316;
+  font-weight: 700;
 }
 
 .market {
-  color: #8fd3c8;
+  color: #2f5f5a;
 }
 
 @media (max-width: 600px) {
   .banner {
+    gap: 8px 12px;
     padding: 8px 12px;
+  }
+
+  .badge {
+    width: 38px;
+    height: 38px;
+    font-size: 14px;
+  }
+
+  .name {
+    font-size: 17px;
+  }
+
+  .objective {
+    font-size: 15px;
+  }
+
+  .progress {
+    height: 22px;
+  }
+
+  .progressLabel {
+    font-size: 12px;
+    line-height: 19px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progressFill {
+    transition: none;
   }
 }
