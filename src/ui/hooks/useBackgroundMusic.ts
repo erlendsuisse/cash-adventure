@@ -1,195 +1,132 @@
 import { useEffect, useRef, useState } from 'react'
 import type { GameState } from '../../engine/types'
-import { MUSIC_TRACKS, getTracksForPhase } from '../../assets/sounds/musicMetadata'
+import { currentChapter } from '../../engine/selectors'
+import { playlistForChapter } from '../music'
 
-interface AudioState {
-  current: string | null
-  fadingOut: string | null
-  trackIndex: number // Track position in current phase's playlist
-}
+const VOLUME = 0.5
+const FADE_STEP_MS = 50
+const CHAPTER_FADE_OUT_MS = 2000
+const CHAPTER_FADE_IN_MS = 3000
+const NEXT_TRACK_FADE_IN_MS = 1500
 
+/**
+ * Background music by chapter (see ui/music.ts). A chapter's tracks play one
+ * after another and loop; the music only changes when a new chapter starts,
+ * with a slow fade out and in. Browsers block audio until the player clicks or
+ * presses a key, so playback starts on the first interaction.
+ */
 export function useBackgroundMusic(state: GameState, enabled: boolean = true) {
-  const [userInteracted, setUserInteracted] = useState(false)
+  const chapter = currentChapter(state)
+  const [unlocked, setUnlocked] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
-  const stateRef = useRef<AudioState>({ current: null, fadingOut: null, trackIndex: 0 })
-  const fadeIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const playlistRef = useRef<string[]>([])
+  const indexRef = useRef(0)
+  const failuresRef = useRef(0)
+  const fadeRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  useEffect(() => {
-    if (!enabled || !userInteracted) return
+  // These only touch refs, so the copies captured by audio callbacks never go stale.
+  function stopFade() {
+    if (fadeRef.current) clearInterval(fadeRef.current)
+    fadeRef.current = null
+  }
 
-    // Get first track when story phase changes
-    const tracks = getTracksForPhase(
-      state.progress.storyPhase,
-      state.progress.colossiDefeated,
-      state.progress.currentPath
+  function fadeTo(target: number, durationMs: number, done?: () => void) {
+    const audio = audioRef.current
+    if (!audio) return
+    stopFade()
+    const from = audio.volume
+    const started = Date.now()
+    fadeRef.current = setInterval(() => {
+      const progress = Math.min(1, (Date.now() - started) / durationMs)
+      audio.volume = Math.min(1, Math.max(0, from + (target - from) * progress))
+      if (progress >= 1) {
+        stopFade()
+        done?.()
+      }
+    }, FADE_STEP_MS)
+  }
+
+  function startTrack(fadeInMs: number) {
+    const audio = audioRef.current
+    const track = playlistRef.current[indexRef.current]
+    if (!audio || !track) return
+    stopFade()
+    audio.src = track
+    audio.volume = 0
+    audio.play().then(
+      () => fadeTo(VOLUME, fadeInMs),
+      (error: unknown) => {
+        // Autoplay refused: forget the playlist so the next interaction starts it again
+        if (error instanceof DOMException && error.name === 'NotAllowedError') {
+          playlistRef.current = []
+          setUnlocked(false)
+        }
+      },
     )
+  }
 
-    if (tracks.length === 0) return
+  function playNextTrack() {
+    if (playlistRef.current.length === 0) return
+    indexRef.current = (indexRef.current + 1) % playlistRef.current.length
+    startTrack(NEXT_TRACK_FADE_IN_MS)
+  }
 
-    // Reset to first track when phase changes
-    stateRef.current.trackIndex = 0
-    const currentTrack: string = tracks[0]!
-
-    console.log('[Music] Phase changed to:', state.progress.storyPhase, 'Playing:', currentTrack)
-
-    // Stop any existing fade interval
-    if (fadeIntervalRef.current) {
-      clearInterval(fadeIntervalRef.current)
-    }
-
-    // If switching to a different track, fade out current and fade in new
-    if (stateRef.current.current !== null && currentTrack !== stateRef.current.current) {
-      fadeOutThenPlayNew(currentTrack)
-    } else if (stateRef.current.current === null) {
-      // Starting music for the first time
-      playTrack(currentTrack)
-    }
-  }, [state.progress.storyPhase, state.progress.colossiDefeated, state.progress.currentPath, enabled, userInteracted])
-
-  // Cleanup on unmount
+  // One audio element for as long as the play screen is open
   useEffect(() => {
+    const audio = new Audio()
+    audio.preload = 'auto'
+    audio.onplaying = () => {
+      failuresRef.current = 0
+    }
+    audio.onended = playNextTrack
+    audio.onerror = () => {
+      // Skip a track that won't load, but give up once every track has failed
+      failuresRef.current++
+      if (failuresRef.current < playlistRef.current.length) playNextTrack()
+      else console.warn('[Music] No track in this chapter could be played')
+    }
+    audioRef.current = audio
     return () => {
-      if (fadeIntervalRef.current) {
-        clearInterval(fadeIntervalRef.current)
-      }
-      if (audioRef.current) {
-        audioRef.current.pause()
-      }
+      stopFade()
+      audio.onended = audio.onerror = audio.onplaying = null
+      audio.pause()
+      audio.removeAttribute('src')
+      audio.load()
+      audioRef.current = null
+      playlistRef.current = []
     }
   }, [])
 
-  function playTrack(trackId: string) {
-    const track = MUSIC_TRACKS[trackId]
-    if (!track || !audioRef.current) {
-      console.log('[Music] Track not found or audio element missing:', trackId)
+  useEffect(() => {
+    if (unlocked) return
+    const unlock = () => setUnlocked(true)
+    document.addEventListener('click', unlock)
+    document.addEventListener('keydown', unlock)
+    return () => {
+      document.removeEventListener('click', unlock)
+      document.removeEventListener('keydown', unlock)
+    }
+  }, [unlocked])
+
+  // Switch playlists only when the chapter changes
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio || !unlocked) return
+
+    if (!enabled) {
+      playlistRef.current = []
+      fadeTo(0, CHAPTER_FADE_OUT_MS, () => audio.pause())
       return
     }
 
-    console.log('[Music] Playing track:', trackId, 'from', track.fileName)
-    audioRef.current.src = track.fileName
-    audioRef.current.volume = 0.5 // Start at 50% volume for ambient
-    audioRef.current.loop = false
+    const playlist = playlistForChapter(chapter)
+    if (playlist === playlistRef.current) return
+    const wasPlaying = playlistRef.current.length > 0 && !audio.paused
+    playlistRef.current = playlist
+    indexRef.current = 0
+    failuresRef.current = 0
 
-    // When track ends, play next in rotation
-    audioRef.current.onended = () => {
-      console.log('[Music] Track ended, playing next in rotation')
-      const tracks = getTracksForPhase(
-        state.progress.storyPhase,
-        state.progress.colossiDefeated,
-        state.progress.currentPath
-      )
-      if (tracks.length > 0) {
-        stateRef.current.trackIndex = (stateRef.current.trackIndex + 1) % tracks.length
-        const nextTrack = tracks[stateRef.current.trackIndex]!
-        playTrack(nextTrack)
-      }
-    }
-
-    audioRef.current.play().then(() => {
-      console.log('[Music] Playback started successfully')
-    }).catch((e) => {
-      console.warn('[Music] Playback failed:', e)
-    })
-
-    stateRef.current.current = trackId
-    stateRef.current.fadingOut = null
-  }
-
-  function fadeOutThenPlayNew(nextTrackId: string) {
-    if (!audioRef.current || !stateRef.current.current) return
-
-    stateRef.current.fadingOut = stateRef.current.current
-    const startVolume = audioRef.current.volume
-    const fadeDuration = 800 // 800ms fade out
-    const steps = 40 // 40 steps = 20ms per step
-    let step = 0
-
-    fadeIntervalRef.current = setInterval(() => {
-      if (!audioRef.current) return
-
-      step++
-      const progress = step / steps
-      audioRef.current.volume = startVolume * (1 - progress)
-
-      if (step >= steps) {
-        clearInterval(fadeIntervalRef.current!)
-        fadeIntervalRef.current = null
-
-        if (audioRef.current) {
-          audioRef.current.pause()
-          audioRef.current.currentTime = 0
-        }
-
-        playTrack(nextTrackId)
-
-        // Fade in new track
-        if (audioRef.current) {
-          audioRef.current.volume = 0
-          fadeInTrack()
-        }
-      }
-    }, fadeDuration / steps)
-  }
-
-  function fadeInTrack() {
-    if (!audioRef.current || !stateRef.current.current) return
-
-    const fadeDuration = 1200 // 1.2s fade in
-    const steps = 40
-    let step = 0
-
-    fadeIntervalRef.current = setInterval(() => {
-      if (!audioRef.current) return
-
-      step++
-      const progress = step / steps
-      audioRef.current.volume = 0.5 * progress // Fade to 50%
-
-      if (step >= steps) {
-        clearInterval(fadeIntervalRef.current!)
-        fadeIntervalRef.current = null
-        if (audioRef.current) {
-          audioRef.current.volume = 0.5
-        }
-      }
-    }, fadeDuration / steps)
-  }
-
-  // Create/get audio element (hidden) and set up user interaction listener
-  useEffect(() => {
-    if (!audioRef.current) {
-      const audio = document.createElement('audio')
-      audio.id = 'background-music'
-      audio.style.display = 'none'
-      document.body.appendChild(audio)
-      audioRef.current = audio
-    }
-
-    // Listen for first user interaction to enable audio playback
-    const handleInteraction = () => {
-      if (!userInteracted) {
-        console.log('[Music] User interaction detected, audio enabled')
-        setUserInteracted(true)
-      }
-    }
-
-    document.addEventListener('click', handleInteraction)
-    document.addEventListener('keydown', handleInteraction)
-
-    return () => {
-      document.removeEventListener('click', handleInteraction)
-      document.removeEventListener('keydown', handleInteraction)
-    }
-  }, [])
-
-  return {
-    currentTrack: stateRef.current.current,
-    play: playTrack,
-    stop: () => {
-      if (audioRef.current) {
-        audioRef.current.pause()
-        stateRef.current.current = null
-      }
-    },
-  }
+    if (wasPlaying) fadeTo(0, CHAPTER_FADE_OUT_MS, () => startTrack(CHAPTER_FADE_IN_MS))
+    else startTrack(CHAPTER_FADE_IN_MS)
+  }, [chapter, enabled, unlocked])
 }

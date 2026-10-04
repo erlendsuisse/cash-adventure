@@ -1,6 +1,6 @@
 # Additional Background Music for Cash Adventure
 
-Generate these 5 new tracks in Suno to add variety. Place them in `public/sounds/music/`
+Generate these 5 new tracks in Suno to add variety. Place them in `src/assets/music/chapter1/`
 
 ## 1. merchant-gambit-alt.mp3
 
@@ -110,7 +110,7 @@ Quality: Atmospheric, immersive, game-ready background music. Professional produ
 ## After Generation
 
 1. Download all 5 tracks from Suno
-2. Place in `public/sounds/music/` with exact filenames:
+2. Place in `src/assets/music/chapter1/` with exact filenames:
    - merchant-gambit-alt.mp3
    - exploration-calm.mp3
    - tension-rising.mp3
