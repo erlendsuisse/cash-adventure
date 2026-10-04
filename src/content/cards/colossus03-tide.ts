@@ -5,40 +5,37 @@ const colossus03_start: StoryCard = {
   id: 'colossus03_start',
   title: 'The Market Turns',
   body: [
-    'The sky splits open with no warning. A storm that the soothsayers did not predict—could not predict—tears across the harbor.',
-    'The Tide is the third Colossus. It is chaos embodied—market collapse, unpredictable fortune, the force that reminds all merchants that they do not control the forces that make them wealthy.',
-    'Your merchant fleet sinks in the deep. Sector prices collapse like houses of cards. The market, which you understood, reveals itself to be an ocean—and you, merely a merchant playing at gods.',
-    'The Tide cannot be reasoned with. It cannot be negotiated with. It is pure uncertainty, pure risk. You survive by understanding risk itself: what you can protect, what you must abandon, when to hold and when to flee.',
-    'Face the storm. Prove you can survive chaos.',
+    'The sky turns black at noon. Lightning splits the clouds, and a storm no fortune-teller saw coming roars across the harbour.',
+    'The third Colossus rises from the sea: the Tide, a giant made of waves, with ships tangled in its hair. Wherever it walks, prices crash and fortunes wash away.',
+    'Your ships are swept out to sea. Prices tumble like a house of cards. The market you thought you understood is suddenly a wild, roaring ocean.',
   ],
-  choices: [{ id: 'weather_storm', label: 'Face the Storm', goto: 'colossus03_trial_nerve' }],
+  choices: [{ id: 'weather_storm', label: 'Face the storm', goto: 'colossus03_trial_nerve' }],
 }
 
 const colossus03_trial_nerve: StoryCard = {
   id: 'colossus03_trial_nerve',
-  title: 'Cut the Losses',
+  title: 'Sell or Hold?',
   body: [
-    'Your broker screams: "Sell! Sell now before prices fall further!"',
-    'Your advisor whispers: "Hold. The market always recovers. Weather passes."',
-    'Your ledger shows you have enough gold for 1 week, maybe 2, before you must liquidate everything.',
-    'The storm rages outside. Every hour, prices drop further. You must decide: gamble that recovery is coming, or accept losses now?',
+    'Your broker shouts over the thunder: "Sell! Sell now, before it gets worse!"',
+    'Your old advisor whispers: "Hold on. Storms always pass."',
+    'Your gold will last 1 week, maybe 2. After that, you must sell everything.',
   ],
   choices: [
     {
       id: 'hold_nerve',
-      label: 'Hold your position and trust the recovery (Nerve check, DC 15)',
+      label: 'Hold your nerve and wait (Nerve check, DC 15)',
       check: {
         stat: 'nerve',
         dc: 15,
         success: {
-          text: '3 days pass. The storm breaks. Prices rebound. You held when others panicked.',
+          text: '3 days pass. The storm breaks, and prices bounce back! You held on while others panicked.',
           effects: [
-            { kind: 'if', when: { kind: 'flag', id: 'investigated_tide', atLeast: 1 }, then: [{ kind: 'narrate', text: 'The old sailor\'s wisdom echoes in your mind: never overcommit. You held steadily, and your patience is rewarded.' }], else: [] },
+            { kind: 'if', when: { kind: 'flag', id: 'investigated_tide', atLeast: 1 }, then: [{ kind: 'narrate', text: 'The old sailor\'s words echo in your head: never risk it all. Your patience pays off.' }], else: [] },
           ],
           goto: 'colossus03_trial_savvy',
         },
         failure: {
-          text: 'The storm intensifies. Prices plummet further before recovering. You panic and sell at the bottom.',
+          text: 'The storm gets worse. You panic and sell everything, right at the very bottom.',
           effects: [{ kind: 'gold', delta: -50 }],
           goto: 'colossus03_trial_savvy',
         },
@@ -49,28 +46,28 @@ const colossus03_trial_nerve: StoryCard = {
 
 const colossus03_trial_savvy: StoryCard = {
   id: 'colossus03_trial_savvy',
-  title: 'Reading the Waters',
+  title: 'A Risky Offer in the Storm',
   body: [
-    'The immediate crisis has passed, but the market remains volatile. Opportunity lurks in chaos—but so does ruin.',
-    'A merchant from the spice quarter approaches with a proposition: "The storm has destroyed the warehouses of 3 competitors. We could corner the market if we act now. It will cost everything you have left."',
-    'You must decide: is this the moment to double down, or to rebuild slowly and safely?',
+    'The worst has passed, but the market still lurches like a ship at sea.',
+    'A spice merchant grabs your arm. "The storm flattened 3 rival warehouses! If we buy everything now, we rule the market. It\'ll cost everything you have left."',
+    'Is this your big chance, or a trap?',
   ],
   choices: [
     {
       id: 'read_market',
-      label: 'Analyze the market wisely (Savvy check, DC 16)',
+      label: 'Think it through (Savvy check, DC 16)',
       check: {
         stat: 'savvy',
         dc: 16,
         success: {
-          text: 'You see the trap. If you invest everything and another storm comes—you are ruined. Instead, you take a measured position. Smart.',
+          text: 'You spot the trap. One more storm, and you would lose everything. So you risk just a little. Smart!',
           effects: [
-            { kind: 'if', when: { kind: 'flag', id: 'investigated_tide', atLeast: 1 }, then: [{ kind: 'stat', stat: 'nerve', delta: 1 }, { kind: 'narrate', text: 'Your earlier preparation—the diversification strategy you learned—saves you now. You navigate the chaos with confidence.' }], else: [] },
+            { kind: 'if', when: { kind: 'flag', id: 'investigated_tide', atLeast: 1 }, then: [{ kind: 'stat', stat: 'nerve', delta: 1 }, { kind: 'narrate', text: 'You remember the lesson: never put all your eggs in one basket. You steer through the storm with confidence.' }], else: [] },
           ],
           goto: 'colossus03_outcome',
         },
         failure: {
-          text: 'You misjudge the market. You invest heavily in a recovery that doesn\'t materialize as quickly as promised.',
+          text: 'You bet big on a quick recovery. It comes much slower than promised.',
           effects: [{ kind: 'gold', delta: -40 }],
           goto: 'colossus03_outcome',
         },
@@ -88,11 +85,11 @@ const colossus03_outcome: StoryCard = {
     { kind: 'advancePhase', to: 'recovery' },
     ...enterChapter(4),
     { kind: 'queueCard', card: 'war_contracts' },
-    { kind: 'narrate', text: 'The Tide withdraws as mysteriously as it came. The sky clears. The harbor settles. But you have learned an ancient lesson: the ocean is older than gold, and no merchant truly commands it. You are still alive—scarred, diminished, but alive. That is the only victory the Tide permits.' },
+    { kind: 'narrate', text: 'The Tide sinks back beneath the waves. The sky clears and the gulls return. You are soaked, and poorer, but you are still standing. Against the Tide, that is a victory.' },
   ],
   body: [
-    'Weeks pass. The market stabilizes. Other merchants never recover from the storm, but you do.',
-    'You understand now what the old traders knew: fortune is a tide, not a treasure. You ride it. You do not own it.',
+    'Weeks pass. The sea grows calm. Many merchants never recover from the storm, but you do.',
+    'Now you understand what old traders know: fortune is a tide, not a treasure. You can ride it, but you can never own it.',
   ],
   choices: [{ id: 'rebuild', label: 'Rebuild', effects: [] }],
 }

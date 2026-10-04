@@ -46,39 +46,39 @@ interface WorkFlavour {
 
 const FLAVOUR: Record<ChapterNumber, WorkFlavour> = {
   1: {
-    odd: { title: 'Hands Wanted at the Harbour', body: 'A ship has come in early and the harbourmaster is short of hands. Hauling crates is hard on the back, but the pay is in coin, today.', label: 'Haul crates for a few days' },
-    steady: { title: 'A Clerk\'s Stool at the Counting-House', body: 'The counting-house needs someone who can add a column without dozing off. It is not glamorous, but it is steady.', label: 'Take the clerk\'s position' },
-    contract: { title: 'Appraise a Cargo', body: 'A merchant suspects his supplier is cheating him and will pay well for an honest appraisal of the whole shipment.', label: 'Appraise the cargo', stat: 'savvy', success: 'You find the short weights and the merchant pays handsomely.', failure: 'You miss half the tricks, but the merchant pays you something for the effort.' },
+    odd: { title: 'Hands Wanted at the Harbour', body: 'A ship has come in early, and the harbourmaster is shouting for help. "Crates to shift! Coin today!" It\'s hard on the back, but the pay is quick.', label: 'Haul crates for a few days' },
+    steady: { title: 'A Clerk\'s Stool at the Counting-House', body: 'The counting-house needs someone who can add up without dozing off. It\'s not exciting, but the pay comes every month.', label: 'Take the clerk\'s position' },
+    contract: { title: 'Appraise a Cargo', body: 'A worried merchant thinks his supplier is cheating him. "Check the whole shipment for me," he begs, "and I\'ll pay you well."', label: 'Appraise the cargo', stat: 'savvy', success: 'You spot the tricked scales! The merchant pays you handsomely.', failure: 'You miss half the tricks, but he pays you something for trying.' },
   },
   2: {
     odd: { title: 'Errands for the Night Market', body: 'The night market always needs runners: lanterns to light, messages to carry, stalls to mind. Nobody asks questions.', label: 'Run errands for a few nights' },
-    steady: { title: 'Night Watchman for the Warehouses', body: 'The warehouse owners have had enough of thieves. They want someone sharp-eyed on the docks every night, paid monthly.', label: 'Take the watchman\'s post' },
-    contract: { title: 'A Thief\'s Hidden Stash', body: 'A widow\'s jewels were stolen and hidden somewhere in the old quarter. Find them before the thief comes back, and the reward is yours.', label: 'Hunt for the stash', stat: 'nerve', success: 'You find the jewels behind a loose brick and collect the full reward.', failure: 'The thief beat you to most of it, but you recover a few pieces for a smaller reward.' },
+    steady: { title: 'Night Watchman for the Warehouses', body: 'The warehouse owners are tired of thieves. They want someone sharp-eyed on the docks every night, paid every month.', label: 'Take the watchman\'s post' },
+    contract: { title: 'A Thief\'s Hidden Stash', body: 'A widow\'s jewels have been stolen and hidden somewhere in the old quarter. Find them before the thief comes back, and the reward is yours.', label: 'Hunt for the stash', stat: 'nerve', success: 'You find the jewels behind a loose brick! The widow hugs you and pays the full reward.', failure: 'The thief got there first, but you rescue a few pieces for a smaller reward.' },
   },
   3: {
-    odd: { title: 'Loading the Supply Wagons', body: 'The army\'s supply train leaves at dawn and the quartermaster pays by the wagon. There is always another wagon.', label: 'Load wagons for a few days' },
-    steady: { title: 'Assistant to the Quartermaster', body: 'The quartermaster is drowning in ledgers. He needs an assistant who knows goods and prices - a merchant, ideally.', label: 'Join the quartermaster\'s staff' },
-    contract: { title: 'An Urgent Dispatch', body: 'A sealed dispatch must reach the northern camp by tomorrow, across hard country. The courier who does it will be well paid.', label: 'Ride with the dispatch', stat: 'grit', success: 'You ride through the night and deliver it on time. The officers pay double.', failure: 'You arrive late and saddle-sore, but they pay you for the ride.' },
+    odd: { title: 'Loading the Supply Wagons', body: 'The army\'s supply wagons leave at dawn, and the quartermaster pays by the wagon. There is always another wagon.', label: 'Load wagons for a few days' },
+    steady: { title: 'Assistant to the Quartermaster', body: 'The quartermaster is buried in paperwork. He needs a helper who knows goods and prices. A merchant would be perfect.', label: 'Join the quartermaster\'s staff' },
+    contract: { title: 'An Urgent Dispatch', body: 'A sealed letter must reach the northern camp by tomorrow, across wild country. Whoever rides it there will be well paid.', label: 'Ride with the dispatch', stat: 'grit', success: 'You gallop through the night and arrive on time! The officers pay you double.', failure: 'You arrive late and very saddle-sore, but they pay you for the ride.' },
   },
   4: {
-    odd: { title: 'Counting Coin at the Exchange', body: 'Quarter-day at the exchange, and the banks need extra hands to count, weigh and bag the coin.', label: 'Count coin for a few days' },
-    steady: { title: 'A Junior Clerk\'s Desk', body: 'A respectable bank needs a junior clerk who understands trade. The salary is modest, but it arrives every month.', label: 'Take the clerk\'s desk' },
-    contract: { title: 'A Bankrupt\'s Accounts', body: 'A merchant house has collapsed and its creditors need someone to untangle the accounts. They pay a share of whatever you recover.', label: 'Untangle the accounts', stat: 'savvy', success: 'You find hidden assets everywhere. Your share is generous.', failure: 'The books are a maze, but you recover enough to earn a fee.' },
+    odd: { title: 'Counting Coin at the Exchange', body: 'It\'s quarter-day at the exchange, and the banks need extra hands to count, weigh and bag mountains of coins.', label: 'Count coin for a few days' },
+    steady: { title: 'A Junior Clerk\'s Desk', body: 'A grand old bank needs a junior clerk who understands trade. The pay is small, but it comes every month.', label: 'Take the clerk\'s desk' },
+    contract: { title: 'A Bankrupt\'s Accounts', body: 'A merchant house has gone bust, and its books are a terrible tangle. Untangle them, and you get a share of whatever money you find.', label: 'Untangle the accounts', stat: 'savvy', success: 'You find hidden money everywhere! Your share is generous.', failure: 'The books are a maze, but you find enough to earn a fee.' },
   },
   5: {
-    odd: { title: 'Water for the Wards', body: 'The plague wards need water carried, linen boiled and floors scrubbed. It is grim work, and the council pays in coin.', label: 'Work the wards for a few days' },
-    steady: { title: 'Steward of a Relief Kitchen', body: 'The council is opening relief kitchens and needs stewards who can keep the stores honest and the queues moving.', label: 'Become a kitchen steward' },
-    contract: { title: 'Medicine Through the Quarantine', body: 'A physician needs a crate of medicine carried through 3 quarantine checkpoints before nightfall.', label: 'Carry the medicine through', stat: 'grit', success: 'You make every checkpoint. The physician pays in full and then some.', failure: 'You are turned back at the last gate, but the physician pays for the attempt.' },
+    odd: { title: 'Water for the Wards', body: 'The sickrooms need water carried, sheets boiled and floors scrubbed. It is hard work, and the council pays in coin.', label: 'Work the wards for a few days' },
+    steady: { title: 'Steward of a Relief Kitchen', body: 'The council is opening soup kitchens. It needs someone to keep the stores honest and the queues moving.', label: 'Become a kitchen steward' },
+    contract: { title: 'Medicine Through the Quarantine', body: 'A doctor needs a crate of medicine carried through 3 guarded gates before nightfall.', label: 'Carry the medicine through', stat: 'grit', success: 'You get through every gate! The doctor pays in full, and a little extra.', failure: 'You are turned back at the last gate, but the doctor pays you for trying.' },
   },
   6: {
-    odd: { title: 'Sealed Letters', body: 'In a city where nobody trusts a messenger, someone with a known face is worth hiring to carry sealed letters by hand.', label: 'Carry letters for a few days' },
-    steady: { title: 'Steward to a Noble House', body: 'An old noble family has dismissed its steward for theft. They want someone new to run the household accounts - someone with nothing to gain from betraying them.', label: 'Become the household steward' },
-    contract: { title: 'Mediate a Feud', body: '2 partners who no longer trust each other will each pay a fee to a mediator who can split their business fairly.', label: 'Mediate between them', stat: 'charm', success: 'Both sides leave satisfied and both pay your fee.', failure: 'They part on bad terms, but one of them still pays.' },
+    odd: { title: 'Sealed Letters', body: 'Nobody trusts messengers anymore. People will pay a familiar face to carry sealed letters by hand.', label: 'Carry letters for a few days' },
+    steady: { title: 'Steward to a Noble House', body: 'An old noble family caught their steward stealing. They need someone new to keep their accounts, someone they can trust.', label: 'Become the household steward' },
+    contract: { title: 'Mediate a Feud', body: '2 partners are squabbling. Each will pay someone fair to split their business between them.', label: 'Mediate between them', stat: 'charm', success: 'Both leave happy, and both pay your fee.', failure: 'They stomp off in opposite directions, but one of them still pays.' },
   },
   7: {
-    odd: { title: 'Cataloguing Strange Artifacts', body: 'The rift keeps spitting out objects nobody understands. The museum pays by the item to have them weighed, drawn and labelled.', label: 'Catalogue artifacts for a few days' },
-    steady: { title: 'Clerk at the Rift Customs House', body: 'Goods from other worlds still owe duty. The new customs house needs clerks who won\'t faint at a talking crate.', label: 'Take the customs post' },
-    contract: { title: 'Haggle with the Otherworldly', body: 'A merchant from beyond the rift wants to buy a whole warehouse of ordinary teapots. Somebody has to negotiate the price.', label: 'Negotiate the sale', stat: 'nerve', success: 'You hold your nerve and close the deal at a staggering price. Your commission is huge.', failure: 'You blink first, but even a poor deal pays a commission.' },
+    odd: { title: 'Cataloguing Strange Artifacts', body: 'The rift keeps spitting out strange objects: humming spoons, glowing pebbles, a sock that whistles. The museum pays by the item to have them drawn and labelled.', label: 'Catalogue artifacts for a few days' },
+    steady: { title: 'Clerk at the Rift Customs House', body: 'Goods from other worlds still pay tax. The new customs house needs clerks who won\'t faint at a talking crate.', label: 'Take the customs post' },
+    contract: { title: 'Haggle with the Otherworldly', body: 'A traveller from beyond the rift wants to buy a whole warehouse of ordinary teapots. Somebody has to haggle over the price.', label: 'Negotiate the sale', stat: 'nerve', success: 'You hold your nerve and sell the teapots for a staggering price. Your share is huge!', failure: 'You blink first, but even a poor deal pays a little.' },
   },
 }
 
@@ -98,8 +98,8 @@ export function workOpportunities(chapter: ChapterNumber): StoryCard[] {
       title: f.odd.title,
       body: [f.odd.body],
       choices: [
-        { id: 'take_odd_jobs', label: `${f.odd.label} (+${odd}g, a few days)`, effects: [{ kind: 'gold', delta: odd }, { kind: 'advanceDays', days: 4 }, { kind: 'narrate', text: 'Honest sweat, honest coin.' }] },
-        { id: 'pass_odd_jobs', label: 'Not now', effects: [{ kind: 'narrate', text: 'You let the work go to someone else.' }] },
+        { id: 'take_odd_jobs', label: `${f.odd.label} (+${odd}g, a few days)`, effects: [{ kind: 'gold', delta: odd }, { kind: 'advanceDays', days: 4 }, { kind: 'narrate', text: 'Sore muscles, full purse. Honest work, honest coin.' }] },
+        { id: 'pass_odd_jobs', label: 'Not now', effects: [{ kind: 'narrate', text: 'Someone else takes the work.' }] },
       ],
     },
     {
@@ -112,9 +112,9 @@ export function workOpportunities(chapter: ChapterNumber): StoryCard[] {
         {
           id: 'take_steady_work',
           label: `${f.steady.label} (+${wage}g wages)`,
-          effects: [{ kind: 'wages', delta: wage }, { kind: 'flag', id: steadyFlag, set: 1 }, { kind: 'narrate', text: 'A wage every month. Not freedom, but solid ground to build on.' }],
+          effects: [{ kind: 'wages', delta: wage }, { kind: 'flag', id: steadyFlag, set: 1 }, { kind: 'narrate', text: 'A wage every month. Not freedom yet, but solid ground to build on.' }],
         },
-        { id: 'pass_steady_work', label: 'Decline', effects: [{ kind: 'narrate', text: 'The position goes to someone else.' }] },
+        { id: 'pass_steady_work', label: 'Decline', effects: [{ kind: 'narrate', text: 'The job goes to someone else.' }] },
       ],
     },
     {
@@ -134,7 +134,7 @@ export function workOpportunities(chapter: ChapterNumber): StoryCard[] {
             failure: { text: f.contract.failure, effects: [{ kind: 'gold', delta: small }] },
           },
         },
-        { id: 'pass_contract', label: 'Turn it down', effects: [{ kind: 'narrate', text: 'Someone else takes the contract.' }] },
+        { id: 'pass_contract', label: 'Turn it down', effects: [{ kind: 'narrate', text: 'Someone else takes the job.' }] },
       ],
     },
   ]

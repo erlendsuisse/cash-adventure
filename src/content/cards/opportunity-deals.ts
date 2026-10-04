@@ -5,9 +5,9 @@ export const opportunityDealCards: StoryCard[] = [
   // Early game opportunities (cheap, 50-150g)
   {
     id: 'tavern_investment',
-    title: 'A Tavern Investment',
+    title: 'A Share of the Anchor & Coin',
     body: [
-      'The owner of The Anchor & Coin is retiring. The tavern is profitable and well-located. "I\'ll sell you a stake for 100 gold," he says. "You\'ll make it back in a few months."',
+      'The jolly owner of the Anchor & Coin wipes the bar and grins. "I\'m retiring, friend. 100 gold buys a share. You\'ll earn it back in a few months."',
     ],
     storyPhase: 'early_game',
     weight: 12,
@@ -15,29 +15,29 @@ export const opportunityDealCards: StoryCard[] = [
     choices: [
       {
         id: 'buy_tavern',
-        label: 'Buy a stake in the tavern (100g)',
+        label: 'Buy a share (100g)',
         effects: [
           { kind: 'gold', delta: -100 },
           {
             kind: 'acquireAsset',
             asset: { id: 'tavern_stake', label: 'Tavern Stake', cost: 100, monthlyCashflow: 15, sector: 'property' },
           },
-          { kind: 'narrate', text: 'You become part owner of The Anchor & Coin. The drinks keep flowing and the gold keeps coming.' },
+          { kind: 'narrate', text: 'You own part of the Anchor & Coin now. The fiddles play, the mugs clink, and the gold keeps coming.' },
         ],
       },
       {
         id: 'decline_tavern',
-        label: 'Decline',
-        effects: [{ kind: 'narrate', text: 'The owner shrugs and looks for another investor.' }],
+        label: 'Not today',
+        effects: [{ kind: 'narrate', text: 'He shrugs and goes back to polishing mugs.' }],
       },
     ],
   },
 
   {
     id: 'workshop_partnership',
-    title: 'A Craftsperson\'s Partnership',
+    title: 'The Woodcarver\'s Workshop',
     body: [
-      'A master craftsperson approaches you. "I need working capital to expand. Give me 80 gold, and we\'ll split profits 50-50." The craftsmanship is exceptional.',
+      'A woodcarver shows you a chair so beautiful it looks alive. "Give me 80 gold for tools and wood," she says, "and we split the profits."',
     ],
     storyPhase: 'early_game',
     weight: 11,
@@ -52,22 +52,22 @@ export const opportunityDealCards: StoryCard[] = [
             kind: 'acquireAsset',
             asset: { id: 'workshop_partnership', label: 'Workshop Partnership', cost: 80, monthlyCashflow: 18, sector: 'craft' },
           },
-          { kind: 'narrate', text: 'Your capital multiplies through skilled hands. The partnership thrives.' },
+          { kind: 'narrate', text: 'Her clever hands turn your gold into furniture fit for nobles. Business is booming.' },
         ],
       },
       {
         id: 'decline_workshop',
-        label: 'Pass',
-        effects: [{ kind: 'narrate', text: 'The craftsperson finds another backer.' }],
+        label: 'Not today',
+        effects: [{ kind: 'narrate', text: 'She finds another partner and gets carving.' }],
       },
     ],
   },
 
   {
     id: 'fishing_fleet_share',
-    title: 'A Fishing Fleet Share',
+    title: 'A Share in a Fishing Boat',
     body: [
-      'Dockworkers are pooling money to buy a fishing boat. "It\'s a solid investment - 75 gold gets you a share of the catch profits." Simple, steady income.',
+      'Dockworkers are chipping in to buy a fishing boat called the Lucky Herring. "75 gold buys you a share of every catch," says one.',
     ],
     storyPhase: 'early_game',
     weight: 11,
@@ -82,22 +82,22 @@ export const opportunityDealCards: StoryCard[] = [
             kind: 'acquireAsset',
             asset: { id: 'fishing_boat_share', label: 'Fishing Boat Share', cost: 75, monthlyCashflow: 16, sector: 'trade' },
           },
-          { kind: 'narrate', text: 'Your money is tied up in a boat that brings in steady catches and steady gold.' },
+          { kind: 'narrate', text: 'The Lucky Herring comes home every evening, full of fish. A little gold comes to you every month.' },
         ],
       },
       {
         id: 'decline_fishing',
-        label: 'Not interested',
-        effects: [{ kind: 'narrate', text: 'The dockworkers continue gathering investors.' }],
+        label: 'Not for you',
+        effects: [{ kind: 'narrate', text: 'The dockworkers keep collecting coins for their boat.' }],
       },
     ],
   },
 
   {
     id: 'brewery_venture',
-    title: 'A Brewery Proposition',
+    title: 'The Cider Press',
     body: [
-      'A brewer with a famous recipe needs capital to scale. "150 gold and we\'ll make something the whole city talks about." Their ales are already legendary.',
+      'A brewer offers you a cup of her famous spiced cider. It\'s delicious! "150 gold buys a bigger press," she says, "and the whole city will be drinking it."',
     ],
     storyPhase: 'climbing',
     weight: 10,
@@ -105,29 +105,29 @@ export const opportunityDealCards: StoryCard[] = [
     choices: [
       {
         id: 'fund_brewery',
-        label: 'Fund the brewery (150g)',
+        label: 'Fund the cider press (150g)',
         effects: [
           { kind: 'gold', delta: -150 },
           {
             kind: 'acquireAsset',
             asset: { id: 'brewery_stake', label: 'Brewery Stake', cost: 150, monthlyCashflow: 28, sector: 'trade' },
           },
-          { kind: 'narrate', text: 'Your gold turns into a brewery that supplies half the taverns in Vessarin.' },
+          { kind: 'narrate', text: 'Soon half the taverns in Vessarin serve your spiced cider.' },
         ],
       },
       {
         id: 'decline_brewery',
         label: 'Too risky',
-        effects: [{ kind: 'narrate', text: 'The brewer tries the next potential investor.' }],
+        effects: [{ kind: 'narrate', text: 'She offers a cup to the next merchant along.' }],
       },
     ],
   },
 
   {
     id: 'vineyard_opportunity',
-    title: 'A Vineyard Investment',
+    title: 'The Sunny Vineyard',
     body: [
-      'A vineyard owner is retiring. The vines are mature, the wine ages naturally. "200 gold for a controlling stake. Wine ages to gold." A long-term play.',
+      'An old vineyard owner stands among rows of fat purple grapes. "I\'m retiring," he says. "200 gold, and most of it is yours. It pays a little more every year."',
     ],
     storyPhase: 'climbing',
     weight: 9,
@@ -135,29 +135,29 @@ export const opportunityDealCards: StoryCard[] = [
     choices: [
       {
         id: 'buy_vineyard',
-        label: 'Buy the vineyard stake (200g)',
+        label: 'Buy into the vineyard (200g)',
         effects: [
           { kind: 'gold', delta: -200 },
           {
             kind: 'acquireAsset',
             asset: { id: 'vineyard_stake', label: 'Vineyard Stake', cost: 200, monthlyCashflow: 24, sector: 'property' },
           },
-          { kind: 'narrate', text: 'You own vines that produce liquid gold, season after season.' },
+          { kind: 'narrate', text: 'Your vines grow fat grapes every summer, and gold every season.' },
         ],
       },
       {
         id: 'decline_vineyard',
         label: 'Not now',
-        effects: [{ kind: 'narrate', text: 'The vineyard goes to another buyer.' }],
+        effects: [{ kind: 'narrate', text: 'Another buyer snaps up the vineyard.' }],
       },
     ],
   },
 
   {
     id: 'bookbinder_deal',
-    title: 'A Bookbinder\'s Opportunity',
+    title: 'The Bookbinder',
     body: [
-      'A master bookbinder has crafted the most beautiful ledgers and journals the city has seen. "60 gold for a partnership. I\'ll make them, you sell them." Low cost, quick returns.',
+      'A bookbinder hands you a leather journal that smells of cedar. "60 gold, and we\'re partners," he says. "I make them, you sell them."',
     ],
     storyPhase: 'early_game',
     weight: 12,
@@ -165,29 +165,29 @@ export const opportunityDealCards: StoryCard[] = [
     choices: [
       {
         id: 'partner_bookbinder',
-        label: 'Partner with the bookbinder (60g)',
+        label: 'Partner with him (60g)',
         effects: [
           { kind: 'gold', delta: -60 },
           {
             kind: 'acquireAsset',
             asset: { id: 'bookbinder_partnership', label: 'Bookbinder Partnership', cost: 60, monthlyCashflow: 14, sector: 'craft' },
           },
-          { kind: 'narrate', text: 'Beautiful books and steady profits flow from this partnership.' },
+          { kind: 'narrate', text: 'Every merchant in town wants one of your journals. They sell as fast as he can stitch them.' },
         ],
       },
       {
         id: 'decline_bookbinder',
-        label: 'Pass',
-        effects: [{ kind: 'narrate', text: 'The bookbinder\'s goods find another distributor.' }],
+        label: 'Not today',
+        effects: [{ kind: 'narrate', text: 'He finds another seller for his books.' }],
       },
     ],
   },
 
   {
     id: 'perfumer_investment',
-    title: 'A Perfumer\'s Gambit',
+    title: 'The Perfume Workshop',
     body: [
-      'A perfumer has created fragrances that nobles crave. "90 gold gets you in on the ground floor. This will be everywhere." Luxurious and profitable.',
+      'A perfumer opens a tiny bottle. The whole room smells of summer roses. "Nobles will fight over this," she says. "90 gold makes you my partner."',
     ],
     storyPhase: 'climbing',
     weight: 10,
@@ -195,29 +195,29 @@ export const opportunityDealCards: StoryCard[] = [
     choices: [
       {
         id: 'invest_perfumer',
-        label: 'Invest in the perfumery (90g)',
+        label: 'Invest in the perfume (90g)',
         effects: [
           { kind: 'gold', delta: -90 },
           {
             kind: 'acquireAsset',
             asset: { id: 'perfume_business', label: 'Perfume Business Share', cost: 90, monthlyCashflow: 20, sector: 'trade' },
           },
-          { kind: 'narrate', text: 'Your investment smells like success. The fragrance sells faster than it can be made.' },
+          { kind: 'narrate', text: 'The perfume sells faster than she can make it. Your investment smells like success!' },
         ],
       },
       {
         id: 'decline_perfumer',
-        label: 'Decline',
-        effects: [{ kind: 'narrate', text: 'The perfumer moves on to find capital elsewhere.' }],
+        label: 'Not today',
+        effects: [{ kind: 'narrate', text: 'She corks the bottle and goes looking for another partner.' }],
       },
     ],
   },
 
   {
     id: 'bakery_chain',
-    title: 'A Bakery Chain',
+    title: 'A Second Bakery',
     body: [
-      'A successful baker wants to expand. "110 gold and we\'ll open a second location. Bread sells itself." Steady, reliable business.',
+      'A floury baker hands you a warm cinnamon bun. "110 gold, and we open a second bakery," he says. "Bread sells itself!"',
     ],
     storyPhase: 'climbing',
     weight: 11,
@@ -225,29 +225,29 @@ export const opportunityDealCards: StoryCard[] = [
     choices: [
       {
         id: 'fund_bakery_expansion',
-        label: 'Fund the expansion (110g)',
+        label: 'Fund the second bakery (110g)',
         effects: [
           { kind: 'gold', delta: -110 },
           {
             kind: 'acquireAsset',
             asset: { id: 'bakery_chain', label: 'Bakery Chain', cost: 110, monthlyCashflow: 19, sector: 'trade' },
           },
-          { kind: 'narrate', text: 'Bread and pastries from multiple ovens fill the city with the smell of profit.' },
+          { kind: 'narrate', text: 'Now two ovens fill the streets with the smell of fresh bread, and profit.' },
         ],
       },
       {
         id: 'decline_bakery',
-        label: 'Not interested',
-        effects: [{ kind: 'narrate', text: 'The baker finds another investor.' }],
+        label: 'Not today',
+        effects: [{ kind: 'narrate', text: 'He finds another partner, and keeps baking.' }],
       },
     ],
   },
 
   {
     id: 'stable_investment',
-    title: 'A Horse Stable',
+    title: 'The Riding Stables',
     body: [
-      'A stable keeper wants to expand. "140 gold gets you a stake in a thriving horse business. Nobles always need mounts." Reliable nobility keeps them buying.',
+      'A stable keeper strokes a glossy black horse. "Nobles always need horses," she says. "140 gold buys you a share of my stables."',
     ],
     storyPhase: 'climbing',
     weight: 10,
@@ -255,29 +255,29 @@ export const opportunityDealCards: StoryCard[] = [
     choices: [
       {
         id: 'buy_stable_stake',
-        label: 'Buy a stake (140g)',
+        label: 'Buy a share (140g)',
         effects: [
           { kind: 'gold', delta: -140 },
           {
             kind: 'acquireAsset',
             asset: { id: 'horse_stable', label: 'Horse Stable', cost: 140, monthlyCashflow: 21, sector: 'property' },
           },
-          { kind: 'narrate', text: 'Hoofbeats echo profits. The stable thrives with noble business.' },
+          { kind: 'narrate', text: 'Nobles trot in every day to hire horses. The stables thrive.' },
         ],
       },
       {
         id: 'decline_stable',
-        label: 'Decline',
-        effects: [{ kind: 'narrate', text: 'The stable keeper looks for other investors.' }],
+        label: 'Not today',
+        effects: [{ kind: 'narrate', text: 'She looks for another partner.' }],
       },
     ],
   },
 
   {
     id: 'library_endowment',
-    title: 'A Library Endowment',
+    title: 'The City\'s First Library',
     body: [
-      'A scholar wants to build the city\'s first proper library. "170 gold buys you naming rights and profits from copying fees. Knowledge is valuable." Steady, prestigious returns.',
+      'A scholar dreams of building Vessarin\'s first real library. "170 gold, and it carries your name," he says. "People pay to copy books, too."',
     ],
     storyPhase: 'climbing',
     weight: 9,
@@ -285,29 +285,29 @@ export const opportunityDealCards: StoryCard[] = [
     choices: [
       {
         id: 'endow_library',
-        label: 'Endow the library (170g)',
+        label: 'Fund the library (170g)',
         effects: [
           { kind: 'gold', delta: -170 },
           {
             kind: 'acquireAsset',
             asset: { id: 'library_endowment', label: 'Library Endowment', cost: 170, monthlyCashflow: 22, sector: 'property' },
           },
-          { kind: 'narrate', text: 'Scholars and students flock to your library, and gold flows from every page copied.' },
+          { kind: 'narrate', text: 'Students and scholars flock to your library. Every copied page earns you a coin.' },
         ],
       },
       {
         id: 'decline_library',
-        label: 'Too intellectual',
-        effects: [{ kind: 'narrate', text: 'The scholar seeks another patron.' }],
+        label: 'Not for you',
+        effects: [{ kind: 'narrate', text: 'He goes looking for another patron.' }],
       },
     ],
   },
 
   {
     id: 'mill_partnership',
-    title: 'A Mill Partnership',
+    title: 'The Old Water Mill',
     body: [
-      'A miller wants a partner with capital. "130 gold and we grind profits. Grain flows in, gold flows out." Steady as a waterwheel.',
+      'The great wheel of the water mill turns and splashes. "130 gold, and you\'re my partner," says the miller. "Grain goes in, gold comes out!"',
     ],
     storyPhase: 'climbing',
     weight: 10,
@@ -315,19 +315,19 @@ export const opportunityDealCards: StoryCard[] = [
     choices: [
       {
         id: 'partner_mill',
-        label: 'Partner with the mill (130g)',
+        label: 'Partner with the miller (130g)',
         effects: [
           { kind: 'gold', delta: -130 },
           {
             kind: 'acquireAsset',
             asset: { id: 'mill_partnership', label: 'Mill Partnership', cost: 130, monthlyCashflow: 20, sector: 'trade' },
           },
-          { kind: 'narrate', text: 'The mill grinds steadily, turning grain and effort into reliable profits.' },
+          { kind: 'narrate', text: 'The wheel turns and the stones grind. Steady as the river, the gold comes in.' },
         ],
       },
       {
         id: 'decline_mill',
-        label: 'Pass',
+        label: 'Not today',
         effects: [{ kind: 'narrate', text: 'The miller finds another partner.' }],
       },
     ],

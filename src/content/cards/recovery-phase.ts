@@ -7,19 +7,19 @@ const mafia_notice: StoryCard = {
   id: 'mafia_notice',
   // Queue-only: its Colossus outcome plays it; never a random draw.
   storyPhase: 'recovery',
-  title: 'The Underworld Stirs',
+  title: 'The Underworld Takes Notice',
   body: [
-    'Word spreads through the criminal networks: a merchant survived the guild\'s wrath and kept their head above water. The black markets want to meet you. "A survivor like that could be useful," they say.',
+    'Word spreads through the back alleys: you survived a Colossus! The underworld wants to meet you. "A survivor like that could be useful," they whisper.',
   ],
   choices: [
     {
       id: 'embrace_underworld',
-      label: 'Meet with the underworld (Nerve check, DC 12)',
+      label: 'Meet them (Nerve check, DC 12)',
       check: {
         stat: 'nerve',
         dc: 12,
         success: {
-          text: 'You negotiate carefully. They offer protection and black market goods at discounts. A dangerous alliance forms.',
+          text: 'You stay calm and bargain well. They offer protection and cheap goods. A risky friendship begins.',
           effects: [
             { kind: 'flag', id: 'underworld_ally', set: 1 },
             { kind: 'stat', stat: 'nerve', delta: 1 },
@@ -27,16 +27,16 @@ const mafia_notice: StoryCard = {
           ],
         },
         failure: {
-          text: 'Your nerves betray you. They see you as weak. You leave empty-handed.',
+          text: 'Your knees knock. They decide you are not worth their time.',
           effects: [{ kind: 'advanceDays', days: 2 }],
         },
       },
     },
     {
       id: 'avoid_underworld',
-      label: 'Avoid the underworld',
+      label: 'Stay away from them',
       effects: [
-        { kind: 'narrate', text: 'You slip out of the city to avoid their attention.' },
+        { kind: 'narrate', text: 'You lie low in the countryside until they lose interest.' },
         { kind: 'flag', id: 'underworld_ignored', set: 1 },
         { kind: 'advanceDays', days: 2 },
       ],
@@ -50,37 +50,37 @@ const refugee_crisis: StoryCard = {
   storyPhase: 'recovery',
   title: 'Refugees Flood the City',
   body: [
-    'The guild\'s collapse triggered a refugee crisis. Desperate people crowd the streets. Some are skilled craftspeople. Some are dangerous. Some are just hungry.',
+    'After the Colossus, homeless families fill the streets. Some are skilled craftspeople. Some are troublemakers. Most are just hungry.',
   ],
   choices: [
     {
       id: 'hire_refugees',
-      label: 'Hire refugees as labor (-80 gold)',
+      label: 'Give them fair work (-80g)',
       requires: [{ kind: 'goldAtLeast', amount: 80 }],
       effects: [
         { kind: 'gold', delta: -80 },
         { kind: 'wages', delta: 15 },
         { kind: 'flag', id: 'refugee_workers', set: 1 },
-        { kind: 'narrate', text: 'You build a small operation with grateful workers. Their productivity is fierce.' },
+        { kind: 'narrate', text: 'Your new workers are grateful and work hard. Your little business hums.' },
         { kind: 'advanceDays', days: 4 },
       ],
     },
     {
       id: 'exploit_refugees',
-      label: 'Exploit them for maximum profit',
+      label: 'Work them hard for little pay',
       effects: [
         { kind: 'gold', delta: 120 },
         { kind: 'stat', stat: 'charm', delta: -1 },
         { kind: 'flag', id: 'exploited_refugees', set: 1 },
-        { kind: 'narrate', text: 'You profit greatly. Your conscience costs you.' },
+        { kind: 'narrate', text: 'You make a lot of money. It doesn\'t feel good.' },
         { kind: 'advanceDays', days: 3 },
       ],
     },
     {
       id: 'ignore_crisis',
-      label: 'It\'s not your problem',
+      label: 'Not your problem',
       effects: [
-        { kind: 'narrate', text: 'You keep your head down and your coin close.' },
+        { kind: 'narrate', text: 'You keep your head down and your coins close.' },
         { kind: 'advanceDays', days: 2 },
       ],
     },
@@ -96,26 +96,26 @@ const wanted_poster: StoryCard = {
   storyPhase: 'recovery',
   title: 'Your Face on a Wanted Poster',
   body: [
-    'The authorities blame you for the Inquisitor\'s rampage. Your face is plastered across the city. "Accessory to destruction of city property." The reward is substantial.',
+    'Your face is on posters all over town! The council blames you for the damage the Inquisitor caused. There is a big reward for your capture.',
   ],
   choices: [
     {
       id: 'flee_city',
-      label: 'Flee the city entirely',
+      label: 'Flee the city',
       effects: [
-        { kind: 'narrate', text: 'You abandon Vessarin. A new start in a distant city awaits, but at what cost?' },
+        { kind: 'narrate', text: 'You slip away from Vessarin with nothing but a bag. A new start, far away.' },
         { kind: 'advanceDays', days: 15 },
         { kind: 'flag', id: 'fled_city', set: 1 },
       ],
     },
     {
       id: 'hide_and_rebuild',
-      label: 'Hide while rebuilding in shadow (Savvy check, DC 14)',
+      label: 'Hide and rebuild in secret (Savvy check, DC 14)',
       check: {
         stat: 'savvy',
         dc: 14,
         success: {
-          text: 'You disappear into the underground economy. Your business thrives hidden from the authorities.',
+          text: 'You run your business from a hidden cellar. Nobody finds you, and the business grows.',
           effects: [
             { kind: 'stat', stat: 'savvy', delta: 2 },
             { kind: 'wages', delta: 20 },
@@ -124,7 +124,7 @@ const wanted_poster: StoryCard = {
           ],
         },
         failure: {
-          text: 'The authorities close in. You narrowly escape arrest.',
+          text: 'The Watch nearly catches you. You escape over the rooftops by a whisker.',
           effects: [
             { kind: 'flag', id: 'authorities_hunting', set: 1 },
             { kind: 'advanceDays', days: 5 },
@@ -134,12 +134,12 @@ const wanted_poster: StoryCard = {
     },
     {
       id: 'clear_name',
-      label: 'Prove your innocence (Charm check, DC 15)',
+      label: 'Prove you\'re innocent (Charm check, DC 15)',
       check: {
         stat: 'charm',
         dc: 15,
         success: {
-          text: 'You convince witnesses to testify. The wanted poster comes down. Freedom tastes sweet.',
+          text: 'Witnesses speak up for you, and the posters come down. Freedom tastes sweet!',
           effects: [
             { kind: 'stat', stat: 'charm', delta: 2 },
             { kind: 'flag', id: 'name_cleared', set: 1 },
@@ -147,7 +147,7 @@ const wanted_poster: StoryCard = {
           ],
         },
         failure: {
-          text: 'No one believes a merchant over the authorities.',
+          text: 'Nobody believes you over the council.',
           effects: [{ kind: 'advanceDays', days: 3 }],
         },
       },
@@ -164,18 +164,18 @@ const war_contracts: StoryCard = {
   storyPhase: 'recovery',
   title: 'The Crown Needs Supplies',
   body: [
-    'The Tide\'s emergence has convinced the crown to mobilize. The military needs food, weapons, horses, everything. Merchants willing to supply them could become wealthy beyond measure—or lose everything if they\'re caught trading with the enemy.',
+    'After the Tide, the crown is preparing for trouble. The army needs food, horses and supplies. Suppliers could get very rich, or lose everything.',
   ],
   choices: [
     {
       id: 'supply_crown',
-      label: 'Contract with the crown (-150 gold, major risk)',
+      label: 'Supply the crown (-150g, big risk)',
       requires: [{ kind: 'goldAtLeast', amount: 150 }],
       check: {
         stat: 'grit',
         dc: 13,
         success: {
-          text: 'Your supplies reach the front lines. The crown rewards you handsomely.',
+          text: 'Your wagons reach the army camps. The crown pays you handsomely.',
           effects: [
             { kind: 'gold', delta: 300 },
             { kind: 'stat', stat: 'grit', delta: 1 },
@@ -184,7 +184,7 @@ const war_contracts: StoryCard = {
           ],
         },
         failure: {
-          text: 'Bandits intercept your shipments. The crown demands compensation.',
+          text: 'Bandits steal your wagons, and the crown wants its money back.',
           effects: [
             { kind: 'gold', delta: -250 },
             { kind: 'advanceDays', days: 8 },
@@ -194,12 +194,12 @@ const war_contracts: StoryCard = {
     },
     {
       id: 'trade_both_sides',
-      label: 'Trade with both sides (Savvy check, DC 15)',
+      label: 'Sell to both sides (Savvy check, DC 15)',
       check: {
         stat: 'savvy',
         dc: 15,
         success: {
-          text: 'You play both sides expertly. Gold flows from every direction. But you\'ve made dangerous enemies.',
+          text: 'You sell to both sides without getting caught. Gold pours in, but you make dangerous enemies.',
           effects: [
             { kind: 'gold', delta: 400 },
             { kind: 'stat', stat: 'savvy', delta: 2 },
@@ -208,7 +208,7 @@ const war_contracts: StoryCard = {
           ],
         },
         failure: {
-          text: 'You\'re discovered. Both sides consider you a traitor.',
+          text: 'You are found out! Now both sides call you a traitor.',
           effects: [
             { kind: 'flag', id: 'hunted_traitor', set: 1 },
             { kind: 'advanceDays', days: 6 },
@@ -220,7 +220,7 @@ const war_contracts: StoryCard = {
       id: 'stay_neutral',
       label: 'Stay out of it',
       effects: [
-        { kind: 'narrate', text: 'You watch from the sidelines as fortunes are made and lost.' },
+        { kind: 'narrate', text: 'You watch from the sidelines as fortunes are won and lost.' },
         { kind: 'advanceDays', days: 4 },
       ],
     },
@@ -236,28 +236,28 @@ const market_collapse: StoryCard = {
   storyPhase: 'recovery',
   title: 'The Market Transforms',
   body: [
-    'The Machine\'s rise has shattered traditional trading. The old market structures crumble. Some merchants adapt to the new reality. Others fight it desperately. A few see opportunities in chaos.',
+    'The Machine has turned the market upside down. Some merchants change with it. Some fight it. A few spot chances in the chaos.',
   ],
   choices: [
     {
       id: 'embrace_machines',
-      label: 'Adapt to mechanized trading',
+      label: 'Learn the new machine trade',
       effects: [
         { kind: 'stat', stat: 'savvy', delta: 2 },
         { kind: 'wages', delta: 25 },
         { kind: 'flag', id: 'machine_adapted', set: 1 },
-        { kind: 'narrate', text: 'You master the new systems. Your profits soar.' },
+        { kind: 'narrate', text: 'You get the hang of the new ways quickly. Your profits soar.' },
         { kind: 'advanceDays', days: 7 },
       ],
     },
     {
       id: 'resist_machines',
-      label: 'Rally merchants against the Machine (Charm check, DC 13)',
+      label: 'Unite the merchants (Charm check, DC 13)',
       check: {
         stat: 'charm',
         dc: 13,
         success: {
-          text: 'You lead a merchant coalition. Together you\'re strong enough to negotiate new terms.',
+          text: 'You bring the merchants together. United, you win much better terms.',
           effects: [
             { kind: 'stat', stat: 'charm', delta: 2 },
             { kind: 'flag', id: 'merchant_leader', set: 1 },
@@ -265,7 +265,7 @@ const market_collapse: StoryCard = {
           ],
         },
         failure: {
-          text: 'Your resistance crumbles. The Machine is too powerful.',
+          text: 'Your group falls apart. The Machine is too strong.',
           effects: [
             { kind: 'wages', delta: -10 },
             { kind: 'advanceDays', days: 5 },
@@ -275,13 +275,13 @@ const market_collapse: StoryCard = {
     },
     {
       id: 'exploit_transition',
-      label: 'Exploit the confusion for profit (-100 gold to invest)',
+      label: 'Profit from the confusion (-100g to invest)',
       requires: [{ kind: 'goldAtLeast', amount: 100 }],
       effects: [
         { kind: 'gold', delta: 250 },
         { kind: 'stat', stat: 'savvy', delta: 1 },
         { kind: 'flag', id: 'transition_profiteer', set: 1 },
-        { kind: 'narrate', text: 'While others panic, you accumulate fortunes.' },
+        { kind: 'narrate', text: 'While others panic, your fortune grows.' },
         { kind: 'advanceDays', days: 8 },
       ],
     },
@@ -294,29 +294,29 @@ const old_mentor_returns: StoryCard = {
   id: 'old_mentor_returns',
   weight: 4,
   storyPhase: 'recovery',
-  title: 'An Old Mentor Reappears',
+  title: 'Old Tobias Returns',
   body: [
-    'The person who first taught you about trading reappears after years away. "I heard you stood against a Colossus. Not many survive. Even fewer keep their wits."',
+    'Old Tobias leans on your counter, eyes twinkling under his big hat. "I heard you stood up to a Colossus," he says. "Not many survive. Fewer still keep their wits."',
   ],
   choices: [
     {
       id: 'accept_guidance',
-      label: 'Accept their guidance',
+      label: 'Ask for his advice',
       effects: [
         { kind: 'stat', stat: 'savvy', delta: 2 },
         { kind: 'stat', stat: 'charm', delta: 1 },
         { kind: 'flag', id: 'mentor_allied', set: 1 },
-        { kind: 'narrate', text: 'Their wisdom accelerates your recovery.' },
+        { kind: 'narrate', text: 'His advice helps you get back on your feet much faster.' },
         { kind: 'advanceDays', days: 5 },
       ],
     },
     {
       id: 'forge_own_path',
-      label: 'Thank them but forge your own path',
+      label: 'Thank him, but find your own way',
       effects: [
         { kind: 'stat', stat: 'grit', delta: 1 },
         { kind: 'stat', stat: 'nerve', delta: 1 },
-        { kind: 'narrate', text: 'You\'ve learned that independence matters.' },
+        { kind: 'narrate', text: 'Tobias chuckles. "Good. You don\'t need me anymore."' },
         { kind: 'advanceDays', days: 3 },
       ],
     },
@@ -329,17 +329,17 @@ const ambitious_rival: StoryCard = {
   storyPhase: 'recovery',
   title: 'Your Rival Strikes',
   body: [
-    'While you were facing the Colossus, your rival seized the opportunity. They\'ve taken over several of your contracts and won new allies. "It\'s nothing personal," they say with a smile that suggests otherwise.',
+    'While you faced the Colossus, your rival stole your best customers. "Nothing personal," she says, with a smile that says otherwise.',
   ],
   choices: [
     {
       id: 'compete_fiercely',
-      label: 'Out-compete them (Savvy check, DC 14)',
+      label: 'Win them back (Savvy check, DC 14)',
       check: {
         stat: 'savvy',
         dc: 14,
         success: {
-          text: 'You reclaim what\'s yours and then some. Your rival slinks away defeated.',
+          text: 'You win back every customer, and more. Your rival slinks away.',
           effects: [
             { kind: 'stat', stat: 'savvy', delta: 1 },
             { kind: 'wages', delta: 20 },
@@ -348,7 +348,7 @@ const ambitious_rival: StoryCard = {
           ],
         },
         failure: {
-          text: 'They\'re better prepared than you expected. Your losses are substantial.',
+          text: 'She is better prepared than you thought. You lose a lot.',
           effects: [
             { kind: 'gold', delta: -100 },
             { kind: 'flag', id: 'lost_to_rival', set: 1 },
@@ -359,12 +359,12 @@ const ambitious_rival: StoryCard = {
     },
     {
       id: 'form_partnership',
-      label: 'Propose a partnership (Charm check, DC 12)',
+      label: 'Suggest working together (Charm check, DC 12)',
       check: {
         stat: 'charm',
         dc: 12,
         success: {
-          text: 'You both benefit. Competition becomes collaboration.',
+          text: 'You team up, and you both do better than before.',
           effects: [
             { kind: 'stat', stat: 'charm', delta: 1 },
             { kind: 'wages', delta: 15 },
@@ -373,7 +373,7 @@ const ambitious_rival: StoryCard = {
           ],
         },
         failure: {
-          text: 'They see it as weakness. They take more.',
+          text: 'She thinks you\'re weak, and takes even more.',
           effects: [{ kind: 'advanceDays', days: 3 }],
         },
       },

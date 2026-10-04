@@ -6,14 +6,17 @@ export const wealthBuildingDeck: StoryCard[] = [
   {
     id: 'iron_broker_visit',
     title: 'The Iron Broker',
-    body: ['A rough-dressed merchant approaches with a proposition. "I deal in raw iron bars. Cheap and plentiful. Interested?" The demand from the crown\'s shipyards seems endless.'],
+    body: ['A broad merchant with soot on his cheeks drops an iron bar on your table. Clang! "Plenty more where that came from," he says. "The shipyards can\'t get enough."'],
     storyPhase: 'climbing',
     weight: 12,
     choices: [
       {
         id: 'buy_iron_bars',
-        label: 'Buy a shipment',
+        label: 'Buy into his iron trade (120g, +18g/month)',
+        requires: [{ kind: 'goldAtLeast', amount: 120 }],
+        showLockedAs: 'Needs 120g',
         effects: [
+          { kind: 'gold', delta: -120 },
           {
             kind: 'acquireAsset',
             asset: {
@@ -26,29 +29,29 @@ export const wealthBuildingDeck: StoryCard[] = [
           },
           {
             kind: 'narrate',
-            text: 'You acquire a steady supply of iron bars. Every month brings predictable returns.',
+            text: 'Iron bars arrive every month, and so does a steady little profit.',
           },
         ],
       },
       {
         id: 'pass_iron_broker',
-        label: 'Decline politely',
-        effects: [{ kind: 'narrate', text: 'The broker shrugs and moves on to find another buyer.' }],
+        label: 'Politely decline',
+        effects: [{ kind: 'narrate', text: 'He tucks the bar under his arm and clanks off to find another buyer.' }],
       },
     ],
   },
 
   {
     id: 'mining_syndicate_offer',
-    title: 'The Mining Syndicate',
-    body: ['A letter arrives sealed with a mark you recognize. The mining syndicate is offering shares in a new iron operation. "Only 50 trusted partners get this opportunity," it reads.'],
+    title: 'A Letter from the Mining Syndicate',
+    body: ['A letter arrives, sealed with a pickaxe in red wax. The mining syndicate is selling shares in a new iron mine. "Only 50 trusted partners are invited," it reads.'],
     storyPhase: 'climbing',
     weight: 10,
     requires: [{ kind: 'goldAtLeast', amount: 180 }],
     choices: [
       {
         id: 'buy_syndicate_share',
-        label: 'Invest in the syndicate',
+        label: 'Buy a share (180g, +32g/month)',
         effects: [
           { kind: 'gold', delta: -180 },
           {
@@ -63,29 +66,29 @@ export const wealthBuildingDeck: StoryCard[] = [
           },
           {
             kind: 'narrate',
-            text: 'Your investment secures a seat at the syndicate\'s table. Monthly dividends begin to arrive.',
+            text: 'You are one of the 50 now. A share of the mine\'s profits arrives every month.',
           },
         ],
       },
       {
         id: 'pass_syndicate',
         label: 'Too risky',
-        effects: [{ kind: 'narrate', text: 'You fold the letter carefully. Someone else will take the opportunity.' }],
+        effects: [{ kind: 'narrate', text: 'You fold the letter away. Someone else will take your place.' }],
       },
     ],
   },
 
   {
     id: 'scrap_iron_collection',
-    title: 'Scrap Iron Opportunity',
-    body: ['A blacksmith you know needs help. "I\'ve got contacts at the shipyards. They sell scrap iron cheap. If you take the waste, I\'ll help you find buyers." Easy profit if you move fast.'],
+    title: 'The Scrap Iron Trade',
+    body: ['A friendly blacksmith wipes her brow. "The shipyards throw out heaps of scrap iron," she says. "Buy it cheap, and I\'ll help you sell it on."'],
     storyPhase: 'early_game',
     weight: 14,
     requires: [{ kind: 'goldAtLeast', amount: 60 }],
     choices: [
       {
         id: 'start_scrap_business',
-        label: 'Start collecting scrap',
+        label: 'Start the scrap trade (60g, +12g/month)',
         effects: [
           { kind: 'gold', delta: -60 },
           {
@@ -101,17 +104,17 @@ export const wealthBuildingDeck: StoryCard[] = [
           { kind: 'flag', id: 'scrap_iron_started', set: 1 },
           {
             kind: 'narrate',
-            text: 'You establish a small operation collecting and reselling scrap iron. Your first profits arrive before the month ends.',
+            text: 'Your cart clatters around the shipyards collecting scrap. The first coins arrive before the month is out.',
           },
         ],
       },
       {
         id: 'decline_scrap',
-        label: 'Not interested',
+        label: 'Not for you',
         effects: [
           {
             kind: 'narrate',
-            text: 'The blacksmith shrugs and finds someone else to help.',
+            text: 'She shrugs and asks someone else.',
           },
         ],
       },
@@ -121,15 +124,15 @@ export const wealthBuildingDeck: StoryCard[] = [
   // Spice opportunities (various tiers)
   {
     id: 'spice_merchant_contact',
-    title: 'A Spice Merchant\'s Offer',
-    body: ['A robed woman with dark eyes finds you in the market. "I have connections to the southern spice routes. Small investments, steady returns. Are you interested?"'],
+    title: 'The Spice Road',
+    body: ['A woman in a saffron-yellow robe smiles at you. Cinnamon drifts from her sleeves. "My caravans walk the southern spice road," she says. "A small share pays you every month."'],
     storyPhase: 'climbing',
     weight: 12,
     requires: [{ kind: 'goldAtLeast', amount: 80 }],
     choices: [
       {
         id: 'invest_spice_trade',
-        label: 'Invest in spice trading',
+        label: 'Buy a share (80g, +22g/month)',
         effects: [
           { kind: 'gold', delta: -80 },
           {
@@ -144,7 +147,7 @@ export const wealthBuildingDeck: StoryCard[] = [
           },
           {
             kind: 'narrate',
-            text: 'Your investment enters the spice trade network. Each month brings returns as goods move along the routes.',
+            text: 'Camels plod along the spice road, and every month a little of their profit is yours.',
           },
         ],
       },
@@ -154,7 +157,7 @@ export const wealthBuildingDeck: StoryCard[] = [
         effects: [
           {
             kind: 'narrate',
-            text: 'The merchant nods understanding and vanishes back into the crowd.',
+            text: 'She nods and disappears into the crowd, trailing cinnamon.',
           },
         ],
       },
@@ -163,15 +166,15 @@ export const wealthBuildingDeck: StoryCard[] = [
 
   {
     id: 'spice_warehouse_venture',
-    title: 'The Warehouse Opportunity',
-    body: ['Your friend at the docks knows about a spice warehouse looking for investors. "They\'re full of inventory and need working capital. Good terms if you commit now."'],
+    title: 'A Warehouse Full of Spice',
+    body: ['Your friend at the docks leans in. "There\'s a warehouse stuffed with spice that needs a partner," she whispers. "Good terms, if you\'re quick."'],
     storyPhase: 'climbing',
     weight: 10,
     requires: [{ kind: 'goldAtLeast', amount: 150 }],
     choices: [
       {
         id: 'fund_warehouse',
-        label: 'Fund the warehouse',
+        label: 'Fund the warehouse (150g, +35g/month)',
         effects: [
           { kind: 'gold', delta: -150 },
           {
@@ -186,17 +189,17 @@ export const wealthBuildingDeck: StoryCard[] = [
           },
           {
             kind: 'narrate',
-            text: 'Your capital secures a stake in the warehouse. As spice moves in and out, you profit from the flow.',
+            text: 'Sacks of spice come in and go out, and you earn on every one.',
           },
         ],
       },
       {
         id: 'pass_warehouse',
-        label: 'Find another investment',
+        label: 'Look for something else',
         effects: [
           {
             kind: 'narrate',
-            text: 'You pass on the opportunity. The warehouse finds another backer.',
+            text: 'The warehouse finds another partner.',
           },
         ],
       },
@@ -206,15 +209,15 @@ export const wealthBuildingDeck: StoryCard[] = [
   // Merchant routes (special assets with quantity)
   {
     id: 'merchant_route_offer',
-    title: 'A Trade Route Opens',
-    body: ['News travels fast. A new land route has opened to the south. Several merchants are pooling resources to establish trading posts along it. "Partnership shares available for early investors," one tells you.'],
+    title: 'The Southern Road',
+    body: ['A new road has opened to the south! Merchants are building trading posts along it. "There\'s room for one more partner," says a cheerful trader.'],
     storyPhase: 'climbing',
     weight: 11,
     requires: [{ kind: 'goldAtLeast', amount: 100 }],
     choices: [
       {
         id: 'establish_merchant_route',
-        label: 'Establish a route',
+        label: 'Open a trading post (100g, +28g/month)',
         effects: [
           { kind: 'gold', delta: -100 },
           {
@@ -231,17 +234,17 @@ export const wealthBuildingDeck: StoryCard[] = [
           { kind: 'flag', id: 'merchant_route_active', set: 1 },
           {
             kind: 'narrate',
-            text: 'Your merchants establish a trading post. Goods flow and profits accumulate.',
+            text: 'Your trading post opens on the southern road. Carts stop, trade and pay.',
           },
         ],
       },
       {
         id: 'pass_route',
-        label: 'Wait for another opportunity',
+        label: 'Wait for another chance',
         effects: [
           {
             kind: 'narrate',
-            text: 'You decide the timing isn\'t right. Perhaps later.',
+            text: 'Not now. Maybe later.',
           },
         ],
       },
@@ -250,8 +253,8 @@ export const wealthBuildingDeck: StoryCard[] = [
 
   {
     id: 'expand_merchant_routes',
-    title: 'Expand Your Routes',
-    body: ['Your first merchant route is thriving. Your partners approach you. "We\'re opening a second route to the west. You in?"'],
+    title: 'A Second Road',
+    body: ['Your trading post is busy every day. Your partners grin. "We\'re opening another road, to the west," they say. "Are you in?"'],
     weight: 13,
     requires: [
       { kind: 'flag', id: 'merchant_route_active', atLeast: 1 },
@@ -260,7 +263,7 @@ export const wealthBuildingDeck: StoryCard[] = [
     choices: [
       {
         id: 'expand_routes',
-        label: 'Expand to a second route',
+        label: 'Open a second post (100g, +28g/month)',
         effects: [
           { kind: 'gold', delta: -100 },
           {
@@ -276,17 +279,17 @@ export const wealthBuildingDeck: StoryCard[] = [
           },
           {
             kind: 'narrate',
-            text: 'You expand your trade network. Now goods flow along multiple routes, multiplying your returns.',
+            text: 'Now you have trading posts on two roads, and twice the profit.',
           },
         ],
       },
       {
         id: 'decline_expansion',
-        label: 'One route is enough',
+        label: 'One road is enough',
         effects: [
           {
             kind: 'narrate',
-            text: 'You focus on optimizing what you already have.',
+            text: 'You focus on making your first post even better.',
           },
         ],
       },
@@ -296,8 +299,8 @@ export const wealthBuildingDeck: StoryCard[] = [
   // Late-game wealth consolidation
   {
     id: 'guild_partnership',
-    title: 'Guild Partnership Proposal',
-    body: ['As your wealth grows, the merchant guilds take notice. "We want successful independent traders like you. Join our guild. Full partnership with quarterly bonuses."'],
+    title: 'A Partner in the Guild',
+    body: ['The guild master himself visits your shop, chain of office glinting. "We want traders like you," he says. "Become a full guild partner."'],
     weight: 9,
     requires: [
       { kind: 'goldAtLeast', amount: 200 },
@@ -306,8 +309,11 @@ export const wealthBuildingDeck: StoryCard[] = [
     choices: [
       {
         id: 'join_guild',
-        label: 'Accept the guild partnership',
+        label: 'Become a guild partner (200g, +50g/month)',
+        requires: [{ kind: 'goldAtLeast', amount: 200 }],
+        showLockedAs: 'Needs 200g',
         effects: [
+          { kind: 'gold', delta: -200 },
           {
             kind: 'acquireAsset',
             asset: {
@@ -321,17 +327,17 @@ export const wealthBuildingDeck: StoryCard[] = [
           { kind: 'flag', id: 'in_guild', set: 1 },
           {
             kind: 'narrate',
-            text: 'You join the merchant guild as a full partner. Doors open and wealth flows from every direction.',
+            text: 'You sign the guild\'s great book. Doors open everywhere, and the profits roll in.',
           },
         ],
       },
       {
         id: 'decline_guild',
-        label: 'Remain independent',
+        label: 'Stay independent',
         effects: [
           {
             kind: 'narrate',
-            text: 'You prefer your freedom. The guild respects your choice and makes no further approach.',
+            text: 'You prefer your freedom. The guild master bows and leaves you be.',
           },
         ],
       },

@@ -6,17 +6,17 @@ export const dangerCards: StoryCard[] = [
   // EARLY GAME DANGERS (small losses, educational)
   {
     id: 'petty_theft',
-    title: 'Petty Theft at the Market',
-    body: ['A pickpocket works the crowd. Your purse is lighter by the time you notice. Such is life in the lower quarters.'],
+    title: 'Pickpocket!',
+    body: ['Someone bumps into you in the crowd. "Sorry!" Moments later, your purse feels lighter. A pickpocket!'],
     storyPhase: 'early_game',
     weight: 10,
     choices: [
       {
         id: 'accept_loss',
-        label: 'Accept the loss',
+        label: 'Grumble and move on',
         effects: [
           { kind: 'gold', delta: -20 },
-          { kind: 'narrate', text: 'You lose 20 gold to a skilled thief. A lesson in vigilance.' },
+          { kind: 'narrate', text: 'The thief got away with 20 gold. Next time, you keep a hand on your purse.' },
         ],
       },
     ],
@@ -24,18 +24,18 @@ export const dangerCards: StoryCard[] = [
 
   {
     id: 'spoiled_shipment',
-    title: 'A Shipment Spoils',
-    body: ['The goods you invested in have rotted in transit. The merchant shrugs apologetically. "Such is the risk of trade," he says.'],
+    title: 'A Crate of Rotten Fruit',
+    body: ['You lift the lid of your new crate. Phew! The fruit has rotted on the voyage. The seller shrugs. "That\'s trade, friend."'],
     storyPhase: 'early_game',
     weight: 9,
     requires: [{ kind: 'anyOf', of: [{ kind: 'flag', id: 'has_commodities', atLeast: 1 }] }],
     choices: [
       {
         id: 'accept_spoilage',
-        label: 'Accept the loss',
+        label: 'Hold your nose and move on',
         effects: [
           { kind: 'gold', delta: -25 },
-          { kind: 'narrate', text: 'You lose 25 gold to spoilage. A reminder that commerce has risks.' },
+          { kind: 'narrate', text: 'That rotten fruit cost you 25 gold. Trade always has its risks.' },
         ],
       },
     ],
@@ -43,25 +43,25 @@ export const dangerCards: StoryCard[] = [
 
   {
     id: 'creditor_pressure',
-    title: 'A Creditor Presses Hard',
-    body: ['A debtor demands payment before schedule. "Times are tough," they say, "and I need my money back." You have to choose.'],
+    title: 'Pay Me Back Early!',
+    body: ['A man you owe money bangs on your door. "Times are hard," he says. "I need my money back now, not later!"'],
     storyPhase: 'climbing',
     weight: 11,
     choices: [
       {
         id: 'pay_early',
-        label: 'Pay them back early (lose 40g)',
+        label: 'Pay him early (-40g)',
         effects: [
           { kind: 'gold', delta: -40 },
-          { kind: 'narrate', text: 'You pay back 40 gold early to satisfy an impatient creditor.' },
+          { kind: 'narrate', text: 'You hand over 40 gold early. He stomps off, satisfied.' },
         ],
       },
       {
         id: 'refuse_creditor',
-        label: 'Refuse (gain reputation debt)',
+        label: 'Refuse (it may hurt your name)',
         effects: [
           { kind: 'flag', id: 'creditor_anger', delta: 1 },
-          { kind: 'narrate', text: 'You refuse. The creditor leaves muttering threats.' },
+          { kind: 'narrate', text: 'You refuse. He leaves, muttering darkly.' },
         ],
       },
     ],
@@ -69,25 +69,25 @@ export const dangerCards: StoryCard[] = [
 
   {
     id: 'competition_undercutting',
-    title: 'A Competitor Undercuts You',
-    body: ['A rival merchant starts selling goods cheaper than you can. Your profits shrink as customers flock to the better price.'],
+    title: 'Cheaper Across the Street',
+    body: ['A rival puts up a big sign: "EVERYTHING HALF PRICE!" Your customers start drifting across the street.'],
     storyPhase: 'climbing',
     weight: 10,
     choices: [
       {
         id: 'absorb_loss',
-        label: 'Absorb the loss',
+        label: 'Take the hit',
         effects: [
           { kind: 'gold', delta: -35 },
-          { kind: 'narrate', text: 'You lose 35 gold to undercutting competitors. Business is brutal.' },
+          { kind: 'narrate', text: 'You lose 35 gold to your rival\'s sale. Business can be tough.' },
         ],
       },
       {
         id: 'cut_prices',
-        label: 'Cut your prices to match',
+        label: 'Cut your prices too',
         effects: [
           { kind: 'expense', delta: 5 },
-          { kind: 'narrate', text: 'You cut prices, hurting your margin by 5 gold per month.' },
+          { kind: 'narrate', text: 'You lower your prices to match. You now earn 5 gold less every month.' },
         ],
       },
     ],
@@ -96,8 +96,8 @@ export const dangerCards: StoryCard[] = [
   // MID-GAME DANGERS (moderate losses, asset risk)
   {
     id: 'fire_at_warehouse',
-    title: 'Fire at Your Warehouse',
-    body: ['Flames consume your warehouse! Goods are destroyed, investments go up in smoke. "It started in the lamp oil," they say.'],
+    title: 'Fire!',
+    body: ['Bells clang in the night. Your warehouse is on fire! By morning, there is only smoke and ash. "A lamp tipped over," says the night guard.'],
     storyPhase: 'climbing',
     weight: 8,
     requires: [
@@ -112,18 +112,18 @@ export const dangerCards: StoryCard[] = [
     choices: [
       {
         id: 'lose_asset',
-        label: 'Lose a major investment',
+        label: 'Count your losses',
         effects: [
           { kind: 'gold', delta: -75 },
-          { kind: 'narrate', text: 'Fire claims 75 gold worth of goods and investment. The warehouse is a total loss.' },
+          { kind: 'narrate', text: 'The fire took 75 gold of goods. The warehouse is gone.' },
         ],
       },
       {
         id: 'pay_insurance',
-        label: 'You had insurance! Pay a claim fee',
+        label: 'You have insurance! Pay the claim fee',
         effects: [
           { kind: 'gold', delta: -25 },
-          { kind: 'narrate', text: 'The insurance company demands 25 gold to process the claim. Better than total loss.' },
+          { kind: 'narrate', text: 'The insurance clerk wants 25 gold to handle the claim. Much better than losing it all!' },
         ],
       },
     ],
@@ -131,8 +131,8 @@ export const dangerCards: StoryCard[] = [
 
   {
     id: 'betrayal_by_partner',
-    title: 'Your Partner Betrays You',
-    body: ['Your business partner has fled with half the inventory and vanished. You discover the betrayal too late. "He seemed so honest," says the guard.'],
+    title: 'Your Partner Vanishes',
+    body: ['Your partner has vanished in the night, along with half your stock. "He seemed so honest," sighs the guard.'],
     weight: 9,
     requires: [{ kind: 'colossiAtLeast', count: 1 }], // was gated on the never-entered 'entangled' phase: a mid-game danger
     choices: [
@@ -141,7 +141,7 @@ export const dangerCards: StoryCard[] = [
         label: 'Accept the loss',
         effects: [
           { kind: 'gold', delta: -100 },
-          { kind: 'narrate', text: 'You lose 100 gold to your partner\'s betrayal. Trust is expensive.' },
+          { kind: 'narrate', text: 'Your partner\'s betrayal cost you 100 gold. Trust can be expensive.' },
         ],
       },
     ],
@@ -150,24 +150,24 @@ export const dangerCards: StoryCard[] = [
   {
     id: 'market_crash_danger',
     title: 'The Market Crashes',
-    body: ['Word from the capital: trade wars have begun. Prices plummet overnight. Your investments are worth a fraction of what they were.'],
+    body: ['A rider gallops in from the capital: a trade war has started! Overnight, prices crash.'],
     storyPhase: 'climbing',
     weight: 7,
     choices: [
       {
         id: 'ride_out_crash',
-        label: 'Ride it out (lose 80g in value)',
+        label: 'Ride it out (-80g in value)',
         effects: [
           { kind: 'gold', delta: -80 },
-          { kind: 'narrate', text: 'Your assets depreciate by 80 gold as the market crashes. You hope prices recover.' },
+          { kind: 'narrate', text: 'Your goods lose 80 gold of value. You cross your fingers for better days.' },
         ],
       },
       {
         id: 'panic_sell',
-        label: 'Panic sell and cut losses',
+        label: 'Sell everything in a panic',
         effects: [
           { kind: 'gold', delta: -120 },
-          { kind: 'narrate', text: 'You sell desperately at terrible prices, losing 120 gold. But you preserve some capital.' },
+          { kind: 'narrate', text: 'You sell at terrible prices and lose 120 gold. At least you saved something.' },
         ],
       },
     ],
@@ -176,9 +176,9 @@ export const dangerCards: StoryCard[] = [
   // LATE-GAME DANGERS (major losses, existential threat)
   {
     id: 'extortion_racket',
-    title: 'The Mob Wants a Cut',
+    title: 'The Gang Wants a Cut',
     body: [
-      'Dark figures visit your businesses. "We provide protection. The fee is 15% of monthly profits. Or bad things happen." You have to choose.',
+      'Three figures in dark coats stroll into your shop. "Nice place," says one. "Shame if something broke. Pay us every month, and nothing will."',
     ],
     weight: 10,
     once: true,
@@ -187,11 +187,11 @@ export const dangerCards: StoryCard[] = [
     choices: [
       {
         id: 'pay_protection',
-        label: 'Pay the protection racket',
+        label: 'Pay them',
         effects: [
           { kind: 'expense', delta: 15 },
           { kind: 'flag', id: 'paying_protection', set: 1 },
-          { kind: 'narrate', text: 'You pay 15 gold per month for "protection." Welcome to the criminal economy.' },
+          { kind: 'narrate', text: 'You now pay 15 gold every month for "protection". They tip their hats and leave.' },
         ],
       },
       {
@@ -199,7 +199,7 @@ export const dangerCards: StoryCard[] = [
         label: 'Refuse (dangerous)',
         effects: [
           { kind: 'flag', id: 'mob_anger', delta: 1 },
-          { kind: 'narrate', text: 'You refuse. The figures smile coldly and leave. You know this isn\'t over.' },
+          { kind: 'narrate', text: 'You refuse. They smile coldly and leave. This isn\'t over.' },
         ],
       },
     ],
@@ -207,9 +207,9 @@ export const dangerCards: StoryCard[] = [
 
   {
     id: 'noble_seizure',
-    title: 'A Noble Claims Your Assets',
+    title: 'A Duke Wants Your Warehouse',
     body: [
-      'A powerful noble decides your warehouse is the perfect location for their new palace. They offer "compensation" far below its worth, and soldiers back the offer.',
+      'A duke in a feathered hat points at your warehouse. "My new palace goes there," he announces. His soldiers hand you a tiny purse of "compensation".',
     ],
     weight: 8,
     once: true,
@@ -217,33 +217,33 @@ export const dangerCards: StoryCard[] = [
     choices: [
       {
         id: 'surrender_asset',
-        label: 'Surrender the property',
+        label: 'Give up the warehouse',
         effects: [
           { kind: 'gold', delta: -150 },
-          { kind: 'narrate', text: 'You lose 150 gold and a key asset to noble seizure. Power wins.' },
+          { kind: 'narrate', text: 'The duke\'s builders move in. It costs you 150 gold and your warehouse.' },
         ],
       },
       {
         id: 'fight_seizure',
-        label: 'Fight legally (costly)',
+        label: 'Fight him in court (costly)',
         effects: [
           { kind: 'gold', delta: -200 },
-          { kind: 'narrate', text: 'You hire the best lawyers and fight for 200 gold. It\'s not worth it. You lose anyway.' },
+          { kind: 'narrate', text: 'You spend 200 gold on lawyers. The judge is the duke\'s cousin. You lose anyway.' },
         ],
       },
       favour('crown', {
         id: 'petition_crown',
-        label: 'Petition the Crown',
-        effects: [{ kind: 'narrate', text: 'A royal clerk reviews the noble\'s claim and finds it wanting. Your property stays yours.' }],
+        label: 'Ask the Crown for help',
+        effects: [{ kind: 'narrate', text: 'A royal clerk reads the duke\'s claim and tears it in half. The warehouse stays yours!' }],
       }),
     ],
   },
 
   {
     id: 'sabotaged_supply',
-    title: 'Your Supply Chain Is Sabotaged',
+    title: 'Sabotage!',
     body: [
-      'Competitors have poisoned wells, burned fields, and destroyed shipments. Your supply of goods vanishes overnight. Economic warfare.',
+      'Your rivals have struck in the night. Wagons overturned, bridges blocked, crates smashed. Your supplies are gone.',
     ],
     weight: 9,
     once: true,
@@ -254,16 +254,16 @@ export const dangerCards: StoryCard[] = [
         label: 'Rebuild from scratch',
         effects: [
           { kind: 'gold', delta: -200 },
-          { kind: 'narrate', text: 'You spend 200 gold rebuilding your supply chain. Business is war.' },
+          { kind: 'narrate', text: 'It costs 200 gold to get your supplies flowing again.' },
         ],
       },
       {
         id: 'seek_revenge',
-        label: 'Seek revenge (risky)',
+        label: 'Get revenge (risky)',
         effects: [
           { kind: 'flag', id: 'vendetta', delta: 1 },
           { kind: 'gold', delta: -50 },
-          { kind: 'narrate', text: 'You hire thugs for 50 gold to sabotage the competitors back. This won\'t end well.' },
+          { kind: 'narrate', text: 'You pay 50 gold for some rough types to strike back. This won\'t end well.' },
         ],
       },
     ],
@@ -271,26 +271,26 @@ export const dangerCards: StoryCard[] = [
 
   {
     id: 'economic_downturn',
-    title: 'Economic Downturn Hits',
-    body: ['The city\'s economy contracts. Trade dries up. Nobles stop spending. Merchants struggle to survive. Your income plummets.'],
+    title: 'Hard Times',
+    body: ['Hard times have come to Vessarin. Nobles stop buying. Shops close. Everyone is pinching their pennies.'],
     weight: 10,
     once: true,
     requires: [{ kind: 'colossiAtLeast', count: 2 }],
     choices: [
       {
         id: 'weather_downturn',
-        label: 'Weather the downturn',
+        label: 'Tighten your belt',
         effects: [
           { kind: 'wages', delta: -10 },
-          { kind: 'narrate', text: 'Your monthly income drops by 10 gold as the economy contracts.' },
+          { kind: 'narrate', text: 'Your monthly income drops by 10 gold until times get better.' },
         ],
       },
       {
         id: 'liquidate_assets',
-        label: 'Liquidate assets for cash',
+        label: 'Sell things for cash',
         effects: [
           { kind: 'gold', delta: -100 },
-          { kind: 'narrate', text: 'You sell assets at fire-sale prices, losing 100 gold but gaining liquidity.' },
+          { kind: 'narrate', text: 'You sell things cheap and lose 100 gold, but now you have coins in hand.' },
         ],
       },
     ],
@@ -298,9 +298,9 @@ export const dangerCards: StoryCard[] = [
 
   {
     id: 'debt_collector_violence',
-    title: 'Debt Collectors Turn Violent',
+    title: 'The Debt Collectors Get Rough',
     body: [
-      'Your creditors have sent enforcers. They break your storefront and rough up your workers. "Pay up or this gets worse," they growl.',
+      'Your lenders have sent their toughest men. They smash your shop window and frighten your workers. "Pay up," they growl, "or next time is worse."',
     ],
     weight: 11,
     once: true,
@@ -309,10 +309,10 @@ export const dangerCards: StoryCard[] = [
     choices: [
       {
         id: 'pay_extortion',
-        label: 'Pay double (immediate)',
+        label: 'Pay double, right now',
         effects: [
           { kind: 'gold', delta: -250 },
-          { kind: 'narrate', text: 'You pay 250 gold to make the enforcers go away. For now.' },
+          { kind: 'narrate', text: 'You pay 250 gold. They leave, for now.' },
         ],
       },
       {
@@ -321,22 +321,22 @@ export const dangerCards: StoryCard[] = [
         effects: [
           { kind: 'expense', delta: 20 },
           { kind: 'flag', id: 'hired_guards', set: 1 },
-          { kind: 'narrate', text: 'You hire guards for 20 gold per month. Your safety has a price.' },
+          { kind: 'narrate', text: 'You hire guards for 20 gold every month. Safety has a price.' },
         ],
       },
       favour('underworld', {
         id: 'call_in_underworld',
-        label: 'Have friends in low places lean on them',
-        effects: [{ kind: 'narrate', text: 'A quiet word in the right tavern. The enforcers apologise for the mess and never come back.' }],
+        label: 'Ask your underworld friends for help',
+        effects: [{ kind: 'narrate', text: 'A quiet word in the right tavern. The thugs come back to apologise, and sweep up the glass.' }],
       }),
     ],
   },
 
   {
     id: 'supply_plague',
-    title: 'Plague Strikes Your Supply Routes',
+    title: 'Sickness on the Supply Roads',
     body: [
-      'Disease ravages the regions where your goods come from. Entire villages are quarantined. Your suppliers are dead or dying. Supply halts.',
+      'A sickness has spread through the villages where your goods come from. Whole villages are closed off. Nothing is coming through.',
     ],
     weight: 9,
     once: true,
@@ -344,18 +344,18 @@ export const dangerCards: StoryCard[] = [
     choices: [
       {
         id: 'reroute_supply',
-        label: 'Find alternative suppliers',
+        label: 'Find new suppliers',
         effects: [
           { kind: 'gold', delta: -300 },
-          { kind: 'narrate', text: 'You spend 300 gold establishing new supply routes through plague-free regions.' },
+          { kind: 'narrate', text: 'You spend 300 gold finding new suppliers in healthy lands.' },
         ],
       },
       {
         id: 'wait_it_out',
-        label: 'Wait for plague to pass',
+        label: 'Wait for it to pass',
         effects: [
           { kind: 'wages', delta: -15 },
-          { kind: 'narrate', text: 'You halt operations and lose 15 gold monthly income while waiting.' },
+          { kind: 'narrate', text: 'You pause your trade and earn 15 gold less every month while you wait.' },
         ],
       },
     ],
@@ -363,9 +363,9 @@ export const dangerCards: StoryCard[] = [
 
   {
     id: 'lawsuit_catastrophe',
-    title: 'A Lawsuit Destroys Your Credibility',
+    title: 'Taken to Court',
     body: [
-      'A disgruntled customer sues for damages. The case is high-profile. Even if you win, the damage to your reputation is catastrophic.',
+      'An angry customer takes you to court, and the whole town is gossiping about it. Even if you win, your good name will suffer.',
     ],
     weight: 8,
     once: true,
@@ -373,33 +373,33 @@ export const dangerCards: StoryCard[] = [
     choices: [
       {
         id: 'settle_lawsuit',
-        label: 'Settle out of court',
+        label: 'Settle quietly',
         effects: [
           { kind: 'gold', delta: -180 },
-          { kind: 'narrate', text: 'You settle for 180 gold to make this go away quietly.' },
+          { kind: 'narrate', text: 'You pay 180 gold, and the whole thing goes away quietly.' },
         ],
       },
       {
         id: 'fight_lawsuit',
-        label: 'Fight in court (expensive)',
+        label: 'Fight it in court (expensive)',
         effects: [
           { kind: 'gold', delta: -400 },
-          { kind: 'narrate', text: 'Legal fees and damages total 400 gold. Justice is expensive.' },
+          { kind: 'narrate', text: 'Lawyers and fines cost 400 gold. Courts are expensive.' },
         ],
       },
       favour('guilds', {
         id: 'guild_arbitration',
-        label: 'Ask the guild to arbitrate (-40g fee)',
-        effects: [{ kind: 'gold', delta: -40 }, { kind: 'narrate', text: 'The guild hears the case in a back room. Your fellow merchants find for you, and the plaintiff takes a token settlement.' }],
+        label: 'Ask the guild to settle it (-40g fee)',
+        effects: [{ kind: 'gold', delta: -40 }, { kind: 'narrate', text: 'The guild hears the case in a back room. Your fellow merchants side with you, and the customer settles for a small sum.' }],
       }),
     ],
   },
 
   {
     id: 'warehouse_hostage',
-    title: 'Your Warehouse Is Taken Hostage',
+    title: 'Thieves Take Your Warehouse',
     body: [
-      'Criminals seize your warehouse and demand ransom. "Pay 300 gold or we burn everything inside." They\'re serious. Your inventory could be destroyed.',
+      'Thieves have barred themselves inside your warehouse. A note flutters from the door: "Pay 300 gold, or we smash everything inside."',
     ],
     weight: 10,
     once: true,
@@ -407,24 +407,24 @@ export const dangerCards: StoryCard[] = [
     choices: [
       {
         id: 'pay_ransom',
-        label: 'Pay the ransom',
+        label: 'Pay them',
         effects: [
           { kind: 'gold', delta: -300 },
-          { kind: 'narrate', text: 'You pay 300 gold ransom. Your warehouse and goods are returned, for now.' },
+          { kind: 'narrate', text: 'You pay 300 gold. The thieves slip away, and your goods are safe, for now.' },
         ],
       },
       {
         id: 'call_guard',
-        label: 'Call the city guard',
+        label: 'Call the Watch',
         effects: [
           { kind: 'gold', delta: -150 },
-          { kind: 'narrate', text: 'The guard intervenes but demands 150 gold for "assistance." Corruption runs deep.' },
+          { kind: 'narrate', text: 'The Watch chases the thieves off, then asks for 150 gold for their "trouble".' },
         ],
       },
       favour('folk', {
         id: 'neighbourhood_rallies',
-        label: 'Call on the neighbourhood',
-        effects: [{ kind: 'narrate', text: 'Half the street turns out with lanterns and cudgels. The thieves slip away before dawn, empty-handed.' }],
+        label: 'Call on your neighbours',
+        effects: [{ kind: 'narrate', text: 'Half the street turns out with lanterns and broomsticks. The thieves flee before dawn, empty-handed!' }],
       }),
     ],
   },

@@ -6,47 +6,47 @@ export const chapter2CommodityCards: StoryCard[] = [
   venture({
     id: 'ch2_spice_smuggling',
     weight: 4,
-    title: 'Underground Spice Network',
+    title: 'The Secret Spice Tunnels',
     body: [
-      'A smuggler offers to cut you in on an underground spice distribution network. "We move high-margin spice through back channels. No taxes, no tariffs - just profit."',
+      'A smuggler lifts a trapdoor in a tavern floor. Below, a tunnel smells of pepper and cinnamon. "We move spice under the city," she whispers. "No taxes. Want in?"',
     ],
     asset: { id: 'ch2_spice_ring', label: 'Spice Smuggling Ring', cost: 150, monthlyCashflow: 35, sector: 'spice' },
     accept: {
       id: 'join_spice_smuggle',
-      label: 'Join the smuggling ring (150g)',
-      effects: [{ kind: 'narrate', text: 'You enter the underground spice trade. The profits are excellent, but so are the risks.' }, heat('police')],
+      label: 'Climb down into the tunnels (150g)',
+      effects: [{ kind: 'narrate', text: 'Sacks of spice travel the tunnels for you now. The profits are sweet. The risks are not.' }, heat('police')],
     },
-    decline: { id: 'refuse_spice_ring', label: 'Too risky', text: 'The smuggler vanishes into the shadows.' },
+    decline: { id: 'refuse_spice_ring', label: 'Close the trapdoor', text: 'She shrugs and drops down into the dark alone.' },
   }),
 
   venture({
     id: 'ch2_salt_black_market',
     weight: 3,
-    title: 'Black Market Salt Supplier',
+    title: 'Salt from the Back Door',
     body: [
-      'A dealer in restricted goods offers partnership. "Salt is heavily controlled. We move it illegally at premium prices. Your network, my supply - we split the take."',
+      'A man knocks on your back door at midnight. He opens a sack: snowy white salt, with no tax stamp. "The crown taxes every grain," he says. "We don\'t. Sell it for me, and we split the take."',
     ],
     asset: { id: 'ch2_salt_black', label: 'Black Market Salt Operation', cost: 140, monthlyCashflow: 32, sector: 'salt' },
     accept: {
       id: 'partner_salt_black',
-      label: 'Partner with black market (140g)',
-      effects: [{ kind: 'narrate', text: 'You move restricted salt. The authorities would pay to catch you.' }, heat('police')],
+      label: 'Sell his secret salt (140g)',
+      effects: [{ kind: 'narrate', text: 'Untaxed salt slips out your back door every night. The crown would love to catch you.' }, heat('police')],
     },
-    decline: { id: 'refuse_salt_black', label: 'Decline', text: 'The dealer moves on.' },
+    decline: { id: 'refuse_salt_black', label: 'Shut the door', text: 'He shoulders his sack and knocks on the next door down.' },
   }),
 
   venture({
     id: 'ch2_iron_theft_fence',
     weight: 3,
-    title: 'Stolen Iron Fence',
-    body: ['A criminal offers to sell you stolen military-grade iron at 60% below market. "No questions asked. We just need a distributor."'],
+    title: 'Iron with an Army Stamp',
+    body: ['A nervous man pulls back a tarp. The iron bars underneath carry the army\'s stamp. "Cheap," he says quickly. "Very cheap. Just don\'t ask where they came from."'],
     asset: { id: 'ch2_iron_fence', label: 'Stolen Iron Distribution', cost: 130, monthlyCashflow: 40, sector: 'iron' },
     accept: {
       id: 'fence_stolen_iron',
-      label: 'Distribute stolen iron (130g)',
-      effects: [{ kind: 'narrate', text: 'You fence stolen iron. The military will want it back.' }, heat('police')],
+      label: 'Sell the stolen iron (130g)',
+      effects: [{ kind: 'narrate', text: 'The iron sells fast. Somewhere, an army quartermaster is very, very cross.' }, heat('police')],
     },
-    decline: { id: 'refuse_iron_fence', label: 'Stay clean', text: 'The fence shrugs and leaves.' },
+    decline: { id: 'refuse_iron_fence', label: 'Keep your hands clean', text: 'He throws the tarp back over the iron and hurries off.' },
   }),
 ]
 
@@ -54,18 +54,18 @@ export const chapter2MarketCards: StoryCard[] = [
   {
     id: 'ch2_turf_war_spike',
     weight: 5,
-    title: 'Turf War Erupts',
-    body: ['2 criminal syndicates clash over territory. Market prices spike as supply chains are disrupted. This could be an opportunity - or a disaster.'],
+    title: 'The Gangs Go to War',
+    body: ['Shutters slam all over the harbour. 2 gangs are fighting over the docks, and no cargo is getting through. Prices shoot up. Clever traders could profit. Careless ones could lose everything.'],
     choices: [
       {
         id: 'profit_turf_war',
-        label: 'Sell high during the chaos (+200g)',
+        label: 'Sell while prices are high (+200g)',
         requires: [{ kind: 'goldAtLeast', amount: 50 }],
         effects: [
           { kind: 'gold', delta: 200 },
           { kind: 'marketShift', sector: 'spice', delta: 15 },
           { kind: 'marketShift', sector: 'salt', delta: 12 },
-          { kind: 'narrate', text: 'You time the chaos perfectly, selling at peak prices.' },
+          { kind: 'narrate', text: 'You sell at just the right moment, when prices peak.' },
         ],
       },
       {
@@ -73,7 +73,7 @@ export const chapter2MarketCards: StoryCard[] = [
         label: 'Stay out of it',
         effects: [
           { kind: 'marketShift', sector: 'iron', delta: -10 },
-          { kind: 'narrate', text: 'The violence spreads. Markets decline.' },
+          { kind: 'narrate', text: 'The fighting spreads, and the whole market slumps.' },
         ],
       },
     ],
@@ -83,24 +83,24 @@ export const chapter2MarketCards: StoryCard[] = [
     id: 'ch2_protection_racket_squeeze',
     weight: 4,
     once: true,
-    title: 'Protection Money Squeeze',
-    body: ['The syndicate that "protects" your operations demands a payment increase. "Business is good. Time to pay more."'],
+    title: 'The Price Goes Up',
+    body: ['Your "protectors" from the syndicate are back, picking their teeth. "Business looks good," says one. "So we want more. 100 gold more."'],
     choices: [
       {
         id: 'pay_squeeze',
-        label: 'Pay increased protection (-100g)',
+        label: 'Pay up (-100g)',
         requires: [{ kind: 'goldAtLeast', amount: 100 }],
         effects: [
           { kind: 'gold', delta: -100 },
-          { kind: 'narrate', text: 'You pay. The protection continues.' },
+          { kind: 'narrate', text: 'You pay. They tip their hats and swagger off.' },
         ],
       },
       {
         id: 'refuse_squeeze',
-        label: 'Refuse - find new allies',
+        label: 'Refuse, and find new friends',
         effects: [
           { kind: 'flag', id: 'syndicate_hostile', set: 1 },
-          { kind: 'narrate', text: 'The syndicate smiles coldly. You\'ve made an enemy.' },
+          { kind: 'narrate', text: 'They stop smiling. You have made an enemy today.' },
         ],
       },
     ],
@@ -109,23 +109,23 @@ export const chapter2MarketCards: StoryCard[] = [
   {
     id: 'ch2_informant_tip',
     weight: 3,
-    title: 'A Timely Informant Tip',
-    body: ['Your informant warns of incoming supply. "Shipment from the north. High quality, cheap. Get there first."'],
+    title: 'A Whisper in the Dark',
+    body: ['A note slides under your door: "Ship from the north. Good goods, cheap. Pier 4 at dawn. Be first." It is from your informant.'],
     choices: [
       {
         id: 'act_on_tip',
-        label: 'Rush to buy stock (+150g)',
+        label: 'Race to Pier 4 (+150g)',
         requires: [{ kind: 'goldAtLeast', amount: 75 }],
         effects: [
           { kind: 'gold', delta: 150 },
           { kind: 'marketShift', sector: 'iron', delta: -8 },
-          { kind: 'narrate', text: 'You arrive first and buy at bargain prices. Smart move.' },
+          { kind: 'narrate', text: 'You reach the pier first and buy everything cheap. Sweet!' },
         ],
       },
       {
         id: 'ignore_tip',
-        label: 'Ignore it',
-        effects: [{ kind: 'narrate', text: 'Someone else profits from the tip.' }],
+        label: 'Stay in bed',
+        effects: [{ kind: 'narrate', text: 'By breakfast, someone else has bought the lot.' }],
       },
     ],
   },
@@ -136,26 +136,26 @@ export const chapter2DangerCards: StoryCard[] = [
     id: 'ch2_rival_merchant',
     weight: 4,
     once: true,
-    title: 'A Rival Merchant Challenges You',
-    body: ['A competing merchant corners you. "You\'re cutting into my territory. This ends now - pay me 80 gold protection or we settle this in the streets."'],
+    title: 'Nose to Nose',
+    body: ['A rival in a huge feathered hat jabs a finger at your chest. "This street is mine! Pay me 80 gold, or we settle it right here, in front of everyone."'],
     choices: [
       {
         id: 'pay_rival',
-        label: 'Pay the rival (-80g)',
+        label: 'Pay him off (-80g)',
         requires: [{ kind: 'goldAtLeast', amount: 80 }],
         effects: [
           { kind: 'gold', delta: -80 },
-          { kind: 'narrate', text: 'You pay. Temporary peace.' },
+          { kind: 'narrate', text: 'You pay. He struts off, feathers bobbing. Peace, for now.' },
         ],
       },
       {
         id: 'challenge_rival',
-        label: 'Challenge them (Nerve check, DC 14)',
+        label: 'Stand your ground (Nerve check, DC 14)',
         check: {
           stat: 'nerve',
           dc: 14,
-          success: { text: 'You intimidate them. They back down.', effects: [{ kind: 'stat', stat: 'nerve', delta: 1 }] },
-          failure: { text: 'They beat you senseless.', effects: [{ kind: 'gold', delta: -150 }, { kind: 'stat', stat: 'grit', delta: -1 }] },
+          success: { text: 'You stare him down. His feathers droop, and he backs away. The crowd cheers!', effects: [{ kind: 'stat', stat: 'nerve', delta: 1 }] },
+          failure: { text: 'He shoves you into a fishmonger\'s barrel. The crowd roars with laughter.', effects: [{ kind: 'gold', delta: -150 }, { kind: 'stat', stat: 'grit', delta: -1 }] },
         },
       },
     ],
@@ -165,8 +165,8 @@ export const chapter2DangerCards: StoryCard[] = [
     id: 'ch2_police_shakedown',
     weight: 3,
     once: true,
-    title: 'Police Shakedown',
-    body: ['Corrupt police stop you on the street. "We hear you\'re doing good business. Time for an informal tax."'],
+    title: 'The Watch Wants a Tip',
+    body: ['Two crooked guards of the Watch block your way, twirling their clubs. "Business is good, we hear," says one. "Time for a little tip."'],
     choices: [
       {
         id: 'pay_police',
@@ -174,7 +174,7 @@ export const chapter2DangerCards: StoryCard[] = [
         requires: [{ kind: 'goldAtLeast', amount: 90 }],
         effects: [
           { kind: 'gold', delta: -90 },
-          { kind: 'narrate', text: 'You bribe them. They leave satisfied.' },
+          { kind: 'narrate', text: 'You pay. They stroll off, whistling.' },
         ],
       },
       {
@@ -183,14 +183,14 @@ export const chapter2DangerCards: StoryCard[] = [
         check: {
           stat: 'charm',
           dc: 13,
-          success: { text: 'You charm them. They let you go without payment.', effects: [{ kind: 'stat', stat: 'charm', delta: 1 }] },
-          failure: { text: 'They get angry. You pay double: 180g.', effects: [{ kind: 'gold', delta: -180 }] },
+          success: { text: 'You tell such a funny story that they forget all about the money.', effects: [{ kind: 'stat', stat: 'charm', delta: 1 }] },
+          failure: { text: 'Your joke falls flat. Now they want double: 180 gold.', effects: [{ kind: 'gold', delta: -180 }] },
         },
       },
       favour('crown', {
         id: 'name_friends_at_court',
         label: 'Mention your friends at court',
-        effects: [{ kind: 'narrate', text: 'The constable hears whose name you drop, pales, and wishes you a pleasant evening.' }],
+        effects: [{ kind: 'narrate', text: 'The guard hears whose name you drop. He turns pale and wishes you a lovely evening.' }],
       }),
     ],
   },
@@ -199,26 +199,26 @@ export const chapter2DangerCards: StoryCard[] = [
     id: 'ch2_loan_collector',
     weight: 3,
     once: true,
-    title: 'Aggressive Loan Collector',
-    body: ['A collector from the underworld appears. "Your debt has interest. Time to pay 120 gold or we take it from your assets."'],
+    title: 'The Debt Collector',
+    body: ['A tall, thin man in black fills your doorway. He opens a huge ledger. "Your debt has grown, I\'m afraid. 120 gold, today. Or we take it from your things."'],
     choices: [
       {
         id: 'pay_collector',
-        label: 'Pay immediately (-120g)',
+        label: 'Pay him now (-120g)',
         requires: [{ kind: 'goldAtLeast', amount: 120 }],
         effects: [
           { kind: 'gold', delta: -120 },
-          { kind: 'narrate', text: 'You pay. They leave, satisfied - for now.' },
+          { kind: 'narrate', text: 'You pay. He snaps the ledger shut and glides away. For now.' },
         ],
       },
       {
         id: 'defy_collector',
-        label: 'Defy them (Grit check, DC 15)',
+        label: 'Refuse to be bullied (Grit check, DC 15)',
         check: {
           stat: 'grit',
           dc: 15,
-          success: { text: 'They respect your nerve. They negotiate terms.', effects: [{ kind: 'stat', stat: 'grit', delta: 1 }] },
-          failure: { text: 'They break your legs. You\'re hospitalized.', effects: [{ kind: 'advanceDays', days: 10 }, { kind: 'stat', stat: 'grit', delta: -2 }] },
+          success: { text: 'He raises an eyebrow. "Brave. Very well, let us talk terms."', effects: [{ kind: 'stat', stat: 'grit', delta: 1 }] },
+          failure: { text: 'His men toss you into the street and empty your shop. It takes days to recover.', effects: [{ kind: 'advanceDays', days: 10 }, { kind: 'stat', stat: 'grit', delta: -2 }] },
         },
       },
     ],

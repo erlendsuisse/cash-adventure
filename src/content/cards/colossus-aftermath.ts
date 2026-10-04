@@ -8,24 +8,24 @@ const plague_aftermath: StoryCard = {
   storyPhase: 'recovery',
   title: 'The City Rebuilds',
   body: [
-    'The city is scarred but living. Markets reopen slowly. Trade resumes cautiously.',
-    'You are remembered as someone who helped. This reputation opens doors.',
-    'Healers approach you offering partnership. The city council wants your counsel. Even your competitors acknowledge your sacrifice.',
+    'The city is bruised, but alive. Markets open again, one stall at a time.',
+    'People remember that you helped. Doors open for you everywhere.',
+    'Healers want you as a partner. The council wants your advice. Even your rivals tip their hats.',
   ],
   choices: [
     {
       id: 'become_healer_patron',
-      label: 'Fund a healing house (+20g/mo passive, -200g)',
+      label: 'Build a healing house (-200g, +20g/month)',
       requires: [{ kind: 'goldAtLeast', amount: 200 }],
       effects: [
         { kind: 'gold', delta: -200 },
         { kind: 'acquireAsset', asset: { id: 'healing_house', label: 'Healing House', cost: 200, monthlyCashflow: 20, sector: 'charity' } },
-        { kind: 'narrate', text: 'You build a healing house. It becomes a beacon of hope in the recovering city.' },
+        { kind: 'narrate', text: 'You build a healing house with a bright blue door. It becomes a place of hope for the whole city.' },
       ],
     },
     {
       id: 'stay_humble',
-      label: 'Refuse offers, keep your principles',
+      label: 'Thank them, and stay independent',
       effects: [
         { kind: 'stat', stat: 'charm', delta: 1 },
         { kind: 'flag', id: 'noble_reputation', set: 1 },
@@ -38,32 +38,32 @@ const betrayal_aftermath: StoryCard = {
   id: 'betrayal_aftermath',
   // Queue-only: its Colossus outcome plays it; never a random draw.
   storyPhase: 'recovery',
-  title: 'New Alliances Form',
+  title: 'New Friends, Old Enemies',
   body: [
-    'The underworld respects you now. You are not their enemy—you are their equal.',
-    'The Syndicate offers partnership. "You understand the game. Work with us, not against us. The profits are beyond measure."',
-    'But you also receive discrete offers from the city\'s legitimate power brokers. They want to use your new connections for their own purposes.',
-    'You stand at a crossroads: embrace the underworld, or help the city government?',
+    'The underworld respects you now. You are not their enemy. You are their equal.',
+    'The Syndicate wants you as a partner. "You know how the game works," says the boss. "Work with us. The profits are enormous."',
+    'But the city council wants you too. They want your help to fight crime.',
+    'Which side will you choose?',
   ],
   choices: [
     {
       id: 'work_with_syndicate',
-      label: 'Partner with the Syndicate (+50g wages, -2 charm)',
+      label: 'Join the Syndicate (+50g wages, -2 Charm)',
       effects: [
         { kind: 'wages', delta: 50 },
         { kind: 'stat', stat: 'charm', delta: -2 },
         { kind: 'flag', id: 'syndicate_partner', set: 1 },
-        { kind: 'narrate', text: 'You become a broker in the grey market. Profitable, but corrosive to your soul.' },
+        { kind: 'narrate', text: 'You become a Syndicate partner. Rich, but people trust you a little less.' },
       ],
     },
     {
       id: 'work_with_government',
-      label: 'Help the government counter crime (+25g/mo, +charm)',
+      label: 'Help the council fight crime (+25g/month, +Charm)',
       effects: [
         { kind: 'wages', delta: 25 },
         { kind: 'stat', stat: 'charm', delta: 2 },
         { kind: 'flag', id: 'government_agent', set: 1 },
-        { kind: 'narrate', text: 'You become an informant and ally to legitimate power. Dangerous, but redemptive.' },
+        { kind: 'narrate', text: 'You help the council catch crooks. It is dangerous, but you sleep well at night.' },
       ],
     },
   ],
@@ -75,41 +75,40 @@ const legacy_choice: StoryCard = {
   storyPhase: 'recovery',
   title: 'Your Legacy Begins',
   body: [
-    'You have survived every trial. You have faced every Colossus. You have looked into the Mirror and survived.',
-    'Now comes the question that matters most: what do you do with what you\'ve built?',
-    'You have enough wealth to rest. Enough power to dominate. Enough knowledge to manipulate.',
-    'But what will define you when you\'re gone? What will people remember? Not your gold, but what you chose to do with it.',
+    'You have faced every Colossus, and looked into the Mirror. You made it.',
+    'Now comes the biggest question of all: what will you do with everything you built?',
+    'One day, people won\'t remember your gold. They will remember what you did with it.',
   ],
   choices: [
     {
       id: 'establish_dynasty',
-      label: 'Build a merchant empire for your heirs',
+      label: 'Build a trading house that lasts',
       requires: [{ kind: 'goldAtLeast', amount: 500 }],
       effects: [
         { kind: 'gold', delta: -500 },
         { kind: 'flag', id: 'dynasty_founder', set: 1 },
         { kind: 'stat', stat: 'savvy', delta: 2 },
-        { kind: 'narrate', text: 'You create an institution that will outlive you. Your name becomes synonymous with merchant excellence.' },
+        { kind: 'narrate', text: 'Your trading house will stand for a hundred years. Your name means fair trade, everywhere.' },
       ],
     },
     {
       id: 'fund_education',
-      label: 'Create schools for the poor',
+      label: 'Build schools for poor children',
       requires: [{ kind: 'goldAtLeast', amount: 400 }],
       effects: [
         { kind: 'gold', delta: -400 },
         { kind: 'flag', id: 'education_founder', set: 1 },
         { kind: 'stat', stat: 'charm', delta: 2 },
-        { kind: 'narrate', text: 'Generations will be educated because of your choice. Your name becomes a symbol of opportunity.' },
+        { kind: 'narrate', text: 'Thousands of children learn to read and count because of you. Your name means a fresh start.' },
       ],
     },
     {
       id: 'retire_quietly',
-      label: 'Retire and live simply',
+      label: 'Retire to a little house by the sea',
       effects: [
         { kind: 'flag', id: 'quiet_retirement', set: 1 },
         { kind: 'stat', stat: 'grit', delta: 1 },
-        { kind: 'narrate', text: 'You leave it all behind. You discover that peace is worth more than any fortune.' },
+        { kind: 'narrate', text: 'You watch the gulls from your little garden. Peace, it turns out, is worth more than any fortune.' },
       ],
     },
   ],

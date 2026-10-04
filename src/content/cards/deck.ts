@@ -4,14 +4,14 @@ const salt_caravan_pitch: StoryCard = {
   id: 'salt_caravan_pitch',
   weight: 3,
   storyPhase: 'climbing',
-  title: 'A Broker\'s Pitch',
+  title: 'A Broker with a Scroll',
   body: [
-    'A broker corners you near the salt exchange, waving a scroll. "Shares in a salt caravan," he says. "200 gold, 15 a month back to you. A rare opportunity."',
+    'A man in a too-shiny coat blocks your path at the salt exchange. He waves a scroll under your nose. "Shares in a salt caravan! 200 gold now, 15 every month, forever." He winks. "Only for you."',
   ],
   choices: [
     {
       id: 'buy_blind',
-      label: 'Buy in without asking questions (-200 gold)',
+      label: 'Buy in on the spot (-200g)',
       requires: [{ kind: 'goldAtLeast', amount: 200 }],
       effects: [
         { kind: 'gold', delta: -200 },
@@ -19,33 +19,33 @@ const salt_caravan_pitch: StoryCard = {
           kind: 'acquireAsset',
           asset: { id: 'salt_caravan', label: 'Salt Caravan Share', cost: 200, monthlyCashflow: 15, sector: 'salt' },
         },
-        { kind: 'narrate', text: 'You hand over the gold. The broker\'s smile is a little too wide.' },
+        { kind: 'narrate', text: 'You hand over the gold. His smile grows a little too wide.' },
       ],
     },
     {
       id: 'inspect',
-      label: 'Inspect the manifests first (Savvy check, DC 13)',
+      label: 'Check his papers first (Savvy check, DC 13)',
       check: {
         stat: 'savvy',
         dc: 13,
-        success: { text: 'The numbers don\'t add up - this caravan is worth less than he claims.', goto: 'salt_caravan_deal' },
-        failure: { text: 'The manifests look convincing enough to you.', effects: [{ kind: 'flag', id: 'overpriced_salt', set: 1 }], goto: 'salt_caravan_deal' },
+        success: { text: 'You spot it fast. The numbers don\'t add up. This caravan is worth far less than he claims.', goto: 'salt_caravan_deal' },
+        failure: { text: 'You squint at the papers. They look honest enough to you.', effects: [{ kind: 'flag', id: 'overpriced_salt', set: 1 }], goto: 'salt_caravan_deal' },
       },
     },
     {
       id: 'walk_away_salt',
       label: 'Walk away',
-      effects: [{ kind: 'narrate', text: 'You leave the broker to find another mark.' }],
+      effects: [{ kind: 'narrate', text: 'You step around him. He is already waving at someone else.' }],
     },
   ],
 }
 
 const salt_caravan_deal: StoryCard = {
   id: 'salt_caravan_deal',
-  title: 'Closing the Deal',
+  title: 'Shaking on It',
   body: [
-    { if: { kind: 'flag', id: 'overpriced_salt', atLeast: 1 }, text: 'Certain of the value now, the broker won\'t budge below 200 gold.' },
-    { if: { kind: 'not', of: { kind: 'flag', id: 'overpriced_salt', atLeast: 1 } }, text: 'Caught out, the broker mutters and drops his price to 150.' },
+    { if: { kind: 'flag', id: 'overpriced_salt', atLeast: 1 }, text: 'The broker folds his arms. "200 gold. Not a coin less, friend."' },
+    { if: { kind: 'not', of: { kind: 'flag', id: 'overpriced_salt', atLeast: 1 } }, text: 'Caught out, the broker turns pink. "Fine, fine. 150, and we never speak of this."' },
   ],
   choices: [
     {
@@ -74,8 +74,8 @@ const salt_caravan_deal: StoryCard = {
     },
     {
       id: 'decline_salt',
-      label: 'Decline',
-      effects: [{ kind: 'narrate', text: 'You keep your gold in your purse.' }],
+      label: 'Keep your coins',
+      effects: [{ kind: 'narrate', text: 'Your purse stays heavy. The broker sighs and rolls up his scroll.' }],
     },
   ],
 }
@@ -84,19 +84,19 @@ const iron_claim_pitch: StoryCard = {
   id: 'iron_claim_pitch',
   weight: 3,
   storyPhase: 'climbing',
-  title: 'An Iron Claim',
-  body: ['A prospector offers you a stake in an iron claim in the eastern hills: 250 gold for 20 a month.'],
+  title: 'A Prospector\'s Claim',
+  body: ['A dusty prospector drops a lump of rock on your table. It glints. "Iron, from my claim in the eastern hills. 250 gold buys you a share, and 20 a month comes back."'],
   choices: [
     {
       id: 'buy_iron',
-      label: 'Buy the claim (-250 gold)',
+      label: 'Buy into the claim (-250g)',
       requires: [{ kind: 'goldAtLeast', amount: 250 }],
       effects: [
         { kind: 'gold', delta: -250 },
         { kind: 'acquireAsset', asset: { id: 'iron_claim', label: 'Iron Claim', cost: 250, monthlyCashflow: 20, sector: 'iron' } },
       ],
     },
-    { id: 'pass_iron', label: 'Pass', effects: [{ kind: 'narrate', text: 'You leave the prospector to find another buyer.' }] },
+    { id: 'pass_iron', label: 'Hand back the rock', effects: [{ kind: 'narrate', text: 'He pockets his rock and trudges off to find another buyer.' }] },
   ],
 }
 
@@ -104,20 +104,20 @@ const guild_quest_offer: StoryCard = {
   id: 'guild_quest_offer',
   weight: 2,
   storyPhase: 'climbing',
-  title: 'The Caravan Guard Contract',
-  body: ['The merchant guild needs a negotiator to secure a standing contract guarding their caravans. It could mean steady coin - if you can talk your way into it.'],
+  title: 'A Contract at the Guild Hall',
+  body: ['The guild hall smells of wax and old money. A stern factor needs guards for the guild caravans, and steady pay for whoever arranges it. You just have to talk your way in.'],
   choices: [
     {
       id: 'negotiate_contract',
-      label: 'Negotiate the contract (Charm check, DC 14)',
+      label: 'Win the factor over (Charm check, DC 14)',
       check: {
         stat: 'charm',
         dc: 14,
-        success: { text: 'You talk your way into a standing contract.', effects: [{ kind: 'wages', delta: 20 }] },
-        failure: { text: 'The guild factor is unmoved. No deal today.' },
+        success: { text: 'The factor cracks a smile and signs. Steady pay, every month.', effects: [{ kind: 'wages', delta: 20 }] },
+        failure: { text: 'The factor does not even look up. "Next."' },
       },
     },
-    { id: 'decline_contract', label: 'Decline', effects: [{ kind: 'narrate', text: 'You leave the guild hall without the contract.' }] },
+    { id: 'decline_contract', label: 'Leave the hall', effects: [{ kind: 'narrate', text: 'You slip out past the queue of hopefuls.' }] },
   ],
 }
 
@@ -125,18 +125,18 @@ const moneylenders_offer: StoryCard = {
   id: 'moneylenders_offer',
   weight: 2,
   storyPhase: 'climbing',
-  title: 'The Moneylender',
-  body: ['A moneylender offers you 300 gold today, 30 a month against it for as long as it takes.'],
+  title: 'The Moneylender\'s Offer',
+  body: ['A moneylender with rings on every finger counts coins onto the table. "300 gold, today. You pay me 30 a month until it\'s paid back." The coins look very shiny.'],
   choices: [
     {
       id: 'take_loan',
-      label: 'Take the loan (+300 gold, +30/mo)',
+      label: 'Take the loan (+300g, +30g/month to repay)',
       effects: [
         { kind: 'loan', principal: 300, monthlyPayment: 30 },
-        { kind: 'narrate', text: 'Gold in hand, debt on the books.' },
+        { kind: 'narrate', text: 'The gold is yours. So is the debt.' },
       ],
     },
-    { id: 'refuse_loan', label: 'Refuse', effects: [{ kind: 'narrate', text: 'You refuse the moneylender\'s terms.' }] },
+    { id: 'refuse_loan', label: 'Push the coins back', effects: [{ kind: 'narrate', text: 'The moneylender shrugs, and his rings clink as he sweeps the coins away.' }] },
   ],
 }
 
@@ -144,15 +144,15 @@ const spice_market_rumor: StoryCard = {
   id: 'spice_market_rumor',
   weight: 3,
   storyPhase: 'climbing',
-  title: 'A Rumor of Blockade',
+  title: 'Blockade in the Spice Lanes',
   body: [
-    { if: { kind: 'not', of: { kind: 'flag', id: 'spice_blockade_seen', atLeast: 1 } }, text: 'Word spreads of a blockade in the spice lanes. Merchant ships are being seized. Prices are climbing fast.' },
-    { if: { kind: 'flag', id: 'spice_blockade_seen', atLeast: 1 }, text: 'You\'ve already heard this news.' },
+    { if: { kind: 'not', of: { kind: 'flag', id: 'spice_blockade_seen', atLeast: 1 } }, text: 'A sailor bursts into the tavern. "Blockade in the spice lanes! They\'re turning ships back!" By noon, spice prices are climbing.' },
+    { if: { kind: 'flag', id: 'spice_blockade_seen', atLeast: 1 }, text: 'The blockade news is old by now. Everyone is still talking about it.' },
   ],
   choices: [
     {
       id: 'buy_spice_assets',
-      label: 'Buy cheap spice before prices spike (-100 gold)',
+      label: 'Buy spice before prices jump (-100g)',
       requires: [{ kind: 'not', of: { kind: 'flag', id: 'spice_blockade_seen', atLeast: 1 } }, { kind: 'goldAtLeast', amount: 100 }],
       effects: [
         { kind: 'gold', delta: -100 },
@@ -160,25 +160,25 @@ const spice_market_rumor: StoryCard = {
         { kind: 'marketShift', sector: 'spice', delta: 15 },
         { kind: 'flag', id: 'spice_blockade_seen', set: 1 },
         { kind: 'flag', id: 'profited_spice_blockade', set: 1 },
-        { kind: 'narrate', text: 'You stockpile spice at bargain prices. When the blockade tightens, you\'ll profit handsomely.' },
+        { kind: 'narrate', text: 'You fill a storeroom with spice at today\'s prices. If the blockade holds, it will be worth a lot more.' },
         { kind: 'queueCard', card: 'spice_blockade_tightens' },
       ],
     },
     {
       id: 'ignore_spice_rumor',
-      label: 'Ignore the opportunity',
+      label: 'Let it pass',
       requires: [{ kind: 'not', of: { kind: 'flag', id: 'spice_blockade_seen', atLeast: 1 } }],
       effects: [
         { kind: 'marketShift', sector: 'spice', delta: 10 },
         { kind: 'flag', id: 'spice_blockade_seen', set: 1 },
-        { kind: 'narrate', text: 'Prices climb. You wonder if you should have acted.' },
+        { kind: 'narrate', text: 'Prices keep climbing. You can\'t help checking them every day.' },
       ],
     },
     {
       id: 'skip_old_spice_news',
       label: 'Move on',
       requires: [{ kind: 'flag', id: 'spice_blockade_seen', atLeast: 1 }],
-      effects: [{ kind: 'narrate', text: 'You\'ve already heard this news.' }],
+      effects: [{ kind: 'narrate', text: 'You shrug. Old news is old news.' }],
     },
   ],
 }
@@ -187,33 +187,33 @@ const iron_mine_collapse: StoryCard = {
   id: 'iron_mine_collapse',
   weight: 2,
   storyPhase: 'climbing',
-  title: 'A Mine Collapses',
+  title: 'The Great Mine Caves In',
   body: [
-    { if: { kind: 'not', of: { kind: 'flag', id: 'iron_collapse_seen', atLeast: 1 } }, text: 'Terrible news arrives: a major iron mine collapsed, killing dozens. Supply will be scarce for months.' },
-    { if: { kind: 'flag', id: 'iron_collapse_seen', atLeast: 1 }, text: 'You\'ve already heard about the collapse.' },
+    { if: { kind: 'not', of: { kind: 'flag', id: 'iron_collapse_seen', atLeast: 1 } }, text: 'A messenger gallops in, mud to the knees. The great iron mine has caved in. The miners got out, but no iron will come out for months.' },
+    { if: { kind: 'flag', id: 'iron_collapse_seen', atLeast: 1 }, text: 'Everyone has heard about the mine by now. Iron traders look nervous.' },
   ],
   choices: [
     {
       id: 'sell_iron_holdings',
-      label: 'Sell iron holdings before prices crash (-40 gold cost, sell for profit)',
+      label: 'Sell your iron before the panic (-40g cost, sell for profit)',
       requires: [{ kind: 'not', of: { kind: 'flag', id: 'iron_collapse_seen', atLeast: 1 } }],
       effects: [
         { kind: 'gold', delta: 120 },
         { kind: 'marketShift', sector: 'iron', delta: -20 },
         { kind: 'flag', id: 'iron_collapse_seen', set: 1 },
         { kind: 'flag', id: 'avoided_iron_crash', set: 1 },
-        { kind: 'narrate', text: 'You liquidate your iron just before the market crashes. A lucky escape.' },
+        { kind: 'narrate', text: 'You sell your iron just before the market tumbles. A narrow escape!' },
       ],
     },
     {
       id: 'hold_iron',
-      label: 'Hold and wait for recovery',
+      label: 'Hold on and wait',
       requires: [{ kind: 'not', of: { kind: 'flag', id: 'iron_collapse_seen', atLeast: 1 } }],
       effects: [
         { kind: 'marketShift', sector: 'iron', delta: -15 },
         { kind: 'flag', id: 'iron_collapse_seen', set: 1 },
         { kind: 'flag', id: 'riding_iron_recovery', set: 1 },
-        { kind: 'narrate', text: 'You hold firm. Recovery will come—but at what cost?' },
+        { kind: 'narrate', text: 'You hold on tight. Prices will recover one day. You hope.' },
         { kind: 'queueCard', card: 'iron_mine_recovery' },
       ],
     },
@@ -221,7 +221,7 @@ const iron_mine_collapse: StoryCard = {
       id: 'skip_collapse_news',
       label: 'Move on',
       requires: [{ kind: 'flag', id: 'iron_collapse_seen', atLeast: 1 }],
-      effects: [{ kind: 'narrate', text: 'Old news.' }],
+      effects: [{ kind: 'narrate', text: 'Old news. You move on.' }],
     },
   ],
 }
@@ -230,15 +230,15 @@ const iron_boom: StoryCard = {
   id: 'iron_market_boom',
   weight: 2,
   storyPhase: 'climbing',
-  title: 'Iron Boom',
+  title: 'The Crown Wants Ships',
   body: [
-    { if: { kind: 'not', of: { kind: 'flag', id: 'iron_boom_seen', atLeast: 1 } }, text: 'The crown announces a massive new fleet to be built. Iron demand surges overnight. Shipwrights are offering premium prices.' },
-    { if: { kind: 'flag', id: 'iron_boom_seen', atLeast: 1 }, text: 'You\'ve already heard of the crown\'s fleet contract.' },
+    { if: { kind: 'not', of: { kind: 'flag', id: 'iron_boom_seen', atLeast: 1 } }, text: 'Trumpets blare in the square. The crown will build a mighty new fleet! By morning, every shipwright in Vessarin is shouting for iron.' },
+    { if: { kind: 'flag', id: 'iron_boom_seen', atLeast: 1 }, text: 'The fleet is still the talk of the town. Hammers ring from every shipyard.' },
   ],
   choices: [
     {
       id: 'invest_iron_boom',
-      label: 'Invest in iron production (-150 gold)',
+      label: 'Build an iron foundry (-150g)',
       requires: [{ kind: 'not', of: { kind: 'flag', id: 'iron_boom_seen', atLeast: 1 } }, { kind: 'goldAtLeast', amount: 150 }],
       effects: [
         { kind: 'gold', delta: -150 },
@@ -246,20 +246,20 @@ const iron_boom: StoryCard = {
         { kind: 'marketShift', sector: 'iron', delta: 20 },
         { kind: 'flag', id: 'iron_boom_seen', set: 1 },
         { kind: 'flag', id: 'funded_iron_boom', set: 1 },
-        { kind: 'narrate', text: 'You establish an iron foundry. The crown\'s fleet will be built with your iron.' },
+        { kind: 'narrate', text: 'Your foundry roars to life. The crown\'s new ships will sail on your iron.' },
         { kind: 'queueCard', card: 'iron_boom_success' },
       ],
     },
     {
       id: 'profit_from_boom',
-      label: 'Buy and resell iron for quick profit',
+      label: 'Buy iron cheap, sell it dear',
       requires: [{ kind: 'not', of: { kind: 'flag', id: 'iron_boom_seen', atLeast: 1 } }, { kind: 'goldAtLeast', amount: 80 }],
       effects: [
         { kind: 'gold', delta: 200 },
         { kind: 'marketShift', sector: 'iron', delta: 18 },
         { kind: 'flag', id: 'iron_boom_seen', set: 1 },
         { kind: 'flag', id: 'quick_iron_profit', set: 1 },
-        { kind: 'narrate', text: 'You flip iron for quick profit. Easy money while it lasts.' },
+        { kind: 'narrate', text: 'You buy at dawn and sell by dusk. Quick coins, while the fever lasts.' },
         { kind: 'advanceDays', days: 5 },
       ],
     },
@@ -269,14 +269,14 @@ const iron_boom: StoryCard = {
       requires: [{ kind: 'not', of: { kind: 'flag', id: 'iron_boom_seen', atLeast: 1 } }],
       effects: [
         { kind: 'flag', id: 'iron_boom_seen', set: 1 },
-        { kind: 'narrate', text: 'Your purse is too thin to ride this one. You watch others grow rich on the crown\'s iron.' },
+        { kind: 'narrate', text: 'Your purse is too thin for this one. You watch others grow rich on the crown\'s iron.' },
       ],
     },
     {
       id: 'skip_boom_news',
       label: 'Move on',
       requires: [{ kind: 'flag', id: 'iron_boom_seen', atLeast: 1 }],
-      effects: [{ kind: 'narrate', text: 'Old news now.' }],
+      effects: [{ kind: 'narrate', text: 'Old news now. You move on.' }],
     },
   ],
 }
@@ -285,20 +285,20 @@ const tavern_doodad: StoryCard = {
   id: 'tavern_doodad',
   weight: 3,
   storyPhase: 'climbing',
-  title: 'A Velvet Cloak',
-  body: ['A tailor displays a fine velvet cloak in his window. Merchants who wear such things are taken more seriously, he claims.'],
+  title: 'The Velvet Cloak',
+  body: ['A deep red velvet cloak hangs in the tailor\'s window. He swoops out to meet you. "Wear this, and every merchant in Vessarin will take you seriously!"'],
   choices: [
     {
       id: 'buy_cloak',
-      label: 'Buy the velvet cloak (-40 gold)',
+      label: 'Buy the cloak (-40g)',
       requires: [{ kind: 'goldAtLeast', amount: 40 }],
       effects: [
         { kind: 'gold', delta: -40 },
         { kind: 'flag', id: 'vain', delta: 1 },
-        { kind: 'narrate', text: 'You look magnificent. Your purse disagrees.' },
+        { kind: 'narrate', text: 'You look magnificent. Your purse looks a lot thinner.' },
       ],
     },
-    { id: 'skip_cloak', label: 'Save your coin', effects: [{ kind: 'narrate', text: 'You walk past the tailor\'s window.' }] },
+    { id: 'skip_cloak', label: 'Save your coins', effects: [{ kind: 'narrate', text: 'You give the cloak one last look and walk on.' }] },
   ],
 }
 
@@ -306,20 +306,20 @@ const jeweler_wares: StoryCard = {
   id: 'jeweler_wares',
   weight: 2,
   storyPhase: 'climbing',
-  title: 'A Signet Ring',
-  body: ['A jeweler displays an ornate signet ring. "Merchants of standing wear these," she says with a knowing smile. "50 gold - it will pay for itself in trust."'],
+  title: 'The Signet Ring',
+  body: ['A jeweler holds up a gold signet ring. "Important merchants wear these," she says. "50 gold, and people will trust you on sight."'],
   choices: [
     {
       id: 'buy_ring',
-      label: 'Buy the signet ring (-50 gold)',
+      label: 'Buy the ring (-50g)',
       requires: [{ kind: 'goldAtLeast', amount: 50 }],
       effects: [
         { kind: 'gold', delta: -50 },
         { kind: 'stat', stat: 'charm', delta: 1 },
-        { kind: 'narrate', text: 'The weight of authority sits well on your hand.' },
+        { kind: 'narrate', text: 'It sits heavy on your finger. Nobody seems to notice it.' },
       ],
     },
-    { id: 'skip_ring', label: 'Walk on', effects: [{ kind: 'narrate', text: 'You admire the ring but keep walking.' }] },
+    { id: 'skip_ring', label: 'Walk on', effects: [{ kind: 'narrate', text: 'You admire the ring, then keep walking.' }] },
   ],
 }
 
@@ -327,20 +327,20 @@ const cobbler_pitch: StoryCard = {
   id: 'cobbler_pitch',
   weight: 2,
   storyPhase: 'climbing',
-  title: 'Fine Merchant Boots',
-  body: ['A cobbler catches your eye with a pair of hand-stitched boots in his window. "These are for merchants who walk in circles of power," he says.'],
+  title: 'Hand-Stitched Boots',
+  body: ['A cobbler taps on his window and holds up shiny hand-stitched boots. "Boots for a merchant who is going places!"'],
   choices: [
     {
       id: 'buy_boots',
-      label: 'Buy the boots (-45 gold)',
+      label: 'Buy the boots (-45g)',
       requires: [{ kind: 'goldAtLeast', amount: 45 }],
       effects: [
         { kind: 'gold', delta: -45 },
         { kind: 'stat', stat: 'savvy', delta: 1 },
-        { kind: 'narrate', text: 'With every step, you feel more the merchant.' },
+        { kind: 'narrate', text: 'They squeak with every step. Very grand. Very squeaky.' },
       ],
     },
-    { id: 'skip_boots', label: 'Skip it', effects: [{ kind: 'narrate', text: 'Good boots or good coin - you choose coin.' }] },
+    { id: 'skip_boots', label: 'Keep your old boots', effects: [{ kind: 'narrate', text: 'Your old boots will do. Your coins stay where they are.' }] },
   ],
 }
 
@@ -348,20 +348,20 @@ const scribe_ledger: StoryCard = {
   id: 'scribe_ledger',
   weight: 2,
   storyPhase: 'climbing',
-  title: 'A Master Ledger',
-  body: ['A scribe displays an ornate account book bound in leather. "Organized merchants keep meticulous records," she says. "This one never loses a calculation."'],
+  title: 'The Leather Ledger',
+  body: ['A scribe strokes a leather-bound ledger with gold corners. "The finest account book in Vessarin," she says. "Serious merchants deserve serious books."'],
   choices: [
     {
       id: 'buy_ledger',
-      label: 'Buy the ledger (-55 gold)',
+      label: 'Buy the ledger (-55g)',
       requires: [{ kind: 'goldAtLeast', amount: 55 }],
       effects: [
         { kind: 'gold', delta: -55 },
         { kind: 'stat', stat: 'savvy', delta: 1 },
-        { kind: 'narrate', text: 'Your accounts will never be questioned now.' },
+        { kind: 'narrate', text: 'Your sums look beautiful in it. They are the same sums as before.' },
       ],
     },
-    { id: 'decline_ledger', label: 'Your memory suffices', effects: [{ kind: 'narrate', text: 'You trust your own wits.' }] },
+    { id: 'decline_ledger', label: 'Your old notebook will do', effects: [{ kind: 'narrate', text: 'You pat your scruffy notebook. It has never let you down.' }] },
   ],
 }
 
@@ -369,20 +369,20 @@ const spice_merchant: StoryCard = {
   id: 'spice_merchant',
   weight: 2,
   storyPhase: 'climbing',
-  title: 'Exotic Spice Gift Set',
-  body: ['A spice merchant offers you a carefully curated gift set. "These rarities open doors in the trading houses," he says with a wink.'],
+  title: 'A Box of Rare Spices',
+  body: ['A spice seller opens a carved box. Saffron, cinnamon and pepper fill the air. "Give these as gifts," he winks, "and every trading house will open its doors."'],
   choices: [
     {
       id: 'buy_spices',
-      label: 'Buy the spice set (-35 gold)',
+      label: 'Buy the spice box (-35g)',
       requires: [{ kind: 'goldAtLeast', amount: 35 }],
       effects: [
         { kind: 'gold', delta: -35 },
         { kind: 'stat', stat: 'charm', delta: 1 },
-        { kind: 'narrate', text: 'The finest gifts often cost the least in the end.' },
+        { kind: 'narrate', text: 'It smells wonderful. No doors open, but your kitchen is very happy.' },
       ],
     },
-    { id: 'pass_spices', label: 'Too expensive for sentiment', effects: [{ kind: 'narrate', text: 'You walk past the display.' }] },
+    { id: 'pass_spices', label: 'Too pricey for a present', effects: [{ kind: 'narrate', text: 'You breathe in the cinnamon one last time and walk on.' }] },
   ],
 }
 
@@ -390,20 +390,20 @@ const quillwright: StoryCard = {
   storyPhase: 'climbing',
   id: 'quillwright',
   weight: 2,
-  title: 'Fine Writing Quills',
-  body: ['A quillwright shows you a set of the finest quills money can buy. "Write your contracts with authority," she says.'],
+  title: 'Swan-Feather Quills',
+  body: ['A quill maker fans out a set of swan-feather quills. "Sign your contracts with these," she says, "and nobody will dare argue."'],
   choices: [
     {
       id: 'buy_quills',
-      label: 'Buy the quill set (-40 gold)',
+      label: 'Buy the quills (-40g)',
       requires: [{ kind: 'goldAtLeast', amount: 40 }],
       effects: [
         { kind: 'gold', delta: -40 },
         { kind: 'stat', stat: 'savvy', delta: 1 },
-        { kind: 'narrate', text: 'Your signatures will carry weight.' },
+        { kind: 'narrate', text: 'Your signature has never looked so curly.' },
       ],
     },
-    { id: 'decline_quills', label: 'Plain quills work fine', effects: [{ kind: 'narrate', text: 'You keep your gold.' }] },
+    { id: 'decline_quills', label: 'Plain quills write just fine', effects: [{ kind: 'narrate', text: 'You keep your gold and your plain old quill.' }] },
   ],
 }
 
@@ -411,20 +411,20 @@ const silk_merchant: StoryCard = {
   storyPhase: 'climbing',
   id: 'silk_merchant',
   weight: 2,
-  title: 'Silk Handkerchiefs',
-  body: ['A silk merchant displays embroidered handkerchiefs. "These mark a person of refinement. Carry one visibly and every negotiation improves."'],
+  title: 'The Silk Handkerchief',
+  body: ['A silk seller flutters an embroidered handkerchief at you. "Wave this at a deal," he says, "and the deal goes your way!"'],
   choices: [
     {
       id: 'buy_silk',
-      label: 'Buy a handkerchief (-30 gold)',
+      label: 'Buy the handkerchief (-30g)',
       requires: [{ kind: 'goldAtLeast', amount: 30 }],
       effects: [
         { kind: 'gold', delta: -30 },
         { kind: 'stat', stat: 'charm', delta: 1 },
-        { kind: 'narrate', text: 'You tuck it into your pocket with a smile.' },
+        { kind: 'narrate', text: 'You tuck it in your pocket with a flourish. It is very soft.' },
       ],
     },
-    { id: 'skip_silk', label: 'Save your coin', effects: [{ kind: 'narrate', text: 'You move on.' }] },
+    { id: 'skip_silk', label: 'Save your coins', effects: [{ kind: 'narrate', text: 'You smile politely and move on.' }] },
   ],
 }
 
@@ -432,20 +432,20 @@ const cartographer: StoryCard = {
   storyPhase: 'climbing',
   id: 'cartographer',
   weight: 2,
-  title: 'A Brass Compass',
-  body: ['An old cartographer sells you a brass compass. "Every merchant needs to know which direction leads to profit," he says.'],
+  title: 'The Brass Compass',
+  body: ['An old map-maker presses a brass compass into your hand. "It points to profit," he whispers. "Well. It points north. Profit is often north."'],
   choices: [
     {
       id: 'buy_compass',
-      label: 'Buy the compass (-50 gold)',
+      label: 'Buy the compass (-50g)',
       requires: [{ kind: 'goldAtLeast', amount: 50 }],
       effects: [
         { kind: 'gold', delta: -50 },
         { kind: 'stat', stat: 'grit', delta: 1 },
-        { kind: 'narrate', text: 'You have a direction now.' },
+        { kind: 'narrate', text: 'It points north, very firmly. You are still not sure where profit is.' },
       ],
     },
-    { id: 'refuse_compass', label: 'I know my way', effects: [{ kind: 'narrate', text: 'You leave the compass behind.' }] },
+    { id: 'refuse_compass', label: 'You know your way', effects: [{ kind: 'narrate', text: 'You hand the compass back. The old man chuckles.' }] },
   ],
 }
 
@@ -453,20 +453,20 @@ const jeweler_pendant: StoryCard = {
   storyPhase: 'climbing',
   id: 'jeweler_pendant',
   weight: 2,
-  title: 'A Silver Pendant',
-  body: ['A jeweler shows you a pendant etched with merchant marks. "This tells other traders you\'re serious business," she says.'],
+  title: 'The Silver Pendant',
+  body: ['A jeweler dangles a silver pendant stamped with merchant marks. "Wear this," she says, "and traders will know you mean business."'],
   choices: [
     {
       id: 'buy_pendant',
-      label: 'Buy the pendant (-45 gold)',
+      label: 'Buy the pendant (-45g)',
       requires: [{ kind: 'goldAtLeast', amount: 45 }],
       effects: [
         { kind: 'gold', delta: -45 },
         { kind: 'stat', stat: 'charm', delta: 1 },
-        { kind: 'narrate', text: 'It catches the light with every handshake.' },
+        { kind: 'narrate', text: 'It flashes in the sun with every handshake. The deals stay the same.' },
       ],
     },
-    { id: 'skip_pendant', label: 'I don\'t need jewelry', effects: [{ kind: 'narrate', text: 'You have no need for such trinkets.' }] },
+    { id: 'skip_pendant', label: 'Skip the jewellery', effects: [{ kind: 'narrate', text: 'You leave the shiny things for someone else.' }] },
   ],
 }
 
@@ -474,20 +474,20 @@ const leatherworker: StoryCard = {
   storyPhase: 'climbing',
   id: 'leatherworker',
   weight: 2,
-  title: 'Fine Leather Gloves',
-  body: ['A leatherworker offers you a pair of supple merchant gloves. "These protect your hands and announce your status," he says.'],
+  title: 'Soft Leather Gloves',
+  body: ['A leatherworker holds out a pair of buttery-soft gloves. "Proper merchants never shake hands bare," he says.'],
   choices: [
     {
       id: 'buy_gloves',
-      label: 'Buy the gloves (-38 gold)',
+      label: 'Buy the gloves (-38g)',
       requires: [{ kind: 'goldAtLeast', amount: 38 }],
       effects: [
         { kind: 'gold', delta: -38 },
         { kind: 'stat', stat: 'grit', delta: 1 },
-        { kind: 'narrate', text: 'You admire your hands in your new gloves.' },
+        { kind: 'narrate', text: 'You wiggle your fingers. Very fine. Very warm. Very expensive.' },
       ],
     },
-    { id: 'skip_gloves', label: 'Keep my hands free', effects: [{ kind: 'narrate', text: 'You leave empty-handed.' }] },
+    { id: 'skip_gloves', label: 'Keep your hands as they are', effects: [{ kind: 'narrate', text: 'You leave with bare hands and a full purse.' }] },
   ],
 }
 
@@ -495,20 +495,20 @@ const perfumer: StoryCard = {
   storyPhase: 'climbing',
   id: 'perfumer',
   weight: 2,
-  title: 'Rare Merchant Perfume',
-  body: ['A perfumer offers you a vial of rare scent. "This announces a person of wealth and taste before they even speak," she says.'],
+  title: 'A Bottle of Rare Perfume',
+  body: ['A perfumer sprays a cloud of roses and amber. "Wear this," she says, "and people will know you are rich before you say a word."'],
   choices: [
     {
       id: 'buy_perfume',
-      label: 'Buy the perfume (-42 gold)',
+      label: 'Buy the perfume (-42g)',
       requires: [{ kind: 'goldAtLeast', amount: 42 }],
       effects: [
         { kind: 'gold', delta: -42 },
         { kind: 'stat', stat: 'charm', delta: 1 },
-        { kind: 'narrate', text: 'You smell success.' },
+        { kind: 'narrate', text: 'You smell like a rose garden. Your purse smells of nothing at all.' },
       ],
     },
-    { id: 'skip_perfume', label: 'Too frivolous', effects: [{ kind: 'narrate', text: 'You keep your coin.' }] },
+    { id: 'skip_perfume', label: 'Too fancy for you', effects: [{ kind: 'narrate', text: 'You sneeze, smile, and keep your coins.' }] },
   ],
 }
 
@@ -517,25 +517,25 @@ const gambling_den: StoryCard = {
   id: 'gambling_den',
   weight: 2,
   title: 'The Dice Den',
-  body: ['A dice den in the harbor quarter offers a game of chance. The stakes are 30 gold.'],
+  body: ['Down a lantern-lit alley, dice rattle on a barrel top. A grinning sailor slides them toward you. "30 gold a throw. Feeling lucky?"'],
   choices: [
     {
       id: 'wager_dice',
-      label: 'Wager 30 gold at dice (Nerve check, DC 12)',
+      label: 'Throw the dice for 30 gold (Nerve check, DC 12)',
       requires: [{ kind: 'goldAtLeast', amount: 30 }],
       check: {
         stat: 'nerve',
         dc: 12,
         critSuccess: { text: 'The house is stunned. You walk out with double your wager.', effects: [{ kind: 'gold', delta: 60 }] },
-        success: { text: 'Luck is with you tonight.', effects: [{ kind: 'gold', delta: 30 }] },
-        failure: { text: 'The dice turn against you.', effects: [{ kind: 'gold', delta: -30 }] },
+        success: { text: 'Double sixes! The sailor groans as you scoop up the coins.', effects: [{ kind: 'gold', delta: 30 }] },
+        failure: { text: 'Snake eyes. The sailor grins and scoops up your gold.', effects: [{ kind: 'gold', delta: -30 }] },
         critFailure: {
           text: 'You are caught palming a die. It costs you dearly.',
           effects: [{ kind: 'gold', delta: -60 }, { kind: 'flag', id: 'bad_reputation', delta: 1 }],
         },
       },
     },
-    { id: 'skip_dice', label: 'Not tonight', effects: [{ kind: 'narrate', text: 'You keep your coin and your dignity.' }] },
+    { id: 'skip_dice', label: 'Not tonight', effects: [{ kind: 'narrate', text: 'You walk back into the lantern light, purse still full.' }] },
   ],
 }
 
@@ -543,23 +543,23 @@ const bandit_toll: StoryCard = {
   storyPhase: 'climbing',
   id: 'bandit_toll',
   weight: 2,
-  title: 'A Toll on the Road',
-  body: ['Bandits block the coast road, demanding a toll of 20 gold to pass unharmed.'],
+  title: 'A Toll on the Coast Road',
+  body: ['A log lies across the coast road. Three bandits lean on it, grinning. "Road tax," says the tallest. "20 gold, and you pass nice and easy."'],
   choices: [
     {
       id: 'pay_toll',
-      label: 'Pay the toll (-20 gold)',
+      label: 'Pay the toll (-20g)',
       requires: [{ kind: 'goldAtLeast', amount: 20 }],
-      effects: [{ kind: 'gold', delta: -20 }, { kind: 'narrate', text: 'You pay and pass without trouble.' }],
+      effects: [{ kind: 'gold', delta: -20 }, { kind: 'narrate', text: 'You pay. They roll the log aside and wave you through.' }],
     },
     {
       id: 'bluff_bandits',
-      label: 'Bluff your way through (Nerve check, DC 13)',
+      label: 'Bluff your way past (Nerve check, DC 13)',
       check: {
         stat: 'nerve',
         dc: 13,
-        success: { text: 'You talk yourself past them without paying a coin.' },
-        failure: { text: 'They see through you and take 30 gold anyway.', effects: [{ kind: 'gold', delta: -30 }] },
+        success: { text: 'You claim the Watch is right behind you. They scatter like startled crows.' },
+        failure: { text: 'They laugh at your bluff and take 30 gold for the trouble.', effects: [{ kind: 'gold', delta: -30 }] },
       },
     },
   ],

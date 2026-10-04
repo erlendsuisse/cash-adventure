@@ -10,33 +10,33 @@ const spice_shortage_followup: StoryCard = {
   storyPhase: 'recovery',
   title: 'The Spice Supply Stabilizes',
   body: [
-    'The spice routes have reopened. Supply is returning to normal.',
+    'The spice ships are sailing again. Prices settle down, and people remember how everyone behaved during the shortage.',
   ],
   choices: [
     {
       id: 'spice_reputation_profit',
-      label: 'Benefit from your greed (was profiting during shortage)',
+      label: 'Profit from your reputation (you sold high in the shortage)',
       requires: [{ kind: 'flag', id: 'profited_spice_shortage', atLeast: 1 }],
       effects: [
         { kind: 'gold', delta: 100 },
         { kind: 'stat', stat: 'savvy', delta: 1 },
-        { kind: 'narrate', text: 'Merchants remember you profited during their crisis. They offer you opportunities—not out of friendship, but respect for ruthlessness.' },
+        { kind: 'narrate', text: 'Merchants remember how much you made. They don\'t like you, but they respect you, and bring you deals.' },
       ],
     },
     {
       id: 'spice_reputation_loyalty',
-      label: 'Benefit from your kindness (was helping during shortage)',
+      label: 'Be repaid for your kindness (you helped in the shortage)',
       requires: [{ kind: 'flag', id: 'helped_spice_shortage', atLeast: 1 }],
       effects: [
         { kind: 'gold', delta: 80 },
         { kind: 'stat', stat: 'charm', delta: 1 },
-        { kind: 'narrate', text: 'The merchants you helped during the crisis remember. They send business your way as repayment.' },
+        { kind: 'narrate', text: 'The merchants you helped remember. They send customers your way to say thank you.' },
       ],
     },
     {
       id: 'spice_neutral_recovery',
-      label: 'No reputation consequences',
-      effects: [{ kind: 'narrate', text: 'The spice market normalizes. You had no stake in the crisis.' }],
+      label: 'You stayed out of it',
+      effects: [{ kind: 'narrate', text: 'The spice market calms down. You weren\'t involved either way.' }],
     },
   ],
 }
@@ -47,23 +47,23 @@ const military_contract_followup: StoryCard = {
   storyPhase: 'recovery',
   title: 'Royal Favor',
   body: [
-    'Your military iron contracts have been fulfilled. The crown is satisfied.',
+    'The army has all the iron it ordered, and the crown is very pleased.',
   ],
   choices: [
     {
       id: 'military_favor_bonus',
-      label: 'Cash in on royal favor (was military supplier)',
+      label: 'Enjoy the crown\'s favour (you supplied the army)',
       requires: [{ kind: 'flag', id: 'military_supplier', atLeast: 1 }],
       effects: [
         { kind: 'gold', delta: 150 },
         { kind: 'wages', delta: 30 },
-        { kind: 'narrate', text: 'The crown grants you additional contracts. You\'ve become a trusted supplier to the military.' },
+        { kind: 'narrate', text: 'The crown sends you more orders. You are now the army\'s trusted supplier.' },
       ],
     },
     {
       id: 'no_military_connection',
-      label: 'You had no military involvement',
-      effects: [{ kind: 'narrate', text: 'The military contracts went to others. You focused on civilian trade.' }],
+      label: 'You didn\'t supply the army',
+      effects: [{ kind: 'narrate', text: 'The army\'s orders went to others. You stuck to ordinary trade.' }],
     },
   ],
 }
@@ -72,29 +72,29 @@ const contrarian_success: StoryCard = {
   id: 'contrarian_recovery',
   weight: 1,
   storyPhase: 'recovery',
-  title: 'The Smart Play',
+  title: 'Brave When Others Panicked',
   body: [
-    'Markets have recovered from the panic. Those who bought at the bottom are now wealthy.',
+    'The market has bounced back. Those who bought when everyone else was selling are now rich.',
   ],
   choices: [
     {
       id: 'contrarian_windfall',
-      label: 'Collect your contrarian profits (was brave during panic)',
+      label: 'Collect your reward (you bought in the panic)',
       requires: [{ kind: 'flag', id: 'contrarian_investor', atLeast: 1 }],
       effects: [
         { kind: 'gold', delta: 200 },
         { kind: 'stat', stat: 'savvy', delta: 2 },
-        { kind: 'narrate', text: 'Your contrarian bet paid off spectacularly. Other merchants ask your advice now.' },
+        { kind: 'narrate', text: 'Your brave bet paid off brilliantly. Now other merchants ask for your advice.' },
       ],
     },
     {
       id: 'stayed_calm_respect',
-      label: 'Earn respect for steadiness (stayed calm during panic)',
+      label: 'Earn respect (you stayed calm in the panic)',
       requires: [{ kind: 'not', of: { kind: 'flag', id: 'contrarian_investor', atLeast: 1 } }],
       effects: [
         { kind: 'gold', delta: 50 },
         { kind: 'stat', stat: 'nerve', delta: 1 },
-        { kind: 'narrate', text: 'Your calm during the panic earned respect. Merchants seek your counsel.' },
+        { kind: 'narrate', text: 'People remember how calm you stayed. They come to you for advice.' },
       ],
     },
   ],
@@ -104,25 +104,25 @@ const old_mentor_connection: StoryCard = {
   id: 'mentor_legacy',
   weight: 2,
   storyPhase: 'recovery',
-  title: 'Mentor\'s Shadow',
+  title: 'Your Teacher\'s Good Name',
   body: [
-    'Your mentor\'s influence echoes through the city. Those who knew them remember your association.',
+    'Your old teacher is famous in Vessarin, and people remember you were their student.',
   ],
   choices: [
     {
       id: 'mentor_legacy_bonus',
-      label: 'Leverage your mentor\'s legacy (had mentor training)',
+      label: 'Use your teacher\'s good name (you had a mentor)',
       requires: [{ kind: 'flag', id: 'mentor_trader', atLeast: 1 }],
       effects: [
         { kind: 'gold', delta: 75 },
         { kind: 'stat', stat: 'charm', delta: 1 },
-        { kind: 'narrate', text: 'Doors open because of your mentor\'s name. You\'ve inherited their reputation.' },
+        { kind: 'narrate', text: 'Doors open when you mention your teacher. Their good name is now yours too.' },
       ],
     },
     {
       id: 'no_mentor',
-      label: 'You forge your own path',
-      effects: [{ kind: 'narrate', text: 'You built your reputation from scratch.' }],
+      label: 'You made your own way',
+      effects: [{ kind: 'narrate', text: 'You built your name all by yourself.' }],
     },
   ],
 }
@@ -131,33 +131,33 @@ const rival_reckoning: StoryCard = {
   id: 'rival_consequence',
   weight: 2,
   storyPhase: 'recovery',
-  title: 'The Rival\'s Gambit',
+  title: 'What Your Rival Did',
   body: [
-    'Your rival has been making moves during your struggle. The landscape has changed.',
+    'While you struggled, your rival was busy. Things have changed.',
   ],
   choices: [
     {
       id: 'outmaneuvered_rival',
-      label: 'You were outmaneuvered',
+      label: 'Your rival got ahead of you',
       requires: [{ kind: 'flag', id: 'ruthless_competitor', atLeast: 1 }],
       effects: [
         { kind: 'gold', delta: -100 },
-        { kind: 'narrate', text: 'While you recovered, your rival seized your opportunities. You\'ll need to rebuild faster.' },
+        { kind: 'narrate', text: 'While you recovered, your rival grabbed your chances. Time to rebuild faster.' },
       ],
     },
     {
       id: 'rival_downfall',
-      label: 'Your rival has fallen',
+      label: 'Your rival fell flat',
       requires: [{ kind: 'flag', id: 'rival_emerges', atLeast: 1 }],
       effects: [
         { kind: 'gold', delta: 120 },
-        { kind: 'narrate', text: 'Your rival overextended and fell. Their assets are available for acquisition.' },
+        { kind: 'narrate', text: 'Your rival grabbed too much and fell. Now their business is up for sale.' },
       ],
     },
     {
       id: 'no_rival',
-      label: 'You had no major rival',
-      effects: [{ kind: 'narrate', text: 'You competed fairly and had no enemies in trade.' }],
+      label: 'You had no real rival',
+      effects: [{ kind: 'narrate', text: 'You played fair and made no enemies.' }],
     },
   ],
 }

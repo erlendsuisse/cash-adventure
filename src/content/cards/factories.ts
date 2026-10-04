@@ -33,7 +33,7 @@ export function enterChapter(chapter: Exclude<ChapterNumber, 1>): Effect[] {
     ...Object.values(consequenceTuning).map(({ flagId }): Effect => ({ kind: 'flag', id: flagId, set: 0 })),
     // Show the chapter's title card next (before the Colossus aftermath card queued after this).
     { kind: 'queueCard', card: chapterTitleCardId(chapter) },
-    { kind: 'narrate', text: `Your station has risen: it costs +${expense}g/month more to keep, and pays +${wages}g/month more in wages.` },
+    { kind: 'narrate', text: `You have moved up in the world! Your new life costs +${expense}g/month more, and your wages rise by +${wages}g/month.` },
   ]
 }
 

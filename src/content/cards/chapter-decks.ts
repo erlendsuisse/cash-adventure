@@ -7,16 +7,16 @@ export const chapter2IntroCards: StoryCard[] = [
   // After Colossus 1: The underworld begins to notice you
   {
     id: 'mob_protection_offer',
-    title: 'The Syndicate Makes an Offer',
+    title: 'The Syndicate Comes Calling',
     body: [
-      'A sleek figure in an expensive coat finds you in a quiet corner. "You\'re making noise in our city. We could work together. Protection, favors, connections - all yours. Cost? A small cut of your business."',
+      'A woman in a silver-buttoned coat slides into the seat across from you. "You\'re getting noticed," she purrs. "We can keep trouble away. For a small fee, of course."',
     ],
     weight: 12,
     requires: [{ kind: 'colossiAtLeast', count: 1 }],
     choices: [
       {
         id: 'accept_mob_protection',
-        label: 'Accept mob protection (110g)',
+        label: 'Pay for protection (110g)',
         requires: [{ kind: 'goldAtLeast', amount: 110 }],
         effects: [
           { kind: 'gold', delta: -110 },
@@ -31,30 +31,30 @@ export const chapter2IntroCards: StoryCard[] = [
             },
           },
           { kind: 'flag', id: 'mob_ally', set: 1 },
-          { kind: 'narrate', text: 'You shake hands with the syndicate. Welcome to the underworld.' },
+          { kind: 'narrate', text: 'She shakes your hand with a cold, firm grip. You belong to the syndicate now.' },
           heat('mafia'),
         ],
       },
       {
         id: 'refuse_mob',
-        label: 'Refuse their offer',
-        effects: [{ kind: 'narrate', text: 'The figure smiles coldly and vanishes. You\'ve made an enemy.' }],
+        label: 'Turn her down',
+        effects: [{ kind: 'narrate', text: 'She smiles without warmth and melts into the crowd. You have made an enemy.' }],
       },
     ],
   },
 
   {
     id: 'criminal_informant',
-    title: 'A Criminal Informant',
+    title: 'The Whisperer',
     body: [
-      'A shady figure offers you information for sale. "I know who\'s moving what, when they\'re vulnerable. That\'s worth 90 gold to someone smart."',
+      'A thin man with darting eyes sidles up. "I know whose ships come in, and when," he whispers. "90 gold, and you\'ll know too."',
     ],
     weight: 11,
     requires: [{ kind: 'colossiAtLeast', count: 1 }],
     choices: [
       {
         id: 'hire_informant',
-        label: 'Hire the informant (90g)',
+        label: 'Pay for his secrets (90g)',
         requires: [{ kind: 'goldAtLeast', amount: 90 }],
         effects: [
           { kind: 'gold', delta: -90 },
@@ -68,29 +68,29 @@ export const chapter2IntroCards: StoryCard[] = [
               sector: 'underworld',
             },
           },
-          { kind: 'narrate', text: 'Knowledge is power. Your informant gives you an edge on every deal.' },
+          { kind: 'narrate', text: 'Every week, a folded note slips under your door. You always seem to know first.' },
         ],
       },
       {
         id: 'decline_informant',
-        label: 'Decline',
-        effects: [{ kind: 'narrate', text: 'The informant moves on to a more interested buyer.' }],
+        label: 'Send him away',
+        effects: [{ kind: 'narrate', text: 'He shrugs and slips off to whisper to someone else.' }],
       },
     ],
   },
 
   {
     id: 'stolen_goods_fence',
-    title: 'A Fence Needs a Partner',
+    title: 'Goods That Fell Off a Cart',
     body: [
-      'A dealer in "found merchandise" approaches. "I need someone to move goods. You provide the network, I provide the goods. We split profits 50-50."',
+      'A cheerful man pats a pile of crates. "Found these," he says with a wink. "You sell them, I find more, we split it 50-50. Nobody asks where they came from."',
     ],
     weight: 10,
     requires: [{ kind: 'colossiAtLeast', count: 1 }],
     choices: [
       {
         id: 'partner_fence',
-        label: 'Partner with the fence (100g)',
+        label: 'Go into business with him (100g)',
         requires: [{ kind: 'goldAtLeast', amount: 100 }],
         effects: [
           { kind: 'gold', delta: -100 },
@@ -105,23 +105,23 @@ export const chapter2IntroCards: StoryCard[] = [
             },
           },
           { kind: 'flag', id: 'criminal_network', set: 1 },
-          { kind: 'narrate', text: 'You join the criminal underworld. The profits are excellent but so are the risks.' },
+          { kind: 'narrate', text: 'The "found" goods sell fast. So far, nobody has asked any questions.' },
           heat('police'),
         ],
       },
       {
         id: 'refuse_fence',
-        label: 'Stay legitimate',
-        effects: [{ kind: 'narrate', text: 'The fence grunts and finds another partner.' }],
+        label: 'Stay honest',
+        effects: [{ kind: 'narrate', text: 'He grunts and wheels his crates away.' }],
       },
     ],
   },
 
   {
     id: 'loan_shark_capital',
-    title: 'A Loan Shark Offers Capital',
+    title: 'The Loan Shark',
     body: [
-      'A dangerous figure makes a simple offer. "150 gold at 20% monthly interest. Fast approval, no questions, but be warned - we collect on time. Every time."',
+      'A big man cracks his knuckles, one by one. "150 gold, right now. You pay back 30 every month. And you pay on time." He smiles. "Everyone pays on time."',
     ],
     weight: 9,
     once: true,
@@ -129,33 +129,33 @@ export const chapter2IntroCards: StoryCard[] = [
     choices: [
       {
         id: 'borrow_shark',
-        label: 'Borrow 150g (30g/month to repay)',
+        label: 'Borrow the gold (+150g, 30g/month to repay)',
         effects: [
           { kind: 'loan', principal: 150, monthlyPayment: 30 },
-          { kind: 'narrate', text: 'You borrow from a loan shark. The interest is brutal, but so is the capital.' },
+          { kind: 'narrate', text: 'The gold is in your hand. His knuckles stay in your memory.' },
           heat('mafia'),
         ],
       },
       {
         id: 'refuse_shark',
-        label: 'Refuse (too risky)',
-        effects: [{ kind: 'narrate', text: 'The loan shark shrugs. "Your loss. Next!"' }],
+        label: 'Back away slowly',
+        effects: [{ kind: 'narrate', text: 'He shrugs. "Your loss. Next!"' }],
       },
     ],
   },
 
   {
     id: 'smuggler_partnership',
-    title: 'A Smuggler Seeks Partnership',
+    title: 'A Captain with a Fast Boat',
     body: [
-      'A captain with a fast boat and no morals offers you a deal. "Partners in smuggling. High risk, high reward. We could make 200 gold worth of deals happen."',
+      'A captain with a gold tooth leans on a sleek black boat. "Nothing outruns her," she grins. "Partner with me, and we skip the harbour tax. High risk, high reward."',
     ],
     weight: 10,
     requires: [{ kind: 'colossiAtLeast', count: 1 }],
     choices: [
       {
         id: 'partner_smuggler',
-        label: 'Partner with the smuggler (120g)',
+        label: 'Join her smuggling runs (120g)',
         requires: [{ kind: 'goldAtLeast', amount: 120 }],
         effects: [
           { kind: 'gold', delta: -120 },
@@ -169,14 +169,14 @@ export const chapter2IntroCards: StoryCard[] = [
               sector: 'underworld',
             },
           },
-          { kind: 'narrate', text: 'You enter the smuggling game. Contraband and coin flow freely.' },
+          { kind: 'narrate', text: 'Her boat slips out on moonless nights. It always comes back heavier.' },
           heat('police'),
         ],
       },
       {
         id: 'refuse_smuggler',
-        label: 'Decline',
-        effects: [{ kind: 'narrate', text: 'The smuggler sails on without you.' }],
+        label: 'Stay on dry land',
+        effects: [{ kind: 'narrate', text: 'She tips her hat and sails off into the fog.' }],
       },
     ],
   },
@@ -186,16 +186,16 @@ export const chapter3IntroCards: StoryCard[] = [
   // After Colossus 2: Deeper crime, syndicates consolidate power
   {
     id: 'syndicate_muscle',
-    title: 'The Syndicate Offers Muscle',
+    title: 'Muscle for Hire',
     body: [
-      'The same sleek figure from before returns. "You\'ve been useful. We want to formalize this. For 160 gold, you get muscle on call. Competitors disappear. Problems vanish."',
+      'The silver-buttoned woman is back, with two very large friends. "For 160 gold, these two work for you. Rivals stop bothering you. Problems simply go away."',
     ],
     weight: 12,
     requires: [{ kind: 'colossiAtLeast', count: 2 }],
     choices: [
       {
         id: 'hire_syndicate_muscle',
-        label: 'Hire the muscle (160g)',
+        label: 'Hire her friends (160g)',
         requires: [{ kind: 'goldAtLeast', amount: 160 }],
         effects: [
           { kind: 'gold', delta: -160 },
@@ -209,30 +209,30 @@ export const chapter3IntroCards: StoryCard[] = [
               sector: 'underworld',
             },
           },
-          { kind: 'narrate', text: 'Bruisers in dark coats now answer your calls. Business becomes easier.' },
+          { kind: 'narrate', text: 'Two giants in dark coats now follow you around. Nobody argues with you anymore.' },
           heat('mafia'),
         ],
       },
       {
         id: 'refuse_muscle',
-        label: 'Refuse (maintain distance)',
-        effects: [{ kind: 'narrate', text: 'The syndicate frowns. Refusing again was not smart.' }],
+        label: 'Keep your distance',
+        effects: [{ kind: 'narrate', text: 'Her smile vanishes. Saying no twice was not wise.' }],
       },
     ],
   },
 
   {
     id: 'black_market_supplier',
-    title: 'A Black Market Supplier',
+    title: 'The Hidden Market',
     body: [
-      'Goods that don\'t exist officially. Weapons, poisons, secrets. A supplier offers you exclusive access. "130 gold membership. You\'ll never want for anything."',
+      'Behind a secret door, a cellar glows with lanterns. Smuggled silk, forbidden maps, rare spices. A woman blocks the stairs. "Members only. Membership is 130 gold."',
     ],
     weight: 11,
     requires: [{ kind: 'colossiAtLeast', count: 2 }],
     choices: [
       {
         id: 'join_black_market',
-        label: 'Join the black market (130g)',
+        label: 'Become a member (130g)',
         requires: [{ kind: 'goldAtLeast', amount: 130 }],
         effects: [
           { kind: 'gold', delta: -130 },
@@ -246,30 +246,30 @@ export const chapter3IntroCards: StoryCard[] = [
               sector: 'underworld',
             },
           },
-          { kind: 'narrate', text: 'You access the true underworld. Anything can be bought or sold.' },
+          { kind: 'narrate', text: 'The secret door now opens for you. Down here, anything can be bought.' },
           heat('police'),
         ],
       },
       {
         id: 'refuse_black_market',
-        label: 'Stay in the light',
-        effects: [{ kind: 'narrate', text: 'The supplier nods. "Maybe next time."' }],
+        label: 'Stay up in the daylight',
+        effects: [{ kind: 'narrate', text: 'She nods. "The door will still be here."' }],
       },
     ],
   },
 
   {
     id: 'crime_boss_lieutenant',
-    title: 'The Crime Boss Wants You',
+    title: 'The Boss Sends for You',
     body: [
-      'The crime boss himself summons you. "I need someone ambitious in my organization. Lieutenant position. 180 gold, and you run operations for me. Excellent salary guaranteed."',
+      'A fire crackles in a velvet study. The city\'s crime boss points at an empty chair. "I need someone clever to run things for me. Buy in for 180 gold. The pay is excellent."',
     ],
     weight: 10,
     requires: [{ kind: 'colossiAtLeast', count: 2 }],
     choices: [
       {
         id: 'become_lieutenant',
-        label: 'Become a crime lieutenant (180g)',
+        label: 'Take the chair (180g)',
         requires: [{ kind: 'goldAtLeast', amount: 180 }],
         effects: [
           { kind: 'gold', delta: -180 },
@@ -284,30 +284,30 @@ export const chapter3IntroCards: StoryCard[] = [
             },
           },
           { kind: 'flag', id: 'crime_lord_ally', set: 1 },
-          { kind: 'narrate', text: 'You become a lieutenant in the criminal hierarchy. Power and danger in equal measure.' },
+          { kind: 'narrate', text: 'You sit down. From now on, the boss\'s business is your business. So is his danger.' },
           heat('mafia'),
         ],
       },
       {
         id: 'refuse_lieutenant',
-        label: 'Refuse (too far)',
-        effects: [{ kind: 'narrate', text: 'The crime boss\'s smile fades. That was a mistake.' }],
+        label: 'Stay standing',
+        effects: [{ kind: 'narrate', text: 'The boss stops smiling. You may regret that.' }],
       },
     ],
   },
 
   {
     id: 'counterfeiter_partnership',
-    title: 'A Counterfeiter Offers Partnership',
+    title: 'The Coin Forger',
     body: [
-      'Money that looks real. A master counterfeiter wants a distributor. "140 gold and you move notes. Untraceable, undetectable."',
+      'A craftsman holds up two gold coins. You cannot tell them apart. One is fake. "140 gold," he says, "and you help me spend my coins."',
     ],
     weight: 9,
     requires: [{ kind: 'colossiAtLeast', count: 2 }],
     choices: [
       {
         id: 'distribute_counterfeit',
-        label: 'Become a distributor (140g)',
+        label: 'Spend his coins for him (140g)',
         requires: [{ kind: 'goldAtLeast', amount: 140 }],
         effects: [
           { kind: 'gold', delta: -140 },
@@ -321,14 +321,14 @@ export const chapter3IntroCards: StoryCard[] = [
               sector: 'underworld',
             },
           },
-          { kind: 'narrate', text: 'You deal in false gold. The risk is enormous, but so are the profits.' },
+          { kind: 'narrate', text: 'Fake coins flow through your hands. If the Watch ever looks closely, you are in big trouble.' },
           heat('police'),
         ],
       },
       {
         id: 'refuse_counterfeit',
-        label: 'Refuse (too illegal)',
-        effects: [{ kind: 'narrate', text: 'The counterfeiter disappears back into the shadows.' }],
+        label: 'Refuse: that\'s a crime',
+        effects: [{ kind: 'narrate', text: 'He pockets both coins and vanishes into the shadows.' }],
       },
     ],
   },
@@ -338,16 +338,16 @@ export const chapter4IntroCards: StoryCard[] = [
   // After Colossus 3: Desperation, true survival mode
   {
     id: 'assassin_contract_broker',
-    title: 'An Assassin Contract Broker',
+    title: 'The Broker of Dirty Tricks',
     body: [
-      'Death for hire. A broker in blood offers you a percentage. "For 200 gold, you broker contracts between killers and those who want targets dead. Very profitable."',
+      'A smiling man with ink-stained fingers offers a nasty trade. "Rivals pay me to ruin each other. Spoiled cargo, sunk deals, nasty rumours. 200 gold buys you a share."',
     ],
     weight: 11,
     requires: [{ kind: 'colossiAtLeast', count: 3 }],
     choices: [
       {
         id: 'become_contract_broker',
-        label: 'Broker assassinations (200g)',
+        label: 'Buy into his dirty tricks (200g)',
         requires: [{ kind: 'goldAtLeast', amount: 200 }],
         effects: [
           { kind: 'gold', delta: -200 },
@@ -361,23 +361,23 @@ export const chapter4IntroCards: StoryCard[] = [
               sector: 'underworld',
             },
           },
-          { kind: 'narrate', text: 'You broker death. The money is excellent. Your soul is another matter.' },
+          { kind: 'narrate', text: 'The money is excellent. You try not to think about the merchants you are ruining.' },
           heat('mafia'),
         ],
       },
       {
         id: 'refuse_assassin',
-        label: 'Refuse (not a murderer)',
-        effects: [{ kind: 'narrate', text: 'The broker studies you coldly. "A mistake."' }],
+        label: 'Refuse: you play fair',
+        effects: [{ kind: 'narrate', text: 'His smile freezes. "A mistake," he says softly.' }],
       },
     ],
   },
 
   {
     id: 'human_trafficking_opportunity',
-    title: 'A Slaver Wants Your Help',
+    title: 'The Cruel Mill Owner',
     body: [
-      'The worst of the underworld. A slaver offers capital. "Help move merchandise. Desperate people willing to work for nothing. Big profits, bigger risks."',
+      'A mill owner in a top hat offers you a share of his profits. His secret? He makes orphans work for him all day, for nothing but scraps. "Big profits," he says. "Interested?"',
     ],
     weight: 8,
     once: true,
@@ -385,24 +385,24 @@ export const chapter4IntroCards: StoryCard[] = [
     choices: [
       {
         id: 'refuse_slaver',
-        label: 'Refuse absolutely',
-        effects: [{ kind: 'narrate', text: 'Some lines you will not cross. Even now.' }],
+        label: 'Refuse, and mean it',
+        effects: [{ kind: 'narrate', text: 'Some lines you will never cross. Not for all the gold in Vessarin.' }],
       },
     ],
   },
 
   {
     id: 'drug_empire_partnership',
-    title: 'A Drug Lord Offers Partnership',
+    title: 'The Miracle Tonic',
     body: [
-      'The fastest way to wealth and death. A drug lord offers you a percentage. "200 gold gets you into distribution. Drugs sell themselves. So do addicts."',
+      'A man in a tall hat shakes a bottle of green tonic. "It cures nothing," he whispers, "but people believe it cures everything. 200 gold gets you a share."',
     ],
     weight: 10,
     requires: [{ kind: 'colossiAtLeast', count: 3 }],
     choices: [
       {
         id: 'become_drug_distributor',
-        label: 'Distribute drugs (200g)',
+        label: 'Sell the fake tonic (200g)',
         requires: [{ kind: 'goldAtLeast', amount: 200 }],
         effects: [
           { kind: 'gold', delta: -200 },
@@ -416,14 +416,14 @@ export const chapter4IntroCards: StoryCard[] = [
               sector: 'underworld',
             },
           },
-          { kind: 'narrate', text: 'You enter the drug trade. Wealth comes fast. Addiction, violence and death follow.' },
+          { kind: 'narrate', text: 'The bottles fly off the shelves. People get sicker, and angrier, and the Watch starts asking questions.' },
           heat('mafia'),
         ],
       },
       {
         id: 'refuse_drugs',
-        label: 'Refuse (not that far)',
-        effects: [{ kind: 'narrate', text: 'The drug lord shrugs. Others will take the offer.' }],
+        label: 'Refuse: it\'s a cruel trick',
+        effects: [{ kind: 'narrate', text: 'He shrugs and goes looking for someone less fussy.' }],
       },
     ],
   },
@@ -433,16 +433,16 @@ export const chapter5IntroCards: StoryCard[] = [
   // After Colossus 4+: Endgame, corruption complete or escape begins
   {
     id: 'government_corruption',
-    title: 'A Corrupt Official',
+    title: 'The Official Who Can Be Bought',
     body: [
-      'Power beyond power. A high-ranking official offers partnership. "250 gold. You provide bribes, I provide permits, licenses, and immunity. Endless profit."',
+      'A crown official leans close, his chain of office clinking. "250 gold, and every permit you want is stamped. Every inspector looks the other way."',
     ],
     weight: 10,
     requires: [{ kind: 'colossiAtLeast', count: 4 }],
     choices: [
       {
         id: 'bribe_official',
-        label: 'Establish bribery network (250g)',
+        label: 'Pay the official (250g)',
         requires: [{ kind: 'goldAtLeast', amount: 250 }],
         effects: [
           { kind: 'gold', delta: -250 },
@@ -456,30 +456,30 @@ export const chapter5IntroCards: StoryCard[] = [
               sector: 'underworld',
             },
           },
-          { kind: 'narrate', text: 'You own government officials. The state works for you now.' },
+          { kind: 'narrate', text: 'Stamped papers arrive whenever you ask. The crown\'s own officials now work for you.' },
           heat('police'),
         ],
       },
       {
         id: 'refuse_corruption',
-        label: 'Refuse (danger)',
-        effects: [{ kind: 'narrate', text: 'The official\'s smile turns dangerous. Betraying the state has consequences.' }],
+        label: 'Refuse: too dangerous',
+        effects: [{ kind: 'narrate', text: 'His smile turns cold. Officials do not forget people who say no.' }],
       },
     ],
   },
 
   {
     id: 'escape_boat',
-    title: 'A Captain Offers Escape',
+    title: 'A Ship for a Rainy Day',
     body: [
-      'A ship captain with no allegiances. "I can get you out. Anywhere in the world, untraceable. 180 gold and you\'ve got passage for life if you need it. Insurance against apocalypse."',
+      'An old captain taps his pipe. "If it all goes wrong, you\'ll need a way out. 180 gold, and my ship is ready for you, any night, no questions."',
     ],
     weight: 9,
     requires: [{ kind: 'colossiAtLeast', count: 4 }],
     choices: [
       {
         id: 'buy_escape_route',
-        label: 'Buy escape insurance (180g)',
+        label: 'Buy a way out (180g)',
         requires: [{ kind: 'goldAtLeast', amount: 180 }],
         effects: [
           { kind: 'gold', delta: -180 },
@@ -493,13 +493,13 @@ export const chapter5IntroCards: StoryCard[] = [
               sector: 'trade',
             },
           },
-          { kind: 'narrate', text: 'You buy a way out. If everything falls apart, you can disappear.' },
+          { kind: 'narrate', text: 'Now you have a secret way out. If everything falls apart, you can vanish.' },
         ],
       },
       {
         id: 'decline_escape',
-        label: 'No escape for you',
-        effects: [{ kind: 'narrate', text: 'You\'re committed now. No way out but forward.' }],
+        label: 'You won\'t need it',
+        effects: [{ kind: 'narrate', text: 'No escape plan. The only way out is forward.' }],
       },
     ],
   },

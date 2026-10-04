@@ -4,18 +4,18 @@ import type { StoryCard } from '../../engine/types'
 
 const master_trader: StoryCard = {
   id: 'master_trader',
-  title: 'The Master\'s Lesson',
+  title: 'The Grand Old Trader',
   weight: 2,
   storyPhase: 'climbing',
   body: [
-    'An elderly merchant with decades of experience approaches you.',
-    '"Most traders chase quick profits. You seem different—you think ahead," she observes.',
-    '"I\'ve built an empire by understanding people, not just markets. I could teach you, if you\'re willing to listen."',
+    'A grand old trader with a silver cane taps your shoe to get your attention.',
+    '"Most traders chase quick coins," she says. "You think ahead. I like that."',
+    '"I built my fortune by understanding people. I could teach you, if you\'ll listen."',
   ],
   choices: [
     {
       id: 'mentor_accept',
-      label: 'Accept mentorship (invest time & 80g/month)',
+      label: 'Become her student (80g/month)',
       effects: [
         { kind: 'expense', delta: 80 },
         { kind: 'flag', id: 'mentor_trader', set: 1 },
@@ -29,19 +29,19 @@ const master_trader: StoryCard = {
 
 const mentor_wisdom: StoryCard = {
   id: 'mentor_wisdom',
-  title: 'Mentor\'s Wisdom',
+  title: 'Lessons by the Fire',
   weight: 1,
   requires: [{ kind: 'flag', id: 'mentor_trader', atLeast: 1 }],
   storyPhase: 'climbing',
   body: [
-    'Your mentor shares hard-won lessons: "The greatest fortunes are built on trust, not deception.',
-    'People remember who treats them well. That reputation is worth more than any single transaction."',
-    'Over weeks of study, you internalize these principles. Your approach to business changes fundamentally.',
+    'By her crackling fire, your teacher shares her secret. "The greatest fortunes are built on trust, not tricks."',
+    '"People remember who treated them well. A good name is worth more than any single deal."',
+    'Week by week, her lessons sink in. You start to see business in a whole new way.',
   ],
   choices: [
     {
       id: 'wisdom_applied',
-      label: 'Apply these lessons',
+      label: 'Put her lessons to work',
       effects: [
         { kind: 'stat', stat: 'charm', delta: 2 },
         { kind: 'stat', stat: 'savvy', delta: 1 },
@@ -59,14 +59,13 @@ const childhood_friend: StoryCard = {
   weight: 1,
   storyPhase: 'climbing',
   body: [
-    'Walking through the market, you run into someone from your childhood—a friend you thought was lost to time.',
-    '"I\'ve been away," they say. "Building something in a new city. But I\'m home now, and I\'d love to reconnect."',
-    'They look at you with warmth and something else—hope, perhaps, that you\'ll stay in their life.',
+    'In the busy market, someone calls your name. It\'s your best friend from when you were small! You haven\'t seen each other in years.',
+    '"I\'ve been away in another city," your friend says, beaming. "But I\'m home now. Let\'s catch up!"',
   ],
   choices: [
     {
       id: 'friend_reconnect',
-      label: 'Reconnect and offer support',
+      label: 'Catch up properly',
       effects: [
         { kind: 'flag', id: 'friend_close', set: 1 },
         { kind: 'stat', stat: 'charm', delta: 1 },
@@ -74,7 +73,7 @@ const childhood_friend: StoryCard = {
     },
     {
       id: 'friend_busy',
-      label: 'Be cordial but focus on business',
+      label: 'Wave, but get back to work',
       effects: [{ kind: 'flag', id: 'friend_distant', set: 1 }],
     },
   ],
@@ -82,19 +81,18 @@ const childhood_friend: StoryCard = {
 
 const friend_crisis: StoryCard = {
   id: 'friend_crisis',
-  title: 'A Friend in Trouble',
+  title: 'Your Friend Needs Help',
   weight: 1,
   requires: [{ kind: 'flag', id: 'friend_close', atLeast: 1 }],
   storyPhase: 'climbing',
   body: [
-    'Your childhood friend arrives at your door, desperate. "I\'m in debt. Serious debt. I made a bad business decision and now people are threatening me."',
-    '"I know I have no right to ask, but... could you help? I need 200 gold to make this go away."',
-    'They look terrified. This person once meant everything to you.',
+    'Your old friend arrives at your door, pale and shaking. "I made a terrible deal," your friend says. "Now I owe money to some very scary people."',
+    '"I hate to ask. But could you lend me 200 gold?"',
   ],
   choices: [
     {
       id: 'friend_save',
-      label: 'Give them 200 gold',
+      label: 'Give your friend 200 gold',
       requires: [{ kind: 'goldAtLeast', amount: 200 }],
       effects: [
         { kind: 'gold', delta: -200 },
@@ -103,12 +101,12 @@ const friend_crisis: StoryCard = {
     },
     {
       id: 'friend_refuse',
-      label: 'Refuse—they must face consequences',
+      label: 'Refuse: your friend must sort it out',
       effects: [{ kind: 'flag', id: 'friend_close', set: 0 }],
     },
     {
       id: 'friend_loan',
-      label: 'Offer a business opportunity to earn it',
+      label: 'Offer your friend work to earn it',
       effects: [
         { kind: 'flag', id: 'friend_partner', set: 1 },
         { kind: 'stat', stat: 'charm', delta: 1 },
@@ -121,19 +119,18 @@ const friend_crisis: StoryCard = {
 
 const ruthless_competitor: StoryCard = {
   id: 'ruthless_competitor',
-  title: 'A Ruthless Rival Emerges',
+  title: 'The Ruthless Rival',
   weight: 2,
   storyPhase: 'climbing',
   body: [
-    'A new merchant moves into Vessarin—aggressive, ambitious, and willing to undercut everyone.',
-    'Within weeks, they\'ve cornered part of the spice market and are moving on salt.',
-    '"You\'re good," they tell you with a smirk, "but I\'m better. And I play harder."',
-    'This is a direct threat to your livelihood.',
+    'A new merchant sweeps into Vessarin in a black carriage, cutting prices everywhere.',
+    'In weeks, he has grabbed half the spice market. Now he wants the salt trade too.',
+    '"You\'re good," he smirks, tipping his hat. "But I\'m better. And I play dirty."',
   ],
   choices: [
     {
       id: 'rival_compete',
-      label: 'Out-compete them with better strategy',
+      label: 'Beat him with a better plan',
       effects: [
         { kind: 'flag', id: 'rival_compete', set: 1 },
         { kind: 'stat', stat: 'savvy', delta: 1 },
@@ -141,31 +138,31 @@ const ruthless_competitor: StoryCard = {
     },
     {
       id: 'rival_sabotage',
-      label: 'Investigate their methods for weaknesses',
+      label: 'Look for his weak spot',
       effects: [
         { kind: 'flag', id: 'rival_sabotage', set: 1 },
         { kind: 'flag', id: 'moral_compromise', delta: 1 },
       ],
     },
-    { id: 'rival_ignore', label: 'Focus on your own business', effects: [] },
+    { id: 'rival_ignore', label: 'Ignore him and mind your own shop', effects: [] },
   ],
 }
 
 const rival_showdown: StoryCard = {
   id: 'rival_showdown',
-  title: 'Competition Heats Up',
+  title: 'The Price War',
   weight: 1,
   requires: [{ kind: 'flag', id: 'rival_compete', equals: 1 }],
   storyPhase: 'climbing',
   body: [
-    'The marketplace becomes a battleground. Prices drop as you both undercut each other.',
-    'Your rival is ruthless, but you\'re strategic. In a crucial negotiation, you outmaneuver them and secure a major contract.',
-    'For now, you\'ve won. But your rival whispers a promise: "This isn\'t over."',
+    'The market becomes a battlefield. You both cut prices again and again.',
+    'He plays dirty, but you play smart. In the big meeting, you win the contract he wanted most.',
+    'You have won, for now. On his way out, he hisses: "This isn\'t over."',
   ],
   choices: [
     {
       id: 'rival_victory',
-      label: 'Bask in victory',
+      label: 'Enjoy the win',
       effects: [
         { kind: 'gold', delta: 180 },
         { kind: 'flag', id: 'rival_beaten', set: 1 },
@@ -179,19 +176,19 @@ const rival_showdown: StoryCard = {
 
 const theft_offer: StoryCard = {
   id: 'theft_offer',
-  title: 'A Tempting Crime',
+  title: 'The Warehouse Key',
   weight: 1,
   storyPhase: 'climbing',
   body: [
-    'A shadowy figure proposes something illegal: steal a shipment of valuable spices from a competitor.',
-    '"No one will know it was you. The job pays 300 gold, and the competitor deserves it anyway."',
-    '"All you have to do is provide the warehouse key. You have it, don\'t you?"',
-    'You do. The choice sits heavy in your mind.',
+    'A hooded figure slides into the seat beside you. "Your rival\'s spice warehouse," she whispers. "Help us empty it."',
+    '"Nobody will know. It pays 300 gold, and he deserves it anyway."',
+    '"All you have to do is lend us the key. You have one, don\'t you?"',
+    'You do. The key feels heavy in your pocket.',
   ],
   choices: [
     {
       id: 'theft_accept',
-      label: 'Accept the job',
+      label: 'Hand over the key',
       effects: [
         { kind: 'gold', delta: 300 },
         { kind: 'flag', id: 'criminal_act', set: 1 },
@@ -201,7 +198,7 @@ const theft_offer: StoryCard = {
     },
     {
       id: 'theft_refuse',
-      label: 'Refuse and report them',
+      label: 'Refuse, and report her',
       effects: [
         { kind: 'stat', stat: 'grit', delta: 1 },
         { kind: 'flag', id: 'criminal_safe', set: 1 },
@@ -214,18 +211,17 @@ const theft_offer: StoryCard = {
 
 const plague_outbreak: StoryCard = {
   id: 'plague_outbreak',
-  title: 'Sickness Spreads',
+  title: 'Someone You Love Is Sick',
   weight: 1,
   storyPhase: 'climbing',
   body: [
-    'An illness spreads through the city\'s poor quarters. The guild does little—profits matter more than people.',
-    'You hear that someone close to you has fallen ill. The healer\'s fee is 100 gold.',
-    'You have the gold. The question is whether you\'ll spend it.',
+    'A sickness is spreading through the poor quarter, and the guild does nothing to help.',
+    'Then the news reaches you: someone you love has caught it. The healer wants 100 gold.',
   ],
   choices: [
     {
       id: 'plague_pay',
-      label: 'Pay for the healer (100 gold)',
+      label: 'Pay the healer (100g)',
       requires: [{ kind: 'goldAtLeast', amount: 100 }],
       effects: [
         { kind: 'gold', delta: -100 },
@@ -234,7 +230,7 @@ const plague_outbreak: StoryCard = {
     },
     {
       id: 'plague_pray',
-      label: 'Pray they recover on their own',
+      label: 'Hope they get better on their own',
       effects: [{ kind: 'flag', id: 'loved_one_lost', set: 1 }],
     },
   ],
@@ -249,9 +245,9 @@ const guild_leadership: StoryCard = {
   requires: [{ kind: 'goldAtLeast', amount: 500 }, { kind: 'statAtLeast', stat: 'savvy', value: 4 }],
   storyPhase: 'climbing',
   body: [
-    'The Merchant Guild offers you a position on their council.',
-    'It comes with prestige, influence, and a seat at the table where real decisions are made.',
-    '"But there\'s a price," the guild master says. "A 500-gold contribution to the guild coffers. Consider it an investment in your future."',
+    'A letter with the guild\'s golden seal arrives. They want you on their council!',
+    'A seat at the table where the big decisions are made.',
+    '"There is a small matter of a gift," the guild master coughs. "500 gold for the guild chest. An investment in your future."',
   ],
   choices: [
     {
@@ -263,7 +259,7 @@ const guild_leadership: StoryCard = {
         { kind: 'stat', stat: 'charm', delta: 1 },
       ],
     },
-    { id: 'guild_decline', label: 'Decline', effects: [] },
+    { id: 'guild_decline', label: 'Decline the seat', effects: [] },
   ],
 }
 
@@ -271,21 +267,21 @@ const guild_leadership: StoryCard = {
 
 const fortune_teller: StoryCard = {
   id: 'fortune_teller',
-  title: 'The Seer\'s Reading',
+  title: 'The Seer\'s Cards',
   weight: 1,
   storyPhase: 'climbing',
   body: [
-    'A fortune teller reads your cards and looks troubled.',
-    '"You stand at a crossroads. Your choices now will define who you become. Wealth without conscience is an empty throne."',
-    '"The cards show both great fortune and great regret in your future. Which path will you walk?"',
+    'A fortune teller turns over her cards, then frowns.',
+    '"You stand at a crossroads," she says. "Gold without a good heart is an empty throne."',
+    '"I see great fortune in your future, and great regret. Which path will you choose?"',
   ],
   choices: [
     {
       id: 'fortune_reflect',
-      label: 'Take the warning seriously',
+      label: 'Take her warning to heart',
       effects: [{ kind: 'flag', id: 'soul_searching', set: 1 }],
     },
-    { id: 'fortune_dismiss', label: 'Dismiss it as superstition', effects: [] },
+    { id: 'fortune_dismiss', label: 'Laugh it off', effects: [] },
   ],
 }
 
@@ -293,16 +289,16 @@ const fortune_teller: StoryCard = {
 
 const presage_ledger_wyrm: StoryCard = {
   id: 'presage_ledger_wyrm',
-  title: 'Disturbing Omens',
+  title: 'Strange Signs',
   weight: 1,
   storyPhase: 'climbing',
   requires: [{ kind: 'colossiAtLeast', count: 0 }],
   body: [
-    'Strange reports circulate among merchants. Ledgers have gone missing from secure vaults. Records that should be impossible to access are appearing in the hands of competitors.',
-    '"Something is wrong," an older merchant tells you. "I\'ve been trading for 40 years. I can feel it. Something ancient is stirring. Something that hungers for order... and judgment."',
-    'You dismiss it as superstition. But a chill runs down your spine.',
+    'Strange things are happening. Ledgers vanish from locked vaults. Secret records turn up in rivals\' hands. At night, the guild towers creak.',
+    '"Something old is waking up," an elderly merchant whispers. "Something that hungers for order. And judgment."',
+    'You tell yourself it\'s just a story. But a chill runs down your spine.',
   ],
-  choices: [{ id: 'presage_continue', label: 'Continue with caution', effects: [] }],
+  choices: [{ id: 'presage_continue', label: 'Carry on, carefully', effects: [] }],
 }
 
 // Export all cards

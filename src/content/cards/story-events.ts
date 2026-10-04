@@ -6,33 +6,33 @@ const tavern_rumor: StoryCard = {
   weight: 4,
   title: 'Whispers in the Tavern',
   body: [
-    'Over drinks, merchants speak in hushed tones of bandits on the northern road. One claims to have seen them. Another says it\'s just speculation. A third insists the guards know but don\'t act.',
+    'In the corner of the Salty Anchor, three merchants whisper about bandits on the northern road. One swears he saw them. One says it\'s nonsense. One says the guards know, but do nothing.',
   ],
   choices: [
     {
       id: 'investigate_bandits',
-      label: 'Investigate the rumor (Savvy check, DC 12)',
+      label: 'Ask a few clever questions (Savvy check, DC 12)',
       check: {
         stat: 'savvy',
         dc: 12,
         success: {
-          text: 'You learn the bandits are real but avoiding the main trade routes. Useful intelligence.',
+          text: 'The bandits are real, but they keep off the main roads. Good to know!',
           effects: [
             { kind: 'flag', id: 'knows_bandit_routes', set: 1 },
             { kind: 'advanceDays', days: 2 },
           ],
         },
         failure: {
-          text: 'The merchants close ranks. You learn nothing concrete.',
+          text: 'The merchants go quiet and stare into their mugs. You learn nothing.',
           effects: [{ kind: 'advanceDays', days: 2 }],
         },
       },
     },
     {
       id: 'ignore_rumor',
-      label: 'Ignore the speculation',
+      label: 'Ignore the gossip',
       effects: [
-        { kind: 'narrate', text: 'You finish your drink and move on.' },
+        { kind: 'narrate', text: 'You finish your cider and head out into the night.' },
         { kind: 'advanceDays', days: 1 },
       ],
     },
@@ -45,18 +45,18 @@ const lost_caravan: StoryCard = {
   weight: 4,
   title: 'A Merchant in Distress',
   body: [
-    'A bedraggled merchant approaches you in the marketplace, desperate. "My caravan never arrived. The goods are worth hundreds of gold. If you can find them, I\'ll pay for the recovery."',
+    'A muddy merchant rushes up, wringing his hands. "My caravan never arrived! It\'s carrying a fortune. Find it, and I\'ll pay you well!"',
   ],
   choices: [
     {
       id: 'search_caravan',
-      label: 'Organize a search (Grit check, DC 14)',
+      label: 'Lead a search party (Grit check, DC 14)',
       requires: [{ kind: 'goldAtLeast', amount: 50 }],
       check: {
         stat: 'grit',
         dc: 14,
         success: {
-          text: 'You track the caravan to a ravine. The merchant pays 200 gold reward.',
+          text: 'You follow wheel tracks to a hidden ravine, and there it is! The merchant pays you 200 gold.',
           effects: [
             { kind: 'gold', delta: 200 },
             { kind: 'flag', id: 'merchant_favor', delta: 1 },
@@ -64,7 +64,7 @@ const lost_caravan: StoryCard = {
           ],
         },
         failure: {
-          text: 'Your search turns up nothing but wasted time and coin.',
+          text: 'Days of searching turn up nothing but sore feet and an empty purse.',
           effects: [
             { kind: 'gold', delta: -50 },
             { kind: 'advanceDays', days: 4 },
@@ -74,8 +74,8 @@ const lost_caravan: StoryCard = {
     },
     {
       id: 'decline_search',
-      label: 'Too risky for you',
-      effects: [{ kind: 'narrate', text: 'You wish them luck and leave.' }],
+      label: 'Wish him luck',
+      effects: [{ kind: 'narrate', text: 'You wish him luck. He hurries off to ask someone else.' }],
     },
   ],
 }
@@ -84,23 +84,23 @@ const cursed_artifact: StoryCard = {
   storyPhase: 'climbing',
   id: 'cursed_artifact',
   weight: 4,
-  title: 'An Antique of Questionable Origin',
+  title: 'The Cursed Statue',
   body: [
-    'A nervous collector offers you an ancient relic at an incredibly low price. "I need it gone," he whispers. "3 owners before me—all lost their fortune within a year."',
+    'A sweating collector pushes a little stone statue at you. Its eyes seem to follow you. "Take it, cheap!" he whispers. "3 owners before me all lost their fortunes."',
   ],
   choices: [
     {
       id: 'examine_artifact',
-      label: 'Examine it carefully (Savvy check, DC 13)',
+      label: 'Examine it closely (Savvy check, DC 13)',
       check: {
         stat: 'savvy',
         dc: 13,
         success: {
-          text: 'You recognize the craftsmanship as masterful but harmless. You resell it for 150 gold profit.',
+          text: 'No curse, just fine old carving! You sell it to a museum for 150 gold profit.',
           effects: [{ kind: 'gold', delta: 150 }, { kind: 'advanceDays', days: 3 }],
         },
         failure: {
-          text: 'You buy it. The first week brings nothing but problems.',
+          text: 'You buy it. That week, your roof leaks, your cart breaks, and your cat runs away.',
           effects: [
             { kind: 'gold', delta: -80 },
             { kind: 'flag', id: 'bad_luck', delta: 1 },
@@ -112,7 +112,7 @@ const cursed_artifact: StoryCard = {
     {
       id: 'walk_away_relic',
       label: 'Stay away from curses',
-      effects: [{ kind: 'narrate', text: 'You leave the cursed thing where it sits.' }],
+      effects: [{ kind: 'narrate', text: 'You back away slowly. The statue\'s eyes follow you all the way out.' }],
     },
   ],
 }
@@ -121,20 +121,20 @@ const guard_problem: StoryCard = {
   storyPhase: 'climbing',
   id: 'guard_problem',
   weight: 4,
-  title: 'A Guard\'s Dilemma',
+  title: 'The Guard Who Wants to Help',
   body: [
-    'A city guard confides in you: bandits have been raiding merchant caravans, but the city refuses to fund more patrols. "If I could get a merchant to back a private caravan guard contract, it would be legitimate."',
+    'A young guard sighs into his tea. "Bandits keep raiding the caravans, and the city won\'t pay for more patrols. If a merchant paid for guards, we could stop them!"',
   ],
   choices: [
     {
       id: 'back_guard_contract',
-      label: 'Fund the private guard contract (-100 gold)',
+      label: 'Pay for the guards (-100g)',
       requires: [{ kind: 'goldAtLeast', amount: 100 }],
       check: {
         stat: 'charm',
         dc: 12,
         success: {
-          text: 'Your backing is accepted. The roads become safer. Word spreads—your reputation grows.',
+          text: 'The new patrols scare the bandits away. Every merchant in town hears who paid for them.',
           effects: [
             { kind: 'gold', delta: -100 },
             { kind: 'stat', stat: 'charm', delta: 1 },
@@ -143,7 +143,7 @@ const guard_problem: StoryCard = {
           ],
         },
         failure: {
-          text: 'Politics interfere. The guard contract falls through. Your gold is wasted.',
+          text: 'The city council argues for weeks and nothing happens. Your gold is wasted.',
           effects: [{ kind: 'gold', delta: -100 }, { kind: 'advanceDays', days: 2 }],
         },
       },
@@ -151,7 +151,7 @@ const guard_problem: StoryCard = {
     {
       id: 'refuse_guard',
       label: 'Not your problem',
-      effects: [{ kind: 'narrate', text: 'The guard leaves disappointed.' }],
+      effects: [{ kind: 'narrate', text: 'The guard finishes his tea and trudges off, disappointed.' }],
     },
   ],
 }
@@ -162,17 +162,17 @@ const fortune_teller: StoryCard = {
   weight: 4,
   title: 'The Seer\'s Warning',
   body: [
-    'A fortune teller stops you in the street. "I see great danger and greater opportunity ahead. The cards show a choice that will change everything."',
+    'A fortune teller with jangling bracelets grabs your hand. "I see great danger, and even greater luck! A choice is coming that will change everything."',
   ],
   choices: [
     {
       id: 'heed_warning',
-      label: 'Ask for clarity (Nerve check, DC 11)',
+      label: 'Ask what she means (Nerve check, DC 11)',
       check: {
         stat: 'nerve',
         dc: 11,
         success: {
-          text: 'The seer\'s words crystallize: "Trust those with steady hands and sharp minds." You feel strangely prepared.',
+          text: '"Trust steady hands and sharp minds," she says. Somehow, you feel ready for anything.',
           effects: [
             { kind: 'stat', stat: 'grit', delta: 1 },
             { kind: 'flag', id: 'seer_blessed', set: 1 },
@@ -180,15 +180,15 @@ const fortune_teller: StoryCard = {
           ],
         },
         failure: {
-          text: 'The seer\'s cryptic words confuse more than enlighten. You leave troubled.',
+          text: 'She mumbles about crows and teacups. You leave more confused than before.',
           effects: [{ kind: 'advanceDays', days: 1 }],
         },
       },
     },
     {
       id: 'dismiss_seer',
-      label: 'Move on',
-      effects: [{ kind: 'narrate', text: 'You dismiss the seer as a charlatan.' }],
+      label: 'Pull your hand away',
+      effects: [{ kind: 'narrate', text: 'You pull your hand back. Fortune tellers! Honestly.' }],
     },
   ],
 }
@@ -199,22 +199,22 @@ const traveling_bard: StoryCard = {
   weight: 4,
   title: 'Tales of the Colossi',
   body: [
-    'A traveling bard regales patrons with stories of the 4 great Colossi—ancient entities that rose when Vessarin\'s wealth reached its peak. "The legends say only those of true merit can stand against them."',
+    'A bard leaps onto a tavern table and strums his lute. "Hear the tale of the 7 Colossi!" he sings. "Giants who wake when a merchant grows too rich, and only the worthy can beat them!"',
   ],
   choices: [
     {
       id: 'listen_bard',
-      label: 'Listen to the full tale',
+      label: 'Listen to the whole song',
       effects: [
-        { kind: 'narrate', text: 'The bard\'s words stir something in you. The world feels larger, full of hidden power.' },
+        { kind: 'narrate', text: 'The song gives you shivers. The world suddenly feels bigger, full of hidden wonders.' },
         { kind: 'stat', stat: 'nerve', delta: 1 },
         { kind: 'advanceDays', days: 2 },
       ],
     },
     {
       id: 'ignore_bard',
-      label: 'Ignore the storyteller',
-      effects: [{ kind: 'narrate', text: 'You have no time for tales.' }],
+      label: 'Head home',
+      effects: [{ kind: 'narrate', text: 'You have no time for songs tonight.' }],
     },
   ],
 }
@@ -223,26 +223,26 @@ const midnight_arrival: StoryCard = {
   storyPhase: 'climbing',
   id: 'midnight_arrival',
   weight: 4,
-  title: 'Mysterious Strangers',
+  title: 'Strangers at Midnight',
   body: [
-    'Late at night, 3 cloaked figures arrive in town asking about a merchant of great wealth and cunning. They leave by dawn. Word spreads. Others begin asking who they seek.',
+    'At midnight, 3 cloaked riders clatter into town. They ask about a rich and cunning merchant, then vanish before dawn. Now everyone is wondering who they were looking for.',
   ],
   choices: [
     {
       id: 'ask_questions',
-      label: 'Investigate who they were (Savvy check, DC 14)',
+      label: 'Find out who they were (Savvy check, DC 14)',
       check: {
         stat: 'savvy',
         dc: 14,
         success: {
-          text: 'You learn they were agents of the banking guild, seeking someone who defrauded them. You now know who to avoid—or approach carefully.',
+          text: 'They were bank agents, hunting a cheat who stole from them. Now you know who to steer clear of.',
           effects: [
             { kind: 'flag', id: 'guild_wary', set: 1 },
             { kind: 'advanceDays', days: 3 },
           ],
         },
         failure: {
-          text: 'Your questions raise suspicion. The guild notices your interest.',
+          text: 'Your questions get noticed. Now the bank is curious about you.',
           effects: [
             { kind: 'flag', id: 'under_scrutiny', delta: 1 },
             { kind: 'advanceDays', days: 2 },
@@ -254,7 +254,7 @@ const midnight_arrival: StoryCard = {
       id: 'stay_quiet',
       label: 'Keep your head down',
       effects: [
-        { kind: 'narrate', text: 'You remain anonymous.' },
+        { kind: 'narrate', text: 'You keep quiet and stay out of it.' },
         { kind: 'advanceDays', days: 1 },
       ],
     },
@@ -265,28 +265,28 @@ const plague_warning: StoryCard = {
   storyPhase: 'climbing',
   id: 'plague_warning',
   weight: 1,
-  title: 'Sickness Spreads',
+  title: 'A Cough in the Poor Quarter',
   body: [
-    'A healer comes to you with grim news: illness has struck the poor districts. If it spreads, trade will halt and prices will spike. But so will desperation.',
+    'A worried healer comes to your door. "A sickness has started in the poor quarter," she says. "If it spreads, trade will stop. I need money for medicine now."',
   ],
   choices: [
     {
       id: 'help_healer',
-      label: 'Donate to the healer (-75 gold)',
+      label: 'Give her money for medicine (-75g)',
       requires: [{ kind: 'goldAtLeast', amount: 75 }],
       effects: [
         { kind: 'gold', delta: -75 },
         { kind: 'stat', stat: 'charm', delta: 1 },
         { kind: 'flag', id: 'community_hero', delta: 1 },
-        { kind: 'narrate', text: 'Your charity saves lives. The city remembers.' },
+        { kind: 'narrate', text: 'Your gift buys medicine for dozens of families. The city will remember.' },
         { kind: 'advanceDays', days: 5 },
       ],
     },
     {
       id: 'wait_and_profit',
-      label: 'Wait to profit from higher prices',
+      label: 'Wait, and profit when prices rise',
       effects: [
-        { kind: 'narrate', text: 'You calculate the profit opportunity.' },
+        { kind: 'narrate', text: 'You start working out what you could sell when things get worse.' },
         { kind: 'flag', id: 'morally_compromised', delta: 1 },
         { kind: 'advanceDays', days: 7 },
       ],
@@ -298,25 +298,25 @@ const scholar_encounter: StoryCard = {
   storyPhase: 'climbing',
   id: 'scholar_encounter',
   weight: 4,
-  title: 'A Learned Merchant',
+  title: 'The Old Scholar',
   body: [
-    'An elderly scholar-merchant offers to share knowledge. "I have spent 40 years studying market patterns and the nature of wealth. Most merchants die rich but ignorant. You could be different."',
+    'An old scholar peers at you over her spectacles. "I\'ve studied money for 40 years," she says. "Most merchants get rich but never understand why. I could teach you."',
   ],
   choices: [
     {
       id: 'study_merchant',
-      label: 'Accept the mentorship',
+      label: 'Become her student',
       effects: [
         { kind: 'stat', stat: 'savvy', delta: 2 },
         { kind: 'flag', id: 'mentor_found', set: 1 },
-        { kind: 'narrate', text: 'The scholar\'s wisdom becomes your compass.' },
+        { kind: 'narrate', text: 'Her lessons change how you see every deal.' },
         { kind: 'advanceDays', days: 10 },
       ],
     },
     {
       id: 'decline_mentor',
-      label: 'You prefer to learn by doing',
-      effects: [{ kind: 'narrate', text: 'You trust your instincts over theories.' }],
+      label: 'Learn by doing instead',
+      effects: [{ kind: 'narrate', text: 'You thank her, and trust your own instincts.' }],
     },
   ],
 }
@@ -325,19 +325,19 @@ const rival_emerges: StoryCard = {
   storyPhase: 'climbing',
   id: 'rival_emerges',
   weight: 4,
-  title: 'A Rival Takes Notice',
+  title: 'A New Rival in Town',
   body: [
-    'A new merchant arrives in town, underselling everyone. They eye you with particular interest. "I\'ve heard of you," they say coldly. "We should settle who belongs in this market."',
+    'A sharp-eyed newcomer opens a shop across the street, selling everything cheaper than you. She stares at you through her window. "I\'ve heard of you," she says. "This market isn\'t big enough for both of us."',
   ],
   choices: [
     {
       id: 'challenge_rival',
-      label: 'Accept the rivalry (Nerve check, DC 13)',
+      label: 'Take her on (Nerve check, DC 13)',
       check: {
         stat: 'nerve',
         dc: 13,
         success: {
-          text: 'You stand your ground. The rival respects your mettle. Competition drives you both to greater success.',
+          text: 'You hold your ground. She respects that, and the competition makes you both better.',
           effects: [
             { kind: 'stat', stat: 'grit', delta: 1 },
             { kind: 'stat', stat: 'nerve', delta: 1 },
@@ -346,7 +346,7 @@ const rival_emerges: StoryCard = {
           ],
         },
         failure: {
-          text: 'You falter. The rival takes advantage, underselling you repeatedly.',
+          text: 'You blink first. She cuts her prices again and again, and your customers drift away.',
           effects: [
             { kind: 'flag', id: 'losing_ground', delta: 1 },
             { kind: 'advanceDays', days: 4 },
@@ -356,9 +356,9 @@ const rival_emerges: StoryCard = {
     },
     {
       id: 'cooperate_rival',
-      label: 'Suggest cooperation',
+      label: 'Offer to work together',
       effects: [
-        { kind: 'narrate', text: 'You extend an unexpected hand.' },
+        { kind: 'narrate', text: 'You cross the street and offer your hand. She looks very surprised.' },
         { kind: 'stat', stat: 'charm', delta: 1 },
         { kind: 'flag', id: 'has_ally', set: 1 },
         { kind: 'advanceDays', days: 5 },
@@ -373,12 +373,12 @@ const treasure_map: StoryCard = {
   weight: 4,
   title: 'A Faded Map',
   body: [
-    'An old prospector sells you a weathered map for 20 gold. It shows X marked in mountains east of the city. "There\'s something there," they say. "Whether treasure or trouble, only time tells."',
+    'A gap-toothed prospector sells you a crumpled map for 20 gold. A big red X sits in the eastern mountains. "Something\'s there," she cackles. "Treasure or trouble!"',
   ],
   choices: [
     {
       id: 'follow_map',
-      label: 'Organize an expedition (Grit check, DC 15)',
+      label: 'Go and find the X (Grit check, DC 15)',
       requires: [{ kind: 'goldAtLeast', amount: 150 }],
       check: {
         stat: 'grit',
@@ -392,7 +392,7 @@ const treasure_map: StoryCard = {
           ],
         },
         success: {
-          text: 'You find ruins and salvageable goods worth 200 gold.',
+          text: 'Under the X you find old ruins full of treasure, worth 200 gold!',
           effects: [
             { kind: 'gold', delta: 200 },
             { kind: 'stat', stat: 'grit', delta: 1 },
@@ -400,15 +400,15 @@ const treasure_map: StoryCard = {
           ],
         },
         failure: {
-          text: 'The expedition finds nothing but danger and expense.',
+          text: 'You find rocks, rain and a very angry goat. The trip costs you dearly.',
           effects: [{ kind: 'gold', delta: -150 }, { kind: 'advanceDays', days: 10 }],
         },
       },
     },
     {
       id: 'ignore_map',
-      label: 'Too uncertain',
-      effects: [{ kind: 'narrate', text: 'You keep the map as a curiosity.' }],
+      label: 'Keep it as a souvenir',
+      effects: [{ kind: 'narrate', text: 'You pin the map on your wall. One day, maybe.' }],
     },
   ],
 }
@@ -419,36 +419,36 @@ const ancient_contract: StoryCard = {
   weight: 1,
   title: 'A Debt Comes Due',
   body: [
-    'A collector approaches you with an ancient contract bearing your family name. "This debt was never paid," they say. "I\'ve tracked it down after 30 years. It\'s time to settle."',
+    'A dusty old man unrolls a yellowed contract. Your family name is on it! "Your grandfather never paid this debt," he says. "I\'ve looked for 30 years. Time to settle up."',
   ],
   choices: [
     {
       id: 'pay_debt',
-      label: 'Pay the debt (-200 gold)',
+      label: 'Pay your grandfather\'s debt (-200g)',
       requires: [{ kind: 'goldAtLeast', amount: 200 }],
       effects: [
         { kind: 'gold', delta: -200 },
         { kind: 'flag', id: 'honor_restored', set: 1 },
         { kind: 'stat', stat: 'charm', delta: 1 },
-        { kind: 'narrate', text: 'Your family\'s honor is restored. The city takes notice.' },
+        { kind: 'narrate', text: 'Your family name is clean again. People notice your honesty.' },
         { kind: 'advanceDays', days: 2 },
       ],
     },
     {
       id: 'contest_debt',
-      label: 'Challenge the contract (Savvy check, DC 15)',
+      label: 'Check the contract for mistakes (Savvy check, DC 15)',
       check: {
         stat: 'savvy',
         dc: 15,
         success: {
-          text: 'You find legal flaws. The contract is void. You walk free.',
+          text: 'The signature is wrong! The contract is worthless, and you owe nothing.',
           effects: [
             { kind: 'stat', stat: 'savvy', delta: 1 },
             { kind: 'advanceDays', days: 5 },
           ],
         },
         failure: {
-          text: 'Your challenge fails. You must pay 250 gold instead.',
+          text: 'The contract is real. Now you owe 250 gold, with the extra fees.',
           effects: [
             { kind: 'gold', delta: -250 },
             { kind: 'advanceDays', days: 4 },
@@ -465,23 +465,23 @@ const spice_blockade_tightens: StoryCard = {
   id: 'spice_blockade_tightens',
   title: 'The Blockade Tightens',
   body: [
-    'The blockade has worsened. Spice prices have tripled. Your stockpile is worth a fortune now. Merchants are desperate, offering premium prices.',
+    'The blockade still holds, and spice prices have tripled! Merchants bang on your door, begging to buy your stockpile.',
   ],
   choices: [
     {
       id: 'sell_spice_hoard',
-      label: 'Sell your stockpile (+300 gold)',
+      label: 'Sell your spice (+300g)',
       effects: [
         { kind: 'gold', delta: 300 },
         { kind: 'stat', stat: 'savvy', delta: 1 },
-        { kind: 'narrate', text: 'Your spice investment has paid off handsomely. You\'ve proven yourself a true merchant.' },
+        { kind: 'narrate', text: 'Your storeroom of spice pays off beautifully. You are a real merchant now!' },
       ],
     },
     {
       id: 'hold_spice',
-      label: 'Hold for even higher prices',
+      label: 'Wait for even higher prices',
       effects: [
-        { kind: 'narrate', text: 'You keep your hoard, gambling on scarcity.' },
+        { kind: 'narrate', text: 'You lock the storeroom and wait for prices to climb even higher.' },
         { kind: 'advanceDays', days: 10 },
       ],
     },
@@ -494,23 +494,23 @@ const iron_mine_recovery: StoryCard = {
   id: 'iron_mine_recovery',
   title: 'Iron Begins to Flow Again',
   body: [
-    'The eastern provinces are opening new iron mines to replace the collapsed one. Supply is returning. Prices are stabilizing after months of volatility.',
+    'New iron mines have opened in the east. Carts of ore rumble into town again, and iron prices finally settle down.',
   ],
   choices: [
     {
       id: 'sell_on_recovery',
-      label: 'Sell your iron holdings for solid profit (+150 gold)',
+      label: 'Sell your iron for a solid profit (+150g)',
       effects: [
         { kind: 'gold', delta: 150 },
         { kind: 'stat', stat: 'savvy', delta: 1 },
-        { kind: 'narrate', text: 'Your patience paid off. The recovery was worth the wait.' },
+        { kind: 'narrate', text: 'Your patience paid off. It was worth the wait!' },
       ],
     },
     {
       id: 'keep_iron_long',
-      label: 'Hold for the long term',
+      label: 'Keep it for the long run',
       effects: [
-        { kind: 'narrate', text: 'You believe iron will be valuable for years to come.' },
+        { kind: 'narrate', text: 'You are sure iron will be valuable for years to come.' },
         { kind: 'advanceDays', days: 15 },
       ],
     },
@@ -523,23 +523,23 @@ const iron_boom_success: StoryCard = {
   id: 'iron_boom_success',
   title: 'The Crown\'s Fleet Rises',
   body: [
-    'The royal fleet is being built. Your foundry is thriving, supplying iron to shipwrights. The crown takes notice of your contribution to the kingdom\'s strength.',
+    'Proud new ships slide into the harbour, built with your iron. A royal messenger arrives with a golden invitation.',
   ],
   choices: [
     {
       id: 'accept_crown_honor',
-      label: 'Accept the crown\'s recognition',
+      label: 'Accept the royal invitation',
       effects: [
         { kind: 'stat', stat: 'charm', delta: 2 },
         { kind: 'flag', id: 'crown_favor', set: 1 },
-        { kind: 'narrate', text: 'You are invited to royal audiences. Doors open that were previously closed.' },
+        { kind: 'narrate', text: 'You bow before the throne. From now on, palace doors open for you.' },
       ],
     },
     {
       id: 'stay_humble',
-      label: 'Keep a low profile',
+      label: 'Stay modest',
       effects: [
-        { kind: 'narrate', text: 'You continue your business quietly, letting the profits speak.' },
+        { kind: 'narrate', text: 'You send polite thanks and keep working quietly. Your profits speak for you.' },
       ],
     },
   ],

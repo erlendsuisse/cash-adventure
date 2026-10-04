@@ -9,20 +9,20 @@ const captain_vex_intro: StoryCard = {
   weight: 2,
   storyPhase: 'climbing',
   body: [
-    'At the docks, you meet Captain Vex, a grizzled smuggler who runs cargo between Vessarin and distant ports.',
-    'His reputation is mixed—loyal to his crew, ruthless to enemies. He eyes you with interest.',
-    '"I need a reliable merchant," he says. "Someone with nerve and discretion. Interested in getting rich the fast way?"',
+    'A boot thumps onto the crate beside you. Captain Vex: eye patch, salt-white beard, and a grin full of gold teeth. Everyone on the docks knows his name.',
+    'His crew would sail into a storm for him. His enemies would rather not talk about him at all.',
+    '"I need a merchant with nerve," he growls, "who can keep a secret. Fancy getting rich the fast way?"',
   ],
   choices: [
     {
       id: 'vex_accept',
-      label: 'Work with Captain Vex',
+      label: 'Shake the captain\'s hand',
       effects: [
         { kind: 'flag', id: 'vex_relationship', set: 1 },
         { kind: 'wages', delta: 10 },
       ],
     },
-    { id: 'vex_decline', label: 'Decline his offer', effects: [] },
+    { id: 'vex_decline', label: 'Turn him down', effects: [] },
   ],
 }
 
@@ -33,19 +33,18 @@ const captain_vex_heist: StoryCard = {
   requires: [{ kind: 'flag', id: 'vex_relationship', atLeast: 1 }],
   storyPhase: 'climbing',
   body: [
-    'Captain Vex has a lucrative job: smuggle high-value textiles past the city guard checkpoints.',
-    'The pay is generous, but if caught, the consequences are severe. He needs someone trustworthy.',
-    '"I can cut you in for 200 gold if you handle the city-side delivery. The guards might ask questions—how you answer matters."',
+    'Vex unrolls a bolt of shimmering silk. "A whole hold of this," he says, "and the city guards must never see it."',
+    '"Get it past the checkpoint, and 200 gold is yours. If the guards ask questions," he winks, "answer well."',
   ],
   choices: [
     {
       id: 'vex_cargo_honest',
-      label: 'Bribe the guards with charm (Charm check, DC 14)',
+      label: 'Charm the guards (Charm check, DC 14)',
       check: {
         stat: 'charm',
         dc: 14,
         success: {
-          text: 'You smooth-talk the guards. They look the other way. Vex is impressed.',
+          text: 'You chat with the guards about their children and the weather. They wave the cart through! Vex roars with laughter.',
           effects: [
             { kind: 'gold', delta: 200 },
             { kind: 'flag', id: 'vex_relationship', delta: 1 },
@@ -54,7 +53,7 @@ const captain_vex_heist: StoryCard = {
           goto: 'vex_heist_success',
         },
         failure: {
-          text: 'The guards get suspicious. You barely escape, empty-handed. Vex is disappointed.',
+          text: 'The guards start poking at the crates. You barely get away, empty-handed. Vex is not pleased.',
           effects: [
             { kind: 'flag', id: 'vex_relationship', delta: -1 },
             { kind: 'flag', id: 'heat_level', delta: 1 },
@@ -65,12 +64,12 @@ const captain_vex_heist: StoryCard = {
     },
     {
       id: 'vex_cargo_nerve',
-      label: 'Run the cargo past guards (Nerve check, DC 16)',
+      label: 'Sneak past the guards (Nerve check, DC 16)',
       check: {
         stat: 'nerve',
         dc: 16,
         success: {
-          text: 'You dart through checkpoints undetected. Vex gains a valuable, fearless partner.',
+          text: 'You slip through in the fog without a sound. Vex claps you on the back. "Now that\'s a partner!"',
           effects: [
             { kind: 'gold', delta: 300 },
             { kind: 'flag', id: 'vex_relationship', delta: 2 },
@@ -79,7 +78,7 @@ const captain_vex_heist: StoryCard = {
           goto: 'vex_heist_success',
         },
         failure: {
-          text: 'The guards catch you. You escape but lose the cargo and any trust with Vex.',
+          text: 'A guard spots you! You escape, but the silk is lost, and so is Vex\'s trust.',
           effects: [
             { kind: 'flag', id: 'vex_relationship', set: 0 },
             { kind: 'flag', id: 'heat_level', delta: 2 },
@@ -94,19 +93,19 @@ const captain_vex_heist: StoryCard = {
 
 const vex_heist_success: StoryCard = {
   id: 'vex_heist_success',
-  title: 'Partnership Forged',
+  title: 'One of the Crew',
   body: [
-    'Captain Vex now sees you as an equal—someone who understands the game. "You\'ve got a future with my crew if you want it," he says.',
-    'Regular work means regular coin. The heat level rises, but so does your potential.',
+    'Vex pours two mugs of hot cider and slides one to you. "You\'ve got salt in your blood," he says. "There\'s a place in my crew for you."',
+    'Regular work means regular coin. It also means the Watch will be watching you more closely.',
   ],
-  choices: [{ id: 'continue_vex', label: 'Continue', effects: [] }],
+  choices: [{ id: 'continue_vex', label: 'Raise your mug', effects: [] }],
 }
 
 const vex_heist_failure: StoryCard = {
   id: 'vex_heist_failure',
-  title: 'Failed Cargo',
-  body: ['The cargo run didn\'t go as planned. Vex seems less interested in you now. Perhaps trust can be rebuilt.'],
-  choices: [{ id: 'continue_failed', label: 'Continue', effects: [] }],
+  title: 'A Cold Shoulder',
+  body: ['The silk is gone, and Vex barely looks at you now. Trust, once lost, takes a long time to win back.'],
+  choices: [{ id: 'continue_failed', label: 'Move on', effects: [] }],
 }
 
 // ===== QUEST CHAINS =====
@@ -114,18 +113,18 @@ const vex_heist_failure: StoryCard = {
 
 const lord_aldric_intro: StoryCard = {
   id: 'lord_aldric_intro',
-  title: 'A Noble\'s Dilemma',
+  title: 'Lord Aldric\'s Problem',
   weight: 2,
   storyPhase: 'climbing',
   body: [
-    'A well-dressed nobleman approaches you in the guild hall—Lord Aldric, a merchant of considerable means.',
-    '"I have a problem," he says quietly. "My import business is being undercut by someone. I need to know who, and how to eliminate their advantage. Legally, of course."',
-    'He slides a pouch of gold across the table. "Investigate for me. The answer is worth another 150 gold."',
+    'In the guild hall, a nobleman in a velvet coat taps your shoulder with a silver-topped cane. Lord Aldric, one of the richest merchants in Vessarin.',
+    '"Someone is selling cheaper than me," he says, lips tight. "I want to know who, and how. Legally, of course."',
+    'He drops a jingling pouch on the table. "Find out for me, and there\'s 150 more."',
   ],
   choices: [
     {
       id: 'aldric_accept',
-      label: 'Accept the investigation',
+      label: 'Take the job',
       effects: [
         { kind: 'gold', delta: 50 },
         { kind: 'flag', id: 'aldric_quest', set: 1 },
@@ -137,19 +136,19 @@ const lord_aldric_intro: StoryCard = {
 
 const aldric_investigation: StoryCard = {
   id: 'aldric_investigation',
-  title: 'Following the Trail',
+  title: 'The Truth About Careth',
   weight: 1,
   requires: [{ kind: 'flag', id: 'aldric_quest', equals: 1 }],
   storyPhase: 'climbing',
   body: [
-    'You begin investigating Aldric\'s competitors. Your sources point to a merchant named Careth—aggressive, ambitious, but honest.',
-    'You discover Careth simply found a better supply line. There\'s no wrongdoing, just better business.',
-    'Now you have a choice: tell Aldric the truth and disappoint him, or fabricate a story to earn the full payment?',
+    'Your questions lead you to a young merchant named Careth. She works hard and plays fair.',
+    'Her secret? She found a better supplier. No tricks at all, just good business.',
+    'Lord Aldric will not like that answer. You could tell him the truth, or make up a story that earns the full reward.',
   ],
   choices: [
     {
       id: 'aldric_honest',
-      label: 'Report the truth (honesty)',
+      label: 'Tell him the truth',
       effects: [
         { kind: 'gold', delta: 100 },
         { kind: 'flag', id: 'aldric_quest', set: 2 },
@@ -159,7 +158,7 @@ const aldric_investigation: StoryCard = {
     },
     {
       id: 'aldric_lie',
-      label: 'Fabricate evidence (deception)',
+      label: 'Make up a story about Careth',
       effects: [
         { kind: 'gold', delta: 150 },
         { kind: 'flag', id: 'aldric_quest', set: 3 },
@@ -172,20 +171,20 @@ const aldric_investigation: StoryCard = {
 
 const aldric_honest_ending: StoryCard = {
   id: 'aldric_honest_ending',
-  title: 'Truth and Respect',
+  title: 'The Honest Answer',
   body: [
-    'Aldric is disappointed but respects your honesty. "At least I know who to trust," he says.',
-    'Word spreads that you\'re a merchant of integrity. Your reputation in ethical circles improves.',
+    'Aldric frowns, then slowly nods. "Not what I wanted to hear," he says. "But now I know who I can trust."',
+    'Word spreads that you tell the truth, even when it costs you.',
   ],
   choices: [{ id: 'continue_aldric', label: 'Continue', effects: [] }],
 }
 
 const aldric_lie_ending: StoryCard = {
   id: 'aldric_lie_ending',
-  title: 'Convenient Lies',
+  title: 'A Convenient Lie',
   body: [
-    'Aldric believes your fabrication and moves to sabotage Careth\'s supply lines.',
-    'You pocket the full payment, but you know the truth. The weight of the lie sits heavy—but the gold spends just the same.',
+    'Aldric believes every word. He sets out to ruin Careth\'s supply line.',
+    'You pocket the full reward. The gold spends just the same, but the lie sits heavy in your chest.',
   ],
   choices: [{ id: 'continue_lie', label: 'Continue', effects: [] }],
 }
@@ -195,19 +194,18 @@ const aldric_lie_ending: StoryCard = {
 
 const scholar_sage: StoryCard = {
   id: 'scholar_sage',
-  title: 'A Merchant Scholar\'s Secret',
+  title: 'The Scholar\'s Secret',
   weight: 1,
   requires: [{ kind: 'statAtLeast', stat: 'savvy', value: 5 }],
   storyPhase: 'climbing',
   body: [
-    'A scholarly merchant notices your sharp financial mind. "You understand something most don\'t," she says.',
-    '"The real wealth isn\'t in goods—it\'s in information. I trade in knowledge of market movements before they happen."',
-    '"Interested in learning the art?"',
+    'A merchant with ink-stained fingers watches you count your coins. "You have a quick mind," she says.',
+    '"Real wealth isn\'t in goods. It\'s in knowing what prices will do next. I can teach you to see it coming."',
   ],
   choices: [
     {
       id: 'scholar_training',
-      label: 'Train in market prediction (150 gold)',
+      label: 'Learn to read the market (150g)',
       requires: [{ kind: 'goldAtLeast', amount: 150 }],
       effects: [
         { kind: 'gold', delta: -150 },
@@ -215,25 +213,25 @@ const scholar_sage: StoryCard = {
         { kind: 'grantBoon', boon: 'market_insider' },
       ],
     },
-    { id: 'scholar_decline', label: 'Decline', effects: [] },
+    { id: 'scholar_decline', label: 'Not today', effects: [] },
   ],
 }
 
 const nerve_master: StoryCard = {
   id: 'nerve_master',
-  title: 'The Confidence Game',
+  title: 'The Card Room',
   weight: 1,
   requires: [{ kind: 'statAtLeast', stat: 'nerve', value: 5 }],
   storyPhase: 'climbing',
   body: [
-    'A mysterious figure in a high-end card room studies you. "You\'ve got the look," they say.',
-    '"Ever thought about playing bigger games? The real fortunes are made by people who can bluff with their lives on the line."',
-    '"I can teach you—if you\'ve got the nerve."',
+    'In a plush card room, a woman with a calm, unreadable face studies you over her cards. "You\'ve got the look," she says.',
+    '"The biggest fortunes go to people who can bluff without blinking. Even when everything is at stake."',
+    '"I can teach you. If you\'ve got the nerve."',
   ],
   choices: [
     {
       id: 'nerve_training',
-      label: 'Master the bluff (200 gold)',
+      label: 'Learn to bluff (200g)',
       requires: [{ kind: 'goldAtLeast', amount: 200 }],
       effects: [
         { kind: 'gold', delta: -200 },
@@ -250,18 +248,17 @@ const nerve_master: StoryCard = {
 
 const the_orphanage: StoryCard = {
   id: 'the_orphanage',
-  title: 'Children in Need',
+  title: 'The Orphanage',
   weight: 1,
   storyPhase: 'climbing',
   body: [
-    'A nun from the city\'s orphanage finds you. "We need 100 gold to keep our doors open for another month. The children have nowhere else to go."',
-    'She looks at you with desperate hope. "I know you\'re a merchant. I know you understand that every coin matters. Can you help us?"',
-    'You have that amount. The choice is yours.',
+    'A tired nun from the orphanage stands at your door, a small girl holding her hand. "We need 100 gold to stay open another month," she says. "The children have nowhere else to go."',
+    'The little girl looks up at you with big, hopeful eyes.',
   ],
   choices: [
     {
       id: 'orphanage_donate',
-      label: 'Donate 100 gold to the orphanage',
+      label: 'Give the orphanage 100 gold',
       requires: [{ kind: 'goldAtLeast', amount: 100 }],
       effects: [
         { kind: 'gold', delta: -100 },
@@ -271,7 +268,7 @@ const the_orphanage: StoryCard = {
     },
     {
       id: 'orphanage_deflect',
-      label: 'Offer sympathies but keep your coin',
+      label: 'Say sorry, but keep your coins',
       effects: [{ kind: 'flag', id: 'moral_hardness', delta: 1 }],
     },
   ],
@@ -279,19 +276,18 @@ const the_orphanage: StoryCard = {
 
 const corrupt_guard: StoryCard = {
   id: 'corrupt_guard',
-  title: 'A Guard\'s Temptation',
+  title: 'The Crooked Guard',
   weight: 1,
   storyPhase: 'climbing',
   body: [
-    'A city guard approaches you privately. "I\'ve noticed your... business ventures," he says meaningfully.',
-    '"I can keep the constables away from your operations for a price. 200 gold monthly, and you\'ll never see a uniform."',
-    '"Or I can report what I\'ve seen. Your choice."',
-    'This is extortion, but he\'s a powerful man.',
+    'A guard with a crooked smile corners you in an alley. "I\'ve been watching your... business," he says.',
+    '"Pay me 200 gold every month, and the Watch never bothers you."',
+    '"Or I tell my captain everything I\'ve seen. Your choice."',
   ],
   choices: [
     {
       id: 'pay_guard',
-      label: 'Pay for protection (recurring -200g/month)',
+      label: 'Pay him (-200g every month)',
       requires: [{ kind: 'goldAtLeast', amount: 200 }],
       effects: [
         { kind: 'gold', delta: -200 },
@@ -302,19 +298,19 @@ const corrupt_guard: StoryCard = {
     },
     {
       id: 'refuse_guard',
-      label: 'Refuse and expose him (Nerve check, DC 15)',
+      label: 'Refuse, and report him (Nerve check, DC 15)',
       check: {
         stat: 'nerve',
         dc: 15,
         success: {
-          text: 'You report him to his superiors. The guard is arrested. You\'re now a target, but you\'re clean.',
+          text: 'You march straight to his captain. The crooked guard is arrested! His friends glare at you now, but your name is clean.',
           effects: [
             { kind: 'flag', id: 'guard_enemy', set: 1 },
             { kind: 'stat', stat: 'nerve', delta: 1 },
           ],
         },
         failure: {
-          text: 'He sees through your bluff. Now you\'re both enemies and marked.',
+          text: 'His captain believes him, not you. Now you have an enemy in the Watch.',
           effects: [
             { kind: 'flag', id: 'heat_level', delta: 2 },
             { kind: 'flag', id: 'guard_enemy', set: 1 },
@@ -334,36 +330,36 @@ const dockside_tavern: StoryCard = {
   weight: 2,
   storyPhase: 'climbing',
   body: [
-    'The Anchor & Coin is the tavern where sailors, smugglers, and merchants intersect.',
-    'The air is thick with opportunity—and danger. The bartender knows everyone. The back room hosts high-stakes games.',
-    '"What\'ll it be?" the bartender asks with a knowing smile.',
+    'Smoke, fiddle music and laughter spill out of the Anchor & Coin. Sailors, smugglers and merchants all drink here.',
+    'The bartender knows everyone\'s business. In the back room, the card games run for big stakes.',
+    '"What\'ll it be?" she asks with a wink.',
   ],
   choices: [
     {
       id: 'tavern_rumors',
-      label: 'Gather rumors and trade gossip',
+      label: 'Listen for gossip',
       effects: [{ kind: 'stat', stat: 'savvy', delta: 1 }, { kind: 'flag', id: 'tavern_patron', set: 1 }],
     },
     {
       id: 'tavern_game',
-      label: 'Join a high-stakes card game (Nerve check, DC 14)',
+      label: 'Join the big card game (Nerve check, DC 14)',
       check: {
         stat: 'nerve',
         dc: 14,
         success: {
-          text: 'You play brilliantly and win big. 150 gold richer, and the regulars respect you.',
+          text: 'You play brilliantly! You walk out 150 gold richer, and the regulars raise their mugs to you.',
           effects: [
             { kind: 'gold', delta: 150 },
             { kind: 'flag', id: 'tavern_patron', set: 2 },
           ],
         },
         failure: {
-          text: 'You lose badly. 100 gold gone, but you\'ve learned a lesson.',
+          text: 'You lose badly. 100 gold gone, and a lesson learned.',
           effects: [{ kind: 'gold', delta: -100 }],
         },
       },
     },
-    { id: 'tavern_skip', label: 'Leave without getting involved', effects: [] },
+    { id: 'tavern_skip', label: 'Leave quietly', effects: [] },
   ],
 }
 
@@ -376,14 +372,14 @@ const winter_festival: StoryCard = {
   weight: 2,
   storyPhase: 'climbing',
   body: [
-    'Winter has come to Vessarin. The city transforms—markets overflow with rare goods, travelers flood the streets, and the guild throws its grandest celebration.',
-    'It\'s a time of excess and opportunity. Prices are high, but so are profits.',
-    '"The festival only comes once a year," a trader says. "Make your moves now."',
+    'Snow falls on Vessarin, and the Winter Festival begins! Lanterns hang over every street. Travellers pour in, and the markets overflow with rare goods.',
+    'Prices are high, but so are the profits.',
+    '"The festival only comes once a year," a trader grins. "Make your move!"',
   ],
   choices: [
     {
       id: 'festival_trade',
-      label: 'Buy rare goods and resell (invest 120 gold)',
+      label: 'Buy rare goods to resell (120g)',
       requires: [{ kind: 'goldAtLeast', amount: 120 }],
       effects: [
         { kind: 'gold', delta: -120 },
@@ -393,13 +389,13 @@ const winter_festival: StoryCard = {
     },
     {
       id: 'festival_celebrate',
-      label: 'Enjoy the festivities',
+      label: 'Enjoy the festival',
       effects: [
         { kind: 'gold', delta: -50 },
         { kind: 'stat', stat: 'charm', delta: 1 },
       ],
     },
-    { id: 'festival_work', label: 'Focus on regular business', effects: [] },
+    { id: 'festival_work', label: 'Stick to regular business', effects: [] },
   ],
 }
 

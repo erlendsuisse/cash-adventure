@@ -4,39 +4,39 @@ import type { StoryCard } from '../../engine/types'
 export const marketOpportunityCards: StoryCard[] = [
   {
     id: 'spice_shortage',
-    title: 'Trade Route Disruption',
+    title: 'Bandits on the Spice Road',
     body: [
-      'News arrives that the eastern trade routes have been blocked by bandits. Spice prices soar as supplies run scarce.',
-      'Merchants are panic-buying. If you have spice in stock, now is the time to sell. Or wait and hope prices climb higher?',
+      'Bandits have blocked the eastern spice road! No caravans are getting through, and spice prices are shooting up.',
+      'Merchants are buying in a panic. Sell your spice now, or wait for even higher prices?',
     ],
     storyPhase: 'climbing',
     weight: 8,
     choices: [
       {
         id: 'sell_spice_now',
-        label: 'Sell all your spice now at peak prices (25% above market)',
+        label: 'Sell all your spice now (25% above market)',
         effects: [
           { kind: 'sellStock', type: 'spice', priceMultiplier: 1.25 },
-          { kind: 'narrate', text: 'You dump your entire inventory at record prices. Profit!' },
+          { kind: 'narrate', text: 'You sell every sack at a record price. Profit!' },
         ],
       },
       {
         id: 'hold_spice',
-        label: 'Hold and wait for prices to climb even higher',
+        label: 'Wait for prices to climb higher',
         effects: [
           { kind: 'marketShift', sector: 'spice', delta: 40 },
           {
             kind: 'narrate',
-            text: 'Spice prices skyrocket as the shortage deepens. Those with supplies are king.',
+            text: 'The shortage gets worse, and spice prices skyrocket. Anyone with spice is king.',
           },
         ],
       },
       {
         id: 'buy_spice_shortage',
-        label: 'Buy cheap spice from desperate sellers',
+        label: 'Buy cheap from nervous sellers',
         effects: [
           { kind: 'marketShift', sector: 'spice', delta: 30 },
-          { kind: 'narrate', text: 'You find sellers willing to offload at discount. You purchase quietly.' },
+          { kind: 'narrate', text: 'You find a few nervous sellers and quietly buy their spice cheap.' },
         ],
       },
     ],
@@ -44,36 +44,36 @@ export const marketOpportunityCards: StoryCard[] = [
 
   {
     id: 'iron_boom',
-    title: 'Construction Boom',
+    title: 'The Building Boom',
     body: [
-      'The city council announces a massive building project. Iron prices jump as demand surges.',
-      'This is temporary - the project will eventually slow. Act fast.',
+      'The council announces a grand new bridge and a dozen new towers! Iron prices jump.',
+      'The boom won\'t last forever. Act fast!',
     ],
     storyPhase: 'climbing',
     weight: 7,
     choices: [
       {
         id: 'sell_iron_boom',
-        label: 'Sell iron at inflated prices',
+        label: 'Sell your iron while it\'s pricey',
         effects: [
           { kind: 'marketShift', sector: 'iron', delta: 25 },
-          { kind: 'narrate', text: 'You offload iron at peak rates. Great timing.' },
+          { kind: 'narrate', text: 'You sell your iron at the top. Great timing!' },
         ],
       },
       {
         id: 'buy_iron_boom',
-        label: 'Stock up on iron before prices rise more',
+        label: 'Buy more before prices climb',
         effects: [
           { kind: 'marketShift', sector: 'iron', delta: 35 },
-          { kind: 'narrate', text: 'You purchase heavily at current rates, betting on higher prices soon.' },
+          { kind: 'narrate', text: 'You buy a big pile of iron, betting prices will climb higher.' },
         ],
       },
       {
         id: 'ignore_iron',
-        label: 'Ignore the opportunity',
+        label: 'Let it pass',
         effects: [
           { kind: 'marketShift', sector: 'iron', delta: 30 },
-          { kind: 'narrate', text: 'Iron prices climb. You watch others profit.' },
+          { kind: 'narrate', text: 'Iron prices climb. You watch others cash in.' },
         ],
       },
     ],
@@ -81,36 +81,36 @@ export const marketOpportunityCards: StoryCard[] = [
 
   {
     id: 'salt_harvest',
-    title: 'Record Salt Harvest',
+    title: 'A Mountain of Salt',
     body: [
-      'Good weather has produced the biggest salt harvest in years. Market is flooded with cheap salt.',
-      'Prices crash. This is a buyer\'s market, but sellers are desperate.',
+      'A long sunny summer has made the biggest salt harvest in years. White mountains of salt pile up on the docks.',
+      'Salt prices crash. Great for buyers, terrible for sellers.',
     ],
     storyPhase: 'climbing',
     weight: 8,
     choices: [
       {
         id: 'buy_salt_harvest',
-        label: 'Buy massive quantities of cheap salt',
+        label: 'Buy loads of cheap salt',
         effects: [
           { kind: 'marketShift', sector: 'salt', delta: -30 },
-          { kind: 'narrate', text: 'You purchase thousands of units at rock-bottom prices. A smart investment.' },
+          { kind: 'narrate', text: 'You buy heaps of salt at rock-bottom prices. Smart thinking.' },
         ],
       },
       {
         id: 'sell_salt_harvest',
-        label: 'Sell your salt holdings before prices crash',
+        label: 'Sell your salt before it drops more',
         effects: [
           { kind: 'marketShift', sector: 'salt', delta: -40 },
-          { kind: 'narrate', text: 'You unload your salt just before the market tanks. Dodged that one.' },
+          { kind: 'narrate', text: 'You sell your salt just before prices sink. Phew!' },
         ],
       },
       {
         id: 'wait_salt',
-        label: 'Wait for prices to stabilize',
+        label: 'Wait for prices to settle',
         effects: [
           { kind: 'marketShift', sector: 'salt', delta: -35 },
-          { kind: 'narrate', text: 'Salt prices hit bottom. Your holdings are worth half what they were.' },
+          { kind: 'narrate', text: 'Salt prices hit the bottom. Your salt is worth half what it was.' },
         ],
       },
     ],
@@ -120,48 +120,48 @@ export const marketOpportunityCards: StoryCard[] = [
     id: 'market_panic',
     title: 'Market Panic',
     body: [
-      'A major merchant house collapses, owing gold to half the city. Panic spreads. Everyone is liquidating.',
-      'Prices for everything are plummeting as panicked sellers dump goods.',
+      'A great merchant house goes bust, owing gold to half the city. Panic spreads street by street.',
+      'Everyone is selling everything, and prices are tumbling.',
     ],
     weight: 6,
     requires: [{ kind: 'goldAtLeast', amount: 50 }, { kind: 'colossiAtLeast', count: 1 }], // mid-game danger (was gated on the never-entered 'entangled' phase)
     choices: [
       {
         id: 'buy_panic',
-        label: 'Buy everything at fire-sale prices',
+        label: 'Buy while everything is cheap',
         effects: [
           { kind: 'marketShift', sector: 'spice', delta: -25 },
           { kind: 'marketShift', sector: 'salt', delta: -25 },
           { kind: 'marketShift', sector: 'iron', delta: -25 },
           {
             kind: 'narrate',
-            text: 'While others panic, you buy. When this panic subsides, you\'ll be wealthy.',
+            text: 'While others panic, you buy. When the dust settles, you\'ll be rich.',
           },
         ],
       },
       {
         id: 'panic_sell',
-        label: 'Panic sell your holdings',
+        label: 'Sell everything too',
         effects: [
           { kind: 'marketShift', sector: 'spice', delta: -35 },
           { kind: 'marketShift', sector: 'salt', delta: -35 },
           { kind: 'marketShift', sector: 'iron', delta: -35 },
           {
             kind: 'narrate',
-            text: 'Fear overtakes you. You dump everything for whatever price you can get.',
+            text: 'Fear wins. You sell everything for whatever you can get.',
           },
         ],
       },
       {
         id: 'hold_panic',
-        label: 'Hold steady. This too shall pass.',
+        label: 'Hold steady and wait',
         effects: [
           { kind: 'marketShift', sector: 'spice', delta: -30 },
           { kind: 'marketShift', sector: 'salt', delta: -30 },
           { kind: 'marketShift', sector: 'iron', delta: -30 },
           {
             kind: 'narrate',
-            text: 'You wait out the chaos. Markets eventually stabilize, but your holdings are underwater.',
+            text: 'You wait out the storm. Things calm down, but your goods are worth less than you paid.',
           },
         ],
       },
@@ -170,10 +170,10 @@ export const marketOpportunityCards: StoryCard[] = [
 
   {
     id: 'arbitrage_opportunity',
-    title: 'The Traveling Merchant',
+    title: 'A Merchant in a Hurry',
     body: [
-      'A wealthy merchant from the coast offers you a deal: buy goods here, deliver to his warehouse on the coast, profit.',
-      '5 units of any commodity. Higher price than market rate. He\'s desperate to get supplies to his warehouse before the season ends.',
+      'A merchant from the coast mops his brow. His warehouse is empty and the season is ending.',
+      '"Buy 5 units of anything for me," he begs, "and I\'ll pay more than market price!"',
     ],
     storyPhase: 'climbing',
     weight: 9,
@@ -181,38 +181,38 @@ export const marketOpportunityCards: StoryCard[] = [
     choices: [
       {
         id: 'trade_with_merchant_spice',
-        label: 'Buy 5 spice at 20g/unit to sell him (profit on delivery)',
+        label: 'Buy 5 spice at 20g each for him (profit on delivery)',
         effects: [
           {
             kind: 'narrate',
-            text: 'You purchase spice and immediately sell to the merchant. Quick profit.',
+            text: 'You buy the spice and sell it straight to him. Quick profit!',
           },
           { kind: 'gold', delta: 25 },
         ],
       },
       {
         id: 'trade_with_merchant_salt',
-        label: 'Buy 5 salt at 12g/unit to sell him (good margin)',
+        label: 'Buy 5 salt at 12g each for him (good margin)',
         effects: [
-          { kind: 'narrate', text: 'Salt trade executed smoothly. Decent profit for little risk.' },
+          { kind: 'narrate', text: 'The salt deal goes smoothly. A tidy profit for little risk.' },
           { kind: 'gold', delta: 20 },
         ],
       },
       {
         id: 'trade_with_merchant_iron',
-        label: 'Buy 5 iron at 18g/unit to sell him (high risk)',
+        label: 'Buy 5 iron at 18g each for him (high risk)',
         effects: [
           {
             kind: 'narrate',
-            text: 'You purchase iron. High stakes, but if he pays as promised, solid profit.',
+            text: 'You buy the iron. If he pays as promised, it\'s a solid profit.',
           },
           { kind: 'gold', delta: 30 },
         ],
       },
       {
         id: 'refuse_merchant',
-        label: 'Decline. Too risky.',
-        effects: [{ kind: 'narrate', text: 'The merchant shrugs and moves on to find another partner.' }],
+        label: 'Too risky',
+        effects: [{ kind: 'narrate', text: 'He hurries off to ask someone else.' }],
       },
     ],
   },
@@ -221,30 +221,30 @@ export const marketOpportunityCards: StoryCard[] = [
     id: 'expert_tip',
     title: 'Caravan Gossip',
     body: [
-      'A caravan master shares insider gossip: spice prices will crash soon when new shipments arrive, but iron will stay scarce.',
-      'He advises selling spice and buying iron now, before the market shifts.',
+      'A dusty caravan master leans in close. "Big spice shipments are coming," he whispers. "Spice will crash. But iron will stay scarce."',
+      '"Sell your spice and buy iron," he winks. "Before everyone else does."',
     ],
     storyPhase: 'climbing',
     weight: 7,
     choices: [
       {
         id: 'follow_tip',
-        label: 'Follow the advice: sell your spice, buy up to 10 iron',
+        label: 'Take his tip: sell spice, buy up to 10 iron',
         effects: [
           { kind: 'sellStock', type: 'spice', priceMultiplier: 1 },
           { kind: 'buyStock', type: 'iron', amount: 10, priceMultiplier: 1 },
           { kind: 'marketShift', sector: 'spice', delta: -30 },
           { kind: 'marketShift', sector: 'iron', delta: 20 },
-          { kind: 'narrate', text: 'You follow the tip. Moments later, the markets shift exactly as predicted.' },
+          { kind: 'narrate', text: 'You follow his tip. Soon after, prices shift exactly as he said!' },
         ],
       },
       {
         id: 'ignore_tip',
-        label: 'Ignore gossip. Trade what you know.',
+        label: 'Ignore the gossip',
         effects: [
           { kind: 'marketShift', sector: 'spice', delta: -25 },
           { kind: 'marketShift', sector: 'iron', delta: 15 },
-          { kind: 'narrate', text: 'The tip turns out to be accurate, but you missed it.' },
+          { kind: 'narrate', text: 'He was right. You missed your chance.' },
         ],
       },
     ],

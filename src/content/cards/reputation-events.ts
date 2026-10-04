@@ -16,9 +16,9 @@ export const reputationEventCards: StoryCard[] = [
     once: true,
     requires: [{ kind: 'colossiAtLeast', count: 1 }, standingAtLeast('guilds', T)],
     title: 'The Guilds Extend Credit',
-    body: ['A guild master calls on you with a strongbox. "You keep your word, and the guilds keep theirs. Consider this an advance on your next venture - no interest, no paperwork."'],
+    body: ['A guild master arrives carrying a heavy strongbox. "You keep your word, so we keep ours," she says. "An advance on your next venture. No interest. No paperwork."'],
     choices: [
-      { id: 'accept_guild_credit', label: 'Accept with thanks (+250g)', effects: [{ kind: 'gold', delta: 250 }, { kind: 'narrate', text: 'Honest trade, it turns out, compounds.' }] },
+      { id: 'accept_guild_credit', label: 'Accept with thanks (+250g)', effects: [{ kind: 'gold', delta: 250 }, { kind: 'narrate', text: 'Honest trade, it turns out, pays you back with interest.' }] },
     ],
   },
   {
@@ -27,16 +27,16 @@ export const reputationEventCards: StoryCard[] = [
     once: true,
     requires: [{ kind: 'colossiAtLeast', count: 1 }, standingAtMost('guilds', -T)],
     title: 'Blacklisted by the Guilds',
-    body: ['Your name is struck from the guild rolls. No guild member may trade with you directly. Every deal now goes through middlemen, and the middlemen know it.'],
+    body: ['A clerk crosses out your name in the guild\'s great book. No guild member may trade with you now. Every deal must go through middlemen, and they know it.'],
     choices: [
       {
         id: 'pay_restitution',
-        label: 'Pay restitution to be reinstated (-200g, Guilds +2)',
+        label: 'Pay to be forgiven (-200g, Guilds +2)',
         requires: [{ kind: 'goldAtLeast', amount: 200 }],
         showLockedAs: 'Needs 200g',
-        effects: [{ kind: 'gold', delta: -200 }, standing('guilds', 2), { kind: 'narrate', text: 'You pay, and grovel. The guild restores your name - on probation.' }],
+        effects: [{ kind: 'gold', delta: -200 }, standing('guilds', 2), { kind: 'narrate', text: 'You pay, and say sorry very nicely. Your name goes back in the book, in pencil.' }],
       },
-      { id: 'use_middlemen', label: 'Trade through middlemen (-120g)', effects: [{ kind: 'gold', delta: -120 }, { kind: 'narrate', text: 'The middlemen take their cut, and smile while doing it.' }] },
+      { id: 'use_middlemen', label: 'Use middlemen (-120g)', effects: [{ kind: 'gold', delta: -120 }, { kind: 'narrate', text: 'The middlemen take their cut, and smile while they do it.' }] },
     ],
   },
 
@@ -47,12 +47,12 @@ export const reputationEventCards: StoryCard[] = [
     once: true,
     requires: [{ kind: 'colossiAtLeast', count: 1 }, standingAtLeast('folk', T)],
     title: 'The People Remember',
-    body: ['You arrive at your warehouse to find it swept, repaired and restocked. The dockhands, the bakers, the families you helped - they did it overnight, and they will not take your coin.'],
+    body: ['Your warehouse has been swept, mended and restocked overnight! The dockhands, the bakers, the families you helped did it all. They won\'t take a single coin.'],
     choices: [
       {
         id: 'thank_the_people',
-        label: 'Thank them (+200g in saved costs, +1 Grit)',
-        effects: [{ kind: 'gold', delta: 200 }, { kind: 'stat', stat: 'grit', delta: 1 }, { kind: 'narrate', text: 'For once, the city gives something back.' }],
+        label: 'Thank them (+200g saved, +1 Grit)',
+        effects: [{ kind: 'gold', delta: 200 }, { kind: 'stat', stat: 'grit', delta: 1 }, { kind: 'narrate', text: 'For once, the city gives something back. Your heart feels full.' }],
       },
     ],
   },
@@ -61,17 +61,17 @@ export const reputationEventCards: StoryCard[] = [
     weight: 4,
     once: true,
     requires: [{ kind: 'colossiAtLeast', count: 1 }, standingAtMost('folk', -T)],
-    title: 'Rocks Through Your Windows',
-    body: ['The common folk have long memories. This morning your shopfront is smashed, your name chalked on the wall with a word you would rather not repeat.'],
+    title: 'Stones Through Your Window',
+    body: ['The ordinary folk of Vessarin have long memories. This morning, your shop window is smashed and a rude word is chalked by your door.'],
     choices: [
       {
         id: 'make_amends',
-        label: 'Make amends - fund a soup kitchen (-150g, Common Folk +2)',
+        label: 'Make amends with a soup kitchen (-150g, Common Folk +2)',
         requires: [{ kind: 'goldAtLeast', amount: 150 }],
         showLockedAs: 'Needs 150g',
-        effects: [{ kind: 'gold', delta: -150 }, standing('folk', 2), { kind: 'narrate', text: 'The soup is good. Slowly, the chalk on your wall gets washed away.' }],
+        effects: [{ kind: 'gold', delta: -150 }, standing('folk', 2), { kind: 'narrate', text: 'The soup is hot and good. Slowly, the chalk gets washed away.' }],
       },
-      { id: 'repair_and_ignore', label: 'Repair the damage and ignore them (-150g)', effects: [{ kind: 'gold', delta: -150 }, { kind: 'narrate', text: 'You pay the glazier. The glares follow you down the street.' }] },
+      { id: 'repair_and_ignore', label: 'Fix the window and ignore them (-150g)', effects: [{ kind: 'gold', delta: -150 }, { kind: 'narrate', text: 'You pay the glazier. The glares follow you down the street.' }] },
     ],
   },
 
@@ -82,9 +82,9 @@ export const reputationEventCards: StoryCard[] = [
     once: true,
     requires: [{ kind: 'colossiAtLeast', count: 1 }, standingAtLeast('crown', T)],
     title: 'A Royal Stipend',
-    body: ['A herald in royal livery reads a proclamation in your doorway: for services to the realm, you are granted a stipend from the treasury, payable monthly, for as long as you remain loyal.'],
+    body: ['A herald in royal colours blows a trumpet at your door. "For services to the kingdom," he reads, "you shall receive gold from the treasury every month!"'],
     choices: [
-      { id: 'accept_stipend', label: 'Accept the stipend (+25g wages)', effects: [{ kind: 'wages', delta: 25 }, { kind: 'narrate', text: 'The Crown pays its friends. You intend to remain one.' }] },
+      { id: 'accept_stipend', label: 'Accept the royal gold (+25g wages)', effects: [{ kind: 'wages', delta: 25 }, { kind: 'narrate', text: 'The Crown rewards its friends. You plan to stay one.' }] },
     ],
   },
   {
@@ -93,17 +93,17 @@ export const reputationEventCards: StoryCard[] = [
     once: true,
     requires: [{ kind: 'colossiAtLeast', count: 1 }, standingAtMost('crown', -T)],
     title: 'The Crown Takes an Interest',
-    body: ['Tax assessors arrive unannounced, with soldiers. They intend to audit everything you own, and they expect to find something.'],
+    body: ['Tax collectors arrive with soldiers at their backs. They mean to check everything you own, and they expect to find something wrong.'],
     choices: [
-      { id: 'pay_assessment', label: 'Pay the assessment (-200g)', effects: [{ kind: 'gold', delta: -200 }, { kind: 'narrate', text: 'They find something. They always do.' }] },
+      { id: 'pay_assessment', label: 'Pay what they ask (-200g)', effects: [{ kind: 'gold', delta: -200 }, { kind: 'narrate', text: 'They find something. They always do.' }] },
       {
         id: 'cooperate_fully',
-        label: 'Open your books and cooperate (Savvy check, DC 14)',
+        label: 'Show them your books (Savvy check, DC 14)',
         check: {
           stat: 'savvy',
           dc: 14,
-          success: { text: 'Your books are spotless. The assessors leave with nothing - and a grudging respect.', effects: [standing('crown', 2)] },
-          failure: { text: 'They find irregularities and fine you heavily.', effects: [{ kind: 'gold', delta: -300 }] },
+          success: { text: 'Your books are spotless. They leave with nothing, and a little respect.', effects: [standing('crown', 2)] },
+          failure: { text: 'They find a few mistakes, and fine you heavily.', effects: [{ kind: 'gold', delta: -300 }] },
         },
       },
     ],
@@ -116,9 +116,9 @@ export const reputationEventCards: StoryCard[] = [
     once: true,
     requires: [{ kind: 'colossiAtLeast', count: 1 }, standingAtLeast('underworld', T)],
     title: 'A Gift from Below',
-    body: ['A crate arrives with no sender. Inside: silver, a bottle of very old brandy, and a note. "Friends look after friends."'],
+    body: ['A crate arrives with no name on it. Inside: silver coins, a jar of rare honey, and a note. "Friends look after friends."'],
     choices: [
-      { id: 'accept_gift', label: 'Accept the gift (+250g, +1 Nerve)', effects: [{ kind: 'gold', delta: 250 }, { kind: 'stat', stat: 'nerve', delta: 1 }, { kind: 'narrate', text: 'You don\'t ask where it came from. That is the point.' }] },
+      { id: 'accept_gift', label: 'Accept the gift (+250g, +1 Nerve)', effects: [{ kind: 'gold', delta: 250 }, { kind: 'stat', stat: 'nerve', delta: 1 }, { kind: 'narrate', text: 'You don\'t ask where it came from. That\'s the whole point.' }] },
     ],
   },
   {
@@ -127,16 +127,16 @@ export const reputationEventCards: StoryCard[] = [
     once: true,
     requires: [{ kind: 'colossiAtLeast', count: 1 }, standingAtMost('underworld', -T)],
     title: 'The Underworld Settles a Score',
-    body: ['You crossed the wrong people. A shipment of yours goes missing between the docks and your warehouse, and everyone on the road swears they saw nothing.'],
+    body: ['You crossed the wrong people. Now a whole shipment has vanished between the docks and your warehouse, and nobody saw a thing.'],
     choices: [
       {
         id: 'pay_tribute',
-        label: 'Pay tribute to make peace (-150g, Underworld +2)',
+        label: 'Pay them to make peace (-150g, Underworld +2)',
         requires: [{ kind: 'goldAtLeast', amount: 150 }],
         showLockedAs: 'Needs 150g',
-        effects: [{ kind: 'gold', delta: -150 }, standing('underworld', 2), { kind: 'narrate', text: 'The tribute is accepted. Your next shipment arrives untouched.' }],
+        effects: [{ kind: 'gold', delta: -150 }, standing('underworld', 2), { kind: 'narrate', text: 'They accept your gold. Your next shipment arrives safe and sound.' }],
       },
-      { id: 'write_off_shipment', label: 'Write off the shipment (-200g)', effects: [{ kind: 'gold', delta: -200 }, { kind: 'narrate', text: 'You eat the loss. The road stays dangerous for you.' }] },
+      { id: 'write_off_shipment', label: 'Accept the loss (-200g)', effects: [{ kind: 'gold', delta: -200 }, { kind: 'narrate', text: 'You swallow the loss. The road stays dangerous for you.' }] },
     ],
   },
 ]

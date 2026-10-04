@@ -5,40 +5,37 @@ const colossus04_start: StoryCard = {
   id: 'colossus04_start',
   title: 'The Machine Arrives',
   body: [
-    'The factories come without warning. Not built by Vessarin\'s craftsmen, but by outsiders—foreigners with strange designs and stranger ambitions.',
-    'The Machine is the fourth Colossus. It represents obsolescence, the crushing force of technological progress that makes old methods worthless overnight. It does not conquer through violence—it conquers through efficiency.',
-    'Smoke fills the harbor. The traditional trades—salt harvesters, spice merchants, ironworkers—watch their livelihoods collapse in days. The Machine produces in hours what took them weeks.',
-    'The old powers, the guilds that once bent kings, now bend their knees to industrial magnates who speak of progress and efficiency. You must either adapt to survive, or be ground beneath the wheels of progress.',
-    'The Colossus does not wear armor. It wears a factory. Confront it, or be crushed.',
+    'One morning, chimneys appear on the edge of town, belching black smoke. Iron wheels clank. Steam hisses.',
+    'The fourth Colossus has arrived: the Machine, a walking factory of brass and fire. It makes in 1 hour what a craftsman makes in a week.',
+    'Salt makers, spinners and smiths watch their trades vanish in days. The old ways are being crushed under its wheels. You must change, or be crushed too.',
   ],
-  choices: [{ id: 'face_machine', label: 'Confront the New World', goto: 'colossus04_trial_savvy' }],
+  choices: [{ id: 'face_machine', label: 'Face the Machine', goto: 'colossus04_trial_savvy' }],
 }
 
 const colossus04_trial_savvy: StoryCard = {
   id: 'colossus04_trial_savvy',
-  title: 'Understanding the Machine',
+  title: 'How Does It Work?',
   body: [
-    'A factory owner—cold, precise, uninterested in tradition—offers you a choice:',
-    '"Your old methods are dying. They are already dead; you simply haven\'t recognized it yet. Join us, and profit from the new order. Resist, and become obsolete."',
-    'You study the machines. Understand their logic. They are not evil—merely efficient beyond imagination.',
-    'Can you adapt your mind to understand this new way of thinking?',
+    'A factory owner with oil-black gloves looks you up and down.',
+    '"Your old ways are finished," he says. "Learn how my machines think, and you can profit. Refuse, and you will be left behind."',
+    'You watch the gears turn and the belts whir. The machines aren\'t evil. They are just very, very fast.',
   ],
   choices: [
     {
       id: 'understand_machines',
-      label: 'Master the logic of industry (Savvy check, DC 17)',
+      label: 'Figure out the machines (Savvy check, DC 17)',
       check: {
         stat: 'savvy',
         dc: 17,
         success: {
-          text: 'You begin to see it. The brutal elegance of industry. The way it compounds advantage. You understand—perhaps not love, but understand—the new world.',
+          text: 'Slowly, it clicks. You see how each machine feeds the next. You may not love this new world, but you understand it.',
           effects: [
-            { kind: 'if', when: { kind: 'flag', id: 'investigated_machine', atLeast: 1 }, then: [{ kind: 'narrate', text: 'The factory worker\'s warnings echo in your mind. You\'ve studied how to stay valuable to machines—and it shows. The owner respects your comprehension.' }], else: [] },
+            { kind: 'if', when: { kind: 'flag', id: 'investigated_machine', atLeast: 1 }, then: [{ kind: 'narrate', text: 'You remember the mechanic\'s warning, and you came prepared. The owner raises an eyebrow, impressed.' }], else: [] },
           ],
           goto: 'colossus04_trial_charm',
         },
         failure: {
-          text: 'You struggle to grasp the economics. Numbers that should compound do not. You are left behind by minds sharper than yours.',
+          text: 'The gears spin too fast to follow. You fall behind, and others race ahead.',
           effects: [{ kind: 'stat', stat: 'savvy', delta: -1 }],
           goto: 'colossus04_trial_charm',
         },
@@ -49,28 +46,28 @@ const colossus04_trial_savvy: StoryCard = {
 
 const colossus04_trial_charm: StoryCard = {
   id: 'colossus04_trial_charm',
-  title: 'The Negotiation',
+  title: 'What Will You Give Up?',
   body: [
-    'The factory owner leans back in his chair. "I respect those who adapt. But adaptation comes at a price. What are you willing to give up to survive?"',
-    'He speaks of your workers—many will no longer be needed. Of the traditional crafts that made you wealthy—soon worthless. Of the guild structures that protected you—soon irrelevant.',
-    '"You can join us," he says. "But you cannot keep the old world. Choose what you lose."',
+    'The factory owner leans back. "I like people who change," he says. "But change costs something. What will you give up?"',
+    'Many of your workers will not be needed. The old crafts that made you rich will soon be worthless.',
+    '"Join me," he says, "but the old world stays behind."',
   ],
   choices: [
     {
       id: 'negotiate_terms',
-      label: 'Negotiate terms for survival (Charm check, DC 16)',
+      label: 'Strike a deal (Charm check, DC 16)',
       check: {
         stat: 'charm',
         dc: 16,
         success: {
-          text: 'You speak his language: profit, efficiency, the future. He agrees to take you on as a minor partner in his expansion. A fall, but not a total collapse.',
+          text: 'You talk his language: profit, speed, the future. He makes you a junior partner. A step down, but not a fall.',
           effects: [
-            { kind: 'if', when: { kind: 'flag', id: 'investigated_machine', atLeast: 1 }, then: [{ kind: 'stat', stat: 'savvy', delta: 1 }, { kind: 'narrate', text: 'Your preparation has made you invaluable. He offers you a better position than he first promised—you\'re too clever to waste.' }], else: [] },
+            { kind: 'if', when: { kind: 'flag', id: 'investigated_machine', atLeast: 1 }, then: [{ kind: 'stat', stat: 'savvy', delta: 1 }, { kind: 'narrate', text: 'Your preparation makes you too useful to waste. He offers you a better deal than he planned.' }], else: [] },
           ],
           goto: 'colossus04_outcome',
         },
         failure: {
-          text: 'He finds you sentimental. You care too much about workers, tradition, the old way. He sees this as weakness. His offer hardens—you can join, but only at the lowest rung.',
+          text: 'He thinks you care too much about your workers and the old ways. You can join, but only at the very bottom.',
           effects: [{ kind: 'wages', delta: -20 }],
           goto: 'colossus04_outcome',
         },
@@ -88,14 +85,13 @@ const colossus04_outcome: StoryCard = {
     { kind: 'advancePhase', to: 'recovery' },
     ...enterChapter(5),
     { kind: 'queueCard', card: 'market_collapse' },
-    { kind: 'narrate', text: 'The Machine grinds on, indifferent to your choices. Your old assets are worthless now—the guild recognizes them no longer. Your wages, redefined by the factory\'s logic, are stripped to what industrial efficiency requires. But you survived. More than that: you adapted. And in a world remade by machines, adaptation is the only victory that matters.' },
+    { kind: 'narrate', text: 'The Machine clanks on. Your old ventures are worthless now, and your wages are cut. But you changed with the times. In a world of machines, that is how you win.' },
   ],
   body: [
-    'Months pass. The old Vessarin is gone. The harbor that once belonged to merchants now belongs to factory owners and their investors.',
-    'You are smaller now. Diminished. But you are not obsolete. You have learned to think like the Machine, and that knowledge keeps you alive.',
-    'You wonder: is this progress, or catastrophe? The answer, you realize, is that it is both.',
+    'Months pass. The old Vessarin is gone. Chimneys smoke where market stalls once stood.',
+    'You are smaller now. But you are not left behind. You have learned to think like the Machine, and that keeps you going.',
   ],
-  choices: [{ id: 'endure', label: 'Endure the New Age', effects: [] }],
+  choices: [{ id: 'endure', label: 'Step into the new age', effects: [] }],
 }
 
 export const colossus04Cards: StoryCard[] = [

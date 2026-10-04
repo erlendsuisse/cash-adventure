@@ -4,47 +4,42 @@ const colossus07_start: StoryCard = {
   id: 'colossus07_start',
   title: 'The Mirror Appears',
   body: [
-    'You have survived 6 impossible trials. You have wealth beyond what you imagined. You have power, respect, fear.',
-    'And yet, something whispers in the darkness.',
-    'The Mirror is the seventh and final Colossus. It is not external—it is you. The sum of every choice, every compromise, every triumph and failure. This is self-knowledge and judgment.',
-    'A figure appears—faceless, ageless. "I am not a Colossus like the others," it says. "I am the sum of all your choices. I am what you have become."',
-    '"The Ledger-Wyrm cannot break you—you mastered finance. The Inquisitor cannot break you—you faced your morality. The Tide cannot break you—you adapted. The Machine cannot break you—you became efficient. The Plague cannot break you—you chose compassion. The Syndicate cannot break you—you outwitted them."',
-    '"But can you survive yourself? Can you face what you are and choose to be something better?"',
-    'This is The Mirror—the final reckoning. You face not an external enemy, but the consequences of every decision you ever made.',
+    'You have beaten 6 Colossi. You are richer than you ever dreamed. People bow when you pass.',
+    'Then, in the great square, a giant mirror rises out of the cobbles. It is as tall as a tower, and it shows your face.',
+    'The seventh and final Colossus steps out of the glass. It looks exactly like you. "I am every choice you ever made," it says, in your own voice.',
+    '"You beat the Wyrm, the Inquisitor, the Tide, the Machine, the Plague and the Betrayal," it says. "But can you face yourself?"',
   ],
-  choices: [{ id: 'face_mirror', label: 'Look Into The Mirror', goto: 'colossus07_trial_truth' }],
+  choices: [{ id: 'face_mirror', label: 'Look into the Mirror', goto: 'colossus07_trial_truth' }],
 }
 
 const colossus07_trial_truth: StoryCard = {
   id: 'colossus07_trial_truth',
-  title: 'The Confession',
+  title: 'What the Mirror Shows',
   body: [
-    'The Mirror shows you everything. Every life you hurt for profit. Every compromise you made. Every person you could have helped but didn\'t.',
-    'It shows you the version of yourself that existed before all of this—the person with principles. The person with hope.',
+    'The Mirror shows you everything. Every person you hurt for profit. Every person you could have helped, but didn\'t.',
+    'Then it shows you yourself on the day you arrived, with 50 gold, big dreams and a good heart.',
     '"What have you done with your life?" it asks.',
-    'There is nowhere to hide. No one to blame. No excuse that holds weight in this moment.',
-    'Do you accept what you have become?',
   ],
   choices: [
     {
       id: 'embrace_true_self',
-      label: 'Accept your true self and rebuild',
+      label: 'Accept who you are, and do better',
       check: {
         stat: 'savvy',
         dc: 20,
         success: {
-          text: 'You see clearly. You have been both terrible and good. You are human. You accept this and choose to be better with what remains of your life.',
+          text: 'You see it all clearly: the good and the bad. You are human. You accept it, and promise to do better.',
           effects: [
             { kind: 'stat', stat: 'savvy', delta: 1 },
             { kind: 'stat', stat: 'grit', delta: 1 },
             { kind: 'stat', stat: 'nerve', delta: 1 },
             { kind: 'stat', stat: 'charm', delta: 1 },
-            { kind: 'if', when: { kind: 'flag', id: 'investigated_mirror', atLeast: 1 }, then: [{ kind: 'narrate', text: 'Your years of self-reflection come to fruition. You face the Mirror not as a stranger to yourself, but as someone who has been preparing for this moment all along.' }], else: [] },
+            { kind: 'if', when: { kind: 'flag', id: 'investigated_mirror', atLeast: 1 }, then: [{ kind: 'narrate', text: 'All that time thinking about who you are pays off. You meet the Mirror like an old friend.' }], else: [] },
           ],
           goto: 'colossus07_outcome',
         },
         failure: {
-          text: 'You cannot face the truth. You rationalize. You justify. You survive, but the Mirror knows you have not truly changed.',
+          text: 'You look away and make excuses. You get through, but the Mirror knows you haven\'t really changed.',
           effects: [{ kind: 'gold', delta: -300 }],
           goto: 'colossus07_outcome',
         },
@@ -55,22 +50,21 @@ const colossus07_trial_truth: StoryCard = {
 
 const colossus07_outcome: StoryCard = {
   id: 'colossus07_outcome',
-  title: 'The Final Reckoning',
+  title: 'The Last Colossus Falls',
   onEnter: [
     { kind: 'grantBoon', boon: 'mirror_survivor' },
     { kind: 'reckoning' },
     { kind: 'advancePhase', to: 'recovery' },
     { kind: 'queueCard', card: 'legacy_choice' },
-    { kind: 'narrate', text: 'The Mirror shatters into a thousand pieces, each reflecting a different version of you. In the reflection, you see not just who you are, but who you could still become. The final Colossus is not defeated—it is integrated. You carry it with you now, forever changed, forever aware. This is not victory in the traditional sense. This is transcendence.' },
+    { kind: 'narrate', text: 'The Mirror shatters into a thousand sparkling pieces. In each one, you see someone you could still become. The last Colossus is beaten. You are free!' },
   ],
   body: [
-    'You stand alone in an empty space.',
-    'The weight of every choice, every consequence, every triumph and failure settles on your shoulders.',
+    'The square is silent. The giant mirror stands still.',
+    'Every choice you ever made rests on your shoulders.',
     'But you are still standing.',
-    'More than that: you are standing with eyes open. You know who you are. You know what you\'ve done. And you are still choosing to move forward.',
-    'This is the real victory. Not wealth. Not power. Self-knowledge. And the choice to be better with what time remains.',
+    'You know who you are, and what you have done. And you choose to keep going.',
   ],
-  choices: [{ id: 'begin_legacy', label: 'Begin Your Legacy', effects: [] }],
+  choices: [{ id: 'begin_legacy', label: 'Claim your victory', effects: [] }],
 }
 
 export const colossus07Cards: StoryCard[] = [

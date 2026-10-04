@@ -10,22 +10,22 @@ const investigate_ledger_wyrm: StoryCard = {
   storyPhase: 'climbing',
   title: 'Warnings of the Auditors',
   body: [
-    'An old merchant pulls you aside at the market. "They\'re coming for us," he whispers. "The Ledger-Wyrm. The auditors and tax collectors. They say it\'s a force of nature, inevitable as the tide."',
-    'He looks haunted. "If you want to survive their scrutiny, you need to know: they can\'t break a perfectly clean ledger. Keep your books impeccable. Don\'t give them anything to find."',
+    'An old merchant pulls you behind a stall. "The Ledger-Wyrm is stirring," he whispers. "A dragon of taxes and audits. It comes for anyone who grows rich too fast."',
+    '"Here\'s the secret," he says. "It can\'t bite a perfectly honest ledger. Keep your books spotless. Give it nothing to find."',
   ],
   choices: [
     {
       id: 'heed_ledger_warning',
-      label: 'Study his warnings closely',
+      label: 'Listen closely',
       effects: [
         { kind: 'flag', id: 'investigated_ledger_wyrm', set: 1 },
-        { kind: 'narrate', text: 'You memorize his advice. When the auditors come, you\'ll be ready.' },
+        { kind: 'narrate', text: 'You remember every word. When the Wyrm comes, you will be ready.' },
       ],
     },
     {
       id: 'ignore_ledger_warning',
-      label: 'Dismiss it as paranoia',
-      effects: [{ kind: 'narrate', text: 'You\'ve heard enough doom-saying. You focus on business.' }],
+      label: 'Laugh it off',
+      effects: [{ kind: 'narrate', text: 'Dragons made of taxes? You laugh and get back to work.' }],
     },
   ],
 }
@@ -36,22 +36,22 @@ const investigate_inquisitor: StoryCard = {
   storyPhase: 'climbing',
   title: 'Whispers of the Inquisition',
   body: [
-    'A priestess finds you in the temple district. "There is something you should know," she says quietly. "The Inquisitor—the force that judges moral failings—it cannot see into an honest heart."',
-    '"If you\'ve done things you regret, face them now. Name them. Confess them to yourself. Carry no lies into the trial, and it cannot find a foothold."',
+    'A priestess in white stops you on the temple steps. "The Inquisitor will come one day," she says quietly. "He judges hearts. But he cannot find a crack in an honest one."',
+    '"If you\'ve done things you regret, own up to them now," she says. "Carry no lies into his trial, and he has nothing to grab onto."',
   ],
   choices: [
     {
       id: 'heed_inquisitor_warning',
-      label: 'Take her guidance to heart',
+      label: 'Take her words to heart',
       effects: [
         { kind: 'flag', id: 'investigated_inquisitor', set: 1 },
-        { kind: 'narrate', text: 'You understand: honesty is your shield.' },
+        { kind: 'narrate', text: 'You understand now: honesty is your shield.' },
       ],
     },
     {
       id: 'ignore_inquisitor_warning',
-      label: 'Keep your past buried',
-      effects: [{ kind: 'narrate', text: 'Some secrets are better left alone.' }],
+      label: 'Keep your secrets',
+      effects: [{ kind: 'narrate', text: 'Some secrets are better left buried. You hope.' }],
     },
   ],
 }
@@ -62,22 +62,22 @@ const investigate_tide: StoryCard = {
   storyPhase: 'climbing',
   title: 'The Old Sailor\'s Wisdom',
   body: [
-    'You meet an ancient sailor in a harbor tavern, weathered by decades at sea. "The Tide comes for all who dare to command the market," he says, swirling his drink.',
-    '"I\'ve seen men richer than kings broken by it. The secret? Never overcommit. Never bet everything on one wave. Diversify. When the storm comes—and it always does—you survive because you have many anchors, not one."',
+    'An old sailor with a face like a walnut beckons you to his table. "The Tide is coming," he says. "A giant made of waves. It drowns anyone who thinks they rule the market."',
+    '"The secret? Never bet everything on one wave. Spread your gold around. When the storm hits, many small anchors hold better than one big one."',
   ],
   choices: [
     {
       id: 'heed_tide_warning',
-      label: 'Learn his lessons about diversification',
+      label: 'Learn his lesson',
       effects: [
         { kind: 'flag', id: 'investigated_tide', set: 1 },
-        { kind: 'narrate', text: 'You resolve to spread your investments. No single failure will destroy you.' },
+        { kind: 'narrate', text: 'You decide to spread your money around. No single storm will sink you.' },
       ],
     },
     {
       id: 'ignore_tide_warning',
-      label: 'Believe in your instincts',
-      effects: [{ kind: 'narrate', text: 'You trust your own judgment over an old sailor\'s tales.' }],
+      label: 'Trust your own instincts',
+      effects: [{ kind: 'narrate', text: 'You thank him for the story and trust your own gut instead.' }],
     },
   ],
 }
@@ -86,24 +86,24 @@ const investigate_machine: StoryCard = {
   id: 'investigate_machine',
   weight: 2,
   storyPhase: 'climbing',
-  title: 'A Mechanic\'s Warning',
+  title: 'The Mechanic\'s Warning',
   body: [
-    'A factory worker approaches you with fear in his eyes. "The Machine—it\'s not evil, but it\'s not merciful either. It only understands efficiency."',
-    '"If you want to survive what\'s coming, learn to think like it does. Understand profit margins. Understand what you can offer that machines cannot—adaptability, intuition, the human touch. Make yourself valuable in a world of machines."',
+    'A mechanic with oily hands grabs your sleeve. "The Machine is coming," she says. "It isn\'t evil. It just doesn\'t care about anything but speed."',
+    '"Learn how it thinks," she says. "And learn what machines can\'t do: change their minds, have ideas, be kind. Be good at those, and you\'ll always be needed."',
   ],
   choices: [
     {
       id: 'heed_machine_warning',
-      label: 'Study industrial economics',
+      label: 'Study how machines work',
       effects: [
         { kind: 'flag', id: 'investigated_machine', set: 1 },
-        { kind: 'narrate', text: 'You begin to grasp the logic of machines and markets.' },
+        { kind: 'narrate', text: 'You spend evenings with gears and diagrams. Slowly, it starts to make sense.' },
       ],
     },
     {
       id: 'ignore_machine_warning',
-      label: 'Trust traditional methods',
-      effects: [{ kind: 'narrate', text: 'The old ways have served you well enough.' }],
+      label: 'Stick to the old ways',
+      effects: [{ kind: 'narrate', text: 'The old ways have worked fine so far.' }],
     },
   ],
 }
@@ -114,23 +114,23 @@ const investigate_plague: StoryCard = {
   storyPhase: 'climbing',
   title: 'A Healer\'s Preparation',
   body: [
-    'A physician pulls you aside. "Sickness will come to this city. Not today, perhaps, but inevitably. When it does, those who prepared will survive—not just physically, but spiritually."',
-    '"Cultivate compassion now. Build relationships with people who matter. When the crisis comes, you\'ll draw strength from the connections you\'ve made. The ones who survive are never the ones who hoard alone."',
+    'A healer with kind eyes stops you in the street. "One day, a great sickness will come," she says. "When it does, gold won\'t save you. People will."',
+    '"Make friends now," she says. "Help people. When hard times come, the ones who make it are never the ones who hide alone with their gold."',
   ],
   choices: [
     {
       id: 'heed_plague_warning',
-      label: 'Invest in relationships and community',
+      label: 'Start helping people',
       effects: [
         { kind: 'flag', id: 'investigated_plague', set: 1 },
         { kind: 'stat', stat: 'charm', delta: 1 },
-        { kind: 'narrate', text: 'You begin helping others, building bonds that may save you.' },
+        { kind: 'narrate', text: 'You start lending a hand around the city. People begin to smile when they see you.' },
       ],
     },
     {
       id: 'ignore_plague_warning',
-      label: 'Focus on accumulating wealth',
-      effects: [{ kind: 'narrate', text: 'Gold will protect you when crisis comes.' }],
+      label: 'Focus on your gold',
+      effects: [{ kind: 'narrate', text: 'Gold will protect you, you tell yourself.' }],
     },
   ],
 }
@@ -139,25 +139,25 @@ const investigate_betrayal: StoryCard = {
   id: 'investigate_betrayal',
   weight: 2,
   storyPhase: 'climbing',
-  title: 'A Fixer\'s Advice',
+  title: 'The Fixer\'s Advice',
   body: [
-    'A shady figure in the underworld catches your attention. "Play with fire, you\'ll get burned. You\'re making deals with people who don\'t forgive."',
-    '"If betrayal comes—and it will—your only weapon is understanding. Know the networks. Know who owes whom. Know the price of everything. When they come to collect, you\'ll be ready to negotiate."',
+    'A fixer in a grey cloak leans out of a doorway. "You\'re dealing with people who never forget a debt," she says. "One day, they will all come to collect."',
+    '"When that day comes, knowledge is your only weapon. Learn who owes whom. Learn the price of everything. Then you can bargain your way out."',
   ],
   choices: [
     {
       id: 'heed_betrayal_warning',
-      label: 'Study the underworld\'s networks',
+      label: 'Learn the underworld\'s secrets',
       effects: [
         { kind: 'flag', id: 'investigated_betrayal', set: 1 },
         { kind: 'stat', stat: 'savvy', delta: 1 },
-        { kind: 'narrate', text: 'You learn the hidden rules of the city\'s underworld.' },
+        { kind: 'narrate', text: 'You learn who owes whom, and the secret rules nobody writes down.' },
       ],
     },
     {
       id: 'ignore_betrayal_warning',
-      label: 'Stay out of underworld politics',
-      effects: [{ kind: 'narrate', text: 'You prefer to keep your hands clean.' }],
+      label: 'Stay out of it',
+      effects: [{ kind: 'narrate', text: 'You would rather keep your hands clean.' }],
     },
   ],
 }
@@ -166,25 +166,25 @@ const investigate_mirror: StoryCard = {
   id: 'investigate_mirror',
   weight: 2,
   storyPhase: 'climbing',
-  title: 'A Philosopher\'s Warning',
+  title: 'The Philosopher\'s Riddle',
   body: [
-    'An old philosopher stops you in the street. "You will face yourself one day. Not as an enemy—as a mirror. The question is not whether you\'ll see your reflection, but whether you\'ll recognize it."',
-    '"Spend time now understanding who you are. What are your principles? What would you never compromise? When you face the Mirror, know yourself—truly know yourself. That is the only way through."',
+    'An old philosopher with a long white beard blocks your path. "One day, you will meet yourself in a mirror," he says. "Will you like who you see?"',
+    '"Think about who you are," he says. "What would you never do, not for all the gold in the world? Know that, and the Mirror cannot scare you."',
   ],
   choices: [
     {
       id: 'heed_mirror_warning',
-      label: 'Spend time in reflection and meditation',
+      label: 'Take time to think about it',
       effects: [
         { kind: 'flag', id: 'investigated_mirror', set: 1 },
         { kind: 'stat', stat: 'nerve', delta: 1 },
-        { kind: 'narrate', text: 'You take time to understand your own heart.' },
+        { kind: 'narrate', text: 'You sit by the harbour and think about who you really are.' },
       ],
     },
     {
       id: 'ignore_mirror_warning',
-      label: 'Avoid such existential thinking',
-      effects: [{ kind: 'narrate', text: 'You\'ve enough to worry about without philosophical questions.' }],
+      label: 'Too much thinking',
+      effects: [{ kind: 'narrate', text: 'You have enough to worry about without riddles.' }],
     },
   ],
 }
