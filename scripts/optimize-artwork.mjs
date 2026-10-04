@@ -3,8 +3,8 @@
 // reads it from: src/assets/artwork/chapter{N}/{cardId}.webp (see src/ui/artwork.ts).
 //
 // Picks up PNG/JPG from src/assets/artwork/** and the old public/assets/artwork/**,
-// resizes to at most 1200px wide (cards show artwork at <=600px, so 2x for
-// retina), and deletes the source once the WebP is written.
+// resizes to at most 1344px wide (the 16:9-ish SDXL size; artwork is shown as
+// the full-screen background), and deletes the source once the WebP is written.
 //
 // Usage: node scripts/optimize-artwork.mjs [--keep]   (--keep leaves the sources)
 
@@ -32,7 +32,7 @@ for (const sourceRoot of sourceRoots) {
       const source = path.join(dir, file)
       const target = path.join(outRoot, chapterDir, file.replace(/\.(png|jpe?g)$/i, '.webp'))
       fs.mkdirSync(path.dirname(target), { recursive: true })
-      await sharp(source).resize({ width: 1200, withoutEnlargement: true }).webp({ quality: 80 }).toFile(target)
+      await sharp(source).resize({ width: 1344, withoutEnlargement: true }).webp({ quality: 80 }).toFile(target)
       before += fs.statSync(source).size
       after += fs.statSync(target).size
       if (!keep) fs.rmSync(source)

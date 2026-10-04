@@ -1,13 +1,18 @@
 #!/usr/bin/env node
-// Generates card artwork via Stability (SDXL) for any card listed in PROMPTS
-// that doesn't have src/assets/artwork/chapter{N}/{id}.webp yet, then run
+// Generates card artwork via Stability for cards listed in PROMPTS, in the same
+// hand-painted fantasy-cartoon style and 16:9 framing as the Chapter 1
+// backgrounds (artwork fills the screen behind the card). Then run
 // `node scripts/optimize-artwork.mjs` to convert the PNGs.
 //
-// Usage: STABILITY_API_KEY=... node scripts/generate-card-artwork.mjs
+// Usage: STABILITY_API_KEY=... node scripts/generate-card-artwork.mjs [options]
+//   --chapter N       only cards in chapter N
+//   --only a,b        only these card ids
+//   --force           regenerate even if the card already has art
+//   --model core|ultra  Stable Image model (default core; ultra costs ~2.5x)
 //
-// Prompt rules that keep moderation happy: show the setting, objects and
-// aftermath - never violence, bodies, drugs, restraints or crime in progress.
-// Words like "ransom" get flagged even in innocent prompts.
+// Prompt rules that keep moderation happy - and the tone friendly: show the
+// setting, objects and aftermath; never violence, bodies, fire, weapons in use,
+// drugs or restraints. Words like "ransom" get flagged even in innocent prompts.
 // Flagged requests are refused and not charged.
 
 import fs from 'node:fs'
@@ -22,7 +27,20 @@ if (!apiKey) {
   process.exit(1)
 }
 
-const STYLE = 'detailed painterly illustration, medieval fantasy merchant world, rich colour, cinematic lighting'
+// Condensed from the Chapter 1 master style guide (scripts/generate-backgrounds.ts).
+const STYLE =
+  'detailed hand-painted cartoon game art, whimsical fantasy merchant world with Victorian steampunk touches, ' +
+  'warm golds, earth browns and teal accents, lantern and sunlight glow, lively and adventurous mood, cinematic 16:9 composition'
+const NEGATIVE =
+  'photograph, photorealistic, 3D render, anime, grayscale, sepia engraving, modern clothing, modern military uniforms, helmets, ' +
+  'guns, rifles, explosions, fire, smoke, blood, gore, corpses, violence, paper money, banknotes, dollar bills, text, watermark, blurry'
+
+const args = process.argv.slice(2)
+const arg = (name) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : undefined }
+const onlyChapter = arg('--chapter') ? Number(arg('--chapter')) : undefined
+const onlyIds = arg('--only')?.split(',')
+const force = args.includes('--force')
+const model = arg('--model') ?? 'core'
 
 /** [chapter, cardId, prompt] */
 const PROMPTS = [
@@ -37,16 +55,41 @@ const PROMPTS = [
   [2, 'stolen_goods_fence', 'A cramped back room crowded with mismatched treasures, candlesticks, paintings and chests, a sly dealer behind a counter, flickering candles'],
   [2, 'loan_shark_capital', 'A cold counting room with a heavy iron strongbox, stacks of coins and a stern moneylender writing in a ledger, harsh single lamp'],
   [2, 'smuggler_partnership', 'A sleek fast sailing boat moored in a hidden cove at dusk, crates being unloaded onto the beach by lantern light'],
-  // Chapter 3 - trader's ladder
-  [3, 'ch3_sutlers_wagon', 'A covered sutler wagon full of goods following a marching army column along a country road, soldiers buying small comforts'],
-  [3, 'ch3_linen_supply', 'Two wooden looms in a sunlit workshop weaving white linen, stacks of folded bandage cloth ready for a field hospital'],
+  // Chapter 3 - war, as a storybook: camps, wagons, markets and quartermasters, never combat (regenerated 2026-10-04)
+  [3, 'syndicate_muscle', 'Two burly but friendly-looking bodyguards in long coats standing either side of a merchant house door at dusk, lanterns glowing'],
+  [3, 'black_market_supplier', 'A cosy hidden cellar market lit by lanterns, stalls of unlabelled crates and curious bottles, cloaked shoppers browsing'],
+  [3, 'crime_boss_lieutenant', 'A plush private study with a big oak desk and a crackling fireplace, a portly boss in a fine waistcoat gesturing to an empty chair'],
+  [3, 'counterfeiter_partnership', 'A cluttered engraver workshop, a bespectacled craftsman inspecting a shiny gold coin under a magnifier, tools and candle'],
+  [3, 'ch3_war_profiteer_iron', 'A bustling forge yard stacked with iron ingots and horseshoes, a quartermaster in a plumed hat haggling with the merchant'],
+  [3, 'ch3_military_supply_contract', 'A grand general with a magnificent moustache in a colourful tent, unrolling a supply contract on a map table, crates of salt and spice outside'],
+  [3, 'ch3_refugee_trade', 'Travellers with carts of household goods at a town gate market, a merchant weighing their wares, hopeful faces, soft morning light'],
+  [3, 'ch3_battle_disrupts_supply', 'A trade road blocked by a fallen bridge in green hills, banners on a distant ridge, a merchant caravan waiting with worried drivers'],
+  [3, 'ch3_refugees_flood_market', 'A crowded colourful market square full of travellers selling pots, rugs and furniture, merchants bargaining under bunting'],
+  [3, 'ch3_military_convoy_raid', 'Overturned supply cart outside a merchant warehouse, scattered apples and crates, guards running down the street, comic chaos'],
+  [3, 'ch3_conscription_notice', 'A town crier on a barrel reading a royal proclamation to a crowd of surprised merchants in a sunny square, banners'],
+  [3, 'ch3_soldier_demands_goods', 'A cheerful but pushy squad of soldiers in bright tabards at a shop counter pointing at sacks of flour, a frowning shopkeeper'],
+  [3, 'ch3_spy_recruitment', 'A mysterious figure in a wide-brimmed hat whispering to a merchant in a lantern-lit tavern booth, folded note on the table'],
+  [3, 'ch3_weapons_smuggling', 'Long wooden crates being loaded onto a barge at a misty river dock at night, lanterns, a lookout on the pier'],
+  [3, 'ch3_medical_supplies_smuggle', 'A healer stacking bundles of herbs and clean bandages onto a small cart behind an apothecary shop, warm lamplight'],
+  [3, 'ch3_military_food_contract', 'A busy army field kitchen with huge cooking pots, bread loaves and barrels, cooks in aprons and a quartermaster with a ledger'],
+  [3, 'ch3_intelligence_selling', 'A merchant passing a sealed letter to a hooded courier in a quiet library corner, candles and tall bookshelves'],
+  [3, 'ch3_transport_logistics', 'A long line of ox wagons with colourful canvas covers rolling along a country road between army camps, sunny sky'],
+  [3, 'ch3_soldier_deserter', 'A tired young soldier in a muddy cloak knocking at a warehouse back door at night, a lantern in the window, quiet street'],
+  [3, 'ch3_refugee_family_encounter', 'A family with a handcart and a little dog at a merchant doorway in the rain, the merchant holding the door open, warm light inside'],
+  [3, 'ch3_officer_proposition', 'A sly officer with a curled moustache in a candlelit tent offering a sealed letter across a map table, conspiratorial grin'],
+  [3, 'ch3_battle_witness', 'A merchant on a hilltop watching colourful toy-like armies with banners on a distant plain, a general on horseback approaching, sunset'],
+  [3, 'ch3_armistice_threat', 'Diplomats in ornate robes signing a treaty at a long table in a grand hall, a nervous merchant peeking from behind a pillar'],
+  [3, 'ch3_enemy_territory_trade', 'A small rowing boat loaded with crates crossing a moonlit river between two castles flying different banners'],
+  [3, 'ch3_inflation_surge', 'A market stall where a shopkeeper keeps raising price tags on a chalkboard, customers with overflowing coin purses gasping'],
+  [3, 'ch3_army_requisition', 'Soldiers in bright livery loading sacks and barrels from a merchant warehouse onto ox carts, a quartermaster writing a receipt'],
+  [3, 'ch3_caught_trading_enemies', 'A stern magistrate in a tall wig in a wood-panelled courtroom, a nervous merchant in the dock clutching a ledger'],
+  [3, 'ch3_ambush_on_supply_run', 'An overturned supply wagon on a misty forest road, spilled crates and grain sacks, broken wheel, quiet aftermath'],
+  [3, 'ch3_informant_demands', 'Two figures in a dim tavern corner, one sliding a folded letter across the table, nervous glances, hooded cloaks'],
+  [3, 'ch3_neutral_city_escape', 'A peaceful walled city with white banners on a hill, merchants and travellers streaming through its open gate at golden hour'],
+  [3, 'ch3_sutlers_wagon', 'A covered sutler wagon full of goods beside a cheerful army camp, soldiers buying small comforts, tents and banners'],
+  [3, 'ch3_linen_supply', 'Two wooden looms in a sunlit workshop weaving white linen, stacks of folded cloth ready for a field hospital'],
   [3, 'ch3_remount_contract', 'A green horse farm with paddocks of cavalry horses, a horse trader and a quartermaster shaking hands by the fence'],
-  [3, 'ch3_royal_victualling_charter', 'A lavish candlelit banquet in a war tent, a royal charter with a wax seal on the table, an army quartermaster raising a glass'],
-  // Chapter 3 - intro deck
-  [3, 'syndicate_muscle', 'Two imposing well-dressed guards standing at the door of a merchant house at night, lanterns, an air of quiet menace'],
-  [3, 'black_market_supplier', 'A hidden underground market in a torchlit cellar, stalls of unlabelled crates and sealed jars, cloaked buyers'],
-  [3, 'crime_boss_lieutenant', 'An opulent private study with a grand desk, a powerful figure in silhouette before a fireplace, an empty chair waiting'],
-  [3, 'counterfeiter_partnership', 'A secretive engraver at a workbench examining a gleaming coin with a loupe, tools and metal blanks, candlelight'],
+  [3, 'ch3_royal_victualling_charter', 'A lavish candlelit banquet in a grand war tent, a royal charter with a wax seal on the table, an officer raising a glass'],
   // Chapter 4 - trader's ladder
   [4, 'ch4_money_changer_booth', 'A money changer booth on grand stone steps, brass scales and touchstones, coins of many nations in neat stacks, travellers queueing'],
   [4, 'ch4_bills_courier', 'A courier on horseback galloping along a country road with a leather satchel of sealed letters, dawn light'],
@@ -92,27 +135,32 @@ const PROMPTS = [
 
 async function generate(chapter, id, prompt) {
   const dir = path.join(outRoot, `chapter${chapter}`)
-  if (fs.existsSync(path.join(dir, `${id}.webp`)) || fs.existsSync(path.join(dir, `${id}.png`))) return 'skipped'
-  const response = await fetch('https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image', {
+  if (!force && (fs.existsSync(path.join(dir, `${id}.webp`)) || fs.existsSync(path.join(dir, `${id}.png`)))) return 'skipped'
+  const form = new FormData()
+  form.append('prompt', `${prompt}. ${STYLE}`)
+  form.append('negative_prompt', NEGATIVE)
+  form.append('aspect_ratio', '16:9')
+  form.append('output_format', 'png')
+  const response = await fetch(`https://api.stability.ai/v2beta/stable-image/generate/${model}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json', Authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({ text_prompts: [{ text: `${prompt}, ${STYLE}`, weight: 1 }], cfg_scale: 7, height: 1024, width: 1024, samples: 1, steps: 30 }),
+    headers: { Accept: 'image/*', Authorization: `Bearer ${apiKey}` },
+    body: form,
   })
   if (!response.ok) {
     const error = await response.json().catch(() => ({}))
-    return `failed: ${error.message ?? response.statusText}`
+    return `failed: ${error.errors?.join('; ') ?? error.message ?? response.statusText}`
   }
-  const artifact = (await response.json()).artifacts?.[0]
-  if (!artifact) return 'failed: no image returned'
   // A filtered prompt can still come back 200 with a blurred image - don't keep it.
-  if (artifact.finishReason === 'CONTENT_FILTERED') return 'failed: content filter (blurred result discarded)'
+  if (response.headers.get('finish-reason') === 'CONTENT_FILTERED') return 'failed: content filter (blurred result discarded)'
   fs.mkdirSync(dir, { recursive: true })
-  fs.writeFileSync(path.join(dir, `${id}.png`), Buffer.from(artifact.base64, 'base64'))
+  fs.writeFileSync(path.join(dir, `${id}.png`), Buffer.from(await response.arrayBuffer()))
   return 'generated'
 }
 
 const results = { generated: 0, skipped: 0, failed: 0 }
 for (const [chapter, id, prompt] of PROMPTS) {
+  if (onlyChapter !== undefined && chapter !== onlyChapter) continue
+  if (onlyIds && !onlyIds.includes(id)) continue
   const result = await generate(chapter, id, prompt)
   results[result.startsWith('failed') ? 'failed' : result]++
   if (result !== 'skipped') console.log(`${result === 'generated' ? '✓' : '✗'} ch${chapter} ${id}${result === 'generated' ? '' : ` - ${result}`}`)
