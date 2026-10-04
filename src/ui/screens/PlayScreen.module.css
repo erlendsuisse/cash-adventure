@@ -116,4 +116,23 @@
   gap: 12px;
   text-align: center;
   padding: 40px;
+  color: #f7ecd2;
+}
+
+.endingTitle {
+  margin: 0;
+  font-family: 'Cinzel Decorative', 'Cinzel', Georgia, serif;
+  font-size: 56px;
+  color: #f2c14e;
+}
+
+.endingButton {
+  padding: 10px 24px;
+  font-family: 'Cinzel', Georgia, serif;
+  font-weight: 700;
+  color: #2b1a06;
+  background: linear-gradient(180deg, #ffe08a 0%, #e0a83a 100%);
+  border: 2px solid #fff0b8;
+  border-radius: 999px;
+  cursor: pointer;
 }

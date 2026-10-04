@@ -3,6 +3,7 @@ import { campaign } from '../../content/campaign'
 import { Background } from '../components/Background/Background'
 import { getCardArtworkPath } from '../artwork'
 import { EncounterCard } from '../components/EncounterCard'
+import { VictoryScreen } from '../components/VictoryScreen'
 import { ChapterBanner } from '../components/ChapterBanner'
 import { LedgerBar } from '../components/LedgerBar'
 import { StatScroll } from '../components/StatScroll'
@@ -15,6 +16,7 @@ import styles from './PlayScreen.module.css'
 export function PlayScreen() {
   const { state, dispatch, exportSave } = useGame()
   const [seedInput, setSeedInput] = useState('42')
+  const [victoryClosed, setVictoryClosed] = useState(false)
 
   // Background music playback based on story phase
   useBackgroundMusic(state)
@@ -49,8 +51,11 @@ export function PlayScreen() {
         <div className={styles.cardContainer}>
           {state.status === 'won' ? (
             <div className={styles.ending}>
-              <h1>Victory</h1>
-              <p>You have overcome all seven Colossi. Vessarin will speak of this for a generation.</p>
+              <h1 className={styles.endingTitle}>Victory!</h1>
+              <p>You have overcome all seven Colossi. Vessarin will speak of your name for a hundred years.</p>
+              <button type="button" className={styles.endingButton} onClick={() => setVictoryClosed(false)}>
+                Show the celebration
+              </button>
             </div>
           ) : card ? (
             <EncounterCard
@@ -72,6 +77,17 @@ export function PlayScreen() {
           <Portfolio state={state} />
         </div>
       </div>
+
+      {state.status === 'won' && !victoryClosed && (
+        <VictoryScreen
+          state={state}
+          onPlayAgain={() => {
+            setVictoryClosed(false)
+            dispatch({ type: 'restart', seed: Math.floor(Math.random() * 1_000_000) })
+          }}
+          onClose={() => setVictoryClosed(true)}
+        />
+      )}
 
       {/* Footer with controls */}
       <div className={styles.footer}>
