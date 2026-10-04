@@ -26,7 +26,7 @@ export function EncounterCard({
           {showingOutcome ? (
             <div>
               {state.pendingOutcome!.checkResult && <RollBreakdown result={state.pendingOutcome!.checkResult} />}
-              <p>{state.pendingOutcome!.text}</p>
+              {state.pendingOutcome!.text && <p>{state.pendingOutcome!.text}</p>}
               {state.pendingOutcome!.effectSummary && (
                 <EffectSummary summary={state.pendingOutcome!.effectSummary} />
               )}

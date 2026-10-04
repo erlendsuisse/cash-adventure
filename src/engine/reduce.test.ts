@@ -25,7 +25,7 @@ function makeCampaign(cards: StoryCard[], overrides: Partial<Campaign> = {}): Ca
 }
 
 describe('reduce - choose', () => {
-  it('applies effects and follows the choice goto', () => {
+  it('applies effects, shows the outcome, then follows the choice goto', () => {
     const campaign = makeCampaign([
       card('start', { choices: [{ id: 'go', label: 'Go', effects: [{ kind: 'gold', delta: 10 }], goto: 'next' }] }),
       card('next'),
@@ -33,7 +33,34 @@ describe('reduce - choose', () => {
     const state = newGame(1, campaign)
     const s = reduce(state, { type: 'choose', choiceId: 'go' }, campaign)
     expect(s.finances.gold).toBe(110)
+    expect(s.currentCardId).toBe('start')
+    expect(s.pendingOutcome?.effectSummary?.gold).toBe(10)
+    expect(reduce(s, { type: 'advance' }, campaign).currentCardId).toBe('next')
+  })
+
+  it('shows narrated text as the outcome, even when nothing else changes', () => {
+    const campaign = makeCampaign([card('start', { choices: [{ id: 'pass', label: 'Pass', effects: [{ kind: 'narrate', text: 'You walk on.' }] }] })])
+    const s = reduce(newGame(1, campaign), { type: 'choose', choiceId: 'pass' }, campaign)
+    expect(s.pendingOutcome).toMatchObject({ text: 'You walk on.' })
+    expect(s.pendingOutcome?.effectSummary).toBeUndefined()
+  })
+
+  it('moves straight on when a choice has nothing to show', () => {
+    const campaign = makeCampaign([card('start', { choices: [{ id: 'go', label: 'Go', goto: 'next' }] }), card('next')])
+    const s = reduce(newGame(1, campaign), { type: 'choose', choiceId: 'go' }, campaign)
+    expect(s.pendingOutcome).toBeUndefined()
     expect(s.currentCardId).toBe('next')
+  })
+
+  it('still runs the economy for advanceDays when the outcome is acknowledged', () => {
+    const campaign = makeCampaign([
+      card('start', { choices: [{ id: 'rest', label: 'Rest', effects: [{ kind: 'advanceDays', days: 30 }, { kind: 'narrate', text: 'A month passes.' }] }] }),
+    ])
+    const direct = makeCampaign([card('start', { choices: [{ id: 'rest', label: 'Rest', effects: [{ kind: 'advanceDays', days: 30 }] }] })])
+    const shown = reduce(reduce(newGame(1, campaign), { type: 'choose', choiceId: 'rest' }, campaign), { type: 'advance' }, campaign)
+    const skipped = reduce(newGame(1, direct), { type: 'choose', choiceId: 'rest' }, direct)
+    expect(shown.clock.day).toBe(skipped.clock.day)
+    expect(shown.finances).toEqual(skipped.finances)
   })
 
   it('ignores a choiceId that does not exist on the current card', () => {
@@ -53,7 +80,7 @@ describe('reduce - choose', () => {
     expect(s.currentCardId).toBe('start')
   })
 
-  it('resolves a skill check and follows the outcome goto, logging the roll', () => {
+  it('resolves a skill check, shows the roll, then follows the outcome goto', () => {
     const campaign = makeCampaign([
       card('start', {
         choices: [
@@ -69,8 +96,10 @@ describe('reduce - choose', () => {
     ])
     const state = newGame(1, campaign)
     const s = reduce(state, { type: 'choose', choiceId: 'check' }, campaign)
-    expect(s.currentCardId).toBe('won_card') // dc 1 always succeeds
+    expect(s.pendingOutcome).toMatchObject({ text: 'yes', goto: 'won_card' }) // dc 1 always succeeds
+    expect(s.pendingOutcome?.checkResult).toBeDefined()
     expect(s.log.some((l) => l.text.includes('vs DC 1'))).toBe(true)
+    expect(reduce(s, { type: 'advance' }, campaign).currentCardId).toBe('won_card')
   })
 
   it('draws from the deck when no goto is specified', () => {

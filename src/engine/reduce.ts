@@ -5,7 +5,7 @@ import { applyAll } from './effects'
 import { newGame } from './init'
 import { commodityBuyPrice, commodityPrice } from './selectors'
 import { isMet } from './requirements'
-import type { Action, Campaign, CardId, Commodity, EffectSummary, GameState } from './types'
+import type { Action, Campaign, CardId, CheckResult, Commodity, EffectSummary, GameState } from './types'
 
 export function reduce(state: GameState, action: Action, campaign: Campaign): GameState {
   switch (action.type) {
@@ -177,30 +177,42 @@ function applyChoose(state: GameState, choiceId: string, campaign: Campaign): Ga
   if ((choice.requires ?? []).some((r) => !isMet(r, state))) return state
 
   let working = state
+  let before = state
   let target: CardId | undefined
+  let checkResult: CheckResult | undefined
+  let outcomeText: string | undefined
 
   if (choice.check) {
     const { result, outcome, rng } = resolveCheck(choice.check, working)
     working = { ...working, rng, log: [...working.log, { day: working.clock.day, text: formatCheck(result) }] }
     if (outcome.text) working = { ...working, log: [...working.log, { day: working.clock.day, text: outcome.text }] }
-    const beforeOutcome = working
+    before = working
     working = applyAll(outcome.effects ?? [], working, campaign)
     target = outcome.goto
-
-    // If check outcome has no goto, show outcome on card and wait for advance
-    if (!target) {
-      const summary = calculateEffectSummary(beforeOutcome, working, campaign)
-      return { ...working, pendingOutcome: { text: outcome.text, checkResult: result, ...(hasSignificantEffects(summary) ? { effectSummary: summary } : {}) } }
-    }
+    checkResult = result
+    outcomeText = outcome.text
   } else {
-    const before = working
     working = applyAll(choice.effects ?? [], working, campaign)
     target = choice.goto
+  }
 
-    // If regular choice has effects, show a summary before proceeding
-    const summary = calculateEffectSummary(before, working, campaign)
-    if (hasSignificantEffects(summary) && !target) {
-      return { ...working, pendingOutcome: { text: 'Effects applied.', effectSummary: summary } }
+  // Show what the choice did before moving on: the roll, the story text (narrate
+  // effects write it to the log) and what changed. Only a choice with none of
+  // these goes straight to the next card.
+  const narration = working.log.slice(before.log.length).map((entry) => entry.text)
+  const text = [outcomeText, ...narration].filter(Boolean).join(' ')
+  const summary = calculateEffectSummary(before, working, campaign)
+  const significant = hasSignificantEffects(summary)
+  if (checkResult || text || significant) {
+    return {
+      ...working,
+      pendingOutcome: {
+        text,
+        ...(checkResult ? { checkResult } : {}),
+        ...(significant ? { effectSummary: summary } : {}),
+        ...(target ? { goto: target } : {}),
+        turnStartDay: state.clock.day,
+      },
     }
   }
 
@@ -208,9 +220,11 @@ function applyChoose(state: GameState, choiceId: string, campaign: Campaign): Ga
 }
 
 function applyAdvance(state: GameState, campaign: Campaign): GameState {
-  // If waiting on pending outcome, clear it and advance
+  // Acknowledging an outcome finishes the turn its choice started
   if (state.pendingOutcome) {
-    return resolveNext(state, state, undefined, campaign)
+    const { goto, turnStartDay } = state.pendingOutcome
+    const turnStart = { ...state, clock: { ...state.clock, day: turnStartDay } }
+    return resolveNext(turnStart, state, goto, campaign)
   }
 
   const card = campaign.cards[state.currentCardId]

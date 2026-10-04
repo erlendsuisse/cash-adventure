@@ -92,9 +92,11 @@ export interface EffectSummary {
 }
 
 export interface PendingOutcome {
-  text: string
+  text: string // what happened, in prose; '' when the choice only changed numbers
   checkResult?: CheckResult
   effectSummary?: EffectSummary
+  goto?: CardId // the choice's authored next card, entered once the outcome is acknowledged
+  turnStartDay: number // clock day before the choice, so advanceDays effects still run the economy
 }
 
 export interface GameState {
