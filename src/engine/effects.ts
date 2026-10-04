@@ -1,8 +1,12 @@
 import { isMet } from './requirements'
-import type { Effect, GameState } from './types'
+import { commodityBuyPrice, commodityPrice } from './selectors'
+import type { Campaign, Commodity, Effect, GameState } from './types'
 
-/** apply() must never call Math.random/Date.now or reach outside `state`. */
-export function apply(effect: Effect, state: GameState): GameState {
+/** Market-priced effects (buyStock/sellStock) need the campaign's base prices. */
+type PriceBook = Pick<Campaign, 'commodityBasePrice'>
+
+/** apply() must never call Math.random/Date.now or reach outside `state` (and the campaign's price book). */
+export function apply(effect: Effect, state: GameState, campaign?: PriceBook): GameState {
   switch (effect.kind) {
     case 'gold':
       return { ...state, finances: { ...state.finances, gold: state.finances.gold + effect.delta } }
@@ -143,11 +147,40 @@ export function apply(effect: Effect, state: GameState): GameState {
       }
     }
 
+    case 'buyStock': {
+      const unit = Math.max(1, Math.round(commodityBuyPrice(state, priceBook(campaign), effect.type) * effect.priceMultiplier))
+      const units = Math.max(0, Math.min(effect.amount, Math.floor(state.finances.gold / unit)))
+      return withStock(state, effect.type, units, -units * unit)
+    }
+
+    case 'sellStock': {
+      const held = state.finances.commodities[effect.type]
+      const units = Math.min(held, effect.amount ?? held)
+      const unit = Math.round(commodityPrice(state, priceBook(campaign), effect.type) * effect.priceMultiplier)
+      return withStock(state, effect.type, -units, units * unit)
+    }
+
     case 'if':
-      return applyAll(isMet(effect.when, state) ? effect.then : effect.else ?? [], state)
+      return applyAll(isMet(effect.when, state) ? effect.then : effect.else ?? [], state, campaign)
   }
 }
 
-export function applyAll(effects: Effect[], state: GameState): GameState {
-  return effects.reduce((s, effect) => apply(effect, s), state)
+export function applyAll(effects: Effect[], state: GameState, campaign?: PriceBook): GameState {
+  return effects.reduce((s, effect) => apply(effect, s, campaign), state)
+}
+
+function priceBook(campaign: PriceBook | undefined): PriceBook {
+  if (!campaign) throw new Error('buyStock/sellStock need the campaign to price the trade')
+  return campaign
+}
+
+function withStock(state: GameState, commodity: Commodity, unitDelta: number, goldDelta: number): GameState {
+  return {
+    ...state,
+    finances: {
+      ...state.finances,
+      gold: state.finances.gold + goldDelta,
+      commodities: { ...state.finances.commodities, [commodity]: state.finances.commodities[commodity] + unitDelta },
+    },
+  }
 }

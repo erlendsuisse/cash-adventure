@@ -5,6 +5,8 @@ export function isMet(req: Requirement, state: GameState): boolean {
   switch (req.kind) {
     case 'goldAtLeast':
       return state.finances.gold >= req.amount
+    case 'commodityAtLeast':
+      return state.finances.commodities[req.type] >= req.amount
     case 'netIncomeAtLeast':
       return totalMonthlyIncome(state) - state.finances.monthlyExpenses >= req.amount
     case 'statAtLeast':

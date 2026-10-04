@@ -22,5 +22,5 @@ export function newGame(seed: number, campaign: Campaign): GameState {
     character: { equipmentSlots: { headgear: null, clothing: null, accessories: null } },
   }
 
-  return startCard ? applyAll(startCard.onEnter ?? [], state) : state
+  return startCard ? applyAll(startCard.onEnter ?? [], state, campaign) : state
 }

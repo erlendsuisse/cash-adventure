@@ -31,7 +31,7 @@ import { chapterTitleCards } from './cards/chapter-titles'
 import { reputationEventCards } from './cards/reputation-events'
 import { CHAPTER_DECKS } from './chapterDecks'
 import { standingFlagIds, withReputation } from './standings'
-import { consequenceTuning, initial, SECTORS, tuning } from './tuning'
+import { COMMODITY_BASE_PRICE, consequenceTuning, initial, MARKET_REGIMES, SECTORS, tuning } from './tuning'
 
 const allCards: StoryCard[] = [
   ...prologueCards,
@@ -87,6 +87,8 @@ export const campaign: Campaign = Object.freeze({
   marketDayCardId: marketDayCard.id,
   tuning,
   consequenceTuning,
+  commodityBasePrice: COMMODITY_BASE_PRICE,
+  marketRegimes: MARKET_REGIMES,
   // Shown to the player: standing per faction, and heat per consequence path.
   trackedFlags: [...standingFlagIds, ...Object.values(consequenceTuning).map((t) => t.flagId)],
   initial,

@@ -21,6 +21,8 @@ export interface Stats {
 
 export type StatId = keyof Stats
 
+export type Commodity = 'spice' | 'salt' | 'iron'
+
 export interface OwnedAsset {
   id: string
   label: string
@@ -85,6 +87,7 @@ export interface EffectSummary {
   assetsGained: string[]
   assetsLost: string[]
   flagsSet: string[]
+  commodities: Partial<Record<Commodity, number>> // units gained or lost
   trackedFlagDeltas: Record<FlagId, number> // changes to Campaign.trackedFlags (e.g. reputation), for display
 }
 
@@ -117,6 +120,7 @@ export interface GameState {
 
 export type Requirement =
   | { kind: 'goldAtLeast'; amount: number }
+  | { kind: 'commodityAtLeast'; type: Commodity; amount: number } // units held
   | { kind: 'netIncomeAtLeast'; amount: number } // wages + passive income - expenses, per month
   | { kind: 'statAtLeast'; stat: StatId; value: number }
   | { kind: 'flag'; id: FlagId; atLeast?: number; equals?: number }
@@ -150,7 +154,10 @@ export type Effect =
   | { kind: 'narrate'; text: string }
   | { kind: 'end'; status: 'won'; summary: string }
   | { kind: 'if'; when: Requirement; then: Effect[]; else?: Effect[] }
-  | { kind: 'commodity'; type: 'spice' | 'salt' | 'iron'; delta: number }
+  | { kind: 'commodity'; type: Commodity; delta: number }
+  // Trade stock at the current market price times priceMultiplier (e.g. 0.7 = a bargain, 1.5 = a premium buyer).
+  | { kind: 'buyStock'; type: Commodity; amount: number; priceMultiplier: number } // buys as many as you can afford, up to amount
+  | { kind: 'sellStock'; type: Commodity; amount?: number; priceMultiplier: number } // amount omitted = sell everything held
 
 // ---- Content: cards, choices, checks ----
 
@@ -229,8 +236,9 @@ export type Action =
   | { type: 'restart'; seed: number }
   | { type: 'takeLoan'; principal: number; monthlyPayment: number }
   | { type: 'payLoan'; amount: number }
-  | { type: 'sellCommodity'; commodity: 'spice' | 'salt' | 'iron'; amount: number; pricePerUnit: number }
-  | { type: 'buyCommodity'; commodity: 'spice' | 'salt' | 'iron'; amount: number; pricePerUnit: number }
+  // pricePerUnit is ignored: the engine prices trades from the market (kept optional for old saves)
+  | { type: 'sellCommodity'; commodity: Commodity; amount: number; pricePerUnit?: number }
+  | { type: 'buyCommodity'; commodity: Commodity; amount: number; pricePerUnit?: number }
   | { type: 'sellAsset'; id: string; priceMultiplier: number }
 
 export interface Tuning {
@@ -239,6 +247,14 @@ export interface Tuning {
   freedomDaysToTrial: number // consecutive free days before the next Colossus stirs
   daysPerTurn: number // days the clock advances for every card resolved, on top of any authored advanceDays
   paydayInterval: number // days between paydays, which credit (wages + passive income - expenses)
+}
+
+/** A chapter's market: on each market day every sector moves `pull` of the way
+ *  toward its target index, plus a random wobble of +/- volatility. */
+export interface MarketRegime {
+  target: Partial<Record<SectorId, number>>
+  pull: number
+  volatility?: number // defaults to tuning.marketDriftRange
 }
 
 export interface ConsequenceTuning {
@@ -257,6 +273,8 @@ export interface Campaign {
   marketDayCardId: CardId
   tuning: Tuning
   consequenceTuning?: ConsequenceTuning // thresholds for consequence triggers
+  commodityBasePrice: Record<Commodity, number> // gold per unit when the market index is 100
+  marketRegimes?: Partial<Record<ChapterNumber, MarketRegime>> // how each chapter's market moves on market day
   trackedFlags?: FlagId[] // flags the player is shown (reputation, heat): their changes count as visible effects
   initial: {
     stats: Stats

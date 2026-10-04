@@ -17,6 +17,7 @@ import {
   chapter6TraderVentures,
   chapter7TraderVentures,
 } from './cards/trader-ventures'
+import { marketTrades } from './cards/market-trades'
 import { workOpportunities } from './cards/work-opportunities'
 
 // The one place chapter content is registered. Each deck's cards get `chapter`
@@ -38,6 +39,7 @@ export const CHAPTER_DECKS: Partial<Record<ChapterNumber, StoryCard[]>> = {
     ...chapter2RecoveryCards,
     ...chapter2TraderVentures,
     ...workOpportunities(2),
+    ...marketTrades(2),
   ]),
   3: defineChapterDeck(3, [
     ...chapter3IntroCards,
@@ -51,9 +53,10 @@ export const CHAPTER_DECKS: Partial<Record<ChapterNumber, StoryCard[]>> = {
     ...chapter3RecoveryCards,
     ...chapter3TraderVentures,
     ...workOpportunities(3),
+    ...marketTrades(3),
   ]),
-  4: defineChapterDeck(4, [...chapter4IntroCards, ...chapter4CommodityCards, ...chapter4MarketCards, ...chapter4DangerCards, ...chapter4TraderVentures, ...workOpportunities(4)]),
-  5: defineChapterDeck(5, [...chapter5IntroCards, ...chapter5CommodityCards, ...chapter5MarketCards, ...chapter5DangerCards, ...chapter5TraderVentures, ...workOpportunities(5)]),
-  6: defineChapterDeck(6, [...chapter6CommodityCards, ...chapter6MarketCards, ...chapter6DangerCards, ...chapter6TraderVentures, ...workOpportunities(6)]),
-  7: defineChapterDeck(7, [...chapter7CommodityCards, ...chapter7MarketCards, ...chapter7DangerCards, ...chapter7TraderVentures, ...workOpportunities(7)]),
+  4: defineChapterDeck(4, [...chapter4IntroCards, ...chapter4CommodityCards, ...chapter4MarketCards, ...chapter4DangerCards, ...chapter4TraderVentures, ...workOpportunities(4), ...marketTrades(4)]),
+  5: defineChapterDeck(5, [...chapter5IntroCards, ...chapter5CommodityCards, ...chapter5MarketCards, ...chapter5DangerCards, ...chapter5TraderVentures, ...workOpportunities(5), ...marketTrades(5)]),
+  6: defineChapterDeck(6, [...chapter6CommodityCards, ...chapter6MarketCards, ...chapter6DangerCards, ...chapter6TraderVentures, ...workOpportunities(6), ...marketTrades(6)]),
+  7: defineChapterDeck(7, [...chapter7CommodityCards, ...chapter7MarketCards, ...chapter7DangerCards, ...chapter7TraderVentures, ...workOpportunities(7), ...marketTrades(7)]),
 }

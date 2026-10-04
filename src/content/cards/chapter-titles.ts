@@ -9,7 +9,8 @@ export const chapterTitleCards: StoryCard[] = ([2, 3, 4, 5, 6, 7] as ChapterNumb
   return {
     id: chapterTitleCardId(n),
     title: `Chapter ${chapter.numeral}: ${chapter.name}`,
-    body: [chapter.theme, chapter.hint],
+    chapter: n,
+    body: [chapter.theme, chapter.hint, `Market: ${chapter.market}`],
     choices: [{ id: 'begin_chapter', label: `Begin Chapter ${chapter.numeral}` }],
   }
 })

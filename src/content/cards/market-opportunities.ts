@@ -14,13 +14,9 @@ export const marketOpportunityCards: StoryCard[] = [
     choices: [
       {
         id: 'sell_spice_now',
-        label: 'Sell all spice now at peak prices',
+        label: 'Sell all your spice now at peak prices (25% above market)',
         effects: [
-          {
-            kind: 'if',
-            when: { kind: 'flag', id: 'has_spice', atLeast: 1 },
-            then: [{ kind: 'marketShift', sector: 'spice', delta: 20 }],
-          },
+          { kind: 'sellStock', type: 'spice', priceMultiplier: 1.25 },
           { kind: 'narrate', text: 'You dump your entire inventory at record prices. Profit!' },
         ],
       },
@@ -233,13 +229,11 @@ export const marketOpportunityCards: StoryCard[] = [
     choices: [
       {
         id: 'follow_tip',
-        label: 'Follow the advice: sell spice, buy iron',
+        label: 'Follow the advice: sell your spice, buy up to 10 iron',
         effects: [
-          {
-            kind: 'if',
-            when: { kind: 'flag', id: 'has_spice', atLeast: 1 },
-            then: [{ kind: 'marketShift', sector: 'spice', delta: -30 }],
-          },
+          { kind: 'sellStock', type: 'spice', priceMultiplier: 1 },
+          { kind: 'buyStock', type: 'iron', amount: 10, priceMultiplier: 1 },
+          { kind: 'marketShift', sector: 'spice', delta: -30 },
           { kind: 'marketShift', sector: 'iron', delta: 20 },
           { kind: 'narrate', text: 'You follow the tip. Moments later, the markets shift exactly as predicted.' },
         ],

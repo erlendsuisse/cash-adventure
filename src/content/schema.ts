@@ -20,6 +20,7 @@ const requirement: z.ZodType<unknown> = z.lazy(() =>
   z.discriminatedUnion('kind', [
     z.object({ kind: z.literal('goldAtLeast'), amount: z.number() }),
     z.object({ kind: z.literal('netIncomeAtLeast'), amount: z.number() }),
+    z.object({ kind: z.literal('commodityAtLeast'), type: commodity, amount: z.number() }),
     z.object({ kind: z.literal('statAtLeast'), stat: statId, value: z.number() }),
     z.object({ kind: z.literal('flag'), id: z.string(), atLeast: z.number().optional(), equals: z.number().optional() }),
     z.object({ kind: z.literal('ownsAsset'), id: z.string() }),
@@ -64,6 +65,8 @@ const effect: z.ZodType<unknown> = z.lazy(() =>
     z.object({ kind: z.literal('end'), status: z.literal('won'), summary: z.string() }),
     z.object({ kind: z.literal('if'), when: requirement, then: z.array(effect), else: z.array(effect).optional() }),
     z.object({ kind: z.literal('commodity'), type: commodity, delta: z.number() }),
+    z.object({ kind: z.literal('buyStock'), type: commodity, amount: z.number(), priceMultiplier: z.number() }),
+    z.object({ kind: z.literal('sellStock'), type: commodity, amount: z.number().optional(), priceMultiplier: z.number() }),
   ]),
 )
 

@@ -3,8 +3,9 @@ import { drawCard, recordDraw } from './director'
 import { tick } from './economy'
 import { applyAll } from './effects'
 import { newGame } from './init'
+import { commodityBuyPrice, commodityPrice } from './selectors'
 import { isMet } from './requirements'
-import type { Action, Campaign, CardId, EffectSummary, GameState } from './types'
+import type { Action, Campaign, CardId, Commodity, EffectSummary, GameState } from './types'
 
 export function reduce(state: GameState, action: Action, campaign: Campaign): GameState {
   switch (action.type) {
@@ -49,47 +50,34 @@ export function reduce(state: GameState, action: Action, campaign: Campaign): Ga
       }
     }
     case 'sellCommodity': {
-      const totalValue = action.amount * action.pricePerUnit
-      const commodities = { ...state.finances.commodities }
-      commodities[action.commodity] -= action.amount
-
+      // Priced by the engine from the market - the client's price is never trusted.
+      const amount = Math.min(Math.max(0, Math.floor(action.amount)), state.finances.commodities[action.commodity])
+      if (amount === 0) return state
+      const price = commodityPrice(state, campaign, action.commodity)
+      const totalValue = amount * price
       return {
         ...state,
         finances: {
           ...state.finances,
           gold: state.finances.gold + totalValue,
-          commodities,
+          commodities: { ...state.finances.commodities, [action.commodity]: state.finances.commodities[action.commodity] - amount },
         },
-        log: [
-          ...state.log,
-          {
-            day: state.clock.day,
-            text: `Sold ${action.amount} units of ${action.commodity} for ${totalValue}g (${action.pricePerUnit}g/unit)`,
-          },
-        ],
+        log: [...state.log, { day: state.clock.day, text: `Sold ${amount} ${action.commodity} for ${totalValue}g (${price}g each)` }],
       }
     }
     case 'buyCommodity': {
-      const totalCost = action.amount * action.pricePerUnit
-      if (totalCost > state.finances.gold) return state
-
-      const commodities = { ...state.finances.commodities }
-      commodities[action.commodity] += action.amount
-
+      const amount = Math.max(0, Math.floor(action.amount))
+      const price = commodityBuyPrice(state, campaign, action.commodity)
+      const totalCost = amount * price
+      if (amount === 0 || totalCost > state.finances.gold) return state
       return {
         ...state,
         finances: {
           ...state.finances,
           gold: state.finances.gold - totalCost,
-          commodities,
+          commodities: { ...state.finances.commodities, [action.commodity]: state.finances.commodities[action.commodity] + amount },
         },
-        log: [
-          ...state.log,
-          {
-            day: state.clock.day,
-            text: `Bought ${action.amount} units of ${action.commodity} for ${totalCost}g (${action.pricePerUnit}g/unit)`,
-          },
-        ],
+        log: [...state.log, { day: state.clock.day, text: `Bought ${amount} ${action.commodity} for ${totalCost}g (${price}g each)` }],
       }
     }
     case 'sellAsset': {
@@ -138,6 +126,12 @@ function calculateEffectSummary(before: GameState, after: GameState, campaign: C
     .filter(([id, value]) => (before.flags[id] ?? 0) !== value && value > 0)
     .map(([id]) => id)
 
+  const commodities: Partial<Record<Commodity, number>> = {}
+  for (const c of ['spice', 'salt', 'iron'] as const) {
+    const delta = after.finances.commodities[c] - before.finances.commodities[c]
+    if (delta !== 0) commodities[c] = delta
+  }
+
   const trackedFlagDeltas: Record<string, number> = {}
   for (const id of campaign.trackedFlags ?? []) {
     const delta = (after.flags[id] ?? 0) - (before.flags[id] ?? 0)
@@ -153,6 +147,7 @@ function calculateEffectSummary(before: GameState, after: GameState, campaign: C
     assetsGained,
     assetsLost,
     flagsSet,
+    commodities,
     trackedFlagDeltas,
   }
 }
@@ -166,6 +161,7 @@ function hasSignificantEffects(summary: EffectSummary): boolean {
     summary.debt !== 0 ||
     summary.assetsGained.length > 0 ||
     summary.assetsLost.length > 0 ||
+    Object.keys(summary.commodities).length > 0 ||
     Object.keys(summary.trackedFlagDeltas).length > 0
   )
 }
@@ -188,7 +184,7 @@ function applyChoose(state: GameState, choiceId: string, campaign: Campaign): Ga
     working = { ...working, rng, log: [...working.log, { day: working.clock.day, text: formatCheck(result) }] }
     if (outcome.text) working = { ...working, log: [...working.log, { day: working.clock.day, text: outcome.text }] }
     const beforeOutcome = working
-    working = applyAll(outcome.effects ?? [], working)
+    working = applyAll(outcome.effects ?? [], working, campaign)
     target = outcome.goto
 
     // If check outcome has no goto, show outcome on card and wait for advance
@@ -198,7 +194,7 @@ function applyChoose(state: GameState, choiceId: string, campaign: Campaign): Ga
     }
   } else {
     const before = working
-    working = applyAll(choice.effects ?? [], working)
+    working = applyAll(choice.effects ?? [], working, campaign)
     target = choice.goto
 
     // If regular choice has effects, show a summary before proceeding
@@ -255,6 +251,6 @@ function enterCard(state: GameState, cardId: CardId, campaign: Campaign): GameSt
     log: [...state.log, { day: state.clock.day, text: card?.title ? `-- ${card.title} --` : `-- ${cardId} --` }],
     pendingOutcome: undefined, // Clear pending outcome when entering new card
   }
-  if (card) s = applyAll(card.onEnter ?? [], s)
+  if (card) s = applyAll(card.onEnter ?? [], s, campaign)
   return s
 }

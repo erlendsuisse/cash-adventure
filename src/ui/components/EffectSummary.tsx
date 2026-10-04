@@ -38,6 +38,14 @@ export function EffectSummary({ summary }: { summary: EffectSummary }) {
             </span>
           </div>
         )}
+        {Object.entries(summary.commodities ?? {}).map(([commodity, delta]) => (
+          <div key={commodity} className={styles.item}>
+            <span className={styles.label}>{commodity[0]!.toUpperCase() + commodity.slice(1)}</span>
+            <span className={delta > 0 ? styles.positive : styles.negative}>
+              {delta > 0 ? '+' : ''}{delta} units
+            </span>
+          </div>
+        ))}
         {Object.entries(summary.trackedFlagDeltas ?? {}).map(([flagId, delta]) => {
           // Standing going up is good; heat going up is not.
           const good = standingFlagIds.includes(flagId) ? delta > 0 : delta < 0

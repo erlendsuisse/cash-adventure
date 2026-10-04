@@ -124,118 +124,64 @@ export const commodityTradingCards: StoryCard[] = [
   {
     id: 'sell_commodities_boom',
     title: 'Market Surge',
-    body: [
-      'News spreads fast: a major shipbuilder is offering premium prices for iron and salt. Merchants rush to sell. This is your chance.',
-    ],
     weight: 13,
-    requires: [
-      {
-        kind: 'anyOf',
-        of: [
-          { kind: 'flag', id: 'own_salt', atLeast: 1 },
-          { kind: 'flag', id: 'own_spice', atLeast: 1 },
-          { kind: 'flag', id: 'own_iron', atLeast: 1 },
-        ],
-      },
-    ],
+    requires: [{ kind: 'anyOf', of: [{ kind: 'commodityAtLeast', type: 'iron', amount: 1 }, { kind: 'commodityAtLeast', type: 'salt', amount: 1 }] }],
+    body: ['News spreads fast: a major shipbuilder is offering premium prices for iron and salt. Merchants rush to sell. This is your chance.'],
     choices: [
       {
         id: 'sell_all_commodities',
-        label: 'Sell everything at market price',
+        label: 'Sell all your iron and salt to the shipbuilder (30% above market)',
         effects: [
-          {
-            kind: 'if',
-            when: { kind: 'flag', id: 'has_salt', atLeast: 1 },
-            then: [
-              { kind: 'gold', delta: 40 }, // 10 units * 4g each
-              { kind: 'commodity', type: 'salt', delta: -10 },
-            ],
-          },
-          {
-            kind: 'if',
-            when: { kind: 'flag', id: 'has_spice', atLeast: 1 },
-            then: [
-              { kind: 'gold', delta: 60 }, // 8 units * 7.5g each
-              { kind: 'commodity', type: 'spice', delta: -8 },
-            ],
-          },
-          {
-            kind: 'if',
-            when: { kind: 'flag', id: 'has_iron', atLeast: 1 },
-            then: [
-              { kind: 'gold', delta: 45 }, // 7 units * 6.4g each
-              { kind: 'commodity', type: 'iron', delta: -7 },
-            ],
-          },
-          { kind: 'narrate', text: 'You unload your inventory at peak prices. The profits are substantial.' },
+          { kind: 'sellStock', type: 'iron', priceMultiplier: 1.3 },
+          { kind: 'sellStock', type: 'salt', priceMultiplier: 1.3 },
+          { kind: 'narrate', text: 'The shipbuilder\'s clerk counts out your coin. A good day to be holding stock.' },
         ],
       },
-      {
-        id: 'hold_commodities',
-        label: 'Hold for better prices',
-        effects: [
-          {
-            kind: 'narrate',
-            text: 'You decide to wait. The market might go even higher.',
-          },
-        ],
-      },
+      { id: 'hold_commodities', label: 'Hold for better prices', effects: [{ kind: 'narrate', text: 'You keep your stock. Prices may climb further - or not.' }] },
     ],
   },
 
   {
     id: 'trader_bulk_purchase',
     title: 'A Bulk Buyer Arrives',
-    body: [
-      'A wealthy merchant from the capital is buying bulk quantities of commodities. "I\'ll pay fair prices for anything you have," he says.',
-    ],
     weight: 10,
     requires: [
       {
         kind: 'anyOf',
         of: [
-          { kind: 'flag', id: 'has_salt', atLeast: 1 },
-          { kind: 'flag', id: 'has_spice', atLeast: 1 },
-          { kind: 'flag', id: 'has_iron', atLeast: 1 },
+          { kind: 'commodityAtLeast', type: 'salt', amount: 1 },
+          { kind: 'commodityAtLeast', type: 'spice', amount: 1 },
+          { kind: 'commodityAtLeast', type: 'iron', amount: 1 },
         ],
       },
     ],
+    body: ['A wealthy merchant from the capital is buying bulk quantities of commodities. "I\'ll pay fair prices for anything you have," he says.'],
     choices: [
       {
         id: 'sell_to_merchant',
-        label: 'Sell your commodities',
+        label: 'Sell all your stock (10% above market)',
         effects: [
-          { kind: 'gold', delta: 120 }, // Simplified: average of all commodities
-          { kind: 'commodity', type: 'salt', delta: -999 }, // Sell all
-          { kind: 'commodity', type: 'spice', delta: -999 },
-          { kind: 'commodity', type: 'iron', delta: -999 },
-          { kind: 'narrate', text: 'The merchant pays well for your entire inventory. A profitable transaction.' },
+          { kind: 'sellStock', type: 'salt', priceMultiplier: 1.1 },
+          { kind: 'sellStock', type: 'spice', priceMultiplier: 1.1 },
+          { kind: 'sellStock', type: 'iron', priceMultiplier: 1.1 },
+          { kind: 'narrate', text: 'The buyer takes everything. Quick, clean money.' },
         ],
       },
       {
         id: 'negotiate_higher',
-        label: 'Demand higher prices',
+        label: 'Demand higher prices (Charm check, DC 13)',
         check: {
           stat: 'charm',
-          dc: 14,
+          dc: 13,
           success: {
-            text: 'Your negotiation convinces him. He raises his offer significantly.',
+            text: 'The buyer grumbles, then pays 40% above market for the lot.',
             effects: [
-              { kind: 'gold', delta: 160 },
-              { kind: 'commodity', type: 'salt', delta: -999 },
-              { kind: 'commodity', type: 'spice', delta: -999 },
-              { kind: 'commodity', type: 'iron', delta: -999 },
+              { kind: 'sellStock', type: 'salt', priceMultiplier: 1.4 },
+              { kind: 'sellStock', type: 'spice', priceMultiplier: 1.4 },
+              { kind: 'sellStock', type: 'iron', priceMultiplier: 1.4 },
             ],
           },
-          failure: {
-            text: 'He takes offense at your greed and walks away.',
-            effects: [
-              {
-                kind: 'narrate',
-                text: 'The merchant leaves. You\'ve lost the opportunity.',
-              },
-            ],
-          },
+          failure: { text: 'The buyer walks out. You keep your stock for another day.' },
         },
       },
     ],

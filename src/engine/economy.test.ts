@@ -12,6 +12,7 @@ function makeCampaign(overrides: Partial<Campaign> = {}): Campaign {
     sectors: ['salt', 'spice', 'iron'],
     colossusCardIds: ['colossus1'],
     marketDayCardId: 'market_day',
+    commodityBasePrice: { spice: 15, salt: 8, iron: 12 },
     tuning: { marketDayInterval: 14, marketDriftRange: 4, freedomDaysToTrial: 5, daysPerTurn: 0, paydayInterval: 999 },
     initial: { stats: { grit: 2, savvy: 2, charm: 2, nerve: 2 }, finances: { gold: 0, wages: 0, monthlyExpenses: 0, debt: 0, assets: [], commodities: { spice: 0, salt: 0, iron: 0 } }, market: { salt: 100, spice: 100, iron: 100 } },
     ...overrides,

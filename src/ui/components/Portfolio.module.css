@@ -255,3 +255,11 @@
   background: linear-gradient(to bottom, #d45555, #b84040);
   box-shadow: 0 0 8px rgba(217, 83, 79, 0.4);
 }
+
+.marketNote {
+  margin: 0 0 6px;
+  font-size: 11px;
+  line-height: 1.4;
+  font-style: italic;
+  color: #c9b79a;
+}

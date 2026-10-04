@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import { campaign } from '../../content/campaign'
+import { CHAPTERS } from '../../content/chapters'
+import { commodityBuyPrice, commodityPrice, currentChapter } from '../../engine/selectors'
 import type { GameState } from '../../engine/types'
 import { useGame } from '../GameProvider'
 import styles from './Portfolio.module.css'
@@ -10,20 +13,17 @@ export function Portfolio({ state }: { state: GameState }) {
   const [buyAmounts, setBuyAmounts] = useState<Record<'spice' | 'salt' | 'iron', number>>({ spice: 0, salt: 0, iron: 0 })
   const [sellAssetId, setSellAssetId] = useState<string | null>(null)
 
-  const getMarketPrice = (commodity: 'spice' | 'salt' | 'iron'): number => {
-    const basePrice: Record<'spice' | 'salt' | 'iron', number> = { spice: 15, salt: 8, iron: 12 }
-    const sectorPrice = state.market[commodity] ?? 100
-    return Math.round(((basePrice[commodity] ?? 0) * sectorPrice) / 100)
-  }
+  // The engine prices every trade; these just show the same numbers.
+  const getMarketPrice = (commodity: 'spice' | 'salt' | 'iron'): number => commodityPrice(state, campaign, commodity)
+  const getBuyPrice = (commodity: 'spice' | 'salt' | 'iron'): number => commodityBuyPrice(state, campaign, commodity)
 
-  const getBuyPrice = (commodity: 'spice' | 'salt' | 'iron'): number => {
-    return Math.round(getMarketPrice(commodity) * 1.1)
-  }
-
+  // Where this chapter's market is pushing the price (MARKET_REGIMES) - the hint to buy or sell.
+  const regime = campaign.marketRegimes?.[currentChapter(state)]
   const getPriceTrend = (commodity: 'spice' | 'salt' | 'iron'): 'up' | 'down' | 'stable' => {
-    const sectorPrice = state.market[commodity] ?? 100
-    if (sectorPrice > 105) return 'up'
-    if (sectorPrice < 95) return 'down'
+    const index = state.market[commodity] ?? 100
+    const target = regime?.target[commodity] ?? index
+    if (target > index + 5) return 'up'
+    if (target < index - 5) return 'down'
     return 'stable'
   }
 
@@ -66,10 +66,11 @@ export function Portfolio({ state }: { state: GameState }) {
         {/* Market Prices Header */}
         <div className={styles.section}>
           <h4 className={styles.sectionTitle}>Market Prices</h4>
+          <p className={styles.marketNote} title="Arrows show where this chapter's market is heading">{CHAPTERS[currentChapter(state)].market}</p>
           <div className={styles.pricesCompact}>
             {(['spice', 'salt', 'iron'] as const).map((commodity) => {
               const trend = getPriceTrend(commodity)
-              const trendIcon = trend === 'up' ? '📈' : trend === 'down' ? '📉' : '→'
+              const trendIcon = trend === 'up' ? '▲' : trend === 'down' ? '▼' : '•'
               return (
                 <div key={commodity} className={styles.priceRow}>
                   <span className={styles.commodityName}>

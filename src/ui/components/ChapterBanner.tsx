@@ -38,6 +38,7 @@ export function ChapterBanner({ state }: { state: GameState }) {
         <div className={styles.details}>
           <p>{chapter.theme}</p>
           <p className={styles.hint}>{chapter.hint}</p>
+          <p className={styles.market}>Market: {chapter.market}</p>
         </div>
       )}
     </div>

@@ -1,6 +1,6 @@
 import { checkConsequenceTrigger, checkTrialTrigger } from './colossi'
 import { rollDie } from './rng'
-import { isFree, totalMonthlyIncome } from './selectors'
+import { currentChapter, isFree, totalMonthlyIncome } from './selectors'
 import type { Campaign, GameState } from './types'
 
 /** Advances the systemic clock by `daysAdvanced` days (already applied to
@@ -43,15 +43,23 @@ function tickOneDay(state: GameState, day: number, campaign: Campaign): GameStat
   return checkTrialTrigger(s, campaign)
 }
 
+/** Market day: each sector wobbles randomly and, if the current chapter has a
+ *  market regime, is pulled part of the way toward that chapter's target -
+ *  so war drives iron up over a few market days rather than overnight, and
+ *  prices keep moving after the chapter that set them. */
 function driftMarket(state: GameState, campaign: Campaign): GameState {
   let rng = state.rng
   const market = { ...state.market }
-  const spread = campaign.tuning.marketDriftRange * 2 + 1
+  const regime = campaign.marketRegimes?.[currentChapter(state)]
+  const range = regime?.volatility ?? campaign.tuning.marketDriftRange
+  const spread = range * 2 + 1
   for (const sector of campaign.sectors) {
     const rolled = rollDie(rng, spread)
     rng = rolled.rng
-    const delta = rolled.roll - (campaign.tuning.marketDriftRange + 1)
-    market[sector] = Math.max(0, (market[sector] ?? 100) + delta)
+    const current = market[sector] ?? 100
+    const target = regime?.target[sector]
+    const pull = target === undefined ? 0 : Math.round((target - current) * regime!.pull)
+    market[sector] = Math.max(10, current + pull + rolled.roll - (range + 1))
   }
   return { ...state, rng, market }
 }

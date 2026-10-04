@@ -1,4 +1,4 @@
-import type { ChapterNumber, GameState } from './types'
+import type { Campaign, ChapterNumber, Commodity, GameState } from './types'
 
 // Derived values are computed on read, never stored on GameState. Storing them
 // would mean every migration has to keep them in sync with the fields they're
@@ -27,4 +27,14 @@ export function netWorth(state: GameState): number {
 /** Chapter N opens once N-1 Colossi are defeated; the seventh is the last. */
 export function currentChapter(state: GameState): ChapterNumber {
   return Math.min(state.progress.colossiDefeated + 1, 7) as ChapterNumber
+}
+
+/** What the market pays per unit right now. */
+export function commodityPrice(state: GameState, campaign: Pick<Campaign, 'commodityBasePrice'>, commodity: Commodity): number {
+  return Math.max(1, Math.round((campaign.commodityBasePrice[commodity] * (state.market[commodity] ?? 100)) / 100))
+}
+
+/** What the market charges per unit right now (sellers keep a 10% margin). */
+export function commodityBuyPrice(state: GameState, campaign: Pick<Campaign, 'commodityBasePrice'>, commodity: Commodity): number {
+  return Math.round(commodityPrice(state, campaign, commodity) * 1.1)
 }
