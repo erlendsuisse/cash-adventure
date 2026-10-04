@@ -19,6 +19,7 @@ const assetSector = z.enum([
 const requirement: z.ZodType<unknown> = z.lazy(() =>
   z.discriminatedUnion('kind', [
     z.object({ kind: z.literal('goldAtLeast'), amount: z.number() }),
+    z.object({ kind: z.literal('netIncomeAtLeast'), amount: z.number() }),
     z.object({ kind: z.literal('statAtLeast'), stat: statId, value: z.number() }),
     z.object({ kind: z.literal('flag'), id: z.string(), atLeast: z.number().optional(), equals: z.number().optional() }),
     z.object({ kind: z.literal('ownsAsset'), id: z.string() }),

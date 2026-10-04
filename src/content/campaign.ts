@@ -27,6 +27,7 @@ import { commodityTradingCards } from './cards/commodity-trading'
 import { opportunityDealCards } from './cards/opportunity-deals'
 import { dangerCards } from './cards/dangers-and-penalties'
 import { marketOpportunityCards } from './cards/market-opportunities'
+import { chapterTitleCards } from './cards/chapter-titles'
 import { reputationEventCards } from './cards/reputation-events'
 import { CHAPTER_DECKS } from './chapterDecks'
 import { standingFlagIds, withReputation } from './standings'
@@ -42,6 +43,7 @@ const allCards: StoryCard[] = [
   ...dangerCards,
   ...Object.values(CHAPTER_DECKS).flat(),
   ...reputationEventCards,
+  ...chapterTitleCards,
   ...adventureDeckCards,
   ...storyEventCards,
   ...statTrainingCards,

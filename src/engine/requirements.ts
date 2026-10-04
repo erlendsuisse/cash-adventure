@@ -1,10 +1,12 @@
-import { isFree } from './selectors'
+import { isFree, totalMonthlyIncome } from './selectors'
 import type { GameState, Requirement } from './types'
 
 export function isMet(req: Requirement, state: GameState): boolean {
   switch (req.kind) {
     case 'goldAtLeast':
       return state.finances.gold >= req.amount
+    case 'netIncomeAtLeast':
+      return totalMonthlyIncome(state) - state.finances.monthlyExpenses >= req.amount
     case 'statAtLeast':
       return state.stats[req.stat] >= req.value
     case 'flag': {

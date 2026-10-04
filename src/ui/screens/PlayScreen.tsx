@@ -3,6 +3,7 @@ import { campaign } from '../../content/campaign'
 import { Background } from '../components/Background/Background'
 import { getCardArtworkPath } from '../artwork'
 import { EncounterCard } from '../components/EncounterCard'
+import { ChapterBanner } from '../components/ChapterBanner'
 import { LedgerBar } from '../components/LedgerBar'
 import { StatScroll } from '../components/StatScroll'
 import { Portfolio } from '../components/Portfolio'
@@ -33,6 +34,9 @@ export function PlayScreen() {
 
       {/* Minimal top bar with critical info only */}
       <LedgerBar state={state} />
+
+      {/* Which chapter, what it's about, and what to do right now */}
+      <ChapterBanner state={state} />
 
       {/* Main layout: Left sidebar + Card area + Right sidebar */}
       <div className={styles.mainLayout}>

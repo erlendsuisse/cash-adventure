@@ -1,4 +1,5 @@
 import type { ChapterNumber, ConsequencePath, Effect, OwnedAsset, Requirement, StoryCard } from '../../engine/types'
+import { chapterTitleCardId } from '../chapters'
 import { CHAPTER_DRAW_WEIGHT, consequenceTuning, LIVING_COST_RISE, STATION_WAGE_SHARE } from '../tuning'
 
 // Authoring helpers for the card shapes that repeat across chapter decks.
@@ -21,7 +22,8 @@ export function defineChapterDeck(chapter: ChapterNumber, cards: StoryCard[]): S
 /** For a Colossus outcome, as the next chapter opens:
  *  - your station rises: it costs more to keep and pays somewhat better, so
  *    freedom needs more passive income but the rebuild stays affordable;
- *  - the Colossus has judged you, so heat on every consequence path clears. */
+ *  - the Colossus has judged you, so heat on every consequence path clears;
+ *  - the new chapter's title card plays, saying what the chapter is about. */
 export function enterChapter(chapter: Exclude<ChapterNumber, 1>): Effect[] {
   const expense = LIVING_COST_RISE[chapter]
   const wages = Math.round(expense * STATION_WAGE_SHARE)
@@ -29,6 +31,8 @@ export function enterChapter(chapter: Exclude<ChapterNumber, 1>): Effect[] {
     { kind: 'expense', delta: expense },
     { kind: 'wages', delta: wages },
     ...Object.values(consequenceTuning).map(({ flagId }): Effect => ({ kind: 'flag', id: flagId, set: 0 })),
+    // Show the chapter's title card next (before the Colossus aftermath card queued after this).
+    { kind: 'queueCard', card: chapterTitleCardId(chapter) },
     { kind: 'narrate', text: `Your station has risen: it costs +${expense}g/month more to keep, and pays +${wages}g/month more in wages.` },
   ]
 }

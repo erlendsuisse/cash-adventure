@@ -41,6 +41,12 @@ describe('isMet', () => {
     expect(isMet({ kind: 'isFree' }, broke)).toBe(false)
   })
 
+  it('netIncomeAtLeast compares wages plus passive income against expenses', () => {
+    const finances = { gold: 0, wages: 30, monthlyExpenses: 50, debt: 0, assets: [{ id: 'a', label: 'A', cost: 1, monthlyCashflow: 10, sector: 'salt' }], commodities: { spice: 0, salt: 0, iron: 0 } }
+    expect(isMet({ kind: 'netIncomeAtLeast', amount: 0 }, makeState({ finances }))).toBe(false) // 40 in, 50 out
+    expect(isMet({ kind: 'netIncomeAtLeast', amount: -10 }, makeState({ finances }))).toBe(true)
+  })
+
   it('colossiAtLeast', () => {
     const state = makeState({ progress: { colossiDefeated: 2, boons: [], freedomDays: 0, tier: 1, storyPhase: 'early_game', currentPath: undefined } })
     expect(isMet({ kind: 'colossiAtLeast', count: 2 }, state)).toBe(true)

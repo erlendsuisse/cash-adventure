@@ -117,6 +117,7 @@ export interface GameState {
 
 export type Requirement =
   | { kind: 'goldAtLeast'; amount: number }
+  | { kind: 'netIncomeAtLeast'; amount: number } // wages + passive income - expenses, per month
   | { kind: 'statAtLeast'; stat: StatId; value: number }
   | { kind: 'flag'; id: FlagId; atLeast?: number; equals?: number }
   | { kind: 'ownsAsset'; id: string }

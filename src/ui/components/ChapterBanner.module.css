@@ -1,0 +1,73 @@
+.banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  padding: 8px 20px;
+  background: rgba(43, 32, 22, 0.82);
+  border-bottom: 1px solid rgba(201, 189, 152, 0.4);
+  color: #e8d4b8;
+  flex-shrink: 0;
+}
+
+.heading {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.chapter {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #c8922f;
+  font-weight: 700;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffd700;
+}
+
+.toggle {
+  font-size: 11px;
+  color: #c9b79a;
+}
+
+.objective {
+  font-size: 13px;
+  flex: 1 1 320px;
+}
+
+.warn {
+  color: #ff9f7a;
+}
+
+.goal {
+  color: #e8d4b8;
+}
+
+.good {
+  color: #90ee90;
+}
+
+.details {
+  flex-basis: 100%;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.details p {
+  margin: 2px 0;
+}
+
+.hint {
+  color: #ffd700;
+}
