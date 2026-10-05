@@ -66,8 +66,15 @@ export function PlayScreen() {
   // Point new players at the Guild Hall when there's something they can afford
   const nudge = useGuildNudge(state, tab, touring || creatingHero || payday !== null)
 
-  // Background music by chapter, if the player has it on
-  useBackgroundMusic(state, settings.music)
+  // Background music by chapter, if the player has it on. It waits until
+  // character creation and the tour are over, so the player has met ⚙️ (where
+  // music can be turned off) before any plays.
+  // (Replaying the tour later from ⚙️ doesn't stop it.)
+  const introDone = useRef(false)
+  const tourStarting = !!heroName && !hadHero.current // the hero was just created; the tour opens next
+  if (!creatingHero && !touring && !tourStarting) introDone.current = true
+  if (creatingHero) introDone.current = false // a new game: a new intro
+  useBackgroundMusic(state, settings.music && introDone.current)
 
   const card = campaign.cards[state.currentCardId]
   const mood = getCharacterMood(state)

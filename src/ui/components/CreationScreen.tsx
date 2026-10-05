@@ -109,16 +109,27 @@ export function CreationScreen({ state, campaign, dispatch }: { state: GameState
                     <span className={styles.portrait}>{portrait ? <img src={portrait} alt="" /> : <Icon size={34} strokeWidth={1.8} />}</span>
                     <span className={styles.className}>{c.name}</span>
                     <span className={styles.cousin}>like a {c.cousin}</span>
-                    <span className={styles.tagline}>{c.tagline}</span>
-                    <span className={styles.ability}>
-                      <strong>{c.ability.name}:</strong> {c.ability.text}
-                    </span>
-                    <span className={styles.statTags}>
-                      Best at <strong>{STAT_INFO[c.mainStat].label}</strong> and <strong>{STAT_INFO[c.secondStat].label}</strong>
-                    </span>
                   </button>
                 )
               })}
+            </div>
+            {/* The chosen hero, up close (one panel instead of six long cards, so nothing scrolls) */}
+            <div className={styles.classDetail} aria-live="polite">
+              {heroClass ? (
+                <>
+                  <p className={styles.detailTagline}>
+                    <strong>{heroClass.name}:</strong> {heroClass.tagline}
+                  </p>
+                  <p className={styles.ability}>
+                    <strong>{heroClass.ability.name}:</strong> {heroClass.ability.text}
+                  </p>
+                  <p className={styles.statTags}>
+                    Best at <strong>{STAT_INFO[heroClass.mainStat].label}</strong> and <strong>{STAT_INFO[heroClass.secondStat].label}</strong>
+                  </p>
+                </>
+              ) : (
+                <p className={styles.detailHint}>Tap a hero to meet them.</p>
+              )}
             </div>
             <div className={styles.nav}>
               <span />

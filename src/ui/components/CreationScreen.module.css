@@ -66,11 +66,11 @@
   text-align: center;
 }
 
-/* Class cards */
+/* Class tiles: just portrait and name; the chosen one is described below */
 .classGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
 }
 
 .classCard,
@@ -79,7 +79,7 @@
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  padding: 16px 14px;
+  padding: 14px 8px;
   text-align: center;
   color: var(--paper-ink);
   background: rgba(255, 249, 232, 0.72);
@@ -124,13 +124,14 @@
 
 .className {
   font-family: 'Cinzel', Georgia, serif;
-  font-size: 19px;
+  font-size: 17px;
+  line-height: 1.15;
   font-weight: 700;
   color: var(--paper-heading);
 }
 
 .cousin {
-  margin-top: -6px;
+  margin-top: -4px;
   font-size: 13px;
   font-style: italic;
   color: #8a6a3e;
@@ -150,8 +151,38 @@
 }
 
 .statTags {
-  font-size: 13px;
+  font-size: 14px;
   color: #6e4316;
+}
+
+/* The chosen hero, described */
+.classDetail {
+  min-height: 118px;
+  max-width: 720px;
+  margin: 14px auto 0;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  background: rgba(255, 249, 232, 0.72);
+  border: 2px dashed #c9a86d;
+  border-radius: 12px;
+}
+
+.classDetail p {
+  margin: 0;
+}
+
+.detailTagline {
+  font-size: 17px;
+}
+
+.detailHint {
+  font-size: 17px;
+  font-style: italic;
+  color: #8a6a3e;
 }
 
 /* Backgrounds */
@@ -346,41 +377,182 @@
 
 @media (max-width: 900px) {
   .classGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
+/* Phones: everything a little smaller so each step fits on one screen */
 @media (max-width: 600px) {
-  .classGrid,
-  .backgroundList {
-    grid-template-columns: 1fr;
+  .screen {
+    padding: 10px 8px;
+  }
+
+  .panel {
+    padding: 14px 12px 14px;
+  }
+
+  .steps {
+    margin-bottom: 2px;
+  }
+
+  .stepDot {
+    width: 24px;
+    height: 24px;
+    font-size: 13px;
+  }
+
+  .title {
+    margin: 2px 0 4px;
+    font-size: 23px;
+  }
+
+  .lead {
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .lookToggle {
+    margin: 0 auto 12px;
+  }
+
+  .lookButton {
+    min-height: 38px;
+    font-size: 15px;
+  }
+
+  .classGrid {
+    gap: 8px;
   }
 
   .classCard {
-    display: grid;
-    grid-template-columns: 72px 1fr;
-    grid-template-areas: 'p n' 'p c' 'p t' 'a a' 's s';
-    align-items: center;
-    column-gap: 12px;
-    text-align: left;
+    padding: 8px 4px;
+    gap: 3px;
   }
 
-  .classCard .portrait { grid-area: p; width: 72px; height: 72px; }
-  .classCard .className { grid-area: n; }
-  .classCard .cousin { grid-area: c; margin: 0; }
-  .classCard .tagline { grid-area: t; }
-  .classCard .ability { grid-area: a; margin-top: 6px; }
-  .classCard .statTags { grid-area: s; }
+  .portrait {
+    width: 64px;
+    height: 64px;
+  }
+
+  .className {
+    font-size: 13px;
+  }
+
+  .cousin {
+    font-size: 11px;
+  }
+
+  .classDetail {
+    min-height: 0;
+    margin-top: 10px;
+    padding: 8px 10px;
+    gap: 4px;
+  }
+
+  .detailTagline,
+  .detailHint {
+    font-size: 15px;
+  }
+
+  .ability {
+    font-size: 13px;
+  }
+
+  .statTags {
+    font-size: 13px;
+  }
+
+  .backgroundList {
+    gap: 8px;
+  }
+
+  .backgroundCard {
+    padding: 10px 8px;
+    gap: 4px;
+  }
+
+  .backgroundCard .className {
+    font-size: 15px;
+  }
+
+  .backgroundCard .tagline {
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .statList {
+    gap: 6px;
+  }
 
   .statRow {
     grid-template-columns: 1fr auto;
     grid-template-areas: 'name value' 'dice dice';
-    row-gap: 8px;
+    row-gap: 4px;
+    min-height: 0;
+    padding: 6px 12px;
   }
 
-  .statName { grid-area: name; }
+  .statName { grid-area: name; font-size: 16px; }
+  .statText { display: none; }
   .dice { grid-area: dice; }
   .statValue { grid-area: value; }
+
+  .die {
+    width: 30px;
+    height: 30px;
+    font-size: 15px;
+  }
+
+  .final {
+    font-size: 24px;
+  }
+
+  .nav {
+    margin-top: 12px;
+  }
+
+  .primary,
+  .secondary {
+    min-height: 46px;
+    padding: 8px 20px;
+    font-size: 16px;
+  }
+
+  .bigPortrait {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 12px;
+  }
+}
+
+/* Short phones (iPhone SE and the like) */
+@media (max-width: 600px) and (max-height: 700px) {
+  .classCard {
+    padding: 6px 4px;
+  }
+
+  .portrait {
+    width: 52px;
+    height: 52px;
+  }
+
+  .lead {
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+
+  .lookToggle {
+    margin-bottom: 8px;
+  }
+
+  .classDetail {
+    margin-top: 8px;
+  }
+
+  .nav {
+    margin-top: 8px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
