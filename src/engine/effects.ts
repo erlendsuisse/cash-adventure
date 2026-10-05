@@ -1,9 +1,11 @@
 import { isMet } from './requirements'
+import { allRules } from './rules'
 import { commodityBuyPrice, commodityPrice } from './selectors'
 import type { Campaign, Commodity, Effect, GameState } from './types'
 
-/** Market-priced effects (buyStock/sellStock) need the campaign's base prices. */
-type PriceBook = Pick<Campaign, 'commodityBasePrice'>
+/** Market-priced effects (buyStock/sellStock) need the campaign's base prices;
+ *  the reckoning needs the hero's class and perks. */
+type PriceBook = Pick<Campaign, 'commodityBasePrice'> & Partial<Pick<Campaign, 'heroClasses' | 'perks'>>
 
 /** apply() must never call Math.random/Date.now or reach outside `state` (and the campaign's price book). */
 export function apply(effect: Effect, state: GameState, campaign?: PriceBook): GameState {
@@ -107,8 +109,15 @@ export function apply(effect: Effect, state: GameState, campaign?: PriceBook): G
     case 'reckoning': {
       // The cost of surviving a Colossus: assets and wages are stripped, debt remains.
       // Failing forward, not a game over - the player rebuilds toward the next trial.
+      // Perks soften it: some keep your best ventures, some more of your wages.
+      const sourced = campaign ? allRules(state, campaign) : []
+      const rules = sourced.map((r) => r.rule)
+      const named = (kind: string) => [...new Set(sourced.filter((r) => r.rule.kind === kind).map((r) => r.source))].join(' & ')
+      const keepCount = rules.reduce((sum, r) => (r.kind === 'keepVentures' ? sum + r.count : sum), 0)
+      const keepWages = Math.min(50, rules.reduce((sum, r) => (r.kind === 'keepWages' ? sum + r.percent : sum), 0))
+      const kept = [...state.finances.assets].sort((a, b) => b.monthlyCashflow - a.monthlyCashflow).slice(0, keepCount)
       const nextDefeated = state.progress.colossiDefeated + 1
-      const newState = {
+      const newState: GameState = {
         ...state,
         progress: {
           ...state.progress,
@@ -118,10 +127,15 @@ export function apply(effect: Effect, state: GameState, campaign?: PriceBook): G
         },
         finances: {
           ...state.finances,
-          assets: [],
-          wages: Math.round(state.finances.wages * 0.5),
+          assets: kept,
+          wages: Math.round((state.finances.wages * (50 + keepWages)) / 100),
         },
       }
+      // Tell the player what their perks saved
+      const notes: string[] = []
+      if (kept.length > 0) notes.push(`${named('keepVentures')} kept ${kept.map((a) => a.label).join(' and ')} safe from the Colossus!`)
+      if (keepWages > 0 && state.finances.wages > 0) notes.push(`${named('keepWages')} saved ${Math.round((state.finances.wages * keepWages) / 100)}g of your monthly wages.`)
+      if (notes.length > 0) newState.log = [...newState.log, ...notes.map((text) => ({ day: state.clock.day, text }))]
       // Victory condition: defeat all 7 Colossi
       if (nextDefeated >= 7) {
         return { ...newState, status: 'won' }

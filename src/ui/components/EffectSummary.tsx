@@ -68,6 +68,19 @@ export function EffectSummary({ summary }: { summary: EffectSummary }) {
         )}
       </div>
 
+      {(summary.perksGained?.length ?? 0) > 0 && (
+        <div className={styles.assets}>
+          <div className={styles.assetGroup}>
+            <span className={styles.assetLabel}>Yours to keep:</span>
+            <ul className={styles.assetList}>
+              {summary.perksGained!.map((perk) => (
+                <li key={perk} className={styles.positive}>{perk}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+
       {(summary.assetsGained.length > 0 || summary.assetsLost.length > 0) && (
         <div className={styles.assets}>
           {summary.assetsGained.length > 0 && (

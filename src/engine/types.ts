@@ -24,11 +24,43 @@ export type BackgroundId = string
 
 /** What a class ability does. The engine applies these; content only picks them. */
 export type AbilityRule =
-  | { kind: 'rerollFailed'; stat: StatId } // re-roll one failed check of this stat per chapter
+  | { kind: 'rerollFailed'; stat: StatId | 'any' } // re-roll one failed check of this stat (or any) per chapter
   | { kind: 'checkBonus'; stat: StatId; mod: number } // always on checks of this stat
   | { kind: 'heatReduction'; amount: number } // Attention (heat) gains are this much smaller
   | { kind: 'ventureDiscount'; percent: number } // buying a venture costs this much less
   | { kind: 'checkGoldBonus'; percent: number } // gold won by a successful check is this much bigger
+  | { kind: 'keepVentures'; count: number } // a Colossus leaves you this many of your best ventures
+  | { kind: 'keepWages'; percent: number } // a Colossus takes this much less of your wages (it normally halves them)
+
+/** A lasting part of your hero, carried through every Colossus: a skill you
+ *  learned, gear you bought, or a trophy from a Colossus. Owned perks are
+ *  boons (progress.boons), so a grantBoon effect is how a card gives one. */
+export interface Perk {
+  id: BoonId
+  kind: 'skill' | 'gear' | 'trophy'
+  name: string
+  icon: string // one emoji
+  text: string // what it does, in a short kid-friendly sentence
+  rules: AbilityRule[]
+}
+
+/** Something for sale at the Guild Hall (You tab): training or a perk. The
+ *  price goes up by priceRise each time it's bought, up to limit purchases. */
+export interface ShopItem {
+  id: string
+  kind: 'training' | 'skill' | 'gear'
+  name: string
+  icon: string
+  text: string // what it does, short: "+1 on Grit rolls"
+  story?: string // a sentence or two of flavour, shown when the player taps it
+  price: number
+  priceRise?: number
+  limit: number
+  fromChapter: ChapterNumber
+  requires?: Requirement[] // e.g. a class's own items; unmet = not shown at all
+  forClass?: string // shown as a ribbon: "Caravan Guards only"
+  effects: Effect[]
+}
 
 export interface HeroClass {
   id: HeroClassId
@@ -89,7 +121,8 @@ export interface Finances {
 
 export interface Progress {
   colossiDefeated: number // 0..7
-  boons: BoonId[]
+  boons: BoonId[] // perks you own (skills, gear, Colossus trophies): never taken away
+  purchases?: Record<string, number> // Guild Hall items bought, by item id (absent in older saves)
   freedomDays: number // consecutive days with passive income >= expenses
   tier: number // scales card weights and trial difficulty
   storyPhase: StoryPhase // current story phase gates available content
@@ -129,6 +162,7 @@ export interface EffectSummary {
   flagsSet: string[]
   commodities: Partial<Record<Commodity, number>> // units gained or lost
   trackedFlagDeltas: Record<FlagId, number> // changes to Campaign.trackedFlags (e.g. reputation), for display
+  perksGained?: string[] // new skills, gear or trophies, as "icon name"
 }
 
 export interface PendingOutcome {
@@ -158,6 +192,7 @@ export interface GameState {
   hero?: Hero // absent until character creation (and in saves from before heroes existed)
   creation?: { rolls: number[][] } // 4 dice per stat, in STAT_ORDER, while creating a hero
   pendingOutcome?: PendingOutcome // skill check outcome awaiting player acknowledgment
+  arrivalNotes?: string[] // what the current card's onEnter effects narrated (e.g. what a Colossus left you)
 }
 
 // ---- Requirements: pure predicates over state ----
@@ -208,7 +243,7 @@ export type Effect =
 // ---- Content: cards, choices, checks ----
 
 export interface SkillCheck {
-  stat: StatId
+  stat: StatId | 'best' // 'best': the hero's highest attribute (Colossus trials let you face them your own way)
   dc: number
   die?: number // default 20
   bonuses?: { if: Requirement; mod: number; reason: string }[]
@@ -274,7 +309,8 @@ export interface CheckResult {
   total: number
   dc: number
   result: 'critSuccess' | 'success' | 'failure' | 'critFailure'
-  reroll?: { firstRoll: number; ability: string } // a class ability re-rolled a failed first roll
+  reroll?: { firstRoll: number; ability: string } // a class ability or perk re-rolled a failed first roll
+  helpedBy?: string[] // a success that only happened thanks to these (bonuses, Guild Hall training): shown as a payoff
 }
 
 export type Action =
@@ -291,11 +327,14 @@ export type Action =
   | { type: 'rollStats' }
   | { type: 'swapStats'; a: StatId; b: StatId }
   | { type: 'createHero'; name: string; classId: HeroClassId; backgroundId: BackgroundId; look?: HeroLook }
+  // The Guild Hall: buy training, a skill or gear (priced by the engine)
+  | { type: 'buyItem'; itemId: string }
 
 export interface Tuning {
   marketDayInterval: number // days between market ticks
   marketDriftRange: number // per-sector drift each market day is in [-range, +range]
   freedomDaysToTrial: number // consecutive free days before the next Colossus stirs
+  freedomDaysByChapter?: Partial<Record<ChapterNumber, number>> // overrides freedomDaysToTrial in these chapters
   daysPerTurn: number // days the clock advances for every card resolved, on top of any authored advanceDays
   paydayInterval: number // days between paydays, which credit (wages + passive income - expenses)
 }
@@ -329,6 +368,8 @@ export interface Campaign {
   trackedFlags?: FlagId[] // flags the player is shown (reputation, heat): their changes count as visible effects
   heroClasses?: Record<HeroClassId, HeroClass>
   backgrounds?: Record<BackgroundId, Background>
+  perks?: Record<BoonId, Perk>
+  shop?: ShopItem[]
   initial: {
     stats: Stats
     finances: Finances

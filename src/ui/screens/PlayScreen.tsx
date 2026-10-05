@@ -10,6 +10,8 @@ import { VictoryScreen } from '../components/VictoryScreen'
 import { ChapterBanner } from '../components/ChapterBanner'
 import { LedgerBar } from '../components/LedgerBar'
 import { StatScroll } from '../components/StatScroll'
+import { FortunePage } from '../components/FortunePage'
+import { GuildHall } from '../components/GuildHall'
 import { useGame } from '../GameProvider'
 import { getCharacterMood } from '../../engine/characterSelectors'
 import { currentChapter } from '../../engine/selectors'
@@ -17,11 +19,12 @@ import { useBackgroundMusic } from '../hooks/useBackgroundMusic'
 import { updateSettings, useSettings } from '../settings'
 import styles from './PlayScreen.module.css'
 
+const randomSeed = () => Math.floor(Math.random() * 1_000_000)
+
 export function PlayScreen() {
-  const { state, dispatch, exportSave } = useGame()
-  const [seedInput, setSeedInput] = useState('42')
+  const { state, dispatch } = useGame()
   const [victoryClosed, setVictoryClosed] = useState(false)
-  // Narrow screens show one panel at a time, picked from the bottom tab bar
+  // One page at a time, picked in the top bar: Adventure, Fortune or Guild Hall
   const [tab, setTab] = useState<TourTab>('story')
   const settings = useSettings()
   // A new game starts with creating a hero (saves from before heroes keep playing without one)
@@ -77,19 +80,15 @@ export function PlayScreen() {
       />
 
       {/* Minimal top bar with critical info only */}
-      <LedgerBar state={state} onShowTour={() => setTouring(true)} />
+      <LedgerBar state={state} tab={tab} onTab={setTab} onShowTour={() => setTouring(true)} onNewGame={() => startNewGame(randomSeed())} />
 
-      {/* Which chapter, what it's about, and what to do right now */}
-      <ChapterBanner state={state} />
+      {/* Which chapter, what it's about, and what to do right now (the Fortune page shows the same, bigger) */}
+      {tab === 'story' && <ChapterBanner state={state} />}
 
-      {/* Main layout: Left sidebar + Card area + Right sidebar */}
       <div className={styles.mainLayout} data-tab={tab}>
-        {/* Left sidebar with character stats and holdings */}
-        <div className={styles.sidebar} data-tour="you">
+        {/* Story tab, wide screens: attributes and reputation beside the card */}
+        <div className={styles.sidebar} data-tour="stats">
           <StatScroll state={state} />
-          <button type="button" className={styles.mobileNewGame} onClick={() => startNewGame(Math.floor(Math.random() * 1_000_000))}>
-            New Game
-          </button>
         </div>
 
         {/* Center: Card and narrative */}
@@ -117,6 +116,17 @@ export function PlayScreen() {
           )}
         </div>
 
+        {/* Fortune: your money at a glance. Guild Hall: spend it on yourself. */}
+        {tab === 'fortune' && (
+          <div className={styles.page}>
+            <FortunePage state={state} />
+          </div>
+        )}
+        {tab === 'guild' && (
+          <div className={styles.page}>
+            <GuildHall state={state} />
+          </div>
+        )}
       </div>
 
       {payday !== null && state.status === 'playing' && !touring && <PaydayBanner state={state} net={payday} onClose={closePayday} />}
@@ -128,51 +138,11 @@ export function PlayScreen() {
       {state.status === 'won' && !victoryClosed && (
         <VictoryScreen
           state={state}
-          onPlayAgain={() => startNewGame(Math.floor(Math.random() * 1_000_000))}
+          onPlayAgain={() => startNewGame(randomSeed())}
           onClose={() => setVictoryClosed(true)}
         />
       )}
 
-      {/* Footer with controls */}
-      <div className={styles.footer}>
-        {/* Developer tools: a fixed seed for repeatable games, and save export */}
-        {import.meta.env.DEV && (
-          <label>
-            Seed:{' '}
-            <input value={seedInput} onChange={(e) => setSeedInput(e.target.value)} inputMode="numeric" />
-          </label>
-        )}
-        <button type="button" onClick={() => startNewGame(import.meta.env.DEV ? Number(seedInput) || 0 : Math.floor(Math.random() * 1_000_000))}>
-          New Game
-        </button>
-        {import.meta.env.DEV && <button
-          type="button"
-          onClick={() => {
-            void navigator.clipboard.writeText(exportSave())
-          }}
-        >
-          Export Save
-        </button>}
-      </div>
-      <nav className={styles.tabBar} aria-label="Game panels">
-        {([
-          ['you', '🧭', 'You'],
-          ['story', '📜', 'Story'],
-        ] as const).map(([id, icon, label]) => (
-          <button
-            key={id}
-            type="button"
-            className={styles.tab}
-            aria-current={tab === id ? 'page' : undefined}
-            onClick={() => setTab(id)}
-          >
-            <span className={styles.tabIcon} aria-hidden="true">
-              {icon}
-            </span>
-            {label}
-          </button>
-        ))}
-      </nav>
     </div>
   )
 }

@@ -5,7 +5,8 @@
   display: flex;
   align-items: center;
   gap: 10px 34px;
-  padding: 12px 24px;
+  padding: 12px max(24px, env(safe-area-inset-right)) 12px max(24px, env(safe-area-inset-left));
+  padding-top: max(12px, env(safe-area-inset-top)); /* clear the status bar when added to the home screen */
   background: linear-gradient(to bottom, #2a2219 0%, #1f1a14 100%);
   border-bottom: 3px solid #c17817;
   color: #f7ecd2;
@@ -72,18 +73,16 @@
 
 @media (max-width: 600px) {
   .bar {
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 6px 10px;
-    padding: 8px 12px;
-  }
-
-  .wages {
-    display: none;
+    gap: 6px;
+    padding: max(8px, env(safe-area-inset-top)) 10px 8px;
   }
 
   .purse {
     padding: 3px 10px 3px 8px;
+  }
+
+  .purse .label {
+    display: none; /* the 💰 says it */
   }
 
   .label {
@@ -266,10 +265,6 @@
 }
 
 @media (max-width: 600px) {
-  .day {
-    display: none;
-  }
-
   .spacer {
     display: none;
   }
@@ -287,5 +282,78 @@
   .purseShake,
   .floater {
     animation: none;
+  }
+}
+
+/* The three pages of the game, as brass buttons set into the bar */
+.tabs {
+  margin: 0 auto; /* centred between purse and settings, and only as wide as its buttons */
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 6px 18px;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #e3cfa6;
+  background: rgba(255, 215, 0, 0.06);
+  border: 1.5px solid rgba(193, 120, 23, 0.6);
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.tab[aria-current='page'] {
+  color: #2b1a06;
+  background: linear-gradient(180deg, #ffe08a 0%, #e0a83a 100%);
+  border-color: #fff0b8;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
+}
+
+@media (hover: hover) {
+  .tab:not([aria-current='page']):hover {
+    color: #ffd76a;
+    background: rgba(255, 215, 0, 0.14);
+  }
+}
+
+.tabIcon {
+  flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+  .tab {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+}
+
+/* Phones: icon over a small label, so purse, 3 tabs and settings share one line */
+@media (max-width: 600px) {
+  .tabs {
+    gap: 4px;
+  }
+
+  .tab {
+    flex-direction: column;
+    gap: 1px;
+    min-height: 44px;
+    padding: 4px 8px;
+    font-family: inherit;
+    font-size: 10px;
+    border-radius: 10px;
+  }
+
+  .tabIcon {
+    width: 18px;
+    height: 18px;
   }
 }

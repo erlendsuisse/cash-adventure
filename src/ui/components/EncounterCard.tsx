@@ -38,7 +38,9 @@ export function EncounterCard({
     setResult(null)
   }, [outcome])
 
-  const spokenText = showingOutcome ? outcome!.text : [card.title, ...paragraphs].filter(Boolean).join('. ')
+  // What the card did as it arrived (a Colossus taking your ventures, what your perks saved)
+  const arrival = state.currentCardId === card.id ? (state.arrivalNotes ?? []) : []
+  const spokenText = showingOutcome ? outcome!.text : [card.title, ...paragraphs, ...arrival].filter(Boolean).join('. ')
 
   // Narrate each card and each outcome as it appears (when narration is on)
   useEffect(() => {
@@ -111,11 +113,22 @@ export function EncounterCard({
               )}
             </div>
           ) : (
-            paragraphs.map((text, i) => (
-              <p key={i}>
-                <RichText text={text} />
-              </p>
-            ))
+            <>
+              {paragraphs.map((text, i) => (
+                <p key={i}>
+                  <RichText text={text} />
+                </p>
+              ))}
+              {arrival.length > 0 && (
+                <div className={styles.arrival}>
+                  {arrival.map((text, i) => (
+                    <p key={i}>
+                      <RichText text={text} />
+                    </p>
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
         {showingOutcome ? (
@@ -164,6 +177,11 @@ const RESULT_TEXT: Record<CheckResult['result'], string> = {
 }
 
 const ROLL_MS = 1000
+
+/** "A", "A and B", "A, B and C" */
+function joinNames(names: string[]): string {
+  return names.length <= 1 ? (names[0] ?? '') : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`
+}
 
 /** A die that tumbles, lands on the real roll, then spells the roll out -
  *  including the bonuses reputation earned you. Tap the die to skip. */
@@ -232,6 +250,11 @@ function RollBreakdown({ result, onLanded }: { result: CheckResult; onLanded: (p
             {' '}= <strong>{result.total}</strong> vs DC {result.dc}:{' '}
             <strong className={passed ? styles.rollPass : styles.rollFail}>{RESULT_TEXT[result.result]}</strong>
           </span>
+          {result.helpedBy && (
+            <span className={styles.helpedBy}>
+              ✨ Made the difference: {joinNames(result.helpedBy)}!
+            </span>
+          )}
         </div>
       ) : (
         <div className={styles.rollText}>

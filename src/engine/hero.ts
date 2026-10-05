@@ -1,5 +1,6 @@
 import { applyAll } from './effects'
 import { rollDie } from './rng'
+import { allRules, heroRules, type SourcedRule } from './rules'
 import { currentChapter } from './selectors'
 import type { AbilityRule, Action, Campaign, Choice, Effect, GameState, Outcome, Requirement, StatId } from './types'
 
@@ -71,38 +72,44 @@ export function heroAction(state: GameState, action: Extract<Action, { type: 'ro
   }
 }
 
-/** The ability rules of the hero's class (none without a hero). */
-export function heroRules(state: GameState, campaign: Campaign): AbilityRule[] {
-  const heroClass = state.hero ? campaign.heroClasses?.[state.hero.classId] : undefined
-  return heroClass?.ability.rules ?? []
-}
+export { allRules, heroRules, type SourcedRule } from './rules'
 
 export function abilityName(state: GameState, campaign: Campaign): string {
   return (state.hero && campaign.heroClasses?.[state.hero.classId]?.ability.name) || 'Ability'
 }
 
-/** Always-on check bonuses from the class ability, for this stat. */
+/** Always-on check bonuses for this stat, each named after the ability or perk it comes from. */
 export function abilityCheckBonuses(stat: StatId, state: GameState, campaign: Campaign): { mod: number; reason: string }[] {
-  const name = abilityName(state, campaign)
-  return heroRules(state, campaign)
-    .filter((r): r is Extract<AbilityRule, { kind: 'checkBonus' }> => r.kind === 'checkBonus' && r.stat === stat)
-    .map((r) => ({ mod: r.mod, reason: name }))
+  return allRules(state, campaign).flatMap(({ rule, source }) => (rule.kind === 'checkBonus' && rule.stat === stat ? [{ mod: rule.mod, reason: source }] : []))
 }
 
-/** The once-per-chapter re-roll flag for the current chapter. */
-export function rerollFlagId(state: GameState): string {
-  return `ability_reroll_ch${currentChapter(state)}`
+/** The once-per-chapter re-roll flag for a source in the current chapter (the
+ *  class keeps its original flag name, so older saves carry on). */
+export function rerollFlagId(state: GameState, sourceId = 'class'): string {
+  return sourceId === 'class' ? `ability_reroll_ch${currentChapter(state)}` : `perk_reroll_${sourceId}_ch${currentChapter(state)}`
 }
 
-/** True when the class may re-roll a failed check of this stat right now. */
-export function canReroll(stat: StatId, state: GameState, campaign: Campaign): boolean {
-  return heroRules(state, campaign).some((r) => r.kind === 'rerollFailed' && r.stat === stat) && !state.flags[rerollFlagId(state)]
+/** The first unused re-roll that covers a failed check of this stat, if any. */
+export function availableReroll(stat: StatId, state: GameState, campaign: Campaign): SourcedRule | undefined {
+  return allRules(state, campaign).find(({ rule, id }) => rule.kind === 'rerollFailed' && (rule.stat === stat || rule.stat === 'any') && !state.flags[rerollFlagId(state, id)])
+}
+
+/** The hero's highest attribute (ties go to the first in STAT_ORDER). */
+export function bestStat(state: GameState): StatId {
+  return STAT_ORDER.reduce((best, stat) => (state.stats[stat] > state.stats[best] ? stat : best), STAT_ORDER[0]!)
 }
 
 const heatFlags = (campaign: Campaign) => new Set(Object.values(campaign.consequenceTuning ?? {}).map((t) => t.flagId))
 
+/** Who gives the hero this kind of rule, for telling the player, e.g. "Haggle & 🤝 Haggler". */
+export function ruleSources(kind: AbilityRule['kind'], state: GameState, campaign: Campaign): string {
+  return [...new Set(allRules(state, campaign).filter((r) => r.rule.kind === kind).map((r) => r.source))].join(' & ')
+}
+
 /** Effects as this hero experiences them: smaller Attention gains (Smuggler),
- *  bigger check winnings (Prospector), cheaper ventures (Silver Tongue). */
+ *  bigger check winnings (Prospector), cheaper ventures (Silver Tongue) - and
+ *  the same from any perks that do these things. Each change adds a short note
+ *  naming what caused it, so the player sees what they bought paying off. */
 export function adjustEffects(effects: Effect[], state: GameState, campaign: Campaign, context: { checkSuccess?: boolean; buysVenture?: boolean }): Effect[] {
   const rules = heroRules(state, campaign)
   if (rules.length === 0) return effects
@@ -110,19 +117,36 @@ export function adjustEffects(effects: Effect[], state: GameState, campaign: Cam
   const heatCut = rules.reduce((sum, r) => (r.kind === 'heatReduction' ? sum + r.amount : sum), 0)
   const goldBonus = rules.reduce((sum, r) => (r.kind === 'checkGoldBonus' ? sum + r.percent : sum), 0)
   const discount = rules.reduce((sum, r) => (r.kind === 'ventureDiscount' ? sum + r.percent : sum), 0)
+  let calmer = false
+  let extraGold = 0
+  let saved = 0
 
   const adjust = (list: Effect[]): Effect[] =>
     list.flatMap((e): Effect[] => {
       if (e.kind === 'if') return [{ ...e, then: adjust(e.then), ...(e.else ? { else: adjust(e.else) } : {}) }]
       if (e.kind === 'flag' && heatCut > 0 && heat.has(e.id) && (e.delta ?? 0) > 0) {
+        calmer = true
         const delta = e.delta! - heatCut
         return delta > 0 ? [{ ...e, delta }] : []
       }
-      if (e.kind === 'gold' && e.delta > 0 && context.checkSuccess && goldBonus > 0) return [{ ...e, delta: Math.round((e.delta * (100 + goldBonus)) / 100) }]
-      if (e.kind === 'gold' && e.delta < 0 && context.buysVenture && discount > 0) return [{ ...e, delta: Math.round((e.delta * (100 - discount)) / 100) }]
+      if (e.kind === 'gold' && e.delta > 0 && context.checkSuccess && goldBonus > 0) {
+        const delta = Math.round((e.delta * (100 + goldBonus)) / 100)
+        extraGold += delta - e.delta
+        return [{ ...e, delta }]
+      }
+      if (e.kind === 'gold' && e.delta < 0 && context.buysVenture && discount > 0) {
+        const delta = Math.round((e.delta * (100 - discount)) / 100)
+        saved += delta - e.delta
+        return [{ ...e, delta }]
+      }
       return [e]
     })
-  return adjust(effects)
+  const adjusted = adjust(effects)
+  const notes: Effect[] = []
+  if (saved > 0) notes.push({ kind: 'narrate', text: `${ruleSources('ventureDiscount', state, campaign)} saved you ${saved}g!` })
+  if (extraGold > 0) notes.push({ kind: 'narrate', text: `${ruleSources('checkGoldBonus', state, campaign)}: ${extraGold}g extra!` })
+  if (calmer) notes.push({ kind: 'narrate', text: `${ruleSources('heatReduction', state, campaign)}: fewer people noticed.` })
+  return [...adjusted, ...notes]
 }
 
 const buysVenture = (effects: Effect[] = []) => effects.some((e) => e.kind === 'acquireAsset')

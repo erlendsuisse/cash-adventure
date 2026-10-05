@@ -80,7 +80,10 @@ if (!native && webSpeech()) {
 /** Reads the text aloud, replacing anything already being read. `force` speaks even when narration is off (the read-aloud button). */
 export function speak(text: string, force = false) {
   if (!voiceSupported() || (!force && !getSettings().voice) || !text.trim()) return
-  const spoken = text.replace(/(\d)g\b/g, '$1 gold').replace(/\/mo(nth)?\b/g, ' a month')
+  const spoken = text
+    .replace(/\p{Extended_Pictographic}\uFE0F?/gu, '') // icons are for the eyes, not the narrator
+    .replace(/(\d)g\b/g, '$1 gold')
+    .replace(/\/mo(nth)?\b/g, ' a month')
   if (native) {
     speakNative(spoken)
     return

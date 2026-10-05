@@ -79,7 +79,7 @@ const outcome = z.strictObject({
 })
 
 const skillCheck = z.strictObject({
-  stat: statId,
+  stat: z.union([statId, z.literal('best')]),
   dc: z.number(),
   die: z.number().optional(),
   bonuses: z.array(z.object({ if: requirement, mod: z.number(), reason: z.string() })).optional(),

@@ -1,3 +1,4 @@
+import { freedomDaysToTrial } from './selectors'
 import type { Campaign, CardId, ConsequencePath, GameState } from './types'
 
 export const COLOSSI_TO_WIN = 7
@@ -10,7 +11,7 @@ export const COLOSSI_TO_WIN = 7
 export function checkTrialTrigger(state: GameState, campaign: Campaign): GameState {
   const nextColossus = summonableColossus(state, campaign)
   if (!nextColossus) return state
-  if (state.progress.freedomDays < campaign.tuning.freedomDaysToTrial) return state
+  if (state.progress.freedomDays < freedomDaysToTrial(state, campaign)) return state
 
   return {
     ...state,

@@ -236,6 +236,7 @@ const CHECK_BONUSES: Record<StatId, { faction: Faction; mod: number; reason: str
 }
 
 function withStandingBonuses(check: SkillCheck): SkillCheck {
+  if (check.stat === 'best') return check // decided at roll time, so no faction can back it in advance
   const rules = CHECK_BONUSES[check.stat].map((rule) => ({
     if: rule.atMost ? standingAtMost(rule.faction, -STANDING_THRESHOLD) : standingAtLeast(rule.faction, STANDING_THRESHOLD),
     mod: rule.mod,

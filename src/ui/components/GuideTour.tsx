@@ -4,26 +4,30 @@ import { RichText } from '../RichText'
 import { speak, stopSpeaking } from '../voice'
 import styles from './GuideTour.module.css'
 
-export type TourTab = 'you' | 'story'
+export type TourTab = 'story' | 'fortune' | 'guild'
 
 interface Step {
   /** data-tour value of the element to point at; none = centred */
   target?: string
-  /** On narrow screens, the tab that shows the target */
-  tab?: TourTab
+  /** The tab that shows the target (a function when it depends on screen size) */
+  tab?: TourTab | (() => TourTab)
   text: string
 }
 
 // Short lines a 10-year-old can take in at a glance; numbers stay digits so they show bold.
+// Attributes and reputation sit beside the card on wide screens; on phones they're behind a Fortune tile
+const statsTab = (): TourTab => (window.matchMedia('(max-width: 700px)').matches ? 'fortune' : 'story')
+
 const STEPS: Step[] = [
   { text: "Welcome to Vessarin! I'm Old Tobias. Along the way you'll have adventures of your own. First, let me show you around - it only takes a minute." },
-  { target: 'purse', text: 'This is your purse. You start with 50 gold. Every choice can add gold or cost you some.' },
-  { target: 'goal', text: 'Your goal: buy ventures - stalls, crews, workshops - that pay you every month. When they pay more than you spend, you are free!' },
-  { target: 'net', text: 'Net is what your ventures earn each month minus your living costs. Wages from work are not counted - when Net turns green, you are free!' },
+  { target: 'purse', tab: 'story', text: 'This is your purse. You start with 50 gold. Every choice can add gold or cost you some.' },
+  { target: 'goal', tab: 'story', text: 'Your goal: buy ventures - stalls, crews, workshops - that pay you every month. When they pay more than you spend, you are free!' },
   { target: 'card', tab: 'story', text: 'Each card is a moment in your story. Read it, then tap a choice. Bold numbers tell you what it costs or pays.' },
-  { target: 'you', tab: 'you', text: 'Here is your hero, with your special ability and your skills: Grit, Savvy, Charm and Nerve. They help you win dice rolls. Your ventures and monthly money are here too.' },
-  { target: 'colossi', tab: 'story', text: 'Grow rich and the 7 Colossi will come to test you, one by one. Beat all 7 to become a legend!' },
-  { target: 'settings', tab: 'story', text: 'I read every card aloud for you. Tap here to turn me off, change the sound, or see this tour again. Good luck, merchant!' },
+  { target: 'stats', tab: statsTab, text: 'Your skills - Grit, Savvy, Charm and Nerve - help you win dice rolls. Here you also see what the people of Vessarin think of you.' },
+  { target: 'fortune', tab: 'fortune', text: 'Fortune shows your road to freedom: what comes in, what goes out, and what you own. Tap any tile to see more, or to visit the moneylender.' },
+  { target: 'guild', tab: 'guild', text: 'In the Guild Hall you spend gold on yourself: training, gear and skills. A Colossus can take your ventures, but never these!' },
+  { target: 'tabs', tab: 'story', text: 'Grow rich and the 7 Colossi will come to test you, one by one. Tap Adventure to get back to your story.' },
+  { target: 'settings', tab: 'story', text: 'Tap here to have every card read aloud, change the sound, see this tour again or start a new game. Good luck, merchant!' },
 ]
 
 const PAD = 8
@@ -35,14 +39,15 @@ export function GuideTour({ onTab, onDone }: { onTab: (tab: TourTab) => void; on
   const last = index === STEPS.length - 1
 
   const measure = useCallback(() => {
-    const el = step.target ? document.querySelector<HTMLElement>(`[data-tour="${step.target}"]`) : null
-    const r = el?.getBoundingClientRect()
-    setRect(r && r.width > 0 && r.height > 0 ? r : null)
+    // The first copy of the target that's actually on screen (some live on two tabs)
+    const els = step.target ? [...document.querySelectorAll<HTMLElement>(`[data-tour="${step.target}"]`)] : []
+    const r = els.map((el) => el.getBoundingClientRect()).find((box) => box.width > 0 && box.height > 0)
+    setRect(r ?? null)
   }, [step.target])
 
-  // Switch tabs first (narrow screens), then measure once the layout has settled
+  // Switch tabs first, then measure once the layout has settled
   useLayoutEffect(() => {
-    if (step.tab) onTab(step.tab)
+    if (step.tab) onTab(typeof step.tab === 'function' ? step.tab() : step.tab)
     const frame = requestAnimationFrame(() => requestAnimationFrame(measure))
     return () => cancelAnimationFrame(frame)
   }, [step.tab, measure, onTab])

@@ -6,6 +6,8 @@ export const tuning: Tuning = {
   marketDayInterval: 14,
   marketDriftRange: 4,
   freedomDaysToTrial: 21,
+  // Later Colossi wait longer, so there's time to train and build your hero
+  freedomDaysByChapter: { 2: 35, 3: 35, 4: 35, 5: 35, 6: 35, 7: 35 },
   daysPerTurn: 2,
   paydayInterval: 7,
 }

@@ -33,6 +33,7 @@ import { marketOpportunityCards } from './cards/market-opportunities'
 import { chapterTitleCards } from './cards/chapter-titles'
 import { reputationEventCards } from './cards/reputation-events'
 import { CHAPTER_DECKS } from './chapterDecks'
+import { PERKS, SHOP, withOwnWay } from './perks'
 import { standingFlagIds, withReputation } from './standings'
 import { COMMODITY_BASE_PRICE, consequenceTuning, initial, MARKET_REGIMES, SECTORS, tuning } from './tuning'
 
@@ -74,8 +75,9 @@ const allCards: StoryCard[] = [
 const cards: Record<string, StoryCard> = {}
 // Every card gets its reputation wiring (standings from story flags, standing
 // bonuses on skill checks) here, so card files only record what happened.
-// Class touches go first, so class-only choices also get reputation bonuses
-for (const card of allCards.map(withClassTouches).map(withReputation)) {
+// Class touches go first, so class-only choices also get reputation bonuses;
+// a Colossus trial's "your own way" choice comes last, copying those bonuses
+for (const card of allCards.map(withClassTouches).map(withReputation).map(withOwnWay)) {
   // Fail loudly: a duplicate id would silently replace the earlier card.
   if (cards[card.id]) throw new Error(`Duplicate card id: ${card.id}`)
   cards[card.id] = card
@@ -98,5 +100,7 @@ export const campaign: Campaign = Object.freeze({
   trackedFlags: [...standingFlagIds, ...Object.values(consequenceTuning).map((t) => t.flagId)],
   heroClasses: HERO_CLASSES,
   backgrounds: BACKGROUNDS,
+  perks: PERKS,
+  shop: SHOP,
   initial,
 })

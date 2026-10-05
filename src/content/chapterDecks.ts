@@ -18,6 +18,8 @@ import {
   chapter7TraderVentures,
 } from './cards/trader-ventures'
 import { marketTrades } from './cards/market-trades'
+import { mentors } from './cards/mentors'
+import { skillChallenges } from './cards/skill-challenges'
 import { sideStories } from './cards/side-stories'
 import { workOpportunities } from './cards/work-opportunities'
 
@@ -27,7 +29,7 @@ import { workOpportunities } from './cards/work-opportunities'
 // gate can only ever hide a chapter card, never help it (content.test.ts checks).
 export const CHAPTER_DECKS: Partial<Record<ChapterNumber, StoryCard[]>> = {
   // Chapter 1's story deck is the generic pool; it only adds work for players in trouble.
-  1: defineChapterDeck(1, [...workOpportunities(1), ...sideStories(1)]),
+  1: defineChapterDeck(1, [...workOpportunities(1), ...sideStories(1), ...mentors(1)]),
   2: defineChapterDeck(2, [
     ...chapter2IntroCards,
     ...chapter2CommodityCards,
@@ -42,6 +44,8 @@ export const CHAPTER_DECKS: Partial<Record<ChapterNumber, StoryCard[]>> = {
     ...workOpportunities(2),
     ...marketTrades(2),
     ...sideStories(2),
+    ...mentors(2),
+    ...skillChallenges(2),
   ]),
   3: defineChapterDeck(3, [
     ...chapter3IntroCards,
@@ -57,9 +61,11 @@ export const CHAPTER_DECKS: Partial<Record<ChapterNumber, StoryCard[]>> = {
     ...workOpportunities(3),
     ...marketTrades(3),
     ...sideStories(3),
+    ...mentors(3),
+    ...skillChallenges(3),
   ]),
-  4: defineChapterDeck(4, [...chapter4IntroCards, ...chapter4CommodityCards, ...chapter4MarketCards, ...chapter4DangerCards, ...chapter4TraderVentures, ...workOpportunities(4), ...marketTrades(4), ...sideStories(4)]),
-  5: defineChapterDeck(5, [...chapter5IntroCards, ...chapter5CommodityCards, ...chapter5MarketCards, ...chapter5DangerCards, ...chapter5TraderVentures, ...workOpportunities(5), ...marketTrades(5), ...sideStories(5)]),
-  6: defineChapterDeck(6, [...chapter6CommodityCards, ...chapter6MarketCards, ...chapter6DangerCards, ...chapter6TraderVentures, ...workOpportunities(6), ...marketTrades(6), ...sideStories(6)]),
-  7: defineChapterDeck(7, [...chapter7CommodityCards, ...chapter7MarketCards, ...chapter7DangerCards, ...chapter7TraderVentures, ...workOpportunities(7), ...marketTrades(7), ...sideStories(7)]),
+  4: defineChapterDeck(4, [...chapter4IntroCards, ...chapter4CommodityCards, ...chapter4MarketCards, ...chapter4DangerCards, ...chapter4TraderVentures, ...workOpportunities(4), ...marketTrades(4), ...sideStories(4), ...mentors(4)]),
+  5: defineChapterDeck(5, [...chapter5IntroCards, ...chapter5CommodityCards, ...chapter5MarketCards, ...chapter5DangerCards, ...chapter5TraderVentures, ...workOpportunities(5), ...marketTrades(5), ...sideStories(5), ...mentors(5)]),
+  6: defineChapterDeck(6, [...chapter6CommodityCards, ...chapter6MarketCards, ...chapter6DangerCards, ...chapter6TraderVentures, ...workOpportunities(6), ...marketTrades(6), ...sideStories(6), ...mentors(6)]),
+  7: defineChapterDeck(7, [...chapter7CommodityCards, ...chapter7MarketCards, ...chapter7DangerCards, ...chapter7TraderVentures, ...workOpportunities(7), ...marketTrades(7), ...sideStories(7), ...mentors(7)]),
 }

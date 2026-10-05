@@ -1,0 +1,536 @@
+/* Your fortune at a glance: one screen, no scrolling, tap a tile for details */
+.page {
+  height: 100%;
+  width: min(1040px, 100%);
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: minmax(280px, 380px) 1fr;
+  grid-template-rows: auto auto;
+  gap: 16px;
+  align-content: center;
+}
+
+.hero,
+.freedom,
+.tile {
+  color: var(--paper-ink);
+  background: linear-gradient(165deg, #faf0d7 0%, #f1e0b8 60%, #e8d09f 100%);
+  border: 1.5px solid #b08a4e;
+  border-radius: 14px;
+  box-shadow: inset 0 0 30px rgba(130, 85, 30, 0.18), 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+}
+
+.portrait {
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #2a2219;
+  border: 3px solid #c17817;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #f2c14e;
+  color: #f2c14e;
+}
+
+.portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroText {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.heroName {
+  margin: 0;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 22px;
+  color: var(--paper-heading);
+  line-height: 1.15;
+}
+
+.heroClass {
+  font-size: 14px;
+  font-style: italic;
+  color: #6b5232;
+}
+
+.ability {
+  margin: 6px 0 0;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.kit {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.kitItem {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  background: #fffaf0;
+  border: 1.5px solid #c9a46a;
+  border-radius: 50%;
+}
+
+.kitEmpty {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-style: italic;
+  color: #6b5232;
+  border: 1.5px dashed #c9a46a;
+  border-radius: 999px;
+}
+
+/* ---------- Road to freedom ---------- */
+.freedom {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  padding: 18px 22px;
+}
+
+.freedomTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+
+.freedomTitle {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--paper-heading);
+}
+
+.chapter {
+  font-size: 14px;
+  color: #6b5232;
+}
+
+.bar {
+  position: relative;
+  height: 34px;
+  overflow: hidden;
+  background: rgba(110, 70, 25, 0.16);
+  border: 2px solid #9c7038;
+  border-radius: 999px;
+}
+
+.fill {
+  height: 100%;
+  background: linear-gradient(to bottom, #f5d06a 0%, #c08a22 100%);
+  border-radius: 999px;
+  transition: width 0.8s ease-out;
+}
+
+.barText {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #3b2a14;
+  text-shadow: 0 1px 0 rgba(255, 250, 235, 0.8);
+}
+
+.flow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 17px;
+}
+
+.flow strong {
+  font-family: Georgia, serif;
+  font-size: 32px;
+}
+
+/* ---------- Tiles ---------- */
+.tiles {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  align-self: start;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+  min-height: 170px;
+  padding: 16px 10px;
+  font: inherit;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tile:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) {
+  .tile:hover {
+    transform: translateY(-2px);
+    box-shadow: inset 0 0 30px rgba(130, 85, 30, 0.18), 0 12px 28px rgba(0, 0, 0, 0.45);
+  }
+}
+
+.tileIcon {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.tileLabel {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #8a5a22;
+}
+
+.tileValue {
+  font-family: Georgia, serif;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.phoneOnly {
+  display: none;
+}
+
+.plus {
+  color: #2f6b3a;
+}
+
+.minus {
+  color: #a8321f;
+}
+
+/* ---------- Sheet contents ---------- */
+.line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dotted rgba(120, 80, 35, 0.35);
+}
+
+.lineLabel {
+  display: flex;
+  flex-direction: column;
+  font-size: 17px;
+}
+
+.hint {
+  display: block;
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 400;
+  color: #6b5232;
+}
+
+.amount {
+  flex-shrink: 0;
+  font-family: Georgia, serif;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.total {
+  border-bottom: 2px solid rgba(120, 80, 35, 0.55);
+  font-weight: 700;
+}
+
+.subLine {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0 3px 18px;
+  font-size: 15px;
+}
+
+.empty,
+.tip {
+  margin: 8px 0;
+  font-style: italic;
+  color: #6b5232;
+}
+
+.perk {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dotted rgba(120, 80, 35, 0.35);
+}
+
+.perkIcon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  background: #fffaf0;
+  border: 1.5px solid #c9a46a;
+  border-radius: 50%;
+}
+
+.darkPanel {
+  padding: 8px;
+  background: #1f1a14;
+  border-radius: 10px;
+}
+
+.loanRow {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.loanRow input {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  padding: 6px 12px;
+  font-size: 17px;
+  color: var(--paper-ink);
+  background: #fffaf0;
+  border: 1.5px solid #b48d52;
+  border-radius: 10px;
+}
+
+.button {
+  min-height: 48px;
+  padding: 8px 20px;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #2b1a06;
+  background: linear-gradient(180deg, #ffe08a 0%, #e0a83a 100%);
+  border: 2px solid #a06a32;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.45;
+}
+
+/* iPad portrait: hero over freedom, tiles 2 by 2 */
+@media (max-width: 900px) {
+  .page {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    align-content: center;
+  }
+
+  .tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Phones: everything smaller, plus a tile for attributes (no side panel here) */
+@media (max-width: 700px) {
+  .page {
+    padding: 10px 12px;
+    gap: 10px;
+    align-content: start;
+  }
+
+  .hero {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .portrait {
+    width: 64px;
+    height: 64px;
+  }
+
+  .heroName {
+    font-size: 18px;
+  }
+
+  .ability {
+    display: none;
+  }
+
+  .kitItem {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
+
+  .freedom {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+
+  .freedomTitle {
+    font-size: 19px;
+  }
+
+  .bar {
+    height: 30px;
+  }
+
+  .barText {
+    font-size: 12px;
+  }
+
+  .flow {
+    font-size: 14px;
+  }
+
+  .flow strong {
+    font-size: 24px;
+  }
+
+  .tiles {
+    gap: 10px;
+  }
+
+  .tile {
+    min-height: 0;
+    padding: 10px 6px;
+  }
+
+  .tileIcon {
+    font-size: 24px;
+  }
+
+  .tileValue {
+    font-size: 19px;
+  }
+
+  .phoneOnly {
+    display: flex;
+    grid-column: 1 / -1;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill,
+  .tile {
+    transition: none;
+  }
+}
+
+/* Money bags: a green arrow sweeping in, a red arrow flying out */
+.bag {
+  position: relative;
+  display: inline-block;
+  font-size: 44px;
+  line-height: 1;
+}
+
+.bagArrow {
+  position: absolute;
+  top: -6px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  border: 2px solid #fffaf0;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.bagIn .bagArrow {
+  left: -14px;
+  background: radial-gradient(circle at 35% 30%, #6fd17a, #2f8a45);
+  animation: arrowIn 2.4s ease-in-out infinite;
+}
+
+.bagOut .bagArrow {
+  right: -14px;
+  background: radial-gradient(circle at 35% 30%, #f07a63, #b3361f);
+  animation: arrowOut 2.4s ease-in-out infinite;
+}
+
+@keyframes arrowIn {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(3px, 3px);
+  }
+}
+
+@keyframes arrowOut {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(3px, -3px);
+  }
+}
+
+@media (max-width: 700px) {
+  .bag {
+    font-size: 30px;
+  }
+
+  .bagArrow {
+    width: 22px;
+    height: 22px;
+    top: -4px;
+  }
+
+  .bagArrow svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .bagIn .bagArrow {
+    left: -10px;
+  }
+
+  .bagOut .bagArrow {
+    right: -10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bagArrow {
+    animation: none !important;
+  }
+}

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { passiveIncome } from '../../engine/selectors'
+import { Compass, Gem, Landmark } from 'lucide-react'
 import type { GameState } from '../../engine/types'
+import type { TourTab } from './GuideTour'
 import { prefersReducedMotion, updateSettings, useSettings } from '../settings'
 import { sfx } from '../sfx'
 import { stopSpeaking, voiceSupported } from '../voice'
@@ -13,9 +14,14 @@ interface Floater {
   delta: number
 }
 
-export function LedgerBar({ state, onShowTour }: { state: GameState; onShowTour: () => void }) {
-  const income = passiveIncome(state)
-  const netIncome = income - state.finances.monthlyExpenses
+const TABS: { id: TourTab; label: string; Icon: typeof Compass }[] = [
+  { id: 'story', label: 'Adventure', Icon: Compass },
+  { id: 'fortune', label: 'Fortune', Icon: Gem },
+  { id: 'guild', label: 'Guild Hall', Icon: Landmark },
+]
+
+/** The top bar: your purse, the three pages of the game, and ⚙️ for settings. */
+export function LedgerBar({ state, tab, onTab, onShowTour, onNewGame }: { state: GameState; tab: TourTab; onTab: (tab: TourTab) => void; onShowTour: () => void; onNewGame: () => void }) {
   const gold = state.finances.gold
   const shownGold = useCountUp(gold, state.clock.day)
   const purseRef = useRef<HTMLDivElement>(null)
@@ -64,28 +70,15 @@ export function LedgerBar({ state, onShowTour }: { state: GameState; onShowTour:
           </span>
         ))}
       </div>
-      {/* Phones hide wages to fit one line; it's on the You tab too */}
-      <div className={`${styles.group} ${styles.wages}`}>
-        <span className={styles.label}>Wages</span>
-        <span className={styles.value}>{state.finances.wages}g/mo</span>
-      </div>
-      <div className={styles.group} data-tour="net">
-        <span className={styles.label}>Net</span>
-        <span className={`${styles.value} ${netIncome >= 0 ? styles.positive : styles.negative}`}>
-          {netIncome >= 0 ? '+' : ''}
-          {netIncome}g
-        </span>
-      </div>
-      <div className={`${styles.group} ${styles.day}`}>
-        <span className={styles.label}>Day</span>
-        <span className={styles.value}>{state.clock.day}</span>
-      </div>
-      <div className={styles.group} data-tour="colossi">
-        <span className={styles.label}>Colossi</span>
-        <span className={styles.value}>{state.progress.colossiDefeated}/7</span>
-      </div>
-      <div className={styles.spacer} />
-      <SettingsMenu onShowTour={onShowTour} />
+      <nav className={styles.tabs} aria-label="Game pages" data-tour="tabs">
+        {TABS.map(({ id, label, Icon }) => (
+          <button key={id} type="button" className={styles.tab} aria-current={tab === id ? 'page' : undefined} onClick={() => onTab(id)} data-tour={`tab-${id}`}>
+            <Icon className={styles.tabIcon} size={20} strokeWidth={2} aria-hidden="true" />
+            <span className={styles.tabLabel}>{label}</span>
+          </button>
+        ))}
+      </nav>
+      <SettingsMenu onShowTour={onShowTour} onNewGame={onNewGame} />
     </div>
   )
 }
@@ -172,8 +165,8 @@ function dropCoins(purse: HTMLElement, count: number) {
   }
 }
 
-/** ⚙️ in the top bar: sound, music, narration, and replaying the guide's tour. */
-function SettingsMenu({ onShowTour }: { onShowTour: () => void }) {
+/** ⚙️ in the top bar: sound, music, narration, replaying the guide's tour, and starting over. */
+function SettingsMenu({ onShowTour, onNewGame }: { onShowTour: () => void; onNewGame: () => void }) {
   const settings = useSettings()
   const [open, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -230,6 +223,18 @@ function SettingsMenu({ onShowTour }: { onShowTour: () => void }) {
           >
             <span aria-hidden="true">❓</span>
             <span className={styles.menuLabel}>How to play</span>
+          </button>
+          <button
+            type="button"
+            role="menuitem"
+            className={styles.menuItem}
+            onClick={() => {
+              setOpen(false)
+              onNewGame()
+            }}
+          >
+            <span aria-hidden="true">🌅</span>
+            <span className={styles.menuLabel}>New game</span>
           </button>
         </div>
       )}

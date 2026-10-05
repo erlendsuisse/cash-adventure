@@ -1,5 +1,5 @@
 import { campaign } from '../../content/campaign'
-import { abilityName, effectiveChoice } from '../../engine/hero'
+import { effectiveChoice, ruleSources } from '../../engine/hero'
 import { isMet } from '../../engine/requirements'
 import type { Choice, GameState } from '../../engine/types'
 import { choiceIcon } from '../choiceIcon'
@@ -10,7 +10,7 @@ export function ChoiceList({ choices, state, onChoose }: { choices: Choice[]; st
   return (
     <div className={styles.choices}>
       {choices.map((choice) => {
-        // The choice as this hero sees it: the Silver Tongue's Haggle lowers prices
+        // The choice as this hero sees it: Haggle, the Haggler skill and others lower prices
         const shown = effectiveChoice(choice, state, campaign)
         const unmet = (shown.requires ?? []).filter((r) => !isMet(r, state))
         if (unmet.length > 0 && !choice.showLockedAs) return null
@@ -32,7 +32,7 @@ export function ChoiceList({ choices, state, onChoose }: { choices: Choice[]; st
               <RichText text={label} />
               {haggled && (
                 <span className={styles.abilityTag}>
-                  {abilityName(state, campaign)}: was {was}g
+                  {ruleSources('ventureDiscount', state, campaign)}: was {was}g
                 </span>
               )}
               {locked && lockedText ? <span className={styles.reason}>{lockedText}</span> : null}

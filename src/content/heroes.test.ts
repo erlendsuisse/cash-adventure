@@ -83,12 +83,12 @@ describe('class abilities', () => {
 
   it('Shadow Step: the Smuggler gains 1 less Attention', () => {
     const shady: Choice = { id: 's', label: 'Shady', effects: [{ kind: 'flag', id: 'police_trigger', delta: 2 }, { kind: 'flag', id: 'mafia_trigger', delta: 1 }] }
-    expect(effectiveChoice(shady, heroGame('smuggler'), campaign).effects).toEqual([{ kind: 'flag', id: 'police_trigger', delta: 1 }])
+    expect(effectiveChoice(shady, heroGame('smuggler'), campaign).effects).toEqual([{ kind: 'flag', id: 'police_trigger', delta: 1 }, { kind: 'narrate', text: 'Shadow Step: fewer people noticed.' }])
   })
 
   it('Lucky Find: the Prospector wins 25% more gold from a successful check', () => {
     const win = { text: 'Found it!', effects: [{ kind: 'gold' as const, delta: 100 }] }
-    expect(effectiveOutcome(win, true, heroGame('prospector'), campaign).effects).toEqual([{ kind: 'gold', delta: 125 }])
+    expect(effectiveOutcome(win, true, heroGame('prospector'), campaign).effects).toEqual([{ kind: 'gold', delta: 125 }, { kind: 'narrate', text: 'Lucky Find: 25g extra!' }])
     expect(effectiveOutcome(win, false, heroGame('prospector'), campaign).effects).toEqual(win.effects)
   })
 

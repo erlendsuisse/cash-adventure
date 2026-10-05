@@ -555,3 +555,52 @@
   font-size: 14px;
   line-height: 1.4;
 }
+
+/* Extra on rolls from the class ability, skills, gear and trophies */
+.rollBonus {
+  margin-left: auto;
+  margin-right: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #9ed49a;
+}
+
+.kit {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 8px;
+}
+
+.kitItem {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  background: rgba(255, 215, 0, 0.08);
+  border: 1.5px solid rgba(193, 120, 23, 0.6);
+  border-radius: 50%;
+  cursor: help;
+}
+
+/* Attributes as a 2 by 2 grid of tiles: the side panel never needs to scroll */
+.statGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.statGrid .stat {
+  flex-wrap: wrap;
+  padding: 8px 10px;
+  background: rgba(255, 215, 0, 0.06);
+  border: 1px solid rgba(193, 120, 23, 0.45);
+  border-radius: 8px;
+}
+
+.statGrid .rollBonus {
+  order: 3;
+  flex-basis: 100%;
+  margin: 0;
+}

@@ -78,7 +78,7 @@ const flat = (effects: Effect[] = []): Effect[] => effects.flatMap((e) => (e.kin
 
 export function choiceIcon(choice: Choice, locked = false): LucideIcon {
   if (locked) return Lock
-  if (choice.check) return STAT_ICON[choice.check.stat]
+  if (choice.check) return choice.check.stat === 'best' ? Sparkles : STAT_ICON[choice.check.stat]
 
   const label = choice.label.toLowerCase()
   if (label === 'continue') return ChevronsRight

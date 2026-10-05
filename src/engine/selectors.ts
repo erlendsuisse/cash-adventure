@@ -29,6 +29,11 @@ export function currentChapter(state: GameState): ChapterNumber {
   return Math.min(state.progress.colossiDefeated + 1, 7) as ChapterNumber
 }
 
+/** Days you must stay free in this chapter before its Colossus comes. */
+export function freedomDaysToTrial(state: GameState, campaign: Pick<Campaign, 'tuning'>): number {
+  return campaign.tuning.freedomDaysByChapter?.[currentChapter(state)] ?? campaign.tuning.freedomDaysToTrial
+}
+
 /** What the market pays per unit right now. */
 export function commodityPrice(state: GameState, campaign: Pick<Campaign, 'commodityBasePrice'>, commodity: Commodity): number {
   return Math.max(1, Math.round((campaign.commodityBasePrice[commodity] * (state.market[commodity] ?? 100)) / 100))

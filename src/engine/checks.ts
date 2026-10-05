@@ -1,6 +1,6 @@
 import { isMet } from './requirements'
 import { rollDie } from './rng'
-import type { CheckResult, GameState, Outcome, RngState, SkillCheck } from './types'
+import type { CheckResult, GameState, Outcome, RngState, SkillCheck, StatId } from './types'
 
 export interface ResolvedCheck {
   result: CheckResult
@@ -10,7 +10,7 @@ export interface ResolvedCheck {
 
 /** Rolls inside the engine so the result is deterministic and replayable; the
  *  UI only ever renders a CheckResult it was handed, never rolls itself. */
-export function resolveCheck(check: SkillCheck, state: GameState, extraBonuses: { mod: number; reason: string }[] = []): ResolvedCheck {
+export function resolveCheck(check: SkillCheck & { stat: StatId }, state: GameState, extraBonuses: { mod: number; reason: string }[] = []): ResolvedCheck {
   const die = check.die ?? 20
   const { roll, rng } = rollDie(state.rng, die)
 

@@ -3,7 +3,7 @@ import { campaign } from '../../content/campaign'
 import { inTrouble } from '../../content/cards/work-opportunities'
 import { CHAPTERS } from '../../content/chapters'
 import { isMet } from '../../engine/requirements'
-import { currentChapter, isFree, passiveIncome } from '../../engine/selectors'
+import { currentChapter, freedomDaysToTrial, isFree, passiveIncome } from '../../engine/selectors'
 import type { GameState } from '../../engine/types'
 import { RichText } from '../RichText'
 import styles from './ChapterBanner.module.css'
@@ -26,12 +26,12 @@ function objective(state: GameState): Objective {
   if (!isFree(state)) {
     return { tone: 'goal', text: `Buy ventures until they pay for your living costs. Just ${expenses - passive}g a month to go, and you're free!`, progress: income }
   }
-  const days = campaign.tuning.freedomDaysToTrial
+  const days = freedomDaysToTrial(state, campaign)
   const remaining = Math.max(0, days - state.progress.freedomDays)
   const next = state.progress.colossiDefeated + 1
   return {
     tone: 'good',
-    text: `You're free! Stay free ${remaining} more day${remaining === 1 ? '' : 's'}, and Colossus ${next} will come to test you.`,
+    text: `You're free! Stay free ${remaining} more day${remaining === 1 ? '' : 's'}, and Colossus ${next} will come to test you. Train at the Guild Hall while you wait!`,
     progress: { value: state.progress.freedomDays, max: days, label: `Free for ${state.progress.freedomDays} of ${days} days` },
   }
 }
