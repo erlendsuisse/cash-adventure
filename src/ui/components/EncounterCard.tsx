@@ -28,9 +28,18 @@ export function EncounterCard({
   const [rollLanded, setRollLanded] = useState(!outcome?.checkResult || prefersReducedMotion())
   const [result, setResult] = useState<'pass' | 'fail' | null>(null)
 
+  // The card waits a moment so the new artwork can be enjoyed, then is dealt
+  // in; its sound and narration wait for the same moment.
+  const [arrived, setArrived] = useState(() => cardArriveMs() === 0)
   useEffect(() => {
-    sfx.card()
-    return () => stopSpeaking()
+    const t = setTimeout(() => {
+      setArrived(true)
+      sfx.card()
+    }, cardArriveMs())
+    return () => {
+      clearTimeout(t)
+      stopSpeaking()
+    }
   }, [])
 
   useEffect(() => {
@@ -44,8 +53,8 @@ export function EncounterCard({
 
   // Narrate each card and each outcome as it appears (when narration is on)
   useEffect(() => {
-    if (rollLanded) speak(spokenText)
-  }, [spokenText, rollLanded])
+    if (rollLanded && arrived) speak(spokenText)
+  }, [spokenText, rollLanded, arrived])
 
   const outcomeVisible = showingOutcome && rollLanded
   const summary = outcome?.effectSummary
@@ -65,7 +74,10 @@ export function EncounterCard({
   return (
     <div className={styles.wrap}>
       {badNews && <div className={styles.badVignette} aria-hidden="true" />}
-      <div className={`${styles.card} ${result === 'pass' ? styles.cardPass : ''} ${badNews ? styles.cardBad : ''}`}>
+      <div
+        className={`${styles.card} ${result === 'pass' ? styles.cardPass : ''} ${badNews ? styles.cardBad : ''} ${arrived ? '' : styles.arriving}`}
+        style={{ '--arrive': `${cardArriveMs()}ms` } as React.CSSProperties}
+      >
         {badNews && (
           <div className={styles.rainCloud} aria-hidden="true">
             🌧️
@@ -177,6 +189,10 @@ const RESULT_TEXT: Record<CheckResult['result'], string> = {
 }
 
 const ROLL_MS = 1000
+
+/** The pause before a new card is dealt, to enjoy the artwork (the background crossfade takes 1.2s) */
+const CARD_ARRIVE_MS = 2000
+const cardArriveMs = () => (prefersReducedMotion() ? 0 : CARD_ARRIVE_MS)
 
 /** "A", "A and B", "A, B and C" */
 function joinNames(names: string[]): string {

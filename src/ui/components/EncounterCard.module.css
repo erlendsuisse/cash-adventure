@@ -2,14 +2,14 @@
   flex: 1 0 auto; /* grow to fill, never shrink: the container scrolls instead */
   display: flex;
   justify-content: center;
-  padding: 24px;
+  padding: 24px 24px max(20px, env(safe-area-inset-bottom));
 }
 
 .card {
   position: relative;
   width: 100%;
   max-width: 640px;
-  margin: auto 0; /* vertically centred; a taller card still scrolls from its top */
+  margin: auto 0 0; /* at the bottom, leaving the artwork above it clear; a taller card still scrolls from its top */
   padding: 34px 38px 30px;
   color: var(--paper-ink);
   /* Old paper: a soft grain, warm cream, and edges darkened with age */
@@ -23,8 +23,15 @@
     inset 0 0 50px rgba(130, 85, 30, 0.22),
     0 4px 8px rgba(30, 20, 10, 0.25),
     0 18px 40px rgba(30, 20, 10, 0.4);
-  /* Dealt onto the table like a card from a deck */
-  animation: deal 0.55s cubic-bezier(0.2, 0.8, 0.3, 1.1) 1.25s both; /* a pause first, to enjoy the new picture */
+  /* Dealt onto the table like a card from a deck, after a pause to enjoy the
+     new picture. The pause is CARD_ARRIVE_MS in EncounterCard.tsx, passed in
+     as --arrive so narration and sound wait for exactly the same moment. */
+  animation: deal 0.55s cubic-bezier(0.2, 0.8, 0.3, 1.1) var(--arrive, 2s) both;
+}
+
+/* Not tappable until it has been dealt (an invisible card can't take a stray tap) */
+.arriving {
+  pointer-events: none;
 }
 
 /* A thin inked border just inside the edge, with small corner ornaments */
