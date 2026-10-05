@@ -6,12 +6,28 @@
   padding: 20px;
   display: grid;
   grid-template-columns: minmax(280px, 380px) 1fr;
-  grid-template-rows: auto auto;
+  grid-template-areas:
+    'hero holdings'
+    'goods holdings'
+    'tiles tiles';
   gap: 16px;
   align-content: center;
 }
 
+.hero {
+  grid-area: hero;
+}
+
+.goodsPanel {
+  grid-area: goods;
+}
+
+.holdings {
+  grid-area: holdings;
+}
+
 .hero,
+.goodsPanel,
 .holdings,
 .tile {
   color: var(--paper-ink);
@@ -144,10 +160,16 @@
   color: #6b5232;
 }
 
-.ventures {
+.goodsPanel {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 8px;
+  padding: 12px 16px 14px;
+}
+
+.ventures {
+  display: grid;
+  gap: 10px;
   padding: 0;
   font: inherit;
   color: inherit;
@@ -157,11 +179,64 @@
   cursor: pointer;
 }
 
-.venture {
+/* A few ventures: big boxes, like the goods */
+.ventureBoxes {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.ventureBoxes .venture {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'icon name'
+    'icon flow';
+  align-items: center;
+  column-gap: 12px;
+  padding: 12px 14px;
+  background: rgba(255, 250, 235, 0.7);
+  border: 1.5px solid #c9a46a;
+  border-radius: 12px;
+}
+
+.ventureBoxes .ventureIcon {
+  grid-area: icon;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  background: #fffaf0;
+  border: 1.5px solid #c9a46a;
+  border-radius: 50%;
+}
+
+.ventureBoxes .ventureName {
+  grid-area: name;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.ventureBoxes .ventureFlow {
+  grid-area: flow;
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Many ventures: a tidy two-column list */
+.ventureList {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px 20px;
+}
+
+.ventureList .venture {
   display: flex;
   align-items: baseline;
   gap: 8px;
+  padding: 3px 0;
   font-size: 15px;
+  border-bottom: 1px dotted rgba(120, 80, 35, 0.3);
 }
 
 .ventureName {
@@ -172,7 +247,16 @@
   text-overflow: ellipsis;
 }
 
+.ventureList .ventureName {
+  white-space: nowrap;
+}
+
+.ventureBoxes .ventureName {
+  white-space: normal;
+}
+
 .more {
+  grid-column: 1 / -1;
   font-size: 13px;
   font-style: italic;
   color: #6b5232;
@@ -228,7 +312,8 @@
   display: flex;
   align-items: baseline;
   gap: 10px;
-  padding: 6px 0 0;
+  margin-top: auto;
+  padding: 8px 0 0;
   font: inherit;
   color: inherit;
   text-align: left;
@@ -264,7 +349,7 @@
 
 /* ---------- Tiles ---------- */
 .tiles {
-  grid-column: 1 / -1;
+  grid-area: tiles;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 14px;
@@ -313,10 +398,20 @@
   font-weight: 700;
 }
 
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  margin-top: 8px;
+}
+
+.heroActions .kit {
+  margin-top: 0;
+}
+
 .skillsButton {
   display: none;
-  align-self: flex-start;
-  margin-top: 6px;
   min-height: 36px;
   padding: 4px 12px;
   font-size: 13px;
@@ -455,7 +550,11 @@
 @media (max-width: 900px) {
   .page {
     grid-template-columns: 1fr;
-    grid-template-rows: none;
+    grid-template-areas:
+      'hero'
+      'goods'
+      'holdings'
+      'tiles';
     align-content: center;
   }
 
@@ -515,9 +614,40 @@
     font-size: 16px;
   }
 
-  .venture:nth-child(n + 3),
+  .goodsPanel {
+    padding: 8px 12px 10px;
+    gap: 4px;
+  }
+
+  .ventureList {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .ventureBoxes .venture {
+    padding: 8px 10px;
+    column-gap: 8px;
+  }
+
+  .ventureBoxes .ventureIcon {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .ventureBoxes .ventureName {
+    font-size: 13px;
+  }
+
+  .ventureBoxes .ventureFlow {
+    font-size: 15px;
+  }
+
+  /* Room for 2 boxes or 3 list lines on a phone; the rest are a tap away */
+  .ventureBoxes .venture:nth-child(n + 3),
+  .ventureList .venture:nth-child(n + 4),
   .wideOnly {
-    display: none; /* two on a phone; the rest are a tap away */
+    display: none;
   }
 
   .phoneMore {

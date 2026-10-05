@@ -13,8 +13,12 @@ import styles from './FortunePage.module.css'
 const COMMODITIES: Commodity[] = ['salt', 'spice', 'iron']
 const GOOD_ICON: Record<Commodity, string> = { salt: '🧂', spice: '🌶️', iron: '⚒️' }
 const SECTOR_ICON: Record<string, string> = { salt: '🧂', spice: '🌶️', iron: '⚒️' }
-/** Ventures listed on the page; the rest are one tap away */
-const VENTURES_SHOWN = 3
+/** Up to this many ventures get big boxes; more shrink to a list */
+const MAX_BOXES = 4
+/** Most ventures a list shows on iPad and on a phone; the rest are one tap away */
+const LIST_SHOWN = 8
+const PHONE_BOXES = 2
+const PHONE_LIST = 3
 const cap = (s: string) => s[0]!.toUpperCase() + s.slice(1)
 const signed = (n: number) => `${n >= 0 ? '+' : '−'}${Math.abs(n)}g`
 
@@ -70,6 +74,9 @@ export function FortunePage({ state }: { state: GameState }) {
   const goodsValue = goods.reduce((sum, g) => sum + g.value, 0)
   const worth = finances.gold + venturesValue + goodsValue - finances.debt
   const chapter = CHAPTERS[currentChapter(state)]
+  const boxes = finances.assets.length <= MAX_BOXES
+  const shown = boxes ? MAX_BOXES : LIST_SHOWN
+  const phoneShown = boxes ? PHONE_BOXES : PHONE_LIST
   const kit = state.progress.boons.flatMap((b) => (campaign.perks?.[b] ? [campaign.perks[b]] : []))
 
   const heroClass = state.hero ? campaign.heroClasses?.[state.hero.classId] : undefined
@@ -100,65 +107,67 @@ export function FortunePage({ state }: { state: GameState }) {
               <strong>{heroClass.ability.name}:</strong> {heroClass.ability.text}
             </p>
           )}
-          {/* Phones have no side panel: attributes and reputation open from here */}
-          <button type="button" className={styles.skillsButton} onClick={() => setOpen('skills')} data-tour="stats">
-            🎲 Skills & friends
-          </button>
-          <button type="button" className={styles.kit} onClick={() => setOpen('kit')} aria-label="Skills, gear and trophies">
-            {kit.length === 0 ? (
-              <span className={styles.kitEmpty}>No skills or gear yet</span>
-            ) : (
-              kit.map((p) => (
-                <span key={p.id} className={styles.kitItem} aria-hidden="true">
-                  {p.icon}
-                </span>
-              ))
-            )}
-          </button>
+          <div className={styles.heroActions}>
+            {/* Phones have no side panel: attributes and reputation open from here */}
+            <button type="button" className={styles.skillsButton} onClick={() => setOpen('skills')} data-tour="stats">
+              🎲 Skills & friends
+            </button>
+            <button type="button" className={styles.kit} onClick={() => setOpen('kit')} aria-label="Skills, gear and trophies">
+              {kit.length === 0 ? (
+                <span className={styles.kitEmpty}>No skills or gear yet</span>
+              ) : (
+                kit.map((p) => (
+                  <span key={p.id} className={styles.kitItem} aria-hidden="true">
+                    {p.icon}
+                  </span>
+                ))
+              )}
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* What you own and owe (the road to freedom is on the Adventure page) */}
+      {/* Goods: under your persona, so ventures get the whole right side */}
+      <section className={styles.goodsPanel}>
+        <h3 className={styles.panelTitle}>Goods</h3>
+        <div className={styles.goods}>
+          {COMMODITIES.map((c) => {
+            const units = finances.commodities[c]
+            return (
+              <span key={c} className={`${styles.good} ${units === 0 ? styles.goodEmpty : ''}`}>
+                <span className={styles.goodIcon} aria-hidden="true">
+                  {GOOD_ICON[c]}
+                </span>
+                <span className={styles.goodName}>{cap(c)}</span>
+                <strong>{units}</strong>
+                <span className={styles.goodValue}>{units > 0 ? `${units * commodityPrice(state, campaign, c)}g` : `${commodityPrice(state, campaign, c)}g each`}</span>
+              </span>
+            )
+          })}
+        </div>
+      </section>
+
+      {/* What you own and owe (the road to freedom is on the Adventure page).
+          A few ventures get big boxes; many shrink to a list. */}
       <section className={styles.holdings}>
-        <h3 className={styles.panelTitle}>Your Holdings</h3>
-
-        <div className={styles.group}>
-          <span className={styles.groupLabel}>Ventures</span>
-          {finances.assets.length === 0 ? (
-            <p className={styles.none}>None yet. Look out for cards that offer one!</p>
-          ) : (
-            <button type="button" className={styles.ventures} onClick={() => setOpen('in')}>
-              {finances.assets.slice(0, VENTURES_SHOWN).map((a) => (
-                <span key={a.id} className={styles.venture}>
-                  <span aria-hidden="true">{SECTOR_ICON[a.sector] ?? '🏪'}</span>
-                  <span className={styles.ventureName}>{a.label}</span>
-                  <span className={styles.plus}>+{a.monthlyCashflow}g/mo</span>
+        <h3 className={styles.panelTitle}>Your Ventures</h3>
+        {finances.assets.length === 0 ? (
+          <p className={styles.none}>None yet. Look out for cards that offer one: they pay you every month!</p>
+        ) : (
+          <button type="button" className={`${styles.ventures} ${boxes ? styles.ventureBoxes : styles.ventureList}`} onClick={() => setOpen('in')}>
+            {finances.assets.slice(0, shown).map((a) => (
+              <span key={a.id} className={styles.venture}>
+                <span className={styles.ventureIcon} aria-hidden="true">
+                  {SECTOR_ICON[a.sector] ?? '🏪'}
                 </span>
-              ))}
-              {finances.assets.length > VENTURES_SHOWN && <span className={`${styles.more} ${styles.wideOnly}`}>and {finances.assets.length - VENTURES_SHOWN} more…</span>}
-              {finances.assets.length > 2 && <span className={`${styles.more} ${styles.phoneMore}`}>and {finances.assets.length - 2} more…</span>}
-            </button>
-          )}
-        </div>
-
-        <div className={styles.group}>
-          <span className={styles.groupLabel}>Goods</span>
-          <div className={styles.goods}>
-            {COMMODITIES.map((c) => {
-              const units = finances.commodities[c]
-              return (
-                <span key={c} className={`${styles.good} ${units === 0 ? styles.goodEmpty : ''}`}>
-                  <span className={styles.goodIcon} aria-hidden="true">
-                    {GOOD_ICON[c]}
-                  </span>
-                  <span className={styles.goodName}>{cap(c)}</span>
-                  <strong>{units}</strong>
-                  <span className={styles.goodValue}>{units > 0 ? `${units * commodityPrice(state, campaign, c)}g` : `${commodityPrice(state, campaign, c)}g each`}</span>
-                </span>
-              )
-            })}
-          </div>
-        </div>
+                <span className={styles.ventureName}>{a.label}</span>
+                <span className={`${styles.ventureFlow} ${styles.plus}`}>+{a.monthlyCashflow}g/mo</span>
+              </span>
+            ))}
+            {finances.assets.length > shown && <span className={`${styles.more} ${styles.wideOnly}`}>and {finances.assets.length - shown} more…</span>}
+            {finances.assets.length > phoneShown && <span className={`${styles.more} ${styles.phoneMore}`}>and {finances.assets.length - phoneShown} more…</span>}
+          </button>
+        )}
 
         <button type="button" className={`${styles.debt} ${finances.debt > 0 ? styles.debtOwed : ''}`} onClick={() => setOpen('lender')}>
           <span className={styles.groupLabel}>Debt</span>
