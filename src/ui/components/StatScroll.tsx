@@ -35,6 +35,16 @@ export function StatScroll({ state }: { state: GameState }) {
               </div>
             ))}
           </div>
+          {/* Skills, gear and trophies at a glance (details on the Fortune page) */}
+          {kit.length > 0 && (
+            <div className={styles.kit} aria-label="Carried with you">
+              {kit.map((perk) => (
+                <span key={perk.id} className={styles.kitItem} title={`${perk.name}: ${perk.text}`} aria-label={`${perk.name}: ${perk.text}`}>
+                  {perk.icon}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Reputation: what each faction thinks of you, and what it's worth */}
@@ -63,20 +73,6 @@ export function StatScroll({ state }: { state: GameState }) {
             })}
           </div>
         </div>
-
-        {/* Skills, gear and trophies at a glance (details on the You tab) */}
-        {kit.length > 0 && (
-          <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Carried With You</h4>
-            <div className={styles.kit}>
-              {kit.map((perk) => (
-                <span key={perk.id} className={styles.kitItem} title={`${perk.name}: ${perk.text}`} aria-label={`${perk.name}: ${perk.text}`}>
-                  {perk.icon}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Heat: misconduct draws attention; full heat summons the next Colossus early */}
         {HEAT_PATHS.some((h) => (state.flags[h.flagId] ?? 0) > 0) && (

@@ -87,49 +87,250 @@
   line-height: 1.35;
 }
 
-/* Progress toward the goal */
-.progress {
+/* ---------- The road to the goal ---------- */
+.road {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.track {
   position: relative;
-  height: 24px;
-  overflow: hidden;
-  background: rgba(110, 70, 25, 0.16);
-  border: 1.5px solid #9c7038;
+  flex: 1;
+  height: 30px;
+  background: rgba(110, 70, 25, 0.18);
+  border: 2px solid #9c7038;
   border-radius: 999px;
+  box-shadow: inset 0 2px 4px rgba(60, 35, 10, 0.25);
 }
 
-.progressFill {
+.fill {
+  position: relative;
   height: 100%;
-  background: linear-gradient(to bottom, #e9bf52 0%, #c08a22 100%);
+  overflow: hidden;
+  background: linear-gradient(to bottom, #ffe08a 0%, #e9bf52 45%, #c08a22 100%);
   border-radius: 999px;
-  transition: width 0.8s ease-out;
+  transition: width 0.9s cubic-bezier(0.3, 1.2, 0.5, 1);
 }
 
-.progressLabel {
+/* A slow gleam running along the gold */
+.fill::after {
+  content: '';
   position: absolute;
   inset: 0;
-  padding: 0 10px;
-  overflow: hidden;
-  line-height: 21px;
-  text-align: center;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  background: linear-gradient(100deg, transparent 0%, rgba(255, 255, 255, 0.55) 50%, transparent 100%);
+  transform: translateX(-100%);
+  animation: gleam 3.2s ease-in-out infinite;
+}
+
+@keyframes gleam {
+  60%,
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Checkpoints at a quarter, half and three quarters */
+.milestone {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  background: #f6e8c6;
+  border: 2px solid #9c7038;
+  transform: translate(-50%, -50%) rotate(45deg);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.milestoneLit {
+  background: #fff3b0;
+  border-color: #fff;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.9);
+}
+
+.amount {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: Georgia, serif;
   font-size: 13px;
   font-weight: 700;
   color: #3b2410;
-  text-shadow: 0 1px 0 rgba(255, 245, 220, 0.7);
+  text-shadow: 0 1px 0 rgba(255, 245, 220, 0.8);
 }
 
-.warn .progressFill {
-  background: linear-gradient(to bottom, #e58b6c 0%, #b4492c 100%);
+/* Your hero, walking the road */
+.walker {
+  position: absolute;
+  top: 50%;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  background: #2a2219;
+  border: 2.5px solid #ffd76a;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #8a5a22, 0 3px 8px rgba(0, 0, 0, 0.45);
+  transform: translate(-50%, -50%);
+  transition: left 0.9s cubic-bezier(0.3, 1.2, 0.5, 1);
+  animation: walk 1.6s ease-in-out infinite;
+  z-index: 1;
+}
+
+.walker img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+@keyframes walk {
+  0%,
+  100% {
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    transform: translate(-50%, -58%);
+  }
+}
+
+/* "+12g/mo" flies up out of the bar when a venture moves you forward */
+.gain {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  padding: 2px 8px;
+  font-family: Georgia, serif;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #fff;
+  background: #2f8a45;
+  border: 1.5px solid #fff;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  animation: gainRise 1.8s ease-out forwards;
+}
+
+@keyframes gainRise {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 10px) scale(0.6);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -4px) scale(1.1);
+  }
+  75% {
+    opacity: 1;
+    transform: translate(-50%, -14px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -24px) scale(1);
+  }
+}
+
+/* What waits at the end of the road */
+.end {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.endIcon {
+  font-size: 30px;
+  filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.7));
+  animation: beckon 2.4s ease-in-out infinite;
+}
+
+@keyframes beckon {
+  50% {
+    filter: drop-shadow(0 0 12px rgba(255, 215, 0, 1));
+    transform: scale(1.06);
+  }
+}
+
+.endLabel {
+  margin-top: 2px;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #8a5a22;
+}
+
+.warn .fill {
+  background: linear-gradient(to bottom, #f0a58a 0%, #e58b6c 45%, #b4492c 100%);
+}
+
+.good .fill {
+  background: linear-gradient(to bottom, #b8eaa8 0%, #8ed37f 45%, #3f8a3a 100%);
+}
+
+/* A milestone: the whole banner glows for a moment */
+.glow {
+  animation: bannerGlow 1.6s ease-out;
+}
+
+@keyframes bannerGlow {
+  30% {
+    box-shadow: 0 0 0 3px #ffd76a, 0 0 30px rgba(255, 215, 0, 0.8);
+  }
+}
+
+/* Old Tobias cheers you on */
+.cheer {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: max-content;
+  max-width: min(460px, calc(100vw - 32px));
+  padding: 8px 16px 8px 8px;
+  font-size: 16px;
+  color: var(--paper-ink);
+  background: #fffaf0;
+  border: 2px solid #c9a46a;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  transform: translateX(-50%);
+  animation: cheerIn 4s ease forwards;
+}
+
+.cheerPortrait {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border: 2px solid #c17817;
+  border-radius: 50%;
+}
+
+@keyframes cheerIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -10px) scale(0.9);
+  }
+  10%,
+  85% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -6px);
+  }
 }
 
 .warn .objective {
   color: #8f2a14;
   font-weight: 700;
-}
-
-.good .progressFill {
-  background: linear-gradient(to bottom, #8ed37f 0%, #3f8a3a 100%);
 }
 
 .good .objective {
@@ -178,18 +379,49 @@
     font-size: 15px;
   }
 
-  .progress {
-    height: 22px;
+  .track {
+    height: 24px;
   }
 
-  .progressLabel {
-    font-size: 12px;
-    line-height: 19px;
+  .walker {
+    width: 32px;
+    height: 32px;
+  }
+
+  .milestone {
+    width: 10px;
+    height: 10px;
+  }
+
+  .amount {
+    font-size: 11px;
+  }
+
+  .endIcon {
+    font-size: 24px;
+  }
+
+  .endLabel {
+    font-size: 9px;
+  }
+
+  .cheer {
+    font-size: 14px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .progressFill {
+  .fill,
+  .walker,
+  .milestone {
     transition: none;
+  }
+
+  .fill::after,
+  .walker,
+  .endIcon,
+  .glow,
+  .cheer {
+    animation: none;
   }
 }
