@@ -218,7 +218,7 @@ function mentorCard(chapter: ChapterNumber): StoryCard {
     choices: [
       {
         id: `mentor_ch${chapter}_pay`,
-        label: `${m.payLabel} (-${fee}g, learn ${perk.name})`,
+        label: `${m.payLabel} (-${fee}g, gain ${perk.name})`,
         requires: [{ kind: 'goldAtLeast', amount: fee }],
         effects: [{ kind: 'gold', delta: -fee }, { kind: 'grantBoon', boon: perk.id }, { kind: 'narrate', text: m.learned }],
       },

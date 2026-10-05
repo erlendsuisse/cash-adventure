@@ -10,7 +10,7 @@ export function ChoiceList({ choices, state, onChoose }: { choices: Choice[]; st
   return (
     <div className={styles.choices}>
       {choices.map((choice) => {
-        // The choice as this hero sees it: Haggle, the Haggler skill and others lower prices
+        // The choice as this hero sees it: Haggle, The Trader's Wink and others lower prices
         const shown = effectiveChoice(choice, state, campaign)
         const unmet = (shown.requires ?? []).filter((r) => !isMet(r, state))
         if (unmet.length > 0 && !choice.showLockedAs) return null

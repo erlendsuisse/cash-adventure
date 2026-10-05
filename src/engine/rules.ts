@@ -8,7 +8,7 @@ type RuleBook = Partial<Pick<Campaign, 'heroClasses' | 'perks'>>
 /** A rule and where it comes from: the class ability or a perk (skill, gear, trophy). */
 export interface SourcedRule {
   rule: AbilityRule
-  source: string // shown to the player, e.g. "Stand Firm" or "🧮 Brass Abacus"
+  source: string // shown to the player, e.g. "Stand Firm" or "🧮 Old Mott's Abacus"
   id: string // 'class' or the perk id; keys the once-per-chapter re-roll
 }
 

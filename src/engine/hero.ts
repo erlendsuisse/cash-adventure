@@ -101,7 +101,7 @@ export function bestStat(state: GameState): StatId {
 
 const heatFlags = (campaign: Campaign) => new Set(Object.values(campaign.consequenceTuning ?? {}).map((t) => t.flagId))
 
-/** Who gives the hero this kind of rule, for telling the player, e.g. "Haggle & 🤝 Haggler". */
+/** Who gives the hero this kind of rule, for telling the player, e.g. "Haggle & 🤝 The Trader's Wink". */
 export function ruleSources(kind: AbilityRule['kind'], state: GameState, campaign: Campaign): string {
   return [...new Set(allRules(state, campaign).filter((r) => r.rule.kind === kind).map((r) => r.source))].join(' & ')
 }
