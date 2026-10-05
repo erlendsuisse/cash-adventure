@@ -31,19 +31,23 @@ export function CreationScreen({ state, campaign, dispatch }: { state: GameState
   const [rolling, setRolling] = useState(false)
   const [look, setLook] = useState<HeroLook>('female')
 
+  const heroClass = classId ? campaign.heroClasses?.[classId] : undefined
+
   // Read each step's question aloud, for players still learning to read
   useEffect(() => {
-    speak({ class: 'Who will you be? Pick a hero.', background: 'Where did you grow up?', roll: 'Roll for your stats!', name: 'What is your name?' }[step])
+    const chosen = heroClass ? `${heroClass.name}! ${heroClass.ability.name}: ${heroClass.ability.text} ` : ''
+    speak({ class: 'Who will you be? Pick a hero.', background: `${chosen}Where did you grow up?`, roll: 'Roll for your stats!', name: 'What is your name?' }[step])
+    // Only when the step changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step])
-
-  const heroClass = classId ? campaign.heroClasses?.[classId] : undefined
   const background = backgroundId ? campaign.backgrounds?.[backgroundId] : undefined
   const rolls = state.creation?.rolls
 
+  /** Picking a hero is the whole step: on to where they grew up (Back changes it) */
   function chooseClass(id: string) {
     setClassId(id)
-    const c = campaign.heroClasses![id]!
-    speak(`${c.name}. ${c.tagline} ${c.ability.name}: ${c.ability.text}`)
+    sfx.card()
+    setStep('background')
   }
 
   function roll() {
@@ -93,12 +97,16 @@ export function CreationScreen({ state, campaign, dispatch }: { state: GameState
           <>
             <h1 className={styles.title}>Who will you be?</h1>
             <p className={styles.lead}>Every hero makes their fortune in their own way, and lives their own adventure.</p>
-            <div className={styles.lookToggle} role="radiogroup" aria-label="Hero look">
-              {(['female', 'male'] as HeroLook[]).map((l) => (
-                <button key={l} type="button" role="radio" aria-checked={look === l} className={`${styles.lookButton} ${look === l ? styles.lookActive : ''}`} onClick={() => setLook(l)}>
-                  {l === 'female' ? 'She' : 'He'}
-                </button>
-              ))}
+            <div className={styles.lookToggle} role="radiogroup" aria-label="Lass or lad">
+              {(['female', 'male'] as HeroLook[]).map((l) => {
+                const face = heroPortrait(classes[0]!.id, l)
+                return (
+                  <button key={l} type="button" role="radio" aria-checked={look === l} className={`${styles.lookButton} ${look === l ? styles.lookActive : ''}`} onClick={() => setLook(l)}>
+                    {face && <img src={face} alt="" className={styles.lookFace} />}
+                    {l === 'female' ? 'Lass' : 'Lad'}
+                  </button>
+                )
+              })}
             </div>
             <div className={styles.classGrid}>
               {classes.map((c) => {
@@ -109,41 +117,28 @@ export function CreationScreen({ state, campaign, dispatch }: { state: GameState
                     <span className={styles.portrait}>{portrait ? <img src={portrait} alt="" /> : <Icon size={34} strokeWidth={1.8} />}</span>
                     <span className={styles.className}>{c.name}</span>
                     <span className={styles.cousin}>like a {c.cousin}</span>
+                    <span className={styles.tileTagline}>{c.tagline}</span>
                   </button>
                 )
               })}
             </div>
-            {/* The chosen hero, up close (one panel instead of six long cards, so nothing scrolls) */}
-            <div className={styles.classDetail} aria-live="polite">
-              {heroClass ? (
-                <>
-                  <p className={styles.detailTagline}>
-                    <strong>{heroClass.name}:</strong> {heroClass.tagline}
-                  </p>
-                  <p className={styles.ability}>
-                    <strong>{heroClass.ability.name}:</strong> {heroClass.ability.text}
-                  </p>
-                  <p className={styles.statTags}>
-                    Best at <strong>{STAT_INFO[heroClass.mainStat].label}</strong> and <strong>{STAT_INFO[heroClass.secondStat].label}</strong>
-                  </p>
-                </>
-              ) : (
-                <p className={styles.detailHint}>Tap a hero to meet them.</p>
-              )}
-            </div>
-            <div className={styles.nav}>
-              <span />
-              <button type="button" className={styles.primary} disabled={!classId} onClick={() => setStep('background')}>
-                Next
-              </button>
-            </div>
+            <p className={styles.detailHint}>Tap a hero to choose them.</p>
           </>
         )}
 
         {step === 'background' && heroClass && (
           <>
             <h1 className={styles.title}>Where did you grow up?</h1>
-            <p className={styles.lead}>Your past gives you a head start. {heroClass.description}</p>
+            <div className={styles.chosen}>
+              <span className={styles.chosenPortrait}>{heroPortrait(heroClass.id, look) ? <img src={heroPortrait(heroClass.id, look)} alt="" /> : null}</span>
+              <span>
+                <strong className={styles.chosenName}>{heroClass.name}</strong> <span className={styles.cousin}>like a {heroClass.cousin}</span>
+                <span className={styles.chosenAbility}>
+                  <strong>{heroClass.ability.name}:</strong> {heroClass.ability.text} Best at {STAT_INFO[heroClass.mainStat].label} and {STAT_INFO[heroClass.secondStat].label}.
+                </span>
+              </span>
+            </div>
+            <p className={styles.lead}>Your past gives you a head start.</p>
             <div className={styles.backgroundList}>
               {backgrounds.map((b) => (
                 <button key={b.id} type="button" className={`${styles.backgroundCard} ${backgroundId === b.id ? styles.selected : ''}`} onClick={() => { setBackgroundId(b.id); speak(`${b.name}. ${b.text}`) }} aria-pressed={backgroundId === b.id}>
@@ -173,6 +168,14 @@ export function CreationScreen({ state, campaign, dispatch }: { state: GameState
                   : 'You keep the best 3 dice of 4. Want to swap two stats? Tap one, then another. You get one swap.'
                 : 'For each stat you roll 4 dice and keep the best 3. Then your class and background add their bonuses.'}
             </p>
+            {!rolls && (
+              <button type="button" className={styles.bigRoll} onClick={roll}>
+                <span className={styles.bigRollDice} aria-hidden="true">
+                  🎲🎲
+                </span>
+                Roll the dice!
+              </button>
+            )}
             <div className={styles.statList}>
               {STAT_ORDER.map((stat, i) => {
                 const dice = rolls?.[i]
@@ -217,13 +220,9 @@ export function CreationScreen({ state, campaign, dispatch }: { state: GameState
               <button type="button" className={styles.secondary} onClick={() => setStep('background')} disabled={!!rolls}>
                 Back
               </button>
-              {rolls ? (
+              {rolls && (
                 <button type="button" className={styles.primary} onClick={() => setStep('name')} disabled={rolling}>
                   Next
-                </button>
-              ) : (
-                <button type="button" className={`${styles.primary} ${styles.rollButton}`} onClick={roll}>
-                  🎲 Roll the dice!
                 </button>
               )}
             </div>

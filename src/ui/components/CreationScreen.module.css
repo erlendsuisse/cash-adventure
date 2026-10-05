@@ -155,34 +155,115 @@
   color: #6e4316;
 }
 
-/* The chosen hero, described */
-.classDetail {
-  min-height: 118px;
-  max-width: 720px;
-  margin: 14px auto 0;
-  padding: 12px 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 6px;
+.detailHint {
+  margin: 14px 0 0;
   text-align: center;
+  font-size: 16px;
+  font-style: italic;
+  color: #8a6a3e;
+}
+
+.tileTagline {
+  font-size: 12px;
+  line-height: 1.3;
+  color: #4a3720;
+}
+
+/* Lass / Lad, each with a little face */
+.lookFace {
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
+  vertical-align: middle;
+  object-fit: cover;
+  border: 1.5px solid #e6c88d;
+  border-radius: 50%;
+}
+
+/* The hero you picked, shown while choosing a background */
+.chosen {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: 640px;
+  margin: 4px auto 10px;
+  padding: 10px 14px;
+  text-align: left;
   background: rgba(255, 249, 232, 0.72);
-  border: 2px dashed #c9a86d;
+  border: 2px solid #c9a86d;
   border-radius: 12px;
 }
 
-.classDetail p {
-  margin: 0;
+.chosenPortrait {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  overflow: hidden;
+  border: 3px solid #e6c88d;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #6e4316;
 }
 
-.detailTagline {
-  font-size: 17px;
+.chosenPortrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.detailHint {
-  font-size: 17px;
-  font-style: italic;
-  color: #8a6a3e;
+.chosenName {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 18px;
+  color: var(--paper-heading);
+}
+
+.chosenAbility {
+  display: block;
+  margin-top: 2px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* The big roll: right where the eye goes, before the stats */
+.bigRoll {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: min(420px, 100%);
+  min-height: 72px;
+  margin: 0 auto 16px;
+  padding: 12px 28px;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #2b1a06;
+  background: linear-gradient(180deg, #ffe08a 0%, #e0a83a 100%);
+  border: 3px solid #a06a32;
+  border-radius: 999px;
+  box-shadow: 0 4px 0 #8a5a16, 0 0 0 0 rgba(233, 191, 82, 0.5);
+  cursor: pointer;
+  animation: bigPulse 1.6s ease-in-out infinite;
+}
+
+.bigRollDice {
+  font-size: 32px;
+  animation: wiggle 1.6s ease-in-out infinite;
+}
+
+@keyframes bigPulse {
+  50% {
+    box-shadow: 0 4px 0 #8a5a16, 0 0 0 12px rgba(233, 191, 82, 0.35);
+    transform: scale(1.03);
+  }
+}
+
+@keyframes wiggle {
+  25% {
+    transform: rotate(-12deg);
+  }
+  75% {
+    transform: rotate(12deg);
+  }
 }
 
 /* Backgrounds */
@@ -366,14 +447,6 @@
   border: 2px solid #c9a86d;
 }
 
-.rollButton {
-  font-size: 19px;
-  animation: pulse 1.6s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  50% { box-shadow: 0 3px 0 #8a5a16, 0 0 0 8px rgba(233, 191, 82, 0.35); }
-}
 
 @media (max-width: 900px) {
   .classGrid {
@@ -443,16 +516,48 @@
     font-size: 11px;
   }
 
-  .classDetail {
-    min-height: 0;
-    margin-top: 10px;
-    padding: 8px 10px;
-    gap: 4px;
+  .detailHint {
+    margin-top: 8px;
+    font-size: 14px;
   }
 
-  .detailTagline,
-  .detailHint {
+  .tileTagline {
+    display: none;
+  }
+
+  .lookFace {
+    width: 22px;
+    height: 22px;
+    margin-right: 6px;
+  }
+
+  .chosen {
+    gap: 10px;
+    padding: 6px 10px;
+    margin-bottom: 6px;
+  }
+
+  .chosenPortrait {
+    width: 48px;
+    height: 48px;
+  }
+
+  .chosenName {
     font-size: 15px;
+  }
+
+  .chosenAbility {
+    font-size: 12px;
+  }
+
+  .bigRoll {
+    min-height: 58px;
+    margin-bottom: 10px;
+    font-size: 21px;
+  }
+
+  .bigRollDice {
+    font-size: 26px;
   }
 
   .ability {
@@ -546,9 +651,6 @@
     margin-bottom: 8px;
   }
 
-  .classDetail {
-    margin-top: 8px;
-  }
 
   .nav {
     margin-top: 8px;
@@ -557,7 +659,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .dieRolling,
-  .rollButton {
+  .bigRoll,
+  .bigRollDice {
     animation: none;
   }
 }
