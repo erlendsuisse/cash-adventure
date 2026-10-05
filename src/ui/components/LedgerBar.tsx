@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Compass, Gem, Landmark } from 'lucide-react'
 import type { GameState } from '../../engine/types'
 import type { TourTab } from './GuideTour'
+import tobias from '../../assets/guide/old-tobias.webp'
 import { prefersReducedMotion, updateSettings, useSettings } from '../settings'
 import { sfx } from '../sfx'
 import { stopSpeaking, voiceSupported } from '../voice'
@@ -21,7 +22,25 @@ const TABS: { id: TourTab; label: string; Icon: typeof Compass }[] = [
 ]
 
 /** The top bar: your purse, the three pages of the game, and ⚙️ for settings. */
-export function LedgerBar({ state, tab, onTab, onShowTour, onNewGame }: { state: GameState; tab: TourTab; onTab: (tab: TourTab) => void; onShowTour: () => void; onNewGame: () => void }) {
+export function LedgerBar({
+  state,
+  tab,
+  onTab,
+  onShowTour,
+  onNewGame,
+  guildBadge = false,
+  guildTip = null,
+  onTipClose,
+}: {
+  state: GameState
+  tab: TourTab
+  onTab: (tab: TourTab) => void
+  onShowTour: () => void
+  onNewGame: () => void
+  guildBadge?: boolean
+  guildTip?: string | null
+  onTipClose?: () => void
+}) {
   const gold = state.finances.gold
   const shownGold = useCountUp(gold, state.clock.day)
   const purseRef = useRef<HTMLDivElement>(null)
@@ -71,12 +90,45 @@ export function LedgerBar({ state, tab, onTab, onShowTour, onNewGame }: { state:
         ))}
       </div>
       <nav className={styles.tabs} aria-label="Game pages" data-tour="tabs">
-        {TABS.map(({ id, label, Icon }) => (
-          <button key={id} type="button" className={styles.tab} aria-current={tab === id ? 'page' : undefined} onClick={() => onTab(id)} data-tour={`tab-${id}`}>
-            <Icon className={styles.tabIcon} size={20} strokeWidth={2} aria-hidden="true" />
-            <span className={styles.tabLabel}>{label}</span>
-          </button>
-        ))}
+        {TABS.map(({ id, label, Icon }) => {
+          const nudge = id === 'guild' && guildBadge
+          return (
+            <span key={id} className={styles.tabWrap}>
+              <button
+                type="button"
+                className={`${styles.tab} ${nudge ? styles.tabNudge : ''}`}
+                aria-current={tab === id ? 'page' : undefined}
+                onClick={() => onTab(id)}
+                data-tour={`tab-${id}`}
+                aria-label={nudge ? `${label}: something new you can afford` : undefined}
+              >
+                <Icon className={styles.tabIcon} size={20} strokeWidth={2} aria-hidden="true" />
+                <span className={styles.tabLabel}>{label}</span>
+                {nudge && (
+                  <span className={styles.badge} aria-hidden="true">
+                    ✦
+                  </span>
+                )}
+              </button>
+              {/* Old Tobias points the way */}
+              {id === 'guild' && guildTip && (
+                <button
+                  type="button"
+                  className={styles.tip}
+                  onClick={() => {
+                    onTipClose?.()
+                    onTab('guild')
+                  }}
+                >
+                  <img src={tobias} alt="" className={styles.tipPortrait} />
+                  <span>
+                    {guildTip} <span className={styles.tipGo}>Take me there →</span>
+                  </span>
+                </button>
+              )}
+            </span>
+          )
+        })}
       </nav>
       <SettingsMenu onShowTour={onShowTour} onNewGame={onNewGame} />
     </div>

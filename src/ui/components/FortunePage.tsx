@@ -37,7 +37,7 @@ function Line({ label, hint, amount, tone, strong }: { label: string; hint?: str
   )
 }
 
-function Tile({ icon, label, value, tone, onClick, className = '', tour }: { icon: ReactNode; label: string; value: ReactNode; tone?: 'plus' | 'minus' | 'worth'; onClick: () => void; className?: string; tour?: string }) {
+function Tile({ icon, label, value, tone, onClick, className = '', tour }: { icon: ReactNode; label: string; value: ReactNode; tone?: 'plus' | 'minus' | 'worth' | 'owe'; onClick: () => void; className?: string; tour?: string }) {
   return (
     <button type="button" className={`${styles.tile} ${className}`} onClick={onClick} data-tour={tour}>
       <span className={styles.tileIcon} aria-hidden="true">
@@ -181,7 +181,7 @@ export function FortunePage({ state }: { state: GameState }) {
         <Tile icon={<MoneyBag flow="in" />} label="Coming in" value={signed(income)} tone="plus" onClick={() => setOpen('in')} />
         <Tile icon={<MoneyBag flow="out" />} label="Going out" value={`−${finances.monthlyExpenses}g`} tone="minus" onClick={() => setOpen('out')} />
         <Tile icon="⚖️" label="You're worth" value={`${worth}g`} tone="worth" onClick={() => setOpen('worth')} />
-        <Tile icon="🏦" label="Money Lender" value={finances.debt > 0 ? `Owe ${finances.debt}g` : 'Borrow'} tone={finances.debt > 0 ? 'minus' : undefined} onClick={() => setOpen('lender')} />
+        <Tile icon="🏦" label="Money Lender" value={finances.debt > 0 ? `Owe ${finances.debt}g` : 'Borrow'} tone={finances.debt > 0 ? 'owe' : undefined} onClick={() => setOpen('lender')} />
       </div>
 
       {open === 'in' && (

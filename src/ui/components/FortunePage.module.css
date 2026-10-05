@@ -329,7 +329,7 @@
 }
 
 .debtOwed strong {
-  color: #a8321f;
+  color: #c8650f;
 }
 
 .debtPay {
@@ -433,6 +433,10 @@
 
 .worth {
   color: #6b3fa0;
+}
+
+.owe {
+  color: #c8650f;
 }
 
 /* ---------- Sheet contents ---------- */

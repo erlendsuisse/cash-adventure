@@ -16,6 +16,7 @@ import { useGame } from '../GameProvider'
 import { getCharacterMood } from '../../engine/characterSelectors'
 import { currentChapter } from '../../engine/selectors'
 import { useBackgroundMusic } from '../hooks/useBackgroundMusic'
+import { useGuildNudge } from '../hooks/useGuildNudge'
 import { updateSettings, useSettings } from '../settings'
 import styles from './PlayScreen.module.css'
 
@@ -62,6 +63,9 @@ export function PlayScreen() {
     dispatch({ type: 'restart', seed })
   }
 
+  // Point new players at the Guild Hall when there's something they can afford
+  const nudge = useGuildNudge(state, tab, touring || creatingHero || payday !== null)
+
   // Background music by chapter, if the player has it on
   useBackgroundMusic(state, settings.music)
 
@@ -80,7 +84,16 @@ export function PlayScreen() {
       />
 
       {/* Minimal top bar with critical info only */}
-      <LedgerBar state={state} tab={tab} onTab={setTab} onShowTour={() => setTouring(true)} onNewGame={() => startNewGame(randomSeed())} />
+      <LedgerBar
+        state={state}
+        tab={tab}
+        onTab={setTab}
+        onShowTour={() => setTouring(true)}
+        onNewGame={() => startNewGame(randomSeed())}
+        guildBadge={nudge.badge}
+        guildTip={nudge.tip}
+        onTipClose={nudge.dismissTip}
+      />
 
       {/* Which chapter, what it's about, and what to do right now (the Fortune page shows the same, bigger) */}
       {tab === 'story' && <ChapterBanner state={state} />}
