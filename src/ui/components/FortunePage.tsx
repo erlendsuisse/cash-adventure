@@ -2,7 +2,7 @@ import { ArrowDownRight, ArrowUpRight } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { campaign } from '../../content/campaign'
 import { CHAPTERS } from '../../content/chapters'
-import { commodityPrice, currentChapter, isFree, passiveIncome } from '../../engine/selectors'
+import { commodityPrice, currentChapter, passiveIncome } from '../../engine/selectors'
 import type { Commodity, GameState, Perk } from '../../engine/types'
 import { useGame } from '../GameProvider'
 import { heroIcon, heroPortrait } from '../heroArt'
@@ -10,7 +10,11 @@ import { Sheet } from './Sheet'
 import { StatScroll } from './StatScroll'
 import styles from './FortunePage.module.css'
 
-const COMMODITIES: Commodity[] = ['spice', 'salt', 'iron']
+const COMMODITIES: Commodity[] = ['salt', 'spice', 'iron']
+const GOOD_ICON: Record<Commodity, string> = { salt: '🧂', spice: '🌶️', iron: '⚒️' }
+const SECTOR_ICON: Record<string, string> = { salt: '🧂', spice: '🌶️', iron: '⚒️' }
+/** Ventures listed on the page; the rest are one tap away */
+const VENTURES_SHOWN = 3
 const cap = (s: string) => s[0]!.toUpperCase() + s.slice(1)
 const signed = (n: number) => `${n >= 0 ? '+' : '−'}${Math.abs(n)}g`
 
@@ -29,14 +33,14 @@ function Line({ label, hint, amount, tone, strong }: { label: string; hint?: str
   )
 }
 
-function Tile({ icon, label, value, tone, onClick, className = '', tour }: { icon: ReactNode; label: string; value: ReactNode; tone?: 'plus' | 'minus'; onClick: () => void; className?: string; tour?: string }) {
+function Tile({ icon, label, value, tone, onClick, className = '', tour }: { icon: ReactNode; label: string; value: ReactNode; tone?: 'plus' | 'minus' | 'worth'; onClick: () => void; className?: string; tour?: string }) {
   return (
     <button type="button" className={`${styles.tile} ${className}`} onClick={onClick} data-tour={tour}>
       <span className={styles.tileIcon} aria-hidden="true">
         {icon}
       </span>
       <span className={styles.tileLabel}>{label}</span>
-      <span className={`${styles.tileValue} ${tone === 'plus' ? styles.plus : tone === 'minus' ? styles.minus : ''}`}>{value}</span>
+      <span className={`${styles.tileValue} ${tone ? styles[tone] : ''}`}>{value}</span>
     </button>
   )
 }
@@ -54,16 +58,13 @@ function MoneyBag({ flow }: { flow: 'in' | 'out' }) {
   )
 }
 
-/** Your fortune at a glance: who you are, how close you are to freedom, and
- *  four tiles that open the details. Fits one screen; nothing to scroll. */
+/** Your fortune at a glance: who you are, what you hold and owe, and four
+ *  tiles that open the details. Fits one screen; nothing to scroll. */
 export function FortunePage({ state }: { state: GameState }) {
   const [open, setOpen] = useState<Detail | null>(null)
   const { finances } = state
   const passive = passiveIncome(state)
   const income = finances.wages + passive
-  const cashflow = income - finances.monthlyExpenses
-  const free = isFree(state)
-  const freedomPct = Math.min(100, Math.round((passive / Math.max(1, finances.monthlyExpenses)) * 100))
   const goods = COMMODITIES.filter((c) => finances.commodities[c] > 0).map((c) => ({ c, units: finances.commodities[c], value: finances.commodities[c] * commodityPrice(state, campaign, c) }))
   const venturesValue = finances.assets.reduce((sum, a) => sum + a.cost, 0)
   const goodsValue = goods.reduce((sum, g) => sum + g.value, 0)
@@ -91,11 +92,18 @@ export function FortunePage({ state }: { state: GameState }) {
               {background ? ` · ${background.name}` : ''}
             </div>
           )}
+          <div className={styles.progress}>
+            Chapter {chapter.numeral} · {state.progress.colossiDefeated}/7 Colossi beaten
+          </div>
           {heroClass && (
             <p className={styles.ability}>
               <strong>{heroClass.ability.name}:</strong> {heroClass.ability.text}
             </p>
           )}
+          {/* Phones have no side panel: attributes and reputation open from here */}
+          <button type="button" className={styles.skillsButton} onClick={() => setOpen('skills')} data-tour="stats">
+            🎲 Skills & friends
+          </button>
           <button type="button" className={styles.kit} onClick={() => setOpen('kit')} aria-label="Skills, gear and trophies">
             {kit.length === 0 ? (
               <span className={styles.kitEmpty}>No skills or gear yet</span>
@@ -110,33 +118,61 @@ export function FortunePage({ state }: { state: GameState }) {
         </div>
       </section>
 
-      {/* How close you are to freedom */}
-      <section className={styles.freedom}>
-        <div className={styles.freedomTop}>
-          <span className={styles.freedomTitle}>{free ? 'You are free!' : 'The Road to Freedom'}</span>
-          <span className={styles.chapter}>
-            Chapter {chapter.numeral} · {state.progress.colossiDefeated}/7 Colossi
-          </span>
+      {/* What you own and owe (the road to freedom is on the Adventure page) */}
+      <section className={styles.holdings}>
+        <h3 className={styles.panelTitle}>Your Holdings</h3>
+
+        <div className={styles.group}>
+          <span className={styles.groupLabel}>Ventures</span>
+          {finances.assets.length === 0 ? (
+            <p className={styles.none}>None yet. Look out for cards that offer one!</p>
+          ) : (
+            <button type="button" className={styles.ventures} onClick={() => setOpen('in')}>
+              {finances.assets.slice(0, VENTURES_SHOWN).map((a) => (
+                <span key={a.id} className={styles.venture}>
+                  <span aria-hidden="true">{SECTOR_ICON[a.sector] ?? '🏪'}</span>
+                  <span className={styles.ventureName}>{a.label}</span>
+                  <span className={styles.plus}>+{a.monthlyCashflow}g/mo</span>
+                </span>
+              ))}
+              {finances.assets.length > VENTURES_SHOWN && <span className={`${styles.more} ${styles.wideOnly}`}>and {finances.assets.length - VENTURES_SHOWN} more…</span>}
+              {finances.assets.length > 2 && <span className={`${styles.more} ${styles.phoneMore}`}>and {finances.assets.length - 2} more…</span>}
+            </button>
+          )}
         </div>
-        <div className={styles.bar} role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={freedomPct}>
-          <div className={styles.fill} style={{ width: `${freedomPct}%` }} />
-          <span className={styles.barText}>
-            Ventures pay {passive}g of your {finances.monthlyExpenses}g a month
-          </span>
+
+        <div className={styles.group}>
+          <span className={styles.groupLabel}>Goods</span>
+          <div className={styles.goods}>
+            {COMMODITIES.map((c) => {
+              const units = finances.commodities[c]
+              return (
+                <span key={c} className={`${styles.good} ${units === 0 ? styles.goodEmpty : ''}`}>
+                  <span className={styles.goodIcon} aria-hidden="true">
+                    {GOOD_ICON[c]}
+                  </span>
+                  <span className={styles.goodName}>{cap(c)}</span>
+                  <strong>{units}</strong>
+                  <span className={styles.goodValue}>{units > 0 ? `${units * commodityPrice(state, campaign, c)}g` : `${commodityPrice(state, campaign, c)}g each`}</span>
+                </span>
+              )
+            })}
+          </div>
         </div>
-        <div className={styles.flow}>
-          <span>Every month you end up with</span>
-          <strong className={cashflow >= 0 ? styles.plus : styles.minus}>{signed(cashflow)}</strong>
-        </div>
+
+        <button type="button" className={`${styles.debt} ${finances.debt > 0 ? styles.debtOwed : ''}`} onClick={() => setOpen('lender')}>
+          <span className={styles.groupLabel}>Debt</span>
+          <strong>{finances.debt > 0 ? `${finances.debt}g` : 'None'}</strong>
+          {(finances.loanPayments ?? 0) > 0 && <span className={styles.debtPay}>paying {finances.loanPayments}g a month</span>}
+        </button>
       </section>
 
       {/* Tap in for the details */}
       <div className={styles.tiles}>
         <Tile icon={<MoneyBag flow="in" />} label="Coming in" value={signed(income)} tone="plus" onClick={() => setOpen('in')} />
         <Tile icon={<MoneyBag flow="out" />} label="Going out" value={`−${finances.monthlyExpenses}g`} tone="minus" onClick={() => setOpen('out')} />
-        <Tile icon="⚖️" label="You're worth" value={`${worth}g`} onClick={() => setOpen('worth')} />
-        <Tile icon="🏦" label="Moneylender" value={finances.debt > 0 ? `Owe ${finances.debt}g` : 'Borrow'} tone={finances.debt > 0 ? 'minus' : undefined} onClick={() => setOpen('lender')} />
-        <Tile icon="🎲" label="Skills & friends" value="See all" onClick={() => setOpen('skills')} className={styles.phoneOnly} tour="stats" />
+        <Tile icon="⚖️" label="You're worth" value={`${worth}g`} tone="worth" onClick={() => setOpen('worth')} />
+        <Tile icon="🏦" label="Money Lender" value={finances.debt > 0 ? `Owe ${finances.debt}g` : 'Borrow'} tone={finances.debt > 0 ? 'minus' : undefined} onClick={() => setOpen('lender')} />
       </div>
 
       {open === 'in' && (
@@ -176,7 +212,7 @@ export function FortunePage({ state }: { state: GameState }) {
       )}
 
       {open === 'lender' && (
-        <Sheet title="The Moneylender" icon="🏦" onClose={close}>
+        <Sheet title="The Money Lender" icon="🏦" onClose={close}>
           <Lender state={state} />
         </Sheet>
       )}
